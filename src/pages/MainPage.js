@@ -4,6 +4,7 @@ const MainPage = () => {
   return (
     <div>
       MainPage
+      새로운 내용
     </div>
   )
 }
