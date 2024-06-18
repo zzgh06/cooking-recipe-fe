@@ -15,23 +15,34 @@ export const registerUser = createAsyncThunk(
 );
 
 export const loginUser = createAsyncThunk(
-    'auth/loginUser',
-    async (userData, { rejectWithValue }) => {
-      try {
-        const response = await api.post('/login', userData);
-        return response.data;
-      } catch (error) {
-        return rejectWithValue(error.response.data);
-      }
+  'auth/loginUser',
+  async (userData, { rejectWithValue }) => {
+    try {
+      const response = await api.post('/login', userData);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
     }
-  );
+  }
+);
+
+export const loginWithGoogle = createAsyncThunk(
+  'auth/loginWithGoogle',
+  async (token, { rejectWithValue }) => {
+    try {
+      const response = await api.post('/google', { token });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
 const initialState = {
-  policyAccepted: false,
   registrationData: null,
   loginData: null,
   error: null,
-  loading: false,  // 로딩 상태 추가
+  loading: false,
 };
 
 const authSlice = createSlice({
@@ -65,13 +76,28 @@ const authSlice = createSlice({
         state.loading = false;
         state.loginData = action.payload;
         state.error = null;
+        sessionStorage.setItem("token", action.payload.token);
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
+      .addCase(loginWithGoogle.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(loginWithGoogle.fulfilled, (state, action) => {
+        state.loading = false;
+        state.loginData = action.payload;
+        state.error = null;
+        sessionStorage.setItem("token", action.payload.token);
+      })
+      .addCase(loginWithGoogle.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
   },
 });
 
 export const { setError } = authSlice.actions;
-export default authSlice.reducer;
+export default userSlice.reducer;

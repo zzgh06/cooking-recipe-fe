@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import { registerUser } from '../redux/authSlice';
+import { registerUser } from '../redux/userSlice';
 import './RegisterPage.style.css';
 
 const RegisterPage = () => {
