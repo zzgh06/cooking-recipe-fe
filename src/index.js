@@ -7,9 +7,6 @@ import { BrowserRouter } from "react-router-dom";
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
