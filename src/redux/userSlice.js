@@ -6,7 +6,7 @@ export const registerUser = createAsyncThunk(
   'auth/registerUser',
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await api.post('/register', userData);
+      const response = await api.post('/user', userData);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -18,7 +18,7 @@ export const loginUser = createAsyncThunk(
   'auth/loginUser',
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await api.post('/login', userData);
+      const response = await api.post('/auth/login', userData);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -30,7 +30,7 @@ export const loginWithGoogle = createAsyncThunk(
   'auth/loginWithGoogle',
   async (token, { rejectWithValue }) => {
     try {
-      const response = await api.post('/google', { token });
+      const response = await api.post('/auth/google', { token });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
