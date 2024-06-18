@@ -1,0 +1,267 @@
+.nav {
+  z-index: 999;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  box-shadow: 0px 3px 3px 1px rgba(190, 190, 190, 1);
+}
+
+.nav-top {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 10px;
+  cursor: pointer;
+  margin-right: 150px;
+}
+
+.nav-top span {
+  font-size: 15px;
+  font-weight: 600;
+  padding: 0px 10px;
+}
+
+.nav-top .register {
+  border-right: 3px solid green;
+}
+
+.nav-middle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 150px;
+}
+
+.nav-logo {
+  font-size: 25px;
+  font-weight: 600;
+  min-width: 130px;
+}
+
+.search-box {
+  position: relative;
+  width: 350px;
+  border: 2px solid rgb(0, 187, 0);
+  padding: 5px;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.search-box input {
+  margin: 7px;
+  margin-right: 100px;
+  border: none;
+  font-size: 16px;
+}
+
+.search-box input:focus {
+  outline: none;
+}
+
+.search-box svg {
+  position: absolute;
+  right: 10px;
+  top: 12px;
+  font-size: 20px;
+}
+
+.user-menu {
+  min-width: 150px;
+}
+
+.nav-icon {
+  font-size: 30px;
+  margin-right: 30px;
+  cursor: pointer;
+}
+
+.nav-icon:last-child {
+  margin-right: 0;
+}
+
+.nav-bottom {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  padding: 0 150px;
+}
+
+.nav-category {
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  min-width: 150px;
+}
+
+.nav-category svg {
+  font-size: 25px;
+  margin-right: 10px;
+  color: rgb(0, 187, 0);
+}
+
+.nav-category span {
+  font-size: 20px;
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+  min-width: 600px;
+}
+
+.nav-menu li {
+  font-weight: 600;
+  font-size: 18px;
+  padding: 15px;
+  margin-right: 50px;
+  list-style-type: none;
+}
+
+.nav-menu li::after {
+  content: "";
+  display: block;
+  border-bottom: 3px solid green;
+  transform: scaleX(0);
+  transition: all 0.2s ease-in-out;
+}
+
+.nav-menu li:hover::after {
+  transform: scaleX(1);
+}
+
+.nav-menu a {
+  color: black;
+  text-decoration: none;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 40px;
+  left: 0;
+  width: 150px;
+  background-color: #f9f9f9;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  flex-direction: column;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+}
+
+.dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
+
+.nav-category:hover .dropdown-content {
+  display: flex;
+}
+
+
+.sidebar-toggle {
+  display: none;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 250px; 
+  height: 100%;
+  background-color: white;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: none;
+  flex-direction: column;
+  padding: 15px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  transform: translateX(280px);
+}
+.sidebar.open {
+  transform: translateX(0);
+}
+
+.sidebar-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.sidebar-header svg {
+  font-size: 25px;
+  cursor: pointer;
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.sidebar-menu a {
+  font-size: 18px;
+  padding: 10px 0;
+  text-decoration: none;
+  color: black;
+  font-weight: 600;
+}
+
+@media (max-width: 994px) {
+  .nav-top,
+  .search-box,
+  .user-menu,
+  .nav-menu,
+  .nav-category {
+    display: none;
+  }
+
+  .nav-middle {
+    padding: 20px 30px;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    font-size: 20px;
+    padding-left: 10px;
+  }
+
+  .sidebar {
+    display: flex;
+  }
+
+  .sidebar-toggle {
+    display: block;
+  }
+
+  .sidebar-search-box {
+    position: relative;
+    width: 230px;
+    border: 2px solid rgb(0, 187, 0);
+    padding: 5px;
+    border-radius: 5px;
+    margin-right: 10px;
+  }
+  
+  .sidebar-search-box input {
+    margin: 7px;
+    margin-right: 100px;
+    border: none;
+    font-size: 16px;
+  }
+  
+  .sidebar-search-box input:focus {
+    outline: none;
+  }
+  
+  .sidebar-search-box svg {
+    position: absolute;
+    right: 10px;
+    top: 12px;
+    font-size: 20px;
+  }
+}
