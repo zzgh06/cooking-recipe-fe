@@ -33,13 +33,14 @@ const LoginPage = () => {
     const handleLogin = async (event) => {
         event.preventDefault();
         const { email, password } = formData;
+        console.log("formData", email, password)
 
         try {
             await dispatch(loginUser({ email, password })).unwrap();
             console.log("로그인 성공");
-            navigate('/'); // 로그인 성공 후 대시보드 페이지로 이동
-        } catch (err) {
-            console.error("로그인 실패: ", err);
+            navigate('/');
+        } catch (error) {
+            console.error("로그인 실패: ", error);
         }
     };
 

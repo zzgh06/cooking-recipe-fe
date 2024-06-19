@@ -19,6 +19,7 @@ export const loginUser = createAsyncThunk(
   async (userData, { rejectWithValue }) => {
     try {
       const response = await api.post('/auth/login', userData);
+      sessionStorage.setItem("token", response.data.token);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -31,9 +32,23 @@ export const loginWithGoogle = createAsyncThunk(
   async (token, { rejectWithValue }) => {
     try {
       const response = await api.post('/auth/google', { token });
+      sessionStorage.setItem("token", response.data.token);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const loginWithToken = createAsyncThunk(
+  'auth/loginWithToken',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.get('/user/me');
+      if (response.status !== 200) throw new Error(response.error);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );
@@ -75,8 +90,7 @@ const userSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
         state.loginData = action.payload;
-        state.error = null;
-        sessionStorage.setItem("token", action.payload.token);
+        state.error = null;        
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
@@ -89,13 +103,26 @@ const userSlice = createSlice({
       .addCase(loginWithGoogle.fulfilled, (state, action) => {
         state.loading = false;
         state.loginData = action.payload;
-        state.error = null;
-        sessionStorage.setItem("token", action.payload.token);
+        state.error = null;        
       })
       .addCase(loginWithGoogle.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      });
+      })
+      .addCase(loginWithToken.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(loginWithToken.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload; 
+        state.error = null;
+      })
+      .addCase(loginWithToken.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.user = null;
+      })
   },
 });
 
