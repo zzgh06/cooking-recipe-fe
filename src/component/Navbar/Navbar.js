@@ -10,11 +10,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import "../Navbar/Navbar.style.css";
 import SearchBox from "./SearchBox";
+import Dropdown from "./Dropdown";
 
 const Navbar = ({ user }) => {
   const navigate = useNavigate();
   const menuList = ["스토어", "레시피", "베스트", "My 냉장고"];
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [dropdownVisible, setDropdownVisible] = useState(false);
 
   const onCheckEnter = (event) => {
     if (event.key === "Enter") {
@@ -29,6 +31,14 @@ const Navbar = ({ user }) => {
     setSidebarOpen(!sidebarOpen);
   };
 
+  const showDropdown = () => {
+    setDropdownVisible(true);
+  };
+
+  const hideDropdown = () => {
+    setDropdownVisible(false);
+  };
+
   return (
     <div className="nav">
       <div className="nav-top">
@@ -39,7 +49,7 @@ const Navbar = ({ user }) => {
           <span>로그인</span>
         </div>
       </div>
-      <div className="nav-middle">
+      <div className="nav-middle" onMouseLeave={hideDropdown}>
         <div className="nav-logo" onClick={() => navigate("/")}>
           What’s in your fridge
         </div>
@@ -58,15 +68,9 @@ const Navbar = ({ user }) => {
         </div>
       </div>
       <div className="nav-bottom">
-        <div className="nav-category">
+        <div className="nav-category" onMouseEnter={showDropdown}>
           <FontAwesomeIcon icon={faBars} />
           <span>카테고리</span>
-          <div className="dropdown-content">
-            <Link to="/">Category 1</Link>
-            <Link to="/">Category 2</Link>
-            <Link to="/">Category 3</Link>
-            <Link to="/">Category 4</Link>
-          </div>
         </div>
         <div className="nav-menu">
           {menuList.map((menu, index) => (
@@ -75,6 +79,11 @@ const Navbar = ({ user }) => {
             </li>
           ))}
         </div>
+        <Dropdown
+          dropdownVisible={dropdownVisible}
+          showDropdown={showDropdown}
+          hideDropdown={hideDropdown}
+        />
       </div>
 
       <div className={`sidebar ${sidebarOpen ? "open" : ""}`}>
