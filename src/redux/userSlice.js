@@ -1,12 +1,12 @@
 // src/redux/authSlice.js
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import api from '../utils/api';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import api from "../utils/api";
 
 export const registerUser = createAsyncThunk(
-  'auth/registerUser',
+  "auth/registerUser",
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await api.post('/user', userData);
+      const response = await api.post("/user", userData);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -15,7 +15,7 @@ export const registerUser = createAsyncThunk(
 );
 
 export const loginUser = createAsyncThunk(
-  'auth/loginUser',
+  "auth/loginUser",
   async (userData, { rejectWithValue }) => {
     try {
       const response = await api.post('/auth/login', userData);
@@ -28,7 +28,7 @@ export const loginUser = createAsyncThunk(
 );
 
 export const loginWithGoogle = createAsyncThunk(
-  'auth/loginWithGoogle',
+  "auth/loginWithGoogle",
   async (token, { rejectWithValue }) => {
     try {
       const response = await api.post('/auth/google', { token });
@@ -61,7 +61,7 @@ const initialState = {
 };
 
 const userSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
     setError: (state, action) => {
