@@ -10,9 +10,10 @@
 .nav-top {
   display: flex;
   justify-content: flex-end;
+  width: 100%;
   padding-top: 10px;
-  cursor: pointer;
   margin-right: 150px;
+  cursor: pointer;
 }
 
 .nav-top span {
@@ -29,6 +30,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
   padding: 15px 150px;
 }
 
@@ -83,6 +85,7 @@
   display: flex;
   align-items: center;
   font-weight: 600;
+  width: 100%;
   padding: 0 150px;
 }
 
