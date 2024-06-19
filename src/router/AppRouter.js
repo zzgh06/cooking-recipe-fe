@@ -1,12 +1,10 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import MainPage from '../pages/MainPage'
-import Navbar from '../component/Navbar/Navbar'
-import Footer from '../component/Footer/Footer'
 import LoginPage from '../pages/LoginPage'
 import RegisterPage from '../pages/RegisterPage'
 import RecipeDetail from '../pages/RecipeDetail'
-import Ingredients from '../pages/Ingredients'
+import IngredientsDetail from '../pages/IngredientsDetail'
 import PrivateRoute from './PrivateRoute'
 import MyFridge from '../pages/MyFridge'
 import CartPage from '../pages/CartPage' 
@@ -15,20 +13,21 @@ import OrderCompletePage from '../pages/OrderCompletePage'
 import MyPage from '../pages/MyPage'
 import MyProfile from '../pages/MyProfile'
 import AdminOrderPage from '../pages/AdminOrderPage'
-import AdminProduct from '../pages/AdminProduct'
+import AdminIngredientsPage from '../pages/AdminIngredientsPage'
 import AdminUserPage from '../pages/AdminUserPage'
+import AdminRecipePage from  '../pages/AdminRecipePage'
 
 
 const AppRouter = () => {
   return (
     <>
-    <Navbar />
+    
     <Routes>
       <Route path="/" element={<MainPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/recipe/:id" element={<RecipeDetail />} />
-      <Route path="/ingredients/:id" element={<Ingredients />} />
+      <Route path="/ingredients/:id" element={<IngredientsDetail />} />
       <Route element={<PrivateRoute permissionLevel="customer" />}>
         <Route path="/fridge" element={<MyFridge />} />
         <Route path="/cart" element={<CartPage />} />
@@ -38,12 +37,13 @@ const AppRouter = () => {
         <Route path="/account/profile" element={<MyProfile />} />
       </Route>
       <Route element={<PrivateRoute permissionLevel="admin" />}>
-        <Route path="/admin/product" element={<AdminProduct />} />
+        <Route path="/admin/recipe" element={<AdminRecipePage />} />
+        <Route path="/admin/ingredients" element={<AdminIngredientsPage />} />
         <Route path="/admin/order" element={<AdminOrderPage />} />
         <Route path="/admin/user" element={<AdminUserPage />} />
       </Route>
     </Routes>
-    <Footer />
+    
     </>
   )
 }

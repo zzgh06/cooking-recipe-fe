@@ -15,8 +15,7 @@ const RegisterPage = () => {
         email: "",
         contact: "",
         shipTo: "",
-    });
-    console.log("formData", formData)
+    });   
 
     const [passwordError, setPasswordError] = useState("");
     const error = useSelector((state) => state.auth.error);
@@ -34,8 +33,7 @@ const RegisterPage = () => {
 
         dispatch(registerUser({ id, password, name, email, contact, shipTo }))
           .unwrap()
-          .then(() => {
-            console.log("click register")
+          .then(() => {            
             navigate('/login');
           })
           .catch((err) => {

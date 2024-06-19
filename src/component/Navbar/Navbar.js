@@ -12,7 +12,7 @@ import "../Navbar/Navbar.style.css";
 import SearchBox from "./SearchBox";
 import Dropdown from "./Dropdown";
 
-const Navbar = ({ user }) => {
+const Navbar = ({ user }) => {  
   const navigate = useNavigate();
   const menuList = ["스토어", "레시피", "베스트", "My 냉장고"];
   const [sidebarOpen, setSidebarOpen] = useState(false);
