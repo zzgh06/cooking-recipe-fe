@@ -7,7 +7,7 @@
   justify-content: center;
   width: 100%;
   padding: 20px 0;
-  box-shadow: 0px -8px 6px -3px rgba(190, 190, 190, 1);
+  border-top: 1px solid lightgrey;
 }
 
 .footerInfo {
@@ -16,7 +16,7 @@
 }
 
 .footerInfo img {
-  width: 50px;
+  width: 40px;
   margin-right: 20px;
   cursor: pointer;
 }
@@ -26,8 +26,6 @@
   width: 333px;
   text-align: center;
 }
-
-
 
 .company {
   width: 534px;
@@ -50,4 +48,13 @@
   margin-left: 15px;
   line-height: 1.8;
   color: #999;
+}
+
+@media (max-width: 994px) {
+  .footerInfo {
+    margin-bottom: 15px;
+  }
+  .footerInfo img {
+    width: 30px;
+  }
 }
