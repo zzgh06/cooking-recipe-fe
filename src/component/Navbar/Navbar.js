@@ -49,7 +49,7 @@ const Navbar = ({ user }) => {
           <span>로그인</span>
         </div>
       </div>
-      <div className="nav-middle" onMouseLeave={hideDropdown}>
+      <div className="nav-middle">
         <div className="nav-logo" onClick={() => navigate("/")}>
           What’s in your fridge
         </div>
@@ -67,8 +67,8 @@ const Navbar = ({ user }) => {
           <FontAwesomeIcon icon={faBars} onClick={toggleSidebar} />
         </div>
       </div>
-      <div className="nav-bottom">
-        <div className="nav-category" onMouseEnter={showDropdown}>
+      <div className="nav-bottom" onMouseLeave={hideDropdown}>
+        <div className="nav-category" onMouseEnter={showDropdown} >
           <FontAwesomeIcon icon={faBars} />
           <span>카테고리</span>
         </div>
