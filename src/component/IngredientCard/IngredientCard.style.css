@@ -1,0 +1,44 @@
+.ingredient-card {
+  position: relative;
+  border: none;
+  margin-bottom: 10px;
+  width: 20vw;
+  overflow: hidden;
+  transition: all 0.5s;
+}
+
+.ingredient-card img {
+  width: 100%;
+  border-radius: 8px;
+  transition: all 0.3s;
+}
+
+.ingredient-card img:hover {
+  transform: scale(1.01);
+}
+
+.card-disc {
+  padding: 10px 8px;
+}
+
+.card-disc .title {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.card-disc .price {
+  font-size: 15px;
+  color: rgb(164, 164, 164);
+  text-decoration:line-through
+}
+
+.card-disc .discount-price {
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.card-disc .discount-rate {
+  font-size: 19px;
+  font-weight: 600;
+  color: orangered;
+}
