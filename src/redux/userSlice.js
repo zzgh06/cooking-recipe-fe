@@ -42,13 +42,25 @@ export const loginWithGoogle = createAsyncThunk(
 
 export const loginWithToken = createAsyncThunk(
   'auth/loginWithToken',
-  async (_, { rejectWithValue }) => {
+  async (_, thunkAPI) => {
     try {
       const response = await api.get('/user/me');
       if (response.status !== 200) throw new Error(response.error);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || error.message);
+      thunkAPI.dispatch(logout());
+      return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
+
+export const logout = createAsyncThunk(
+  'auth/logout',
+  async (_, { rejectWithValue }) => {
+    try {
+      sessionStorage.removeItem("token");
+    } catch (error) {
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -123,6 +135,11 @@ const userSlice = createSlice({
         state.error = action.payload;
         state.user = null;
       })
+      .addCase(logout.fulfilled, (state) => {
+        state.user = null;
+        state.loading = false;
+        state.error = null;
+      });
   },
 });
 
