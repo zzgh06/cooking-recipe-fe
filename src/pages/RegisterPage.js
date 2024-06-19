@@ -22,7 +22,7 @@ const RegisterPage = () => {
     const error = useSelector((state) => state.auth.error);
 
     const handleRegister = async (event) => {
-        event.preventDefault();
+        event.preventDefault();        
         const { id, password, confirmPassword, name, email, contact, shipTo } = formData;
 
         if (password !== confirmPassword) {
