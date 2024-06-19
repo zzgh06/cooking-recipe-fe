@@ -32,9 +32,7 @@ const LoginPage = () => {
 
     const handleLogin = async (event) => {
         event.preventDefault();
-        const { email, password } = formData;
-        console.log("formData", email, password)
-
+        const { email, password } = formData;      
         try {
             await dispatch(loginUser({ email, password })).unwrap();
             console.log("로그인 성공");
@@ -83,11 +81,17 @@ const LoginPage = () => {
                     </div>
                     {error && <p className="error">{error}</p>}
                     <button type="submit">로그인</button>
+                    <div className="admin-box">
+                        <p>Email: admin@gmail.com  PW: 123</p>
+                    </div>
                 </form>
-                <GoogleLogin
-                    onSuccess={handleGoogleSuccess}
-                    onError={handleGoogleFailure}
-                />
+                <div className="googleLogin">
+                    <GoogleLogin
+                        onSuccess={handleGoogleSuccess}
+                        onError={handleGoogleFailure}
+                    />  
+                </div>
+                
             </div>
         
     );
