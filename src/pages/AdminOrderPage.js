@@ -5,7 +5,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import SearchBox from "../component/Navbar/SearchBox";
 import { useDispatch, useSelector } from "react-redux";
 import OrderTable from "../component/OrderTable/OrderTable";
-import DashboardCard from "../component/DashBoardCard/DashboardCard";
+import DashBoardCard from "../component/DashBoardCard/DashBoardCard";
 import OrderDetailDialog from "../component/OrderDetailDialog/OrderDetailDialog";
 
 const AdminOrderPage = () => {
@@ -98,7 +98,7 @@ const AdminOrderPage = () => {
   };
   return (
     <div className="locate-center">
-      <Container>
+      <Container className="container-custom">
         <div className="mt-2 display-center mb-2">
           <SearchBox
             searchQuery={searchQuery}
@@ -110,7 +110,7 @@ const AdminOrderPage = () => {
 
         <Row className="overflow-x">
           {Object.keys(badgeBg).map((status) => (
-            <DashboardCard
+            <DashBoardCard
               key={status}
               status={status}
               count={getOrderCountByStatus(status)}

@@ -1,7 +1,7 @@
 import React from "react";
 import { Col } from "react-bootstrap";
 
-const DashboardCard = ({ status, count, borderColor }) => {
+const DashBoardCard = ({ status, count, borderColor }) => {
   console.log(borderColor)
   return (
     <Col lg="3" md="6" sm="12">
@@ -15,4 +15,4 @@ const DashboardCard = ({ status, count, borderColor }) => {
   );
 };
 
-export default DashboardCard;
+export default DashBoardCard;
