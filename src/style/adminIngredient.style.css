@@ -42,8 +42,28 @@
   }
 
 .ingredients{
-    width: 170px;    
+    width: 170px; 
+    background-color: green;
+    border-color: green;   
 }
+
+.ingredients:hover {
+    background-color: darkgreen;
+    border-color: darkgreen;
+  }
+
+.button-container .btn {
+    background-color: green;
+    border-color: green;
+  }
+  
+  .button-container .btn:hover {
+    background-color: darkgreen;
+    border-color: darkgreen;
+  }
+  
+ 
+  
 
 .form-container{
     padding:20px
@@ -69,5 +89,5 @@
 .modal-dialog {
     max-width: 800px; 
   }
-  
+
  
