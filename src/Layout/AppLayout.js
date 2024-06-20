@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useLocation } from "react-router";
 import { Col, Row } from "react-bootstrap";
-import Sidebar from "../component/SideBar/sidebar";
+import Sidebar from "../component/SideBar/Sidebar";
 import Navbar from "../component/Navbar/Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import Footer from "../component/Footer/Footer";
@@ -17,11 +17,15 @@ const AppLayout = ({ children }) => {
     dispatch(loginWithToken());
   }, []);
 
+  useEffect(() => {
+    console.log("Current location:", location.pathname);
+  }, [location]);
+
   return (
     <div>
       {location.pathname.includes("admin") ? (
         <Row className="vh-100">
-          <Col xs={12} md={3} className="sidebar mobile-sidebar">
+          <Col xs={12} md={3}>
             <Sidebar />
           </Col>
           <Col xs={12} md={9}>
