@@ -104,7 +104,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
   }, [showDialog, mode, selectedIngredient]);
 
   return (
-    <Modal show={showDialog} onHide={handleClose}>
+    <Modal show={showDialog} onHide={handleClose} dialogClassName="modal-dialog">
       <Modal.Header closeButton>
         {mode === "new" ? (
           <Modal.Title>Create New Ingredient</Modal.Title>

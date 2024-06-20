@@ -8,6 +8,7 @@ import NewItemDialog from '../component/NewItemDialog/NewItemDialog';
 import ReactPaginate from "react-paginate";
 import { fetchIngredients, createIngredient, editIngredient, deleteIngredient } from "../redux/ingredientSlice";
 import { useSearchParams, useNavigate } from "react-router-dom";
+import '../style/adminIngredient.style.css'
 
 
 const AdminIngredientsPage = () => {
@@ -50,7 +51,7 @@ const AdminIngredientsPage = () => {
 
   return (
     <div className="locate-center">
-      <Container>
+      <Container className="container-custom">
         <div className="mt-2 top-container">
           <SearchBox
             searchQuery={searchQuery}
@@ -58,13 +59,16 @@ const AdminIngredientsPage = () => {
             placeholder="제품 이름으로 검색"
             field="name"
           />
-          <Button className="mt-2 mb-2" onClick={handleShowAll}>
+          <Button className="ingredients mt-2 mb-2" onClick={handleShowAll}>
             Show All
           </Button>
         </div>
-        <Button className="mt-2 mb-2" onClick={handleClickNewItem}>
-          Add New Item +
-        </Button>
+        <div className="button-container">
+          <Button className="ingredients mt-2 mb-2" onClick={handleClickNewItem}>
+            Add New Item +
+          </Button>
+        </div>
+
         <IngredientTable
           header={["#", "SKU", "Name", "Price", "Stock", "Image", "Status", "Actions"]}
           data={ingredientList}
@@ -93,6 +97,7 @@ const AdminIngredientsPage = () => {
           className="display-center list-style-none"
         />
       </Container>
+
       <NewItemDialog
         mode={mode}
         showDialog={showDialog}

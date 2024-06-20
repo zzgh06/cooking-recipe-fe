@@ -19,18 +19,30 @@
     align-items: center;
     width: 100%;
 }
+
+.container-custom{
+    width: 100%; 
+    max-width: 1200px; 
+    margin: 0 auto;
+}
 .stock{
     margin-right: 10px;
 }
 
-.top-container{
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-}
+.top-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 10px;
+  }
 
-.mt-2{
-    margin-top: 20px;    
+.ingredients{
+    width: 170px;    
 }
 
 .form-container{
@@ -53,3 +65,9 @@
     font-size: 10pt;
     padding-right: 10px;
 }
+
+.modal-dialog {
+    max-width: 800px; 
+  }
+  
+ 
