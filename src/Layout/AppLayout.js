@@ -31,7 +31,7 @@ const AppLayout = ({ children }) => {
       ) : (
         <>
           <Navbar user={user} />
-          {children}
+          <div className="layout">{children}</div>
         </>
       )}
       <Footer />

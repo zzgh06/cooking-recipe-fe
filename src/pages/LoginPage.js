@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import { loginUser, loginWithGoogle, setError } from '../redux/userSlice';
+import { loginUser, loginWithGoogle, loginWithToken, setError } from '../redux/userSlice';
 import { GoogleLogin } from '@react-oauth/google';
 import './LoginPage.style.css';
 
@@ -36,6 +36,7 @@ const LoginPage = () => {
         try {
             await dispatch(loginUser({ email, password })).unwrap();
             console.log("로그인 성공");
+            await dispatch(loginWithToken()).unwrap();
             navigate('/');
         } catch (error) {
             console.error("로그인 실패: ", error);
