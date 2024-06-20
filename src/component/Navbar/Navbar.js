@@ -11,9 +11,12 @@ import {
 import "../Navbar/Navbar.style.css";
 import SearchBox from "./SearchBox";
 import Dropdown from "./Dropdown";
+import { logout } from "../../redux/userSlice";
+import { useDispatch } from "react-redux";
 
-const Navbar = ({ user }) => {  
+const Navbar = ({ user }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const menuList = ["스토어", "레시피", "베스트", "My 냉장고"];
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
@@ -25,6 +28,12 @@ const Navbar = ({ user }) => {
       }
       // navigate(`?name=${event.target.value}`);
     }
+  };
+  console.log("level", user?.user.level);
+
+  const handleLogout = async () => {
+    await dispatch(logout());
+    navigate("/");
   };
 
   const toggleSidebar = () => {
@@ -42,12 +51,26 @@ const Navbar = ({ user }) => {
   return (
     <div className="nav">
       <div className="nav-top">
-        <div className="register" onClick={() => navigate("/register")}>
-          <span>회원가입</span>
-        </div>
-        <div onClick={() => navigate("/login")}>
-          <span>로그인</span>
-        </div>
+        {user && user?.user.level === "admin" && (
+          <Link to="/admin/recipe" className="admin-link">
+            Admin page
+          </Link>
+        )}
+        {user ? (
+          <div className="user-info">
+            <span>{user.user.name}님 </span>
+            <span onClick={handleLogout}>로그아웃</span>
+          </div>
+        ) : (
+          <>
+            <div className="register" onClick={() => navigate("/register")}>
+              <span>회원가입</span>
+            </div>
+            <div className="login" onClick={() => navigate("/login")}>
+              <span>로그인</span>
+            </div>
+          </>
+        )}
       </div>
       <div className="nav-middle">
         <div className="nav-logo" onClick={() => navigate("/")}>
@@ -68,7 +91,7 @@ const Navbar = ({ user }) => {
         </div>
       </div>
       <div className="nav-bottom" onMouseLeave={hideDropdown}>
-        <div className="nav-category" onMouseEnter={showDropdown} >
+        <div className="nav-category" onMouseEnter={showDropdown}>
           <FontAwesomeIcon icon={faBars} />
           <span>카테고리</span>
         </div>
