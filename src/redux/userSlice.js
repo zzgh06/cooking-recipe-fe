@@ -54,6 +54,19 @@ export const loginWithToken = createAsyncThunk(
   }
 );
 
+export const getUsersInfo = createAsyncThunk(
+  'auth/getUsersInfo',
+  async (_, thunkAPI) => {
+    try {
+      const response = await api.get('/user/admin');
+      if (response.status !== 200) throw new Error(response.error);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+)
+
 export const logout = createAsyncThunk(
   'auth/logout',
   async (_, { rejectWithValue }) => {
@@ -65,9 +78,11 @@ export const logout = createAsyncThunk(
   }
 );
 
+
 const initialState = {
   registrationData: null,
   loginData: null,
+  usersData: [],
   error: null,
   loading: false,
 };
@@ -139,7 +154,20 @@ const userSlice = createSlice({
         state.user = null;
         state.loading = false;
         state.error = null;
-      });
+      })
+      .addCase(getUsersInfo.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getUsersInfo.fulfilled, (state, action) => {
+        state.loading = false;
+        state.usersData = action.payload;
+        state.error = null;        
+      })
+      .addCase(getUsersInfo.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
   },
 });
 
