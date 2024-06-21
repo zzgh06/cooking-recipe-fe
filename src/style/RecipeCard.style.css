@@ -1,0 +1,23 @@
+.recipe-card {
+  position: relative;
+  border: none;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  width: 20vw;
+  overflow: hidden;
+  transition: all 0.5s;
+}
+
+.recipe-card img {
+  width: 100%;
+  border-radius: 8px;
+  transition: all 0.3s;
+}
+
+.recipe-card img:hover {
+  transform: scale(1.05);
+}
+
+.card-disc {
+  padding: 10px 8px;
+}
