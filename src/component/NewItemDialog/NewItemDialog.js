@@ -32,7 +32,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog, selectedIngredient }) 
     event.preventDefault();
     if (formData.stock === 0) return setStockError(true);
 
-    if (mode === "new") {
+    if (mode === "new") {   
       console.log("FormData being sent:", formData);
       dispatch(createIngredient(formData));
     } else {
