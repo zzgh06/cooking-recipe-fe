@@ -5,7 +5,7 @@ import { Container } from 'react-bootstrap';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import UserTable from '../component/UserTable/UserTable';
-import { getUsersInfo } from '../redux/userSlice';
+import { deleteUser, getUsersInfo } from '../redux/userSlice';
 import UserDetailDialog from '../component/UserDetailDialog/UserDetailDialog';
 import "../style/adminUserPage.style.css";
 
@@ -44,7 +44,11 @@ const AdminUserPage = () => {
     navigate("?" + queryString);
   }, [searchQuery]);
 
-
+  const handleUserDelete = async (id) => {
+    await dispatch(deleteUser(id))
+    await dispatch(getUsersInfo())
+    handleClose();
+  }
 
   const handlePageClick = ({ selected }) => {
     setSearchQuery({ ...searchQuery, page: selected + 1 });
@@ -59,6 +63,7 @@ const AdminUserPage = () => {
     setShowDialog(false);
     setSelectedUser(null);
   };
+  
 
   return (
     <div className="locate-center">
@@ -76,6 +81,7 @@ const AdminUserPage = () => {
           header={tableHeader}
           data={usersData}
           onRowClick={handleRowClick}
+          deleteUser={handleUserDelete}
         />
         <ReactPaginate
           nextLabel="next >"
@@ -103,6 +109,7 @@ const AdminUserPage = () => {
           open={showDialog}
           handleClose={handleClose}
           user={selectedUser}
+          deleteUser={handleUserDelete}
         />
       )}
     </div>

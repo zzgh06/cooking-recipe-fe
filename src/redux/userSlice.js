@@ -18,7 +18,7 @@ export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await api.post('/auth/login', userData);
+      const response = await api.post("/auth/login", userData);
       sessionStorage.setItem("token", response.data.token);
       return response.data;
     } catch (error) {
@@ -30,8 +30,8 @@ export const loginUser = createAsyncThunk(
 export const loginWithGoogle = createAsyncThunk(
   "auth/loginWithGoogle",
   async (token, { rejectWithValue }) => {
-    try {      
-      const response = await api.post('/auth/google', { token });
+    try {
+      const response = await api.post("/auth/google", { token });
       sessionStorage.setItem("token", response.data.token);
       return response.data;
     } catch (error) {
@@ -41,38 +41,42 @@ export const loginWithGoogle = createAsyncThunk(
 );
 
 export const loginWithToken = createAsyncThunk(
-  'auth/loginWithToken',
+  "auth/loginWithToken",
   async (_, thunkAPI) => {
     try {
-      const response = await api.get('/user/me');
+      const response = await api.get("/user/me");
       if (response.status !== 200) throw new Error(response.error);
       return response.data;
     } catch (error) {
       thunkAPI.dispatch(logout());
-      return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || error.message
+      );
     }
   }
 );
 
 export const getUsersInfo = createAsyncThunk(
-  'auth/getUsersInfo',
+  "auth/getUsersInfo",
   async (_, thunkAPI) => {
     try {
-      const response = await api.get('/user/admin');
+      const response = await api.get("/user/admin");
       if (response.status !== 200) throw new Error(response.error);
-      console.log(response.data)
+      console.log(response.data);
       return {
         usersData: response.data.data,
         totalPageNum: response.data.totalPageNum,
       };
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || error.message
+      );
     }
   }
-)
+);
 
 export const logout = createAsyncThunk(
-  'auth/logout',
+  "auth/logout",
   async (_, { rejectWithValue }) => {
     try {
       sessionStorage.removeItem("token");
@@ -82,6 +86,30 @@ export const logout = createAsyncThunk(
   }
 );
 
+export const updateUser = createAsyncThunk(
+  "auth/updateUser",
+  async ({ id, userData }, { rejectWithValue }) => {
+    try {
+      const response = await api.put(`user/${id}`, userData);
+      if (response.status !== 200) throw new Error(response.error);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const deleteUser = createAsyncThunk(
+  "auth/deleteUser",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await api.delete(`/user/${id}`);
+      if (response.status !== 200) throw new Error(response.error);
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 const initialState = {
   registrationData: null,
@@ -122,7 +150,7 @@ const userSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
         state.loginData = action.payload;
-        state.error = null;        
+        state.error = null;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
@@ -135,7 +163,7 @@ const userSlice = createSlice({
       .addCase(loginWithGoogle.fulfilled, (state, action) => {
         state.loading = false;
         state.loginData = action.payload;
-        state.error = null;        
+        state.error = null;
       })
       .addCase(loginWithGoogle.rejected, (state, action) => {
         state.loading = false;
@@ -147,7 +175,7 @@ const userSlice = createSlice({
       })
       .addCase(loginWithToken.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload; 
+        state.user = action.payload;
         state.error = null;
       })
       .addCase(loginWithToken.rejected, (state, action) => {
@@ -168,12 +196,37 @@ const userSlice = createSlice({
         state.loading = false;
         state.usersData = action.payload.usersData;
         state.totalPageNum = action.payload.totalPageNum;
-        state.error = null;        
+        state.error = null;
       })
       .addCase(getUsersInfo.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
+      .addCase(deleteUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteUser.fulfilled, (state) => {
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(deleteUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(updateUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.loginData = action.payload;
+        state.error = null;
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
   },
 });
 

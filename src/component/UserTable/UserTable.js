@@ -1,8 +1,9 @@
-import React from 'react'
-import { Table } from 'react-bootstrap';
+import React from "react";
+import { Button, Table } from "react-bootstrap";
 
-const UserTable = ({header, data, onRowClick }) => {
-  console.log(data)
+const UserTable = ({ header, data, onRowClick }) => {
+  console.log(data);
+
   return (
     <div className="overflow-x">
       <Table striped bordered hover>
@@ -15,14 +16,14 @@ const UserTable = ({header, data, onRowClick }) => {
         </thead>
         <tbody>
           {data?.length > 0 ? (
-            data.map((item, index) => (
-              <tr key={index} onClick={()=> onRowClick(item)}>
+            data.map((user, index) => (
+              <tr key={index} onClick={() => onRowClick(user)}>
                 <th>{index}</th>
-                <th>{item.name}</th>
-                <th>{item.email}</th>
-                <th>{item.level}</th>
-                <th>{item.shipTo}</th>
-                <th>{item.createdAt.slice(0, 10)}</th>
+                <th>{user.name}</th>
+                <th>{user.email}</th>
+                <th>{user.level}</th>
+                <th>{user.shipTo}</th>
+                <th>{user.createdAt.slice(0, 10)}</th>
               </tr>
             ))
           ) : (
@@ -32,6 +33,6 @@ const UserTable = ({header, data, onRowClick }) => {
       </Table>
     </div>
   );
-}
+};
 
-export default UserTable
+export default UserTable;
