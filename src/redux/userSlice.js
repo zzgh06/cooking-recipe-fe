@@ -60,7 +60,11 @@ export const getUsersInfo = createAsyncThunk(
     try {
       const response = await api.get('/user/admin');
       if (response.status !== 200) throw new Error(response.error);
-      return response.data;
+      console.log(response.data)
+      return {
+        usersData: response.data.data,
+        totalPageNum: response.data.totalPageNum,
+      };
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
     }
@@ -83,6 +87,7 @@ const initialState = {
   registrationData: null,
   loginData: null,
   usersData: [],
+  totalPageNum: 0,
   error: null,
   loading: false,
 };
@@ -161,7 +166,8 @@ const userSlice = createSlice({
       })
       .addCase(getUsersInfo.fulfilled, (state, action) => {
         state.loading = false;
-        state.usersData = action.payload;
+        state.usersData = action.payload.usersData;
+        state.totalPageNum = action.payload.totalPageNum;
         state.error = null;        
       })
       .addCase(getUsersInfo.rejected, (state, action) => {

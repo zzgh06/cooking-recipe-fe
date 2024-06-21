@@ -1,0 +1,12 @@
+.custom-modal {
+  max-width: 500px; 
+}
+
+.custom-modal {
+  overflow-y: auto;
+}
+
+.order-button-area {
+  display: flex;
+  justify-content: flex-end;
+}

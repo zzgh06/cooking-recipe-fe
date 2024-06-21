@@ -151,7 +151,6 @@ const AdminOrderPage = () => {
         <OrderDetailDialog
           open={open}
           handleClose={handleClose}
-          searchQuery={searchQuery}
         />
       )}
     </div>

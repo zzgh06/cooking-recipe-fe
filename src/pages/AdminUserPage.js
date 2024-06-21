@@ -6,6 +6,8 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import UserTable from '../component/UserTable/UserTable';
 import { getUsersInfo } from '../redux/userSlice';
+import UserDetailDialog from '../component/UserDetailDialog/UserDetailDialog';
+import "../style/adminUserPage.style.css";
 
 const AdminUserPage = () => {
   const dispatch = useDispatch();
@@ -13,12 +15,12 @@ const AdminUserPage = () => {
   const [query, setQuery] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState({
     page: query.get("page") || 1,
-    orderNum: query.get("orderNum") || "",
+    name: query.get("name") || "",
   });
   const [showDialog, setShowDialog] = useState(false);
-  const [open, setOpen] = useState(false);
-  const { usersData } = useSelector(state => state.auth);
- 
+  const [selectedUser, setSelectedUser] = useState(null);
+  const { usersData, totalPageNum } = useSelector(state => state.auth);
+  console.log("totalPageNum", totalPageNum)
   const tableHeader = [
     "#",
     "Name",
@@ -33,8 +35,8 @@ const AdminUserPage = () => {
   }, []);
 
   useEffect(() => {
-    if (searchQuery.orderNum === "") {
-      delete searchQuery.orderNum;
+    if (searchQuery.name === "") {
+      delete searchQuery.name;
     }
     const params = new URLSearchParams(searchQuery);
     const queryString = params.toString();
@@ -48,8 +50,14 @@ const AdminUserPage = () => {
     setSearchQuery({ ...searchQuery, page: selected + 1 });
   };
 
+  const handleRowClick = (user) => {
+    setSelectedUser(user);
+    setShowDialog(true);
+  };
+
   const handleClose = () => {
-    setOpen(false);
+    setShowDialog(false);
+    setSelectedUser(null);
   };
 
   return (
@@ -67,12 +75,13 @@ const AdminUserPage = () => {
         <UserTable
           header={tableHeader}
           data={usersData}
+          onRowClick={handleRowClick}
         />
         <ReactPaginate
           nextLabel="next >"
           onPageChange={handlePageClick}
           pageRangeDisplayed={5}
-          // pageCount={totalPageNum}
+          pageCount={totalPageNum}
           forcePage={searchQuery.page - 1}
           previousLabel="< previous"
           renderOnZeroPageCount={null}
@@ -89,7 +98,13 @@ const AdminUserPage = () => {
           activeClassName="active"
         />
       </Container>
-
+      {showDialog && selectedUser && (
+        <UserDetailDialog
+          open={showDialog}
+          handleClose={handleClose}
+          user={selectedUser}
+        />
+      )}
     </div>
   );
 }
