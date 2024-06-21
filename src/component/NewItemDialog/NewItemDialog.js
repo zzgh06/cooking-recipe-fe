@@ -16,8 +16,7 @@ const InitialFormData = {
   price: 0,
 };
 
-const NewItemDialog = ({ mode, showDialog, setShowDialog, selectedIngredient }) => {
-  console.log("selectedIngredient",selectedIngredient)
+const NewItemDialog = ({ mode, showDialog, setShowDialog, selectedIngredient }) => {  
   const dispatch = useDispatch();
   const [formData, setFormData] = useState(InitialFormData);
   const [stockError, setStockError] = useState(false);
@@ -32,8 +31,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog, selectedIngredient }) 
     event.preventDefault();
     if (formData.stock === 0) return setStockError(true);
 
-    if (mode === "new") {   
-      console.log("FormData being sent:", formData);
+    if (mode === "new") {         
       dispatch(createIngredient(formData));
     } else {
       dispatch(editIngredient({ id: selectedIngredient._id, ingredient: formData }));

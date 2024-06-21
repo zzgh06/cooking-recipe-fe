@@ -2,8 +2,7 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 
-const IngredientTable = ({ header = [], data = [], deleteItem, openEditForm }) => {
-  console.log("IngredientTable data", data);
+const IngredientTable = ({ header = [], data = [], deleteItem, openEditForm }) => {  
   return (
     <div className="overflow-x">
       <Table striped bordered hover>
@@ -19,7 +18,7 @@ const IngredientTable = ({ header = [], data = [], deleteItem, openEditForm }) =
             data.map((item, index) => (
               <tr key={index}>
                 <td>{index + 1}</td>
-                <td>{item?.sku || "N/A"}</td> 
+                {/* <td>{item?.sku || "N/A"}</td>  */}
                 <td style={{ minWidth: "100px" }}>{item?.name || "N/A"}</td>
                 <td style={{ minWidth: "150px" }}>{item?.description || "N/A"}</td>
                 <td>$ {item?.price ? item.price.toFixed(2) : "N/A"}</td>
