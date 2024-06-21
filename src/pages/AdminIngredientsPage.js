@@ -22,13 +22,9 @@ const AdminIngredientsPage = () => {
   const tableHeader = ["#", "Name", "Description", "Price", "Category", "Stock", "Status", "Image", "Actions"];
 
   useEffect(() => {
+    console.log("검색 쿼리 변경:", searchQuery);
     dispatch(fetchIngredients(searchQuery));
   }, [dispatch, searchQuery]);
-
-  useEffect(() => {
-    console.log('Redux State:', ingredientList); // 확인용 로그 출력
-    console.log('Total Pages:', totalPageNumber); // 확인용 로그 출력
-  }, [ingredientList, totalPageNumber]);
 
   const handleShowAll = () => {
     setSearchQuery({ page: 1, name: "" });
@@ -53,6 +49,15 @@ const AdminIngredientsPage = () => {
     dispatch(deleteIngredient(id));
   };
 
+  const onCheckEnter = (event) => {
+    if (event.key === "Enter") {
+      if (event.target.value === "") {
+        return setSearchQuery({ ...searchQuery, name: "" });
+      }
+      setSearchQuery({ ...searchQuery, name: event.target.value });
+    }
+  };
+
 
 
   return (
@@ -60,10 +65,8 @@ const AdminIngredientsPage = () => {
       <Container className="container-custom">
         <div className="mt-2 top-container">
           <SearchBox
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            placeholder="제품 이름으로 검색"
-            field="name"
+            name="search-box"
+            onCheckEnter={onCheckEnter}
           />
           <Button className="ingredients mt-2 mb-2" onClick={handleShowAll}>
             Show All
@@ -82,7 +85,7 @@ const AdminIngredientsPage = () => {
           openEditForm={openEditForm}
         />
 
-<ReactPaginate
+        <ReactPaginate
           nextLabel="next >"
           onPageChange={handlePageClick}
           pageRangeDisplayed={5}
