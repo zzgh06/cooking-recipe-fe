@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Form, Modal, Button, Col, Table } from "react-bootstrap";
-// import { ORDER_STATUS } from "../constants/order.constants";
 import { useDispatch, useSelector } from "react-redux";
 import { currencyFormat } from "../../utils/number";
+import { ORDER_STATUS } from "../../constants/order.constants";
 
-const OrderDetailDialog = ({ open, handleClose, searchQuery }) => {
+const OrderDetailDialog = ({ open, handleClose }) => {
   const dispatch = useDispatch();
   const selectedOrder = [
     {
@@ -85,13 +85,13 @@ const OrderDetailDialog = ({ open, handleClose, searchQuery }) => {
         <Form onSubmit={submitStatus}>
           <Form.Group as={Col} controlId="status">
             <Form.Label>Status</Form.Label>
-            {/* <Form.Select value={orderStatus} onChange={handleStatusChange}>
+            <Form.Select value={orderStatus} onChange={handleStatusChange}>
               {ORDER_STATUS.map((item, idx) => (
                 <option key={idx} value={item.toLowerCase()}>
                   {item}
                 </option>
               ))}
-            </Form.Select> */}
+            </Form.Select>
           </Form.Group>
           <div className="order-button-area">
             <Button

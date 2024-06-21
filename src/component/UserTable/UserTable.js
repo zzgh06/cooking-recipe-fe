@@ -1,21 +1,22 @@
 import React from 'react'
 import { Table } from 'react-bootstrap';
 
-const UserTable = ({header, data}) => {
+const UserTable = ({header, data, onRowClick }) => {
+  console.log(data)
   return (
     <div className="overflow-x">
       <Table striped bordered hover>
         <thead>
           <tr>
-            {header.map((title) => (
-              <th>{title}</th>
+            {header.map((title, index) => (
+              <th key={index}>{title}</th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {data?.users?.length > 0 ? (
-            data.users.map((item, index) => (
-              <tr>
+          {data?.length > 0 ? (
+            data.map((item, index) => (
+              <tr key={index} onClick={()=> onRowClick(item)}>
                 <th>{index}</th>
                 <th>{item.name}</th>
                 <th>{item.email}</th>
