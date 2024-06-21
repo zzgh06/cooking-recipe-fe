@@ -1,4 +1,3 @@
-// src/pages/AdminIngredientsPage.js
 import React, { useEffect, useState } from "react";
 import { Container, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,9 +6,8 @@ import IngredientTable from '../component/IngredientTable/IngredientTable';
 import NewItemDialog from '../component/NewItemDialog/NewItemDialog';
 import ReactPaginate from "react-paginate";
 import { fetchIngredients, createIngredient, editIngredient, deleteIngredient } from "../redux/ingredientSlice";
-import { useSearchParams, useNavigate } from "react-router-dom";
-import '../style/adminIngredient.style.css'
-
+import { useSearchParams } from "react-router-dom";
+import '../style/adminIngredient.style.css';
 
 const AdminIngredientsPage = () => {
   const dispatch = useDispatch();
@@ -18,13 +16,19 @@ const AdminIngredientsPage = () => {
   const [showDialog, setShowDialog] = useState(false);
   const [mode, setMode] = useState("new");
   const [selectedIngredient, setSelectedIngredient] = useState(null);
+  const ingredientList = useSelector(state => state.ingredients.ingredients || []); 
+  const totalPageNumber = useSelector(state => state.ingredients.totalPages || 0); 
 
-  const ingredientList = useSelector(state => state.ingredients.ingredients);
-  const totalPageNumber = useSelector(state => state.ingredients.totalPages);
+  const tableHeader = ["#", "Name", "Description", "Price", "Category", "Stock", "Status", "Image", "Actions"];
 
   useEffect(() => {
     dispatch(fetchIngredients(searchQuery));
   }, [dispatch, searchQuery]);
+
+  useEffect(() => {
+    console.log('Redux State:', ingredientList); // 확인용 로그 출력
+    console.log('Total Pages:', totalPageNumber); // 확인용 로그 출력
+  }, [ingredientList, totalPageNumber]);
 
   const handleShowAll = () => {
     setSearchQuery({ page: 1, name: "" });
@@ -49,6 +53,8 @@ const AdminIngredientsPage = () => {
     dispatch(deleteIngredient(id));
   };
 
+
+
   return (
     <div className="locate-center">
       <Container className="container-custom">
@@ -70,12 +76,13 @@ const AdminIngredientsPage = () => {
         </div>
 
         <IngredientTable
-          header={["#", "SKU", "Name", "Price", "Stock", "Image", "Status", "Actions"]}
+          header={tableHeader}
           data={ingredientList}
           deleteItem={deleteItem}
           openEditForm={openEditForm}
         />
-        <ReactPaginate
+
+<ReactPaginate
           nextLabel="next >"
           onPageChange={handlePageClick}
           pageRangeDisplayed={5}
@@ -94,7 +101,6 @@ const AdminIngredientsPage = () => {
           breakLinkClassName="page-link"
           containerClassName="pagination"
           activeClassName="active"
-          className="display-center list-style-none"
         />
       </Container>
 

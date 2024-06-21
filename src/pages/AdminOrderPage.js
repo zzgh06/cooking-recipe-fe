@@ -5,7 +5,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import SearchBox from "../component/Navbar/SearchBox";
 import { useDispatch, useSelector } from "react-redux";
 import OrderTable from "../component/OrderTable/OrderTable";
-import DashBoardCard from "../component/DashBoardCard/DashBoardCard";
+import DashBoardCard from "../component/DashBoardCard/DashboardCard"
 import OrderDetailDialog from "../component/OrderDetailDialog/OrderDetailDialog";
 
 const AdminOrderPage = () => {
