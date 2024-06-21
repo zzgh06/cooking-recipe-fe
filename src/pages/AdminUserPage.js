@@ -28,6 +28,7 @@ const AdminUserPage = () => {
     "Level",
     "Ship To",
     "Join date",
+    "",
   ];
 
   useEffect(() => {
