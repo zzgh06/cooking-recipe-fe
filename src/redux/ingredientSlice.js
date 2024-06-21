@@ -1,35 +1,25 @@
-// src/slices/ingredientSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import api from "../utils/api";
 
-
-export const fetchIngredients = createAsyncThunk('ingredients/fetchIngredients', async (searchQuery) => {
-  const response = await fetch(`/api/ingredients?name=${searchQuery.name}&page=${searchQuery.page}`);
-  return response.json();
+export const fetchIngredients = createAsyncThunk('ingredients/fetchIngredients', async (searchQuery) => {  
+  const response = await api.get(`/ingredient?name=${searchQuery.name}&page=${searchQuery.page}`);
+  return response.data;
 });
 
 export const createIngredient = createAsyncThunk('ingredients/createIngredient', async (ingredient) => {
-  const response = await fetch('/api/ingredients', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(ingredient),
-  });
-  return response.json();
+  const response = await api.post('/ingredient', ingredient);
+  return response.data;
 });
 
 export const editIngredient = createAsyncThunk('ingredients/editIngredient', async ({ id, ingredient }) => {
-  const response = await fetch(`/api/ingredients/${id}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(ingredient),
-  });
-  return response.json();
+  const response = await api.put(`/ingredient/${id}`, ingredient);
+  return response.data;
 });
 
 export const deleteIngredient = createAsyncThunk('ingredients/deleteIngredient', async (id) => {
-  const response = await fetch(`/api/ingredients/${id}`, { method: 'DELETE' });
-  return response.json();
+  const response = await api.delete(`/ingredient/${id}`);
+  return response.data;
 });
-
 
 const ingredientSlice = createSlice({
   name: 'ingredients',
@@ -47,22 +37,24 @@ const ingredientSlice = createSlice({
       })
       .addCase(fetchIngredients.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.ingredients = action.payload.ingredients;
-        state.totalPages = action.payload.totalPages;
+        state.ingredients = action.payload.data.ingredients;
+        state.totalPages = action.payload.data.totalPageNum;
       })
       .addCase(fetchIngredients.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message;
       })
       .addCase(createIngredient.fulfilled, (state, action) => {
-        state.ingredients.push(action.payload);
+        state.ingredients.push(action.payload.data);
       })
       .addCase(editIngredient.fulfilled, (state, action) => {
-        const index = state.ingredients.findIndex(ingredient => ingredient.id === action.payload.id);
-        state.ingredients[index] = action.payload;
-      })
+        const index = state.ingredients.findIndex(ingredient => ingredient._id === action.payload.ingredient._id);
+        if (index !== -1) {
+          state.ingredients[index] = action.payload.ingredient;
+        }
+      })      
       .addCase(deleteIngredient.fulfilled, (state, action) => {
-        state.ingredients = state.ingredients.filter(ingredient => ingredient.id !== action.payload.id);
+        state.ingredients = state.ingredients.filter(ingredient => ingredient._id !== action.payload.ingredient._id);
       });
   },
 });

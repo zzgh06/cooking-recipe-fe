@@ -3,49 +3,38 @@ import { Form, Modal, Button, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import CloudinaryUploadWidget from "../../utils/CloudinaryUploadWidget";
 import { createIngredient, editIngredient } from "../../redux/ingredientSlice";
-import { CATEGORY, STATUS, SALE } from "../../constants/ingredient.constants";
+import { CATEGORY, STATUS } from "../../constants/ingredient.constants";
 import "../../style/adminIngredient.style.css";
 
 const InitialFormData = {
   name: "",
-  sku: "",
-  stock: {},
+  stock: 0,
   image: "",
   description: "",
-  category: [],
+  category: "",
   status: "active",
   price: 0,
 };
 
-const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
-  const selectedIngredient = useSelector((state) => state.ingredients.selectedIngredient);
-  const { error } = useSelector((state) => state.ingredients);
-  const [formData, setFormData] = useState(
-    mode === "new" ? { ...InitialFormData } : selectedIngredient
-  );
-  const [stock, setStock] = useState([]);
+const NewItemDialog = ({ mode, showDialog, setShowDialog, selectedIngredient }) => {  
   const dispatch = useDispatch();
+  const [formData, setFormData] = useState(InitialFormData);
   const [stockError, setStockError] = useState(false);
- 
+
   const handleClose = () => {
     setFormData({ ...InitialFormData });
-    setStock([]);
     setStockError(false);
     setShowDialog(false);
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (stock.length === 0) return setStockError(true);
+    if (formData.stock === 0) return setStockError(true);
 
-    const totalStock = stock.reduce((total, item) => {
-      return { ...total, [item[0]]: parseInt(item[1]) };
-    }, {});
-
-    if (mode === "new") {
-      dispatch(createIngredient({ ...formData, stock: totalStock }));
+    if (mode === "new") {         
+      dispatch(createIngredient(formData));
     } else {
-      dispatch(editIngredient({ id: selectedIngredient._id, ingredient: { ...formData, stock: totalStock } }));
+      dispatch(editIngredient({ id: selectedIngredient._id, ingredient: formData }));
     }
     setShowDialog(false);
   };
@@ -53,37 +42,6 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
   const handleChange = (event) => {
     const { id, value } = event.target;
     setFormData({ ...formData, [id]: value });
-  };
-
-  const addStock = () => {
-    setStock([...stock, []]);
-  };
-
-  const deleteStock = (idx) => {
-    const newStock = stock.filter((item, index) => index !== idx);
-    setStock(newStock);
-  };
-
-  const handleSizeChange = (value, index) => {
-    const newStock = [...stock];
-    newStock[index][0] = value;
-    setStock(newStock);
-  };
-
-  const handleStockChange = (value, index) => {
-    const newStock = [...stock];
-    newStock[index][1] = value;
-    setStock(newStock);
-  };
-
-  const onHandleCategory = (event) => {
-    const value = event.target.value;
-    if (formData.category.includes(value)) {
-      const newCategory = formData.category.filter((item) => item !== value);
-      setFormData({ ...formData, category: [...newCategory] });
-    } else {
-      setFormData({ ...formData, category: [...formData.category, value] });
-    }
   };
 
   const uploadImage = (url) => {
@@ -94,11 +52,8 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
     if (showDialog) {
       if (mode === "edit" && selectedIngredient) {
         setFormData(selectedIngredient);
-        const stockArray = Object.keys(selectedIngredient.stock).map((size) => [size, selectedIngredient.stock[size]]);
-        setStock(stockArray);
       } else {
         setFormData({ ...InitialFormData });
-        setStock([]);
       }
     }
   }, [showDialog, mode, selectedIngredient]);
@@ -114,16 +69,6 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
       </Modal.Header>
       <Form className="form-container" onSubmit={handleSubmit}>
         <Row className="mb-3">
-          <Form.Group as={Col} controlId="sku">
-            <Form.Label>Sku</Form.Label>
-            <Form.Control
-              onChange={handleChange}
-              type="string"
-              placeholder="Enter Sku"
-              required
-              value={formData.sku}
-            />
-          </Form.Group>
           <Form.Group as={Col} controlId="name">
             <Form.Label>Name</Form.Label>
             <Form.Control
@@ -152,54 +97,13 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
           {stockError && (
             <span className="error-message">재고를 추가해주세요</span>
           )}
-          <Button size="sm" onClick={addStock}>
-            Add +
-          </Button>
-          <div className="mt-2">
-            {stock.map((item, index) => (
-              <Row key={index}>
-                <Col sm={4}>
-                  <Form.Select
-                    onChange={(event) => handleSizeChange(event.target.value, index)}
-                    required
-                    defaultValue={item[0] ? item[0].toLowerCase() : ""}
-                  >
-                    <option value="" disabled selected hidden>
-                      Please Choose...
-                    </option>
-                    {SALE.map((item, idx) => (
-                      <option
-                        invalid="true"
-                        value={item.toLowerCase()}
-                        disabled={stock.some((size) => size[0] === item.toLowerCase())}
-                        key={idx}
-                      >
-                        {item}
-                      </option>
-                    ))}
-                  </Form.Select>
-                </Col>
-                <Col sm={6}>
-                  <Form.Control
-                    onChange={(event) => handleStockChange(event.target.value, index)}
-                    type="number"
-                    placeholder="number of stock"
-                    value={item[1]}
-                    required
-                  />
-                </Col>
-                <Col sm={2}>
-                  <Button
-                    variant="danger"
-                    size="sm"
-                    onClick={() => deleteStock(index)}
-                  >
-                    -
-                  </Button>
-                </Col>
-              </Row>
-            ))}
-          </div>
+          <Form.Control
+            onChange={(e) => setFormData({ ...formData, stock: parseInt(e.target.value) })}
+            type="number"
+            placeholder="Enter stock"
+            value={formData.stock}
+            required
+          />
         </Form.Group>
         <Form.Group className="mb-3" controlId="Image" required>
           <Form.Label>Image</Form.Label>
@@ -226,11 +130,13 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
             <Form.Label>Category</Form.Label>
             <Form.Control
               as="select"
-              multiple
-              onChange={onHandleCategory}
+              onChange={handleChange}
               value={formData.category}
               required
             >
+              <option value="" disabled hidden>
+                Please Choose...
+              </option>
               {CATEGORY.map((item, idx) => (
                 <option key={idx} value={item.toLowerCase()}>
                   {item}

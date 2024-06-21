@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useLocation } from "react-router";
 import { Col, Row } from "react-bootstrap";
-import Sidebar from "../component/SideBar/sidebar";
+import Sidebar from "../component/SideBar/Sidebar";
 import Navbar from "../component/Navbar/Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import Footer from "../component/Footer/Footer";
@@ -10,8 +10,7 @@ import { loginWithToken } from "../redux/userSlice";
 const AppLayout = ({ children }) => {
   const location = useLocation();
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.auth.user);
-  console.log("user", user);
+  const user = useSelector((state) => state.auth.user); 
   
   useEffect(() => {
     dispatch(loginWithToken());
@@ -36,11 +35,10 @@ const AppLayout = ({ children }) => {
         <>
           <Navbar user={user} />
           <div className="layout">{children}</div>
-
-        </>
-         
+          <Footer />
+        </>                 
       )}
-        <Footer />
+        
     </div>
   );
 };
