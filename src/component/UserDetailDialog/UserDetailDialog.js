@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Modal } from "react-bootstrap";
 
-const UserDetailDialog = ({ open, handleClose, user }) => {
+const UserDetailDialog = ({ open, handleClose, user, deleteUser }) => {
   return (
     <Modal show={open} onHide={handleClose} dialogClassName="custom-modal">
       <Modal.Header closeButton>
@@ -16,6 +16,12 @@ const UserDetailDialog = ({ open, handleClose, user }) => {
         <p>연락처: {user.contact}</p>
 
         <div className="order-button-area">
+          <Button
+            variant="danger"
+            onClick={() => deleteUser(user?._id)}
+          >
+            삭제
+          </Button>
           <Button
             variant="light"
             onClick={handleClose}

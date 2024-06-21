@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Table } from "react-bootstrap";
 
-const UserTable = ({ header, data, onRowClick, deleteUser }) => {
+const UserTable = ({ header, data, onRowClick }) => {
   console.log(data);
 
   return (
@@ -24,16 +24,6 @@ const UserTable = ({ header, data, onRowClick, deleteUser }) => {
                 <th>{user.level}</th>
                 <th>{user.shipTo}</th>
                 <th>{user.createdAt.slice(0, 10)}</th>
-                <th>
-                  <Button
-                    size="sm"
-                    variant="danger"
-                    // onClick={() => deleteUser(user._id)}
-                    className="mr-1"
-                  >
-                    -
-                  </Button>
-                </th>
               </tr>
             ))
           ) : (

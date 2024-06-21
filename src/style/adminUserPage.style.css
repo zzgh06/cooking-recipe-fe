@@ -6,7 +6,9 @@
   overflow-y: auto;
 }
 
-.order-button-area {
+.display-flex{
+  width: 70px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
+  align-items: center;
 }
