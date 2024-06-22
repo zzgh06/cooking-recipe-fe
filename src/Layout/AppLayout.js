@@ -6,6 +6,7 @@ import Navbar from "../component/Navbar/Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import Footer from "../component/Footer/Footer";
 import { loginWithToken } from "../redux/userSlice";
+import RecentlyViewed from "../component/RecentlyViewed/RecentlyViewed";
 
 const AppLayout = ({ children }) => {
   const location = useLocation();
@@ -35,6 +36,7 @@ const AppLayout = ({ children }) => {
         <>
           <Navbar user={user} />
           <div className="layout">{children}</div>
+          <RecentlyViewed />
           <Footer />
         </>                 
       )}

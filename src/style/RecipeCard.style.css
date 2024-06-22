@@ -3,9 +3,10 @@
   border: none;
   border-radius: 8px;
   margin-bottom: 10px;
-  width: 20vw;
+  width: 100%;
+  padding: 10px 15px;
   overflow: hidden;
-  transition: all 0.5s;
+  transition: all 1s ease-in-out;
 }
 
 .recipe-card img {
