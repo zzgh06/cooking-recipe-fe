@@ -16,6 +16,8 @@ import AdminOrderPage from '../pages/AdminOrderPage'
 import AdminIngredientsPage from '../pages/AdminIngredientsPage'
 import AdminUserPage from '../pages/AdminUserPage'
 import AdminRecipePage from  '../pages/AdminRecipePage'
+import RecipePage from '../pages/RecipePage'
+import StorePage from '../pages/StorePage'
 
 
 const AppRouter = () => {
@@ -23,10 +25,11 @@ const AppRouter = () => {
     <>
     
     <Routes>
-      <Route path="/" element={<MainPage />} />
+      <Route path="/" element={<RecipePage />} />
+      <Route path="/recipe/:id" element={<RecipeDetail />} />
+      <Route path="/store" element={<StorePage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
-      <Route path="/recipe/:id" element={<RecipeDetail />} />
       <Route path="/ingredients/:id" element={<IngredientsDetail />} />
       <Route element={<PrivateRoute permissionLevel="customer" />}>
         <Route path="/fridge" element={<MyFridge />} />

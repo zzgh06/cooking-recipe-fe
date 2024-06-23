@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { Col, Row } from "react-bootstrap";
 import Sidebar from "../component/SideBar/sidebar";
@@ -6,18 +6,26 @@ import Navbar from "../component/Navbar/Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import Footer from "../component/Footer/Footer";
 import { loginWithToken } from "../redux/userSlice";
+import RecentlyViewed from "../component/RecentlyViewed/RecentlyViewed";
 
 const AppLayout = ({ children }) => {
   const location = useLocation();
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.auth.user); 
-  
+  const user = useSelector((state) => state.auth.user);
+  const [recentlyViewedItems, setRecentlyViewedItems] = useState([]);
+
   useEffect(() => {
     dispatch(loginWithToken());
   }, []);
 
   useEffect(() => {
     console.log("Current location:", location.pathname);
+  }, [location]);
+
+  useEffect(() => {
+    const viewedItems =
+      JSON.parse(localStorage.getItem("viewedIngredients")) || [];
+    setRecentlyViewedItems(viewedItems);
   }, [location]);
 
   return (
@@ -35,10 +43,14 @@ const AppLayout = ({ children }) => {
         <>
           <Navbar user={user} />
           <div className="layout">{children}</div>
+          {recentlyViewedItems.length >= 1 ? (
+            <RecentlyViewed recentlyViewedItems={recentlyViewedItems} />
+          ) : (
+            ""
+          )}
           <Footer />
-        </>                 
+        </>
       )}
-        
     </div>
   );
 };

@@ -1,0 +1,30 @@
+.recipe-all-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+}
+
+.recipe-all-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 50px;
+}
+
+.recipe-all-title h2 {
+  font-weight: 600;
+}
+
+.recipe-category {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 70vw;
+  flex-wrap: wrap;
+}
+
+.category-container {
+  display: flex;
+}

@@ -17,9 +17,15 @@ import { useDispatch } from "react-redux";
 const Navbar = ({ user }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const menuList = ["스토어", "레시피", "베스트", "My 냉장고"];
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
+  const menuList = ["레시피", "스토어", "베스트", "My 냉장고"];
+  const menuPathMapping = {
+    레시피: "",
+    스토어: "store",
+    베스트: "best",
+    "My 냉장고": "fridge",
+  };
 
   const onCheckEnter = (event) => {
     if (event.key === "Enter") {
@@ -98,7 +104,13 @@ const Navbar = ({ user }) => {
         <div className="nav-menu">
           {menuList.map((menu, index) => (
             <li key={index}>
-              <Link to="/">{menu}</Link>
+              <Link
+                to={`/${menuPathMapping[menu]}`}
+                key={index}
+                onClick={toggleSidebar}
+              >
+                {menu}
+              </Link>
             </li>
           ))}
         </div>
