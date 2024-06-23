@@ -1,29 +1,27 @@
-import React, { useEffect, useState } from 'react'
-import "../../style/RecentlyViewed.style.css"
+import React from 'react';
+import "../../style/RecentlyViewed.style.css";
 
-const RecentlyViewed = () => {
-  const [recentlyViewed, setRecentlyViewed] = useState([]);
+const RecentlyViewed = ({ recentlyViewedItems }) => {
+  console.log(recentlyViewedItems);
 
-  useEffect(() => {
-    const viewedProducts = JSON.parse(localStorage.getItem("viewedProducts")) || [];
-    setRecentlyViewed(viewedProducts);
-  }, []);
   return (
     <div className='recently-viewed'>
-      <div className='title' style={{color: 'white'}}>CART</div>
+      <div className='title'>최근 본 상품</div>
       <div className='body'>
-        <div className='content'>
-          {/* 최근 본 레시피 혹은 상품이 보여질 곳 */}
-          {/* <img src={ingredient.image} alt=''/> */}
-        </div>
-        <div className='content'>
-          {/* 최근 본 레시피 혹은 상품이 보여질 곳 */}
-          <img src="" alt=''/>
-        </div>
+        {recentlyViewedItems.length > 0 && (
+          <div className='content'>
+            <img src={recentlyViewedItems[0].image} alt={recentlyViewedItems[0].name} />
+          </div>
+        )}
+        {recentlyViewedItems.length > 1 && (
+          <div className='content'>
+            <img src={recentlyViewedItems[1].image} alt={recentlyViewedItems[1].name} />
+          </div>
+        )}
       </div>
       <div className='footer'><a href='#'>TOP ▲</a></div>
     </div>
-  )
-}
+  );
+};
 
-export default RecentlyViewed
+export default RecentlyViewed;

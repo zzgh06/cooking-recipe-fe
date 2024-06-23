@@ -14,18 +14,7 @@ const StorePage = () => {
   useEffect(() => {
     dispatch(fetchIngredients(searchQuery));
   }, []);
-
-  const { ingredientId } = useParams();
-
-  useEffect(() => {
-    const ingredient = { id: ingredientId, name: "Product Name", image: "Product Image URL" }; // 상품 정보를 동적으로 설정
-    const viewedProducts = JSON.parse(localStorage.getItem("viewedProducts")) || [];
-    
-    const updatedViewedProducts = viewedProducts.filter(item => item.id !== ingredientId);
-    updatedViewedProducts.unshift(ingredient);
-    
-    localStorage.setItem("viewedProducts", JSON.stringify(updatedViewedProducts.slice(0, 2))); // 최대 5개의 최근 본 상품 저장
-  }, [ingredientId]);
+  
   return (
     <div>
       <BannerComponent />
