@@ -23,8 +23,7 @@ const AppLayout = ({ children }) => {
   }, [location]);
 
   useEffect(() => {
-    const viewedItems =
-      JSON.parse(localStorage.getItem("viewedIngredients")) || [];
+    const viewedItems = JSON.parse(localStorage.getItem("viewedIngredients")) || [];
     setRecentlyViewedItems(viewedItems);
   }, [location]);
 
