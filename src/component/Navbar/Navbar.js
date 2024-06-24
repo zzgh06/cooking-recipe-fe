@@ -7,6 +7,7 @@ import {
   faCartPlus,
   faClose,
   faLocationDot,
+  faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import "../Navbar/Navbar.style.css";
 import SearchBox from "./SearchBox";
@@ -15,6 +16,7 @@ import { logout } from "../../redux/userSlice";
 import { useDispatch } from "react-redux";
 
 const Navbar = ({ user }) => {
+  console.log("Nav bar user",user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -35,8 +37,7 @@ const Navbar = ({ user }) => {
       // navigate(`?name=${event.target.value}`);
     }
   };
-  console.log("level", user?.user.level);
-
+  
   const handleLogout = async () => {
     await dispatch(logout());
     navigate("/");
@@ -53,7 +54,8 @@ const Navbar = ({ user }) => {
   const hideDropdown = () => {
     setDropdownVisible(false);
   };
-
+  
+  
   return (
     <div className="nav">
       <div className="nav-top">
@@ -64,7 +66,7 @@ const Navbar = ({ user }) => {
         )}
         {user ? (
           <div className="user-info">
-            <span>{user.user.name}님 </span>
+            <span>{user?.user.name}님 </span>
             <span onClick={handleLogout}>로그아웃</span>
           </div>
         ) : (
@@ -84,6 +86,11 @@ const Navbar = ({ user }) => {
         </div>
         <SearchBox name={"search-box"} onCheckEnter={onCheckEnter} />
         <div className="user-menu">
+          <FontAwesomeIcon
+            className="nav-icon"
+            icon={faUser}
+            onClick={() => navigate("/account/profile")} 
+          />
           <FontAwesomeIcon className="nav-icon" icon={faLocationDot} />
           <FontAwesomeIcon className="nav-icon" icon={faHeart} />
           <FontAwesomeIcon

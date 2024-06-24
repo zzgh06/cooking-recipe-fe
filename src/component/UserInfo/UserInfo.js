@@ -1,0 +1,60 @@
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { Image, Row, Col, Container } from 'react-bootstrap';
+import { logout } from '../../redux/userSlice';
+import { useNavigate } from 'react-router-dom';
+import './UserInfo.style.css';
+
+const UserInfo = ({ user, onEditProfile }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { name, email, contact } = user?.user || {};
+
+  const handleLogout = async () => {
+    await dispatch(logout());
+    navigate("/");
+  };
+
+  const handleEditProfileClick = () => {
+    console.log('프로필 수정을 눌렀습니다.');
+    onEditProfile();
+  };
+
+  return (
+    <Container className="user-info">
+      <Row className="align-items-center mb-3">
+        <Col xs={3}>
+          <Image 
+            src="https://via.placeholder.com/100" 
+            roundedCircle 
+            alt="User profile" 
+            className="profile-image"
+          />
+        </Col>
+        <Col xs={9}>
+          <div className="d-flex flex-column align-items-end">
+            <div className="d-flex justify-content-between w-100">
+              <span className="name-span">{name} 님</span>
+              <span onClick={handleLogout} style={{ cursor: 'pointer', color: 'blue' }}>로그아웃</span>
+            </div>
+            <p className="mb-1">{email}</p>
+            <p>Phone: {contact}</p>
+          </div>
+        </Col>
+      </Row>
+      <Row className="additional-info">
+        <Col>
+          <button className="w-105 mb-2">내 레시피</button>
+        </Col>
+        <Col>
+          <button className="w-105 mb-2">내 주문</button>
+        </Col>
+        <Col>
+          <button className="w-105 mb-2" onClick={handleEditProfileClick}>프로필수정</button>
+        </Col>
+      </Row>
+    </Container>
+  );
+};
+
+export default UserInfo;

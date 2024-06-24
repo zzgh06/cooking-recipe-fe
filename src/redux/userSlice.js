@@ -46,6 +46,7 @@ export const loginWithToken = createAsyncThunk(
     try {
       const response = await api.get("/user/me");
       if (response.status !== 200) throw new Error(response.error);
+      console.log("response",response.data)
       return response.data;
     } catch (error) {
       thunkAPI.dispatch(logout());
@@ -114,6 +115,7 @@ export const deleteUser = createAsyncThunk(
 const initialState = {
   registrationData: null,
   loginData: null,
+  user: null,
   usersData: [],
   totalPageNum: 0,
   error: null,
@@ -220,7 +222,7 @@ const userSlice = createSlice({
       })
       .addCase(updateUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.loginData = action.payload;
+        state.user = action.payload;
         state.error = null;
       })
       .addCase(updateUser.rejected, (state, action) => {
