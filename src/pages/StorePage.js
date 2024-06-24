@@ -8,7 +8,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 const StorePage = () => {
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [searchQuery, setSearchQuery] = useState({ page: 1, name: "" });
+  const [searchQuery, setSearchQuery] = useState({ page: 3, name: "" });
   const ingredientsList = useSelector((state) => state.ingredients.ingredients);
   console.log(ingredientsList);
   useEffect(() => {

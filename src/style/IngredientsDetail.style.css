@@ -1,0 +1,43 @@
+.ingredient-container {
+  padding: 50px 150px;
+}
+
+.image-container {
+  text-align: center;
+  padding: 0;
+}
+
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+}
+
+.ingredient-info-area {
+  padding: 20px;
+}
+
+.ingredient-name {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.ingredient-price {
+  font-size: 20px;
+  color: green;
+}
+
+.ingredient-price .discount-rate {
+  font-size: 19px;
+  font-weight: 600;
+  color: orangered;
+}
+
+.ingredient-info {
+  margin-top: 10px;
+}
+
+.delivery-info {
+  margin-top: 20px;
+  border-top: 1px solid #ddd;
+  padding-top: 10px;
+}
