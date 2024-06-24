@@ -21,7 +21,15 @@
   display: block;
 }
 
-@media (max-width: 768px) {
+.change-button {
+  margin-top: 0;
+}
+
+.change-button:hover {
+  background-color: lightgreen;
+}
+
+@media (max-width: 994px) {
   .postcode-widget {
       width: 100%;
       left: auto;
@@ -30,6 +38,7 @@
 }
 
 .change-button {
+  width: 100px;
   padding: 4px;
   border: 1px solid black;
   color: black;

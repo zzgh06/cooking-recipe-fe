@@ -23,7 +23,8 @@
 
 .ingredient-price {
   font-size: 20px;
-  color: green;
+  font-weight: 600;
+  color: black;
 }
 
 .ingredient-price .discount-rate {
@@ -40,4 +41,14 @@
   margin-top: 20px;
   border-top: 1px solid #ddd;
   padding-top: 10px;
+}
+
+.delivery-info > div {
+  margin-bottom: 10px;
+}
+
+@media (max-width: 994px) {
+  .ingredient-container {
+    padding: 50px 100px;
+  }
 }
