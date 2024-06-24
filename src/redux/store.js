@@ -8,3 +8,7 @@ export const store = configureStore({
     ingredients: ingredientReducer,
   },
 });
+
+store.subscribe(() => {
+  console.log('Current auth state:', store.getState().auth);
+});

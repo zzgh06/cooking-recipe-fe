@@ -7,14 +7,16 @@ import {
   faCartPlus,
   faClose,
   faLocationDot,
+  faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import "../Navbar/Navbar.style.css";
 import SearchBox from "./SearchBox";
 import Dropdown from "./Dropdown";
 import { logout } from "../../redux/userSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-const Navbar = ({ user }) => {
+const Navbar = () => {
+  
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -27,6 +29,9 @@ const Navbar = ({ user }) => {
     "My 냉장고": "fridge",
   };
 
+  const user = useSelector((state) => state.auth.user);
+  
+
   const onCheckEnter = (event) => {
     if (event.key === "Enter") {
       if (event.target.value === "") {
@@ -35,8 +40,7 @@ const Navbar = ({ user }) => {
       // navigate(`?name=${event.target.value}`);
     }
   };
-  console.log("level", user?.user.level);
-
+  
   const handleLogout = async () => {
     await dispatch(logout());
     navigate("/");
@@ -53,7 +57,8 @@ const Navbar = ({ user }) => {
   const hideDropdown = () => {
     setDropdownVisible(false);
   };
-
+  
+  
   return (
     <div className="nav">
       <div className="nav-top">
@@ -64,7 +69,7 @@ const Navbar = ({ user }) => {
         )}
         {user ? (
           <div className="user-info">
-            <span>{user.user.name}님 </span>
+            <span>{user?.user.name}님 </span>
             <span onClick={handleLogout}>로그아웃</span>
           </div>
         ) : (
@@ -84,6 +89,11 @@ const Navbar = ({ user }) => {
         </div>
         <SearchBox name={"search-box"} onCheckEnter={onCheckEnter} />
         <div className="user-menu">
+          <FontAwesomeIcon
+            className="nav-icon"
+            icon={faUser}
+            onClick={() => navigate("/account/profile")} 
+          />
           <FontAwesomeIcon className="nav-icon" icon={faLocationDot} />
           <FontAwesomeIcon className="nav-icon" icon={faHeart} />
           <FontAwesomeIcon

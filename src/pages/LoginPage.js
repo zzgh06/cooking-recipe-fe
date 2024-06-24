@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { loginUser, loginWithGoogle, loginWithToken, setError } from '../redux/userSlice';
 import { GoogleLogin } from '@react-oauth/google';
-import './LoginPage.style.css';
+import '../style/LoginPage.style.css'
 
 const LoginPage = () => {
     const dispatch = useDispatch();
