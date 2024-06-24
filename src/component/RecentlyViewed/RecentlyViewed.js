@@ -1,5 +1,6 @@
 import React from "react";
 import "../../style/RecentlyViewed.style.css";
+import { Link } from "react-router-dom";
 
 const RecentlyViewed = ({ recentlyViewedItems }) => {
   console.log(recentlyViewedItems);
@@ -11,10 +12,12 @@ const RecentlyViewed = ({ recentlyViewedItems }) => {
         {recentlyViewedItems.length > 0 &&
           recentlyViewedItems.map((item) => (
             <div className="content">
+              <Link to={`/ingredients/${item.id}`}>
               <img
                 src={item.image}
                 alt={item.name}
               />
+              </Link>
             </div>
           ))}
       </div>
