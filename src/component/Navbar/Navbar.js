@@ -13,10 +13,10 @@ import "../Navbar/Navbar.style.css";
 import SearchBox from "./SearchBox";
 import Dropdown from "./Dropdown";
 import { logout } from "../../redux/userSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-const Navbar = ({ user }) => {
-  console.log("Nav bar user",user);
+const Navbar = () => {
+  
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -28,6 +28,9 @@ const Navbar = ({ user }) => {
     베스트: "best",
     "My 냉장고": "fridge",
   };
+
+  const user = useSelector((state) => state.auth.user);
+  
 
   const onCheckEnter = (event) => {
     if (event.key === "Enter") {

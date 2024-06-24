@@ -92,6 +92,7 @@ export const updateUser = createAsyncThunk(
   async ({ id, userData }, { rejectWithValue }) => {
     try {
       const response = await api.put(`user/${id}`, userData);
+      console.log("response", response)
       if (response.status !== 200) throw new Error(response.error);
       return response.data;
     } catch (error) {
@@ -222,7 +223,7 @@ const userSlice = createSlice({
       })
       .addCase(updateUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
+        state.user = { user: action.payload.data }; 
         state.error = null;
       })
       .addCase(updateUser.rejected, (state, action) => {

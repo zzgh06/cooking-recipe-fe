@@ -1,14 +1,15 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch,useSelector  } from 'react-redux';
 import { Image, Row, Col, Container } from 'react-bootstrap';
 import { logout } from '../../redux/userSlice';
 import { useNavigate } from 'react-router-dom';
 import './UserInfo.style.css';
 
-const UserInfo = ({ user, onEditProfile }) => {
+const UserInfo = ({onEditProfile }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { name, email, contact } = user?.user || {};
+  const user = useSelector((state) => state.auth.user);
+ 
 
   const handleLogout = async () => {
     await dispatch(logout());
@@ -34,11 +35,11 @@ const UserInfo = ({ user, onEditProfile }) => {
         <Col xs={9}>
           <div className="d-flex flex-column align-items-end">
             <div className="d-flex justify-content-between w-100">
-              <span className="name-span">{name} 님</span>
+              <span className="name-span">{user?.user.name} 님</span>
               <span onClick={handleLogout} style={{ cursor: 'pointer', color: 'blue' }}>로그아웃</span>
             </div>
-            <p className="mb-1">{email}</p>
-            <p>Phone: {contact}</p>
+            <p className="mb-1">{user?.user.email}</p>
+            <p>Phone: {user?.user.contact}</p>
           </div>
         </Col>
       </Row>
