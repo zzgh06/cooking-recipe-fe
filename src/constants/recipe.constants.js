@@ -1,8 +1,3 @@
-export const CATEGORY = ["New", "Sale","Baking", "Dairy", "Spices","vegetable"];
-export const SALE= ["10%","20%","30%","50"];
-export const STATUS = ["active", "disactive"];
-export const UNITS = ["kg", "g", "ml", "pieces"];
-
 export const foodCategory = [
     "밑반찬", "메인반찬", "국/탕", "찌개", "디저트", "면/만두",
     "밥/죽/떡", "퓨전", "김치/젓갈/장류", "양념/소스/잼",
@@ -28,5 +23,15 @@ export const foodCategory = [
   export const etcCategory = [
     "기타"
   ];
-   
-  
+
+  export const servings =[
+    "1인분","2인분","3인분","4인분","5인분","6인분이상"
+  ];
+
+  export const difficulty =[
+    "아무나","초급","중급","고급","신의경지"
+  ];
+
+  export const time =[
+    "5분이내","10이내","15분이내","20분이내","30이내","60이내","90이내","2시간이내","2시간이상"
+  ];

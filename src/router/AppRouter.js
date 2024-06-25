@@ -18,6 +18,7 @@ import AdminUserPage from '../pages/AdminUserPage'
 import AdminRecipePage from  '../pages/AdminRecipePage'
 import RecipePage from '../pages/RecipePage'
 import StorePage from '../pages/StorePage'
+import MyRecipePage from '../pages/MyRecipePage'
 
 
 const AppRouter = () => {
@@ -38,6 +39,7 @@ const AppRouter = () => {
         <Route path="/payment/success" element={<OrderCompletePage />} />
         <Route path="/account/purchase" element={<MyPage />} />
         <Route path="/account/profile" element={<MyProfile />} />
+        <Route path="/account/recipe" element={<MyRecipePage />} />
       </Route>
       <Route element={<PrivateRoute permissionLevel="admin" />}>
         <Route path="/admin/recipe" element={<AdminRecipePage />} />
