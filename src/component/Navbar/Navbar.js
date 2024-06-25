@@ -6,7 +6,7 @@ import {
   faBars,
   faCartPlus,
   faClose,
-  faLocationDot,
+  faUtensils,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import "../Navbar/Navbar.style.css";
@@ -94,7 +94,11 @@ const Navbar = () => {
             icon={faUser}
             onClick={() => navigate("/account/profile")} 
           />
-          <FontAwesomeIcon className="nav-icon" icon={faLocationDot} />
+          <FontAwesomeIcon 
+            className="nav-icon" 
+            icon={faUtensils} 
+            onClick={() => navigate("/account/recipe")}
+          />
           <FontAwesomeIcon className="nav-icon" icon={faHeart} />
           <FontAwesomeIcon
             className="nav-icon"
