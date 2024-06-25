@@ -1,0 +1,37 @@
+.fridge-item-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 120px;
+  height: 140px;
+  padding: 12px;
+  margin: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.fridge-item-card:hover {
+  transform: scale(1.05);
+}
+
+.fridge-item-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.fridge-item-name {
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  color: #333;
+  margin-bottom: 0;
+  overflow: hidden; /* Hide the overflow */
+  text-overflow: ellipsis; /* Display an ellipsis when the text overflows */
+  width: 100%; /* Ensure the text element does not exceed the container width */
+}

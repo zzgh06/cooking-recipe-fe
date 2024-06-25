@@ -1,0 +1,46 @@
+.fridge-container {
+  padding: 20px 200px;
+}
+
+.fridge-title {
+  text-align: center;
+}
+
+.fridge {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  border-top: 1px solid lightgrey;
+  border-bottom: 1px solid lightgrey;
+  margin: 0 100px 20px 100px;
+  min-height: 400px;
+}
+
+.fridge-ingredient-search {
+  padding: 0 100px;
+  margin-bottom: 20px;
+}
+
+.fridge-ingredient-search .layout {
+  padding: 0 150px;
+}
+
+.fridge-ingredient-search > p {
+  font-weight: 600;
+  color: gray;
+}
+
+.fridge-ingredient-search .search-box {
+  margin-bottom: 20px;
+}
+
+.fridge-search-result {
+  padding: 20px 0;
+  border-top: 1px solid lightgrey;
+  border-bottom: 1px solid lightgrey;
+}
+
+.fridge-ingredient-card {
+  width: 150px;
+}
