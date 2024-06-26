@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container } from 'react-bootstrap';
-import { createRecipe } from '../redux/recepiSlice';
+import { createRecipe } from '../redux/recipeSlice';
 import RecipeForm from '../component/RecipeForm/RecipeForm';
 
 const MyRecipePage = () => {
