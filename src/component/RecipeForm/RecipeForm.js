@@ -1,28 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
 import CategorySelect from '../CategorySelect/CategorySelect';
 import CloudinaryUploadWidget from '../../utils/CloudinaryUploadWidget';
 import { foodCategory, moodCategory, methodCategory, ingredientCategory, etcCategory, servings, difficulty, time } from '../../constants/recipe.constants';
 import './RecipeForm.style.css';
 
-const initialFormData = {
-  name: '',
-  description: '',
-  image: [],
-  foodCategory: '',
-  moodCategory: '',
-  methodCategory: '',
-  ingredientCategory: '',
-  etcCategory: '',
-  servings: '',
-  time: '',
-  difficulty: '',
-  ingredients: [{ name: '', qty: '', unit: '' }],
-  steps: [{ description: '', image: null }]
-};
+const RecipeForm = ({ onSubmit, initialData }) => {
+  const initialFormData = {
+    name: '',
+    description: '',
+    images: [],
+    foodCategory: '',
+    moodCategory: '',
+    methodCategory: '',
+    ingredientCategory: '',
+    etcCategory: '',
+    servings: '',
+    time: '',
+    difficulty: '',
+    ingredients: [{ name: '', qty: '', unit: '' }],
+    steps: [{ description: '', image: null }]
+  };
 
-const RecipeForm = ({ onSubmit }) => {
   const [formData, setFormData] = useState(initialFormData);
+
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        ...initialFormData,
+        ...initialData,
+        images: initialData.images || [],
+        foodCategory: initialData.categories?.food || '',
+        moodCategory: initialData.categories?.mood || '',
+        methodCategory: initialData.categories?.method || '',
+        ingredientCategory: initialData.categories?.ingredient || '',
+        etcCategory: initialData.categories?.etc || '',
+        ingredients: initialData.ingredients?.length > 0 ? initialData.ingredients : [{ name: '', qty: '', unit: '' }],
+        steps: initialData.steps?.length > 0 ? initialData.steps : [{ description: '', image: null }]
+      });
+    }
+  }, [initialData]);
+
+  useEffect(() => {
+    console.log('Form Data:', formData);
+  }, [formData]);
 
   const handleAddIngredient = () => {
     setFormData({
@@ -40,7 +61,7 @@ const RecipeForm = ({ onSubmit }) => {
 
   const handleChange = (index, field, value, type) => {
     const updatedArray = [...formData[type]];
-    updatedArray[index][field] = value;
+    updatedArray[index] = { ...updatedArray[index], [field]: value }; 
     setFormData({
       ...formData,
       [type]: updatedArray
@@ -50,14 +71,14 @@ const RecipeForm = ({ onSubmit }) => {
   const uploadMainImage = (url) => {
     setFormData(prevFormData => ({
       ...prevFormData,
-      image: [...prevFormData.image, url]
+      images: [...prevFormData.images, url]
     }));
   };
 
   const uploadStepImage = (url, type, index) => {
     if (type === 'steps') {
       const updatedSteps = [...formData.steps];
-      updatedSteps[index].image = url;
+      updatedSteps[index] = { ...updatedSteps[index], image: url }; 
       setFormData(prevFormData => ({
         ...prevFormData,
         steps: updatedSteps
@@ -77,7 +98,7 @@ const RecipeForm = ({ onSubmit }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const { name, description, image, foodCategory, moodCategory, methodCategory, ingredientCategory, etcCategory, servings, time, difficulty, ingredients, steps } = formData;
+    const { name, description, images, foodCategory, moodCategory, methodCategory, ingredientCategory, etcCategory, servings, time, difficulty, ingredients, steps } = formData;
 
     const recipeData = {
       name,
@@ -85,16 +106,16 @@ const RecipeForm = ({ onSubmit }) => {
       ingredients,
       steps,
       categories: {
-        foodCategory,
-        moodCategory,
-        methodCategory,
-        ingredientCategory,
-        etcCategory: etcCategory.split(',')
+        food: foodCategory,
+        mood: moodCategory,
+        method: methodCategory,
+        ingredient: ingredientCategory,
+        etc: etcCategory,
       },
       servings,
       time,
       difficulty,
-      images: image
+      images
     };
 
     console.log('recipeData to be submitted:', recipeData);
@@ -125,10 +146,10 @@ const RecipeForm = ({ onSubmit }) => {
         />
       </Form.Group>
 
-      <Form.Group controlId="image">
+      <Form.Group controlId="images">
         <Form.Label>레시피 이미지</Form.Label>
         <CloudinaryUploadWidget uploadImage={uploadMainImage} type="main" index={null} />
-        {formData.image.length > 0 && formData.image.map((img, idx) => (
+        {formData.images.length > 0 && formData.images.map((img, idx) => (
           <img
             key={idx}
             id={`uploadedimage_main_${idx}`}
@@ -217,7 +238,7 @@ const RecipeForm = ({ onSubmit }) => {
             <Form.Control
               type="text"
               placeholder="재료명"
-              value={ingredient.name}
+              value={ingredient.name || ''}
               onChange={(e) => handleChange(index, 'name', e.target.value, 'ingredients')}
             />
           </Col>
@@ -225,7 +246,7 @@ const RecipeForm = ({ onSubmit }) => {
             <Form.Control
               type="text"
               placeholder="양"
-              value={ingredient.qty}
+              value={ingredient.qty || ''}
               onChange={(e) => handleChange(index, 'qty', e.target.value, 'ingredients')}
             />
           </Col>
@@ -233,7 +254,7 @@ const RecipeForm = ({ onSubmit }) => {
             <Form.Control
               type="text"
               placeholder="단위"
-              value={ingredient.unit}
+              value={ingredient.unit || ''}
               onChange={(e) => handleChange(index, 'unit', e.target.value, 'ingredients')}
             />
           </Col>
@@ -252,7 +273,7 @@ const RecipeForm = ({ onSubmit }) => {
               as="textarea"
               rows={3}
               placeholder="요리 설명"
-              value={step.description}
+              value={step.description || ''}
               onChange={(e) => handleChange(index, 'description', e.target.value, 'steps')}
             />
           </Col>

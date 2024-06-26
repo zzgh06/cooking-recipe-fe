@@ -34,7 +34,7 @@ const RecipeDetail = () => {
             <div className="recipe-detail-left">
               <h1>{recipeDetail.name}</h1>
               <p>{recipeDetail.description}</p>
-              <h2>만드는 방법</h2>
+              <h2>카테고리</h2>
               <ol>
                 {recipeDetail.steps.length > 0 ? (
                   recipeDetail.steps.map((step, index) => (
@@ -68,6 +68,15 @@ const RecipeDetail = () => {
                   <span className="meta-icon">⭐</span>
                 </div>
                 </div>
+                <h2>레시피 카테고리</h2>
+              <ul>
+                <li>음식 종류: {recipeDetail.categories.food}</li>
+                <li>상황: {recipeDetail.categories.mood}</li>
+                <li>방법: {recipeDetail.categories.method}</li>
+                <li>재료: {recipeDetail.categories.ingredient}</li>
+                <li>기타: {Array.isArray(recipeDetail.categories.etc) ? recipeDetail.categories.etc.join(', ') : recipeDetail.categories.etc}</li>
+              </ul>
+
               <h2>레시피 재료</h2>
               <ul>
                 {recipeDetail.ingredients.map(ingredient => (

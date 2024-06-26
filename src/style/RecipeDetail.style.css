@@ -1,7 +1,7 @@
 .recipe-detail-container {
     font-family: Arial, sans-serif;
     margin: 20px;
-    margin-left: 400px;
+    margin-left: 350px;
     max-width: 1200px;
     width: 100%;
     background: #fff;
@@ -111,6 +111,6 @@
   }
   
   .meta-data {
-    font-size: 2rem;
+    font-size: 1.7rem;
     font-weight: bold;
   }
