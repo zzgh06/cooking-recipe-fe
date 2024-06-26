@@ -8,7 +8,7 @@ export const store = configureStore({
   reducer: {
     auth: userReducer,
     ingredients: ingredientReducer,
-    fridge: fridgeReducer
+    fridge: fridgeReducer,
     recepi : recepiReducer,
   },
 });
