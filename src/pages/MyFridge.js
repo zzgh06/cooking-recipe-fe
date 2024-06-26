@@ -6,7 +6,7 @@ import { fetchIngredients } from "../redux/ingredientSlice";
 import MyFridgeSearchResults from "../component/MyFridgeSearchResults/MyFridgeSearchResults";
 import SearchResultCard from "../component/SearchResultCard/SearchResultCard";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { fetchFridgeItems } from "../redux/fridgeSlice";
+import { fetchFridgeItems, fridgeIngredientRecipeResult } from "../redux/fridgeSlice";
 import FridgeItemCard from "../component/FridgeItemCard/FridgeItemCard";
 
 const MyFridge = () => {
@@ -22,10 +22,12 @@ const MyFridge = () => {
     name: query.get("name") || "",
   });
   const [hasSearched, setHasSearched] = useState(false);
+  const [checkedItems, setCheckedItems] = useState(new Set());
 
   useEffect(() => {
     if (searchQuery.name) {
       dispatch(fetchIngredients(searchQuery));
+      dispatch(fridgeIngredientRecipeResult(searchQuery));
       setHasSearched(true);
     }
   }, [dispatch, searchQuery]);
@@ -38,14 +40,29 @@ const MyFridge = () => {
     const newSearchQuery = { ...searchQuery, name: e.target.value };
     setSearchQuery(newSearchQuery);
     if (e.target.value) {
-      setQuery({ name: e.target.value, page: 1 });
+      setQuery({ name: e.target.value });
     } else {
       navigate("/fridge");
       setHasSearched(false);
     }
   };
 
+  const handleCheckboxChange = (name) => {
+    setCheckedItems((prev) => {
+      const newCheckedItems = new Set(prev);
+      if (newCheckedItems.has(name)) {
+        newCheckedItems.delete(name);
+      } else {
+        newCheckedItems.add(name);
+      }
+      return newCheckedItems;
+    });
+  };
+
+
+
   console.log("fridgeItems", fridgeItems);
+  console.log("checkedItems", checkedItems);
 
   return (
     <>
@@ -68,14 +85,18 @@ const MyFridge = () => {
                 key={item.ingredientId._id}
                 item={item.ingredientId}
                 id={item._id}
+                isChecked={checkedItems.has(item.ingredientId.name)}
+                onCheckboxChange={() => handleCheckboxChange(item.ingredientId.name)}
               />
             ))}
           </div>
         )}
-
+        <div>
+          <MyFridgeSearchResults />
+        </div>
         <div className="fridge-ingredient-search">
-          <div className="layout">
-            <p>재료 검색</p>
+          <div className="search-layout">
+            <p className="title">원하시는 식재료를 검색해주세요</p>
             <SearchBox
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
@@ -96,9 +117,6 @@ const MyFridge = () => {
               )}
             </div>
           )}
-        </div>
-        <div>
-          <MyFridgeSearchResults />
         </div>
       </div>
     </>

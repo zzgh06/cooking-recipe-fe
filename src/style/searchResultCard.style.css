@@ -72,3 +72,9 @@
 .search-resultCard__buttons .button-recipe:hover {
   background-color: #0069d9;
 }
+
+@media (max-width: 994px) {
+  .search-resultCard {
+    width: 300px;
+  }
+}
