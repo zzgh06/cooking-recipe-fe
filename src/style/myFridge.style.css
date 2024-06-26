@@ -1,5 +1,5 @@
 .fridge-container {
-  padding: 20px 200px;
+  padding: 20px 150px;
 }
 
 .fridge-title {
@@ -14,6 +14,7 @@
   border: 2px solid lightgrey;
   border-radius: 10px;
   margin: 0 100px 20px 100px;
+  min-width: 315px;
   min-height: 400px;
 }
 
@@ -22,11 +23,13 @@
   margin-bottom: 20px;
 }
 
-.fridge-ingredient-search .layout {
-  padding: 0 150px;
+.fridge-ingredient-search .search-layout {
+  padding: 0 100px;
 }
 
-.fridge-ingredient-search > p {
+.fridge-ingredient-search .title {
+  text-align: center;
+  font-size: 22px;
   font-weight: 600;
   color: gray;
 }
@@ -36,6 +39,7 @@
 }
 
 .fridge-search-result {
+  min-width: 315px;
   padding: 20px 0;
   border-top: 1px solid lightgrey;
   border-bottom: 1px solid lightgrey;
@@ -44,6 +48,7 @@
 
 .fridge-search-result p {
   margin: 0;
+  font-size: 20px;
 }
 
 .fridge-ingredient-card {
@@ -54,4 +59,23 @@
   display: flex;
   align-items: center;
   font-size: 30px;
+}
+
+@media (max-width: 994px) {
+  .fridge-container {
+    padding: 20px 50px;
+  }
+
+  .fridge {
+    margin: 20px 0;
+  }
+
+  .fridge-ingredient-search {
+    padding: 0;
+    margin-bottom: 20px;
+  }
+
+  .fridge-ingredient-search .search-layout {
+    padding: 0;
+  }
 }
