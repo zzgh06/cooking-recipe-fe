@@ -3,10 +3,9 @@ import api from "../utils/api";
 
 export const addIngredientToFridge = createAsyncThunk(
   "fridge/addIngredientToFridge",
-  async (ingredientId, { dispatch, rejectWithValue }) => {
+  async (ingredientId, { rejectWithValue }) => {
     try {
       const response = await api.post("/frige", { items: [{ ingredientId }] });
-      dispatch(fetchFridgeItems());
       return response.data.userFrige;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -25,6 +24,19 @@ export const fetchFridgeItems = createAsyncThunk(
     }
   }
 );
+
+export const deleteFridgeItem = createAsyncThunk(
+  "fridge/deleteFridgeItem",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await api.delete(`/frige/${id}`);
+      return response.data.data.userFrige;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 
 const initialState = {
   fridgeItems: [],
@@ -62,6 +74,14 @@ const fridgeSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchFridgeItems.rejected, (state, action) => {
+        state.error = action.payload;
+      })
+      .addCase(deleteFridgeItem.fulfilled, (state, action) => {
+        state.fridgeItems = state.fridgeItems.filter(
+          (item) => item._id !== action.payload.userFrige._id
+        );
+      })
+      .addCase(deleteFridgeItem.rejected, (state, action) => {
         state.error = action.payload;
       });
   },

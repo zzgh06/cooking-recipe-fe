@@ -1,12 +1,13 @@
 import React from 'react';
 import "../../style/searchResultCard.style.css";
 import { useDispatch } from 'react-redux';
-import { addIngredientToFridge } from '../../redux/fridgeSlice';
+import { addIngredientToFridge, fetchFridgeItems } from '../../redux/fridgeSlice';
 
 const SearchResultCard = ({ item }) => {
   const dispatch = useDispatch();
   const handleAddClick = () => {
     dispatch(addIngredientToFridge(item._id));
+    dispatch(fetchFridgeItems())
   };
   return (
     <div className='search-resultCard'>

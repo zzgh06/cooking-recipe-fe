@@ -12,7 +12,9 @@ import FridgeItemCard from "../component/FridgeItemCard/FridgeItemCard";
 const MyFridge = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const ingredient = useSelector((state) => state.ingredients.ingredients || []);
+  const ingredient = useSelector(
+    (state) => state.ingredients.ingredients || []
+  );
   const fridgeItems = useSelector((state) => state.fridge.fridgeItems || []);
   const [query, setQuery] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState({
@@ -38,7 +40,7 @@ const MyFridge = () => {
     if (e.target.value) {
       setQuery({ name: e.target.value, page: 1 });
     } else {
-      navigate('/fridge')
+      navigate("/fridge");
       setHasSearched(false);
     }
   };
@@ -52,11 +54,25 @@ const MyFridge = () => {
           <h2>My 냉장고</h2>
           <p>나만의 냉장고에 재료를 추가하고 최적의 레시피를 추천해드려요</p>
         </div>
-        <div className="fridge">
-          {fridgeItems.map((item) => (
-            <FridgeItemCard key={item.ingredientId._id} item={item.ingredientId} />
-          ))}
-        </div>
+
+        {fridgeItems.length === 0 ? (
+          <div className="fridge">
+            <div className="fridge-empty-message">
+              <p>냉장고가 텅 비워져 있습니다 😅 <br/>My 냉장고를 가득 채워주세요. </p>
+            </div>
+          </div>
+        ) : (
+          <div className="fridge">
+            {fridgeItems.map((item) => (
+              <FridgeItemCard
+                key={item.ingredientId._id}
+                item={item.ingredientId}
+                id={item._id}
+              />
+            ))}
+          </div>
+        )}
+
         <div className="fridge-ingredient-search">
           <div className="layout">
             <p>재료 검색</p>
@@ -71,9 +87,13 @@ const MyFridge = () => {
           </div>
           {hasSearched && (
             <div className="fridge-search-result">
-              {ingredient.map((item) => (
-                <SearchResultCard key={item._id} item={item} />
-              ))}
+              {ingredient.length === 0 ? (
+                <p>일치하는 재료가 없습니다.</p>
+              ) : (
+                ingredient.map((item) => (
+                  <SearchResultCard key={item._id} item={item} />
+                ))
+              )}
             </div>
           )}
         </div>
