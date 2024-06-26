@@ -3,7 +3,6 @@ import { Route, Routes } from 'react-router-dom'
 import MainPage from '../pages/MainPage'
 import LoginPage from '../pages/LoginPage'
 import RegisterPage from '../pages/RegisterPage'
-import RecipeDetail from '../pages/RecipeDetail'
 import IngredientsDetail from '../pages/IngredientsDetail'
 import PrivateRoute from './PrivateRoute'
 import MyFridge from '../pages/MyFridge'
@@ -16,9 +15,10 @@ import AdminOrderPage from '../pages/AdminOrderPage'
 import AdminIngredientsPage from '../pages/AdminIngredientsPage'
 import AdminUserPage from '../pages/AdminUserPage'
 import AdminRecipePage from  '../pages/AdminRecipePage'
-import RecipePage from '../pages/RecipePage'
 import StorePage from '../pages/StorePage'
 import MyRecipePage from '../pages/MyRecipePage'
+import RecipePage from '../pages/RecipePage'
+import RecipeDetailPage from '../pages/RecipeDetailPage'
 
 
 const AppRouter = () => {
@@ -27,14 +27,15 @@ const AppRouter = () => {
     
     <Routes>
       <Route path="/" element={<RecipePage />} />
-      <Route path="/recipe/:id" element={<RecipeDetail />} />
       <Route path="/store" element={<StorePage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/ingredients/:id" element={<IngredientsDetail />} />
+      <Route path="/recipe" element={<RecipePage />} />
+      <Route path="/recipe/:id" element={<RecipeDetailPage />} />
       <Route element={<PrivateRoute permissionLevel="customer" />}>
         <Route path="/fridge" element={<MyFridge />} />
-        <Route path="/cart" element={<CartPage />} />
+        <Route path="/cart" element={<CartPage />} />        
         <Route path="/payment" element={<PaymentPage />} />
         <Route path="/payment/success" element={<OrderCompletePage />} />
         <Route path="/account/purchase" element={<MyPage />} />
