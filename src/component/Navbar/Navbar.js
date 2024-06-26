@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import {
   faBars,
@@ -10,17 +10,22 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import "../Navbar/Navbar.style.css";
-import SearchBox from "./SearchBox";
+
 import Dropdown from "./Dropdown";
 import { logout } from "../../redux/userSlice";
 import { useDispatch, useSelector } from "react-redux";
+import SearchBox from "./SearchBox";
 
 const Navbar = () => {
-  
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [query, setQuery] = useSearchParams();
+  const [searchQuery, setSearchQuery] = useState({
+    page: query.get("page") || 1,
+    name: query.get("name") || "",
+  });
   const menuList = ["레시피", "스토어", "베스트", "My 냉장고"];
   const menuPathMapping = {
     레시피: "",
@@ -30,17 +35,16 @@ const Navbar = () => {
   };
 
   const user = useSelector((state) => state.auth.user);
-  
 
   const onCheckEnter = (event) => {
     if (event.key === "Enter") {
       if (event.target.value === "") {
-        return navigate("/");
+        return navigate(`/`);
       }
-      // navigate(`?name=${event.target.value}`);
+      navigate(`?name=${event.target.value}`);
     }
   };
-  
+
   const handleLogout = async () => {
     await dispatch(logout());
     navigate("/");
@@ -57,8 +61,7 @@ const Navbar = () => {
   const hideDropdown = () => {
     setDropdownVisible(false);
   };
-  
-  
+
   return (
     <div className="nav">
       <div className="nav-top">
@@ -87,12 +90,19 @@ const Navbar = () => {
         <div className="nav-logo" onClick={() => navigate("/")}>
           What’s in your fridge
         </div>
-        <SearchBox name={"search-box"} onCheckEnter={onCheckEnter} />
+        <div className="search-box-container">
+          <SearchBox
+            name={"search-box"}
+            onCheckEnter={onCheckEnter}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+          />
+        </div>
         <div className="user-menu">
           <FontAwesomeIcon
             className="nav-icon"
             icon={faUser}
-            onClick={() => navigate("/account/profile")} 
+            onClick={() => navigate("/account/profile")}
           />
           <FontAwesomeIcon 
             className="nav-icon" 

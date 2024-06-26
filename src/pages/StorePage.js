@@ -7,19 +7,19 @@ import { useParams, useSearchParams } from "react-router-dom";
 
 const StorePage = () => {
   const dispatch = useDispatch();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [searchQuery, setSearchQuery] = useState({ page: 2, name: "" });
+  const [query, setQuery] = useSearchParams();
+  const name = query.get("name");
   const ingredientsList = useSelector((state) => state.ingredients.ingredients);
   console.log(ingredientsList);
   useEffect(() => {
-    dispatch(fetchIngredients(searchQuery));
-  }, []);
+    dispatch(fetchIngredients({name}));
+  }, [query, name]);
   
   return (
     <div>
       <BannerComponent />
       StorePage
-      {ingredientsList.map((item) => (
+      {ingredientsList?.map((item) => (
         <IngredientCard item={item} />
       ))}
     </div>

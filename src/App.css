@@ -7,9 +7,13 @@
   width: 100%;
 }
 
+.search-box-container {
+  padding: 0 10px;
+}
+
 .search-box {
   position: relative;
-  width: 350px;
+  width: 100%;
   border: 2px solid rgb(0, 187, 0);
   padding: 5px;
   border-radius: 5px;
