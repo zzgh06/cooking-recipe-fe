@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import { Button } from "react-bootstrap";
 import "../App.css";
-import "../style/common.style.css"
+import "../style/common.style.css";
 
 const CLOUDNAME = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
 const UPLOADPRESET = process.env.REACT_APP_CLOUDINARY_PRESET;
 
 class CloudinaryUploadWidget extends Component {
   componentDidMount() {
+    const { uploadImage, type, index } = this.props;
     var myWidget = window.cloudinary.createUploadWidget(
       {
         cloudName: CLOUDNAME,
@@ -16,26 +17,30 @@ class CloudinaryUploadWidget extends Component {
       (error, result) => {
         if (!error && result && result.event === "success") {
           console.log("Done! Here is the image info: ", result.info);
-          document
-            .getElementById("uploadedimage")
-            .setAttribute("src", result.info.secure_url);
-          this.props.uploadImage(result.info.secure_url);
-          console.log("url",result.info.secure_url);
+          if (type === 'main') {
+            const mainImage = document.getElementById("uploadedimage_main");
+            if (mainImage) {
+              mainImage.setAttribute("src", result.info.secure_url);
+            }
+          }
+          uploadImage(result.info.secure_url, type, index);
         }
-      } //https://cloudinary.com/documentation/react_image_and_video_upload
+      }
     );
-    document.getElementById("upload_widget").addEventListener(
-      "click",
-      function () {
+    const uploadButtonId = `upload_widget_${type}${index !== null ? `_${index}` : ''}`;
+    const uploadButton = document.getElementById(uploadButtonId);
+    if (uploadButton) {
+      uploadButton.addEventListener("click", function () {
         myWidget.open();
-      },
-      false
-    );
+      }, false);
+    }
   }
 
   render() {
+    const { type, index } = this.props;
+    const uploadButtonId = `upload_widget_${type}${index !== null ? `_${index}` : ''}`;
     return (
-      <Button id="upload_widget" size="sm" className="ml-2">
+      <Button id={uploadButtonId} size="sm" className="ml-2">
         Upload Image +
       </Button>
     );
