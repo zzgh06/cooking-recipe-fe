@@ -2,7 +2,8 @@ import { configureStore } from '@reduxjs/toolkit';
 import userReducer from './userSlice';
 import ingredientReducer from './ingredientSlice';
 import fridgeReducer from './fridgeSlice';
-import recepiReducer from './userSlice';
+import recepiReducer from './recepiSlice';
+import cartReducer from './cartSlice';
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     ingredients: ingredientReducer,
     fridge: fridgeReducer,
     recepi : recepiReducer,
+    cart: cartReducer
   },
 });
 
