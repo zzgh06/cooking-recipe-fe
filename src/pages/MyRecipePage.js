@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Container } from 'react-bootstrap';
-import { createRecipe } from '../redux/recepiSlice';
-import RecipeForm from '../component/RecipeForm/RecipeForm';
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Container } from "react-bootstrap";
+import { createRecipe } from "../redux/recipeSlice";
+import RecipeForm from "../component/RecipeForm/RecipeForm";
 
 const MyRecipePage = () => {
   const [submittedData, setSubmittedData] = useState(null);
   const dispatch = useDispatch();
-  const user = useSelector(state => state.auth.user);
+  const user = useSelector((state) => state.auth.user);
 
   const handleSubmit = async (data) => {
     const recipeData = {
@@ -22,7 +22,7 @@ const MyRecipePage = () => {
   };
 
   return (
-    <Container style={{ maxWidth: '1200px' }}>
+    <Container style={{ maxWidth: "1200px" }}>
       <h1>레시피 등록</h1>
       <RecipeForm onSubmit={handleSubmit} />
       {submittedData && (
