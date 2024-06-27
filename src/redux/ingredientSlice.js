@@ -4,9 +4,10 @@ import api from "../utils/api";
 export const fetchIngredients = createAsyncThunk(
   "ingredients/fetchIngredients",
   async (searchQuery) => {
-    const response = await api.get(
-      `/ingredient?name=${searchQuery.name}&page=${searchQuery.page}`
-    );
+    console.log(searchQuery);
+    const response = await api.get("/ingredient", {
+      params: { ...searchQuery },
+    });
     return response.data;
   }
 );

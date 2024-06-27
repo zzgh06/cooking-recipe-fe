@@ -14,6 +14,7 @@ export const createOrder = createAsyncThunk(
   "order/createOrder",
   async ({ payload, navigate }, { dispatch, rejectWithValue }) => {
     try {
+      console.log("payload", payload);
       const response = await api.post("/order", payload);
       //dispatch(cartActions.getCartQty());
       navigate("/payment/success");

@@ -40,7 +40,7 @@ class CloudinaryUploadWidget extends Component {
     const { type, index } = this.props;
     const uploadButtonId = `upload_widget_${type}${index !== null ? `_${index}` : ''}`;
     return (
-      <Button id={uploadButtonId} size="sm" className="ml-2">
+      <Button id={uploadButtonId} size="sm" className="btn-green ml-2">
         Upload Image +
       </Button>
     );

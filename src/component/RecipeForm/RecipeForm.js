@@ -1,33 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
 import CategorySelect from '../CategorySelect/CategorySelect';
 import CloudinaryUploadWidget from '../../utils/CloudinaryUploadWidget';
 import { foodCategory, moodCategory, methodCategory, ingredientCategory, etcCategory, servings, difficulty, time } from '../../constants/recipe.constants';
 import './RecipeForm.style.css';
 
-const initialFormData = {
-  name: '', // 'title' 대신 'name'으로 변경
-  description: '',
-  image: [], // 이미지 배열로 초기화
-  foodCategory: '',
-  moodCategory: '',
-  methodCategory: '',
-  ingredientCategory: '',
-  etcCategory: '',
-  servings: '',
-  time: '',
-  difficulty: '',
-  ingredients: [{ name: '', amount: '', unit: '' }],
-  steps: [{ description: '', image: null }]
-};
+const RecipeForm = ({ onSubmit, initialData }) => {
+  const initialFormData = {
+    name: '',
+    description: '',
+    images: [],
+    foodCategory: '',
+    moodCategory: '',
+    methodCategory: '',
+    ingredientCategory: '',
+    etcCategory: '',
+    servings: '',
+    time: '',
+    difficulty: '',
+    ingredients: [{ name: '', qty: '', unit: '' }],
+    steps: [{ description: '', image: null }]
+  };
 
-const RecipeForm = ({ onSubmit }) => {
   const [formData, setFormData] = useState(initialFormData);
+
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        ...initialFormData,
+        ...initialData,
+        images: initialData.images || [],
+        foodCategory: initialData.categories?.food || '',
+        moodCategory: initialData.categories?.mood || '',
+        methodCategory: initialData.categories?.method || '',
+        ingredientCategory: initialData.categories?.ingredient || '',
+        etcCategory: initialData.categories?.etc || '',
+        ingredients: initialData.ingredients?.length > 0 ? initialData.ingredients : [{ name: '', qty: '', unit: '' }],
+        steps: initialData.steps?.length > 0 ? initialData.steps : [{ description: '', image: null }]
+      });
+    }
+  }, [initialData]);
+
+  useEffect(() => {
+    console.log('Form Data:', formData);
+  }, [formData]);
 
   const handleAddIngredient = () => {
     setFormData({
       ...formData,
-      ingredients: [...formData.ingredients, { name: '', amount: '', unit: '' }]
+      ingredients: [...formData.ingredients, { name: '', qty: '', unit: '' }]
     });
   };
 
@@ -40,7 +61,7 @@ const RecipeForm = ({ onSubmit }) => {
 
   const handleChange = (index, field, value, type) => {
     const updatedArray = [...formData[type]];
-    updatedArray[index][field] = value;
+    updatedArray[index] = { ...updatedArray[index], [field]: value }; 
     setFormData({
       ...formData,
       [type]: updatedArray
@@ -48,14 +69,20 @@ const RecipeForm = ({ onSubmit }) => {
   };
 
   const uploadMainImage = (url) => {
-    setFormData({ ...formData, image: [url] });
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      images: [...prevFormData.images, url]
+    }));
   };
 
   const uploadStepImage = (url, type, index) => {
     if (type === 'steps') {
       const updatedSteps = [...formData.steps];
-      updatedSteps[index].image = url;
-      setFormData({ ...formData, steps: updatedSteps });
+      updatedSteps[index] = { ...updatedSteps[index], image: url }; 
+      setFormData(prevFormData => ({
+        ...prevFormData,
+        steps: updatedSteps
+      }));
     }
   };
 
@@ -71,29 +98,28 @@ const RecipeForm = ({ onSubmit }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const { name, description, image, foodCategory, moodCategory, methodCategory, ingredientCategory, etcCategory, ingredients, steps } = formData;
-    
-    // descriptions 배열 생성
-    const descriptions = steps.map(step => ({
-      description: step.description,
-      image: step.image
-    }));
+    const { name, description, images, foodCategory, moodCategory, methodCategory, ingredientCategory, etcCategory, servings, time, difficulty, ingredients, steps } = formData;
 
     const recipeData = {
       name,
       description,
       ingredients,
-      descriptions, // descriptions 배열로 설정
+      steps,
       categories: {
-        foodCategory,
-        moodCategory,
-        methodCategory,
-        ingredientCategory,
-        etcCategory: etcCategory.split(',')
+        food: foodCategory,
+        mood: moodCategory,
+        method: methodCategory,
+        ingredient: ingredientCategory,
+        etc: etcCategory,
       },
-      images: image // 이미지 배열로 설정
+      servings,
+      time,
+      difficulty,
+      images
     };
-    
+
+    console.log('recipeData to be submitted:', recipeData);
+
     onSubmit(recipeData);
   };
 
@@ -120,17 +146,18 @@ const RecipeForm = ({ onSubmit }) => {
         />
       </Form.Group>
 
-      <Form.Group controlId="image">
+      <Form.Group controlId="images">
         <Form.Label>레시피 이미지</Form.Label>
         <CloudinaryUploadWidget uploadImage={uploadMainImage} type="main" index={null} />
-        {formData.image.length > 0 && (
+        {formData.images.length > 0 && formData.images.map((img, idx) => (
           <img
-            id="uploadedimage_main"
-            src={formData.image[0]}
+            key={idx}
+            id={`uploadedimage_main_${idx}`}
+            src={img}
             className="upload-image mt-2"
             alt="uploadedimage"
           />
-        )}
+        ))}
       </Form.Group>
 
       <Row>
@@ -175,6 +202,7 @@ const RecipeForm = ({ onSubmit }) => {
           />
         </Col>
       </Row>
+
       <h2>요리 정보</h2>
       <Row>
         <Col>
@@ -210,7 +238,7 @@ const RecipeForm = ({ onSubmit }) => {
             <Form.Control
               type="text"
               placeholder="재료명"
-              value={ingredient.name}
+              value={ingredient.name || ''}
               onChange={(e) => handleChange(index, 'name', e.target.value, 'ingredients')}
             />
           </Col>
@@ -218,15 +246,15 @@ const RecipeForm = ({ onSubmit }) => {
             <Form.Control
               type="text"
               placeholder="양"
-              value={ingredient.amount}
-              onChange={(e) => handleChange(index, 'amount', e.target.value, 'ingredients')}
+              value={ingredient.qty || ''}
+              onChange={(e) => handleChange(index, 'qty', e.target.value, 'ingredients')}
             />
           </Col>
           <Col>
             <Form.Control
               type="text"
               placeholder="단위"
-              value={ingredient.unit}
+              value={ingredient.unit || ''}
               onChange={(e) => handleChange(index, 'unit', e.target.value, 'ingredients')}
             />
           </Col>
@@ -235,7 +263,7 @@ const RecipeForm = ({ onSubmit }) => {
           </Col>
         </Row>
       ))}
-      <Button onClick={handleAddIngredient}>재료 추가</Button>
+      <Button className="btn-green" onClick={handleAddIngredient}>재료 추가</Button>
 
       <h2>요리 순서</h2>
       {formData.steps.map((step, index) => (
@@ -245,7 +273,7 @@ const RecipeForm = ({ onSubmit }) => {
               as="textarea"
               rows={3}
               placeholder="요리 설명"
-              value={step.description}
+              value={step.description || ''}
               onChange={(e) => handleChange(index, 'description', e.target.value, 'steps')}
             />
           </Col>
@@ -265,8 +293,8 @@ const RecipeForm = ({ onSubmit }) => {
           </Col>
         </Row>
       ))}
-      <Button onClick={handleAddStep}>요리 순서 추가</Button>
-      <Button type="submit" variant="primary" className="mt-3">레시피 제출</Button>
+      <Button className="btn-green" onClick={handleAddStep}>요리 순서 추가</Button>
+      <Button type="submit" className="btn-green mt-3">레시피 제출</Button>
     </Form>
   );
 };

@@ -15,35 +15,37 @@ import {
 } from "../redux/orderSlice";
 
 const PaymentPage = () => {
+  console.log("paymentpage");
   const dispatch = useDispatch();
-  //const { cartList, totalPrice } = useSelector((state) => state.cart);
-  let cartList = [
-    {
-      ingredientId: {
-        _id: "666d1d48c0f9c53972cd433f",
-        name: "카트 1",
-        price: 91000,
-        stock: 10,
-        status: "active",
-        isDeleted: false,
-      },
-      qty: 5,
-      _id: "667d3e4762a3895b1cd4d243",
-    },
-    {
-      ingredientId: {
-        _id: "666d1d48c0f9c53972cd433f",
-        name: "카트 2",
-        price: 91000,
-        stock: 10,
-        status: "active",
-        isDeleted: false,
-      },
-      qty: 5,
-      _id: "667d3e4762a3895b1cd4d243",
-    },
-  ];
-  let totalPrice = 50000;
+  const { cartItem, totalPrice } = useSelector((state) => state.cart);
+  console.log(cartItem);
+  // let cartList = [
+  //   {
+  //     ingredientId: {
+  //       _id: "666d1d48c0f9c53972cd433f",
+  //       name: "카트 1",
+  //       price: 91000,
+  //       stock: 10,
+  //       status: "active",
+  //       isDeleted: false,
+  //     },
+  //     qty: 5,
+  //     _id: "667d3e4762a3895b1cd4d243",
+  //   },
+  //   {
+  //     ingredientId: {
+  //       _id: "666d1d48c0f9c53972cd433f",
+  //       name: "카트 2",
+  //       price: 91000,
+  //       stock: 10,
+  //       status: "active",
+  //       isDeleted: false,
+  //     },
+  //     qty: 5,
+  //     _id: "667d3e4762a3895b1cd4d243",
+  //   },
+  // ];
+  // let totalPrice = 50000;
 
   const [cardValue, setCardValue] = useState({
     cvc: "",
@@ -70,9 +72,11 @@ const PaymentPage = () => {
     const { firstName, lastName, contact, address, city, zip } = shipInfo;
     const data = {
       totalPrice,
-      shipTo: { address, city, zip },
-      contact: { firstName, lastName, contact },
-      orderList: cartList.map((item) => {
+      contactInfo: {
+        shipTo: { address, city, zip },
+        contact: { firstName, lastName, contact },
+      },
+      items: cartItem.map((item) => {
         return {
           ingredientId: item.ingredientId._id,
           price: item.ingredientId.price,
@@ -81,8 +85,7 @@ const PaymentPage = () => {
       }),
     };
     //오더 생성하기
-
-    dispatch(createOrder({ data, navigate }));
+    dispatch(createOrder({ payload: data, navigate }));
   };
 
   const handleFormChange = (event) => {
@@ -106,12 +109,12 @@ const PaymentPage = () => {
     setCardValue({ ...cardValue, focus: e.target.name });
   };
   //카트에 아이템이 없다면 다시 카트페이지로 돌아가기 (결제할 아이템이 없으니 결제페이지로 가면 안됌)
-  if (cartList.length === 0) {
+  if (cartItem.length === 0) {
     navigate("/cart");
   }
 
   return (
-    <Container>
+    <div>
       <Row>
         <Col lg={7}>
           <div>
@@ -180,7 +183,7 @@ const PaymentPage = () => {
                   </Form.Group>
                 </Row>
                 <div className="mobile-receipt-area">
-                  <OrderReceipt cartList={cartList} totalPrice={totalPrice} />
+                  <OrderReceipt cartList={cartItem} totalPrice={totalPrice} />
                 </div>
                 <div>
                   <h2 className="payment-title">결제 정보</h2>
@@ -203,10 +206,10 @@ const PaymentPage = () => {
           </div>
         </Col>
         <Col lg={5} className="receipt-area">
-          <OrderReceipt cartList={cartList} totalPrice={totalPrice} />
+          <OrderReceipt cartList={cartItem} totalPrice={totalPrice} />
         </Col>
       </Row>
-    </Container>
+    </div>
   );
 };
 

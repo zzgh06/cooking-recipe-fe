@@ -3,7 +3,7 @@ import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router";
 import { useLocation } from "react-router-dom";
 import { currencyFormat } from "../../utils/number";
-
+import "./OrderReceipt.style.css";
 const OrderReceipt = ({ cartList, totalPrice }) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -15,9 +15,11 @@ const OrderReceipt = ({ cartList, totalPrice }) => {
           cartList.map((item) => (
             <li>
               <div className="display-flex space-between">
-                <div>{item.productId.name}</div>
+                <div>{item.ingredientId?.name}</div>
 
-                <div>₩ {currencyFormat(item.productId.price * item.qty)}</div>
+                <div>
+                  ₩ {currencyFormat(item.ingredientId.price * item.qty)}
+                </div>
               </div>
             </li>
           ))}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import SearchBox from '../component/Navbar/SearchBox';
+import SearchBox from '../component/SearchBox/SerachBox';
 import IngredientTable from '../component/IngredientTable/IngredientTable';
 import NewItemDialog from '../component/NewItemDialog/NewItemDialog';
 import ReactPaginate from "react-paginate";
@@ -26,8 +26,8 @@ const AdminIngredientsPage = () => {
   }, [dispatch, searchQuery]);
 
   useEffect(() => {
-    console.log('Redux State:', ingredientList); // 확인용 로그 출력
-    console.log('Total Pages:', totalPageNumber); // 확인용 로그 출력
+    console.log('Redux State:', ingredientList); 
+    console.log('Total Pages:', totalPageNumber);
   }, [ingredientList, totalPageNumber]);
 
   const handleShowAll = () => {
@@ -53,6 +53,9 @@ const AdminIngredientsPage = () => {
     dispatch(deleteIngredient(id));
   };
 
+  const handleSearch = (searchTerm) => {
+    setSearchQuery({ ...searchQuery, name: searchTerm, page: 1 });
+  };
 
 
   return (
@@ -60,9 +63,8 @@ const AdminIngredientsPage = () => {
       <Container className="container-custom">
         <div className="mt-2 top-container">
           <SearchBox
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            placeholder="제품 이름으로 검색"
+            onCheckEnter = {handleSearch}
+            placeholder="재료 이름으로 검색"
             field="name"
           />
           <Button className="ingredients mt-2 mb-2" onClick={handleShowAll}>

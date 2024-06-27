@@ -5,9 +5,9 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import SearchBox from "../component/Navbar/SearchBox";
 import { useDispatch, useSelector } from "react-redux";
 import OrderTable from "../component/OrderTable/OrderTable";
-import DashBoardCard from "../component/DashBoardCard/DashBoardCard"
+import DashBoardCard from "../component/DashBoardCard/DashboardCard";
 import OrderDetailDialog from "../component/OrderDetailDialog/OrderDetailDialog";
-
+import { getOrderList } from "../redux/orderSlice";
 const AdminOrderPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -19,42 +19,46 @@ const AdminOrderPage = () => {
   const [showDialog, setShowDialog] = useState(false);
   const [mode, setMode] = useState("new");
   const [open, setOpen] = useState(false);
-  // const { orderList, getOrderList, setSelectedOrder } = useSelector(state => state.orders);
+  const { orderList } = useSelector((state) => {
+    //console.log(state);
+    return state.order;
+  });
+  console.log("orderList", orderList);
   const badgeBg = {
     preparing: "primary",
     shipping: "warning",
     refund: "danger",
     delivered: "success",
   };
-  const orderList = [
-    {
-      orderNum: "1213132",
-      createdAt: "2024년 06월 20일",
-      userId: { email: "admin@gmail.com" },
-      items: [{ productId: { name: "홍길동" } }],
-      shipTo: { address: "경기도 안산시", city: "안산" },
-      totalPrice: 30000,
-      status: "preparing",
-    },
-    {
-      orderNum: "1213132",
-      createdAt: "2024년 06월 20일",
-      userId: { email: "admin@gmail.com" },
-      items: [{ productId: { name: "홍길동" } }],
-      shipTo: { address: "경기도 안산시", city: "안산" },
-      totalPrice: 30000,
-      status: "preparing",
-    },
-    {
-      orderNum: "1213132",
-      createdAt: "2024년 06월 20일",
-      userId: { email: "admin@gmail.com" },
-      items: [{ productId: { name: "홍길동" } }],
-      shipTo: { address: "경기도 안산시", city: "안산" },
-      totalPrice: 30000,
-      status: "preparing",
-    },
-  ];
+  // const orderList = [
+  //   {
+  //     orderNum: "1213132",
+  //     createdAt: "2024년 06월 20일",
+  //     userId: { email: "admin@gmail.com" },
+  //     items: [{ productId: { name: "홍길동" } }],
+  //     shipTo: { address: "경기도 안산시", city: "안산" },
+  //     totalPrice: 30000,
+  //     status: "preparing",
+  //   },
+  //   {
+  //     orderNum: "1213132",
+  //     createdAt: "2024년 06월 20일",
+  //     userId: { email: "admin@gmail.com" },
+  //     items: [{ productId: { name: "홍길동" } }],
+  //     shipTo: { address: "경기도 안산시", city: "안산" },
+  //     totalPrice: 30000,
+  //     status: "preparing",
+  //   },
+  //   {
+  //     orderNum: "1213132",
+  //     createdAt: "2024년 06월 20일",
+  //     userId: { email: "admin@gmail.com" },
+  //     items: [{ productId: { name: "홍길동" } }],
+  //     shipTo: { address: "경기도 안산시", city: "안산" },
+  //     totalPrice: 30000,
+  //     status: "preparing",
+  //   },
+  // ];
   const tableHeader = [
     "#",
     "Order#",
@@ -66,9 +70,9 @@ const AdminOrderPage = () => {
     "Status",
   ];
 
-  // useEffect(() => {
-  //   dispatch(getOrderList({ ...searchQuery }));
-  // }, [searchQuery]);
+  useEffect(() => {
+    dispatch(getOrderList({ ...searchQuery }));
+  }, [searchQuery]);
 
   useEffect(() => {
     if (searchQuery.orderNum === "") {
@@ -94,7 +98,9 @@ const AdminOrderPage = () => {
   };
 
   const getOrderCountByStatus = (status) => {
-    return orderList.filter((order) => order.status === status).length;
+    console.log(orderList);
+    //return 0;
+    return orderList.data.filter((order) => order.status === status).length;
   };
   return (
     <div className="locate-center">
@@ -121,7 +127,7 @@ const AdminOrderPage = () => {
 
         <OrderTable
           header={tableHeader}
-          data={orderList}
+          data={orderList.data}
           openEditForm={openEditForm}
           badgeBg={badgeBg}
         />
@@ -147,12 +153,7 @@ const AdminOrderPage = () => {
         />
       </Container>
 
-      {open && (
-        <OrderDetailDialog
-          open={open}
-          handleClose={handleClose}
-        />
-      )}
+      {open && <OrderDetailDialog open={open} handleClose={handleClose} />}
     </div>
   );
 };

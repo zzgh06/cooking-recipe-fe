@@ -1,11 +1,13 @@
 import React from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import "../../style/recipeSlider.style.css"; // Use a separate stylesheet for RecipeSlider
+import "../../style/recipeSlider.style.css"; 
 import { recipeResponsive } from "../../constants/responsive";
 import RecipeCard from "../RecipeCard/RecipeCard";
 
-const RecipeSlider = ({ title, recipe }) => {
+const RecipeSlider = ({ title, recipes }) => {
+
+  console.log("recipes",recipes)
   const CustomLeftArrow2 = ({ onClick }) => (
     <button className="custom-arrow-recipe left-recipe" onClick={onClick}>
       ◀
@@ -28,10 +30,9 @@ const RecipeSlider = ({ title, recipe }) => {
         customLeftArrow={<CustomLeftArrow2 />}
         customRightArrow={<CustomRightArrow2 />}
       >
-        <RecipeCard />
-        <RecipeCard />
-        <RecipeCard />
-        <RecipeCard />
+        {recipes.map((recipe) => (
+          <RecipeCard key={recipe._id} item={recipe} />
+        ))}
       </Carousel>
     </div>
   );
