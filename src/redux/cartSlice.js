@@ -19,15 +19,17 @@ export const addItemToCart = createAsyncThunk(
 
 export const editCartItem = createAsyncThunk(
   "cart/editCartItem",
-  async (ingredientId) => {
-    const response = await api.put(`/cart/${ingredientId}`);
+  async ({ingredientId, qty}) => {
+    console.log("ingredientId", ingredientId);
+    console.log("qty", qty);
+    const response = await api.put(`/cart/${ingredientId}`, {qty});
     return response.data;
   }
 );
 
 export const deleteCartItem = createAsyncThunk(
   "cart/deleteCartItem",
-  async (ingredientId) => {
+  async ({ingredientId}) => {
     const response = await api.delete(`/cart/${ingredientId}`);
     return response.data;
   }
@@ -42,7 +44,13 @@ const cartSlice = createSlice({
         status: "idle",
         error: null,
     },
-    reducers: {},
+    reducers: {
+        calculateTotalPrice: (state) => {
+            state.totalPrice = state.cartItem.reduce((total, item) => {
+                return total + item.ingredientId.price * item.qty;
+            }, 0);
+        }
+    },
     extraReducers: (builder) => {
         builder
         .addCase(getCart.pending, (state) => {
@@ -50,10 +58,10 @@ const cartSlice = createSlice({
         })
         .addCase(getCart.fulfilled, (state, action) => {
             state.status = "succeeded";
-            console.log("data", action.payload.data);
             state.cartItem = action.payload.data !== null ? action.payload.data.items : [];
             state.cartItemCount = state.cartItem.length;
-            console.log("cartItem.length", state.cartItem.length);
+            console.log("rrrrrrrrrrrrr", state.cartItem);
+            console.log("state.totalPrice", state.totalPrice);
         })
         .addCase(getCart.rejected, (state, action) => {
             state.status = "failed";
@@ -61,7 +69,7 @@ const cartSlice = createSlice({
         })
         .addCase(addItemToCart.fulfilled, (state, action) => {
             state.status = "succeeded";
-            state.cartItem = action.payload.data.items;
+            state.cartItem.push(action.payload.data);
             state.cartItemCount = state.cartItem.length;
             console.log(state.cartItem, state.cartItemCount);
         })
@@ -71,9 +79,12 @@ const cartSlice = createSlice({
         })
         .addCase(editCartItem.fulfilled, (state, action) => {
             state.status = "succeeded";
-            state.cartItem = action.payload.data.items;
-            state.cartItemCount = state.cartItem.length;
-            console.log(state.cartItem, state.cartItemCount);
+            const {_id} = action.payload.data.ingredientId;
+            const {qty} = action.payload.data;
+            const itemIndex = state.cartItem.findIndex(item => {
+                return item.ingredientId._id === _id;
+            });
+            state.cartItem[itemIndex].qty = qty;
         })
         .addCase(editCartItem.rejected, (state, action) => {
             state.status = "failed";
@@ -81,7 +92,7 @@ const cartSlice = createSlice({
         })
         .addCase(deleteCartItem.fulfilled, (state, action) => {
             state.status = "succeeded";
-            state.cartItem = action.payload.data.items;
+            state.cartItem = action.payload.data;
             state.cartItemCount = state.cartItem.length;
             console.log(state.cartItem, state.cartItemCount);
         })
@@ -92,4 +103,5 @@ const cartSlice = createSlice({
     },
 })
 
+export const {calculateTotalPrice} = cartSlice.actions;
 export default cartSlice.reducer;
