@@ -1,21 +1,23 @@
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React from 'react'
+import React, { useState } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
-const SearchBox = ({name, onCheckEnter}) => {
-    const handleKeyPress = (event) => {
-        if (event.key === 'Enter') {
-          onCheckEnter(event.target.value);
-        }
-      };
-
+const SearchBox = ({searchQuery, setSearchQuery, onCheckEnter, placeholder, field, page='store'}) => {
+  const [query] = useSearchParams();
+  const [keyword, setKeyword] = useState(query.get(field) || "");
+  let navigate = useNavigate()
+  console.log(keyword)
+  
   return (
-    <div className={name}>
+    <div className="search-box">
       <FontAwesomeIcon icon={faSearch} />
       <input
         type="text"
-        placeholder="검색어를 입력해주세요"
-        onKeyPress={handleKeyPress}
+        placeholder={placeholder}
+        onKeyPress={onCheckEnter}
+        onChange={(event) => setKeyword(event.target.value)}
+        value={keyword}
       />
     </div>
   )

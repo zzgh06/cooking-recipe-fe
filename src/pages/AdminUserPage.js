@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import ReactPaginate from 'react-paginate';
-import SearchBox from '../component/Navbar/SearchBox';
 import { Container } from 'react-bootstrap';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,6 +7,7 @@ import UserTable from '../component/UserTable/UserTable';
 import { deleteUser, getUsersInfo } from '../redux/userSlice';
 import UserDetailDialog from '../component/UserDetailDialog/UserDetailDialog';
 import "../style/adminUserPage.style.css";
+import SearchBox from '../component/SearchBox/SerachBox';
 
 const AdminUserPage = () => {
   const dispatch = useDispatch();

@@ -3,8 +3,6 @@ import "../../style/RecentlyViewed.style.css";
 import { Link } from "react-router-dom";
 
 const RecentlyViewed = ({ recentlyViewedItems }) => {
-  console.log(recentlyViewedItems);
-
   return (
     <div className="recently-viewed">
       <div className="title">최근 본 상품</div>

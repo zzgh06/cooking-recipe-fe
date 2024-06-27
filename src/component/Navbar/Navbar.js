@@ -14,7 +14,8 @@ import "../Navbar/Navbar.style.css";
 import Dropdown from "./Dropdown";
 import { logout } from "../../redux/userSlice";
 import { useDispatch, useSelector } from "react-redux";
-import SearchBox from "./SearchBox";
+import SearchBox from "../SearchBox/SerachBox";
+
 
 const Navbar = () => {
   const navigate = useNavigate();
