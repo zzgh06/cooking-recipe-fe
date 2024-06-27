@@ -42,18 +42,32 @@ export const fridgeIngredientRecipeResult = createAsyncThunk(
   async (query, { rejectWithValue }) => {
     try {
       const response = await api.get('/recipe/frige', { params: query });
-      console.log(response)
-      return response.data.data.recipeList;
+      console.log(response.data.recipeList)
+      return response.data.recipeList;
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
-)
+);
+
+export const fetchRecommendedRecipes = createAsyncThunk(
+  "fridge/fetchRecommendedRecipes",
+  async (checkedItems, { rejectWithValue }) => {
+    try {
+      const response = await api.get("/recipe/frige/recommend", {
+        params: { checkedItems: checkedItems.join(',') },
+      });
+      return response.data.recipeList;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 
 const initialState = {
   fridgeItems: [],
-  recipeList: null,
+  recipeList: [],
   error: null,
 };
 
@@ -108,6 +122,16 @@ const fridgeSlice = createSlice({
       .addCase(fridgeIngredientRecipeResult.rejected, (state, action) => {
         state.error = action.payload;
       })
+      .addCase(fetchRecommendedRecipes.pending, (state) => {
+        state.error = null;
+      })
+      .addCase(fetchRecommendedRecipes.fulfilled, (state, action) => {
+        state.recipeList = action.payload;
+        state.error = null;
+      })
+      .addCase(fetchRecommendedRecipes.rejected, (state, action) => {
+        state.error = action.payload;
+      });
   },
 });
 
