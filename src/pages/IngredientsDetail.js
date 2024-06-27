@@ -7,6 +7,7 @@ import { currencyFormat } from "../utils/number";
 import "../style/IngredientsDetail.style.css";
 import AddressInput from "../component/AddressInput/AddressInput";
 import DeliveryEstimate from "../component/DeliveryEstimate/DeliveryEstimate";
+import Review from "../component/Review/Review";
 
 const IngredientsDetail = () => {
   const { id } = useParams();
@@ -44,6 +45,8 @@ const IngredientsDetail = () => {
     );
   }, [selectedIngredient]);
 
+  console.log("selectedIngredient id",selectedIngredient._id)
+
   return (
     <div>
       <Container fluid className="ingredient-container">
@@ -70,7 +73,11 @@ const IngredientsDetail = () => {
               <AddressInput setAddress={setAddress} />
               <DeliveryEstimate address={address} />
             </div>
+            
           </Col>
+          <div className="recipe-detail-reviews">
+              <Review type="ingredient" itemId={selectedIngredient._id} />
+            </div>
         </Row>
       </Container>
     </div>

@@ -1,0 +1,43 @@
+.review-form {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.comment-container {
+    display: flex;
+    align-items: center;
+}
+
+.form-text-area {
+    margin-left: 10px;
+    width: 400px;
+    height: 40px;
+    border-radius: 20px;
+    resize: none;
+    align-content: center;
+    padding-left: 10px; 
+}
+
+.rate-container {
+    margin-left: 50px;
+}
+
+.rating-group {
+    display: flex;
+    align-items: center;
+}
+
+.rating-group label {
+    margin-right: 5px;
+}
+
+.rating-group input {
+    width: 50px;
+    text-align: center;
+}
+
+.form-button {
+    width: 80px;
+    margin-left: auto; 
+}

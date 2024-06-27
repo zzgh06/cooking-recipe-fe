@@ -35,6 +35,7 @@ const Navbar = () => {
   };
 
   const user = useSelector((state) => state.auth.user);
+   
 
   const onCheckEnter = (event) => {
     if (event.key === "Enter") {
