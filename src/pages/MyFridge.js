@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
 import "../style/myFridge.style.css";
-import SearchBox from "../component/Navbar/SearchBox";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchIngredients } from "../redux/ingredientSlice";
 import MyFridgeSearchResults from "../component/MyFridgeSearchResults/MyFridgeSearchResults";
 import SearchResultCard from "../component/SearchResultCard/SearchResultCard";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { fetchFridgeItems, fridgeIngredientRecipeResult } from "../redux/fridgeSlice";
+import {
+  fetchFridgeItems,
+  fetchRecommendedRecipes,
+  fridgeIngredientRecipeResult,
+} from "../redux/fridgeSlice";
 import FridgeItemCard from "../component/FridgeItemCard/FridgeItemCard";
+import SearchBox from "../component/SearchBox/SerachBox";
 
 const MyFridge = () => {
   const dispatch = useDispatch();
@@ -15,7 +19,9 @@ const MyFridge = () => {
   const ingredient = useSelector(
     (state) => state.ingredients.ingredients || []
   );
-  const fridgeItems = useSelector((state) => state.fridge.fridgeItems || []);
+  const { fridgeItems, recipeList } = useSelector(
+    (state) => state.fridge || []
+  );
   const [query, setQuery] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState({
     page: query.get("page") || 1,
@@ -29,6 +35,8 @@ const MyFridge = () => {
       dispatch(fetchIngredients(searchQuery));
       dispatch(fridgeIngredientRecipeResult(searchQuery));
       setHasSearched(true);
+    } else {
+      dispatch(fridgeIngredientRecipeResult(searchQuery));
     }
   }, [dispatch, searchQuery]);
 
@@ -59,10 +67,15 @@ const MyFridge = () => {
     });
   };
 
+  const handleRecommendRecipes = () => {
+    if (checkedItems.size > 0) {
+      const selectedIngredients = Array.from(checkedItems);
+      dispatch(fetchRecommendedRecipes(selectedIngredients));
+    }
+  };
 
-
-  console.log("fridgeItems", fridgeItems);
-  console.log("checkedItems", checkedItems);
+  console.log("recipeList", recipeList);
+  console.log("checkedItems", checkedItems.size);
 
   return (
     <>
@@ -75,25 +88,34 @@ const MyFridge = () => {
         {fridgeItems.length === 0 ? (
           <div className="fridge">
             <div className="fridge-empty-message">
-              <p>냉장고가 텅 비워져 있습니다 😅 <br/>My 냉장고를 가득 채워주세요. </p>
+              <p>
+                냉장고가 텅 비워져 있습니다 😅 <br />
+                My 냉장고를 가득 채워주세요.{" "}
+              </p>
             </div>
           </div>
         ) : (
-          <div className="fridge">
-            {fridgeItems.map((item) => (
-              <FridgeItemCard
-                key={item.ingredientId._id}
-                item={item.ingredientId}
-                id={item._id}
-                isChecked={checkedItems.has(item.ingredientId.name)}
-                onCheckboxChange={() => handleCheckboxChange(item.ingredientId.name)}
-              />
-            ))}
-          </div>
+          <>
+            <div className="fridge">
+              {fridgeItems.map((item) => (
+                <FridgeItemCard
+                  key={item.ingredientId._id}
+                  item={item.ingredientId}
+                  id={item._id}
+                  isChecked={checkedItems.has(item.ingredientId.name)}
+                  onCheckboxChange={() =>
+                    handleCheckboxChange(item.ingredientId.name)
+                  }
+                />
+              ))}
+            </div>
+            <div className="recipe-recommend__button">
+              <button type="button" onClick={handleRecommendRecipes}>
+                레시피 추천
+              </button>
+            </div>
+          </>
         )}
-        <div>
-          <MyFridgeSearchResults />
-        </div>
         <div className="fridge-ingredient-search">
           <div className="search-layout">
             <p className="title">원하시는 식재료를 검색해주세요</p>
@@ -116,6 +138,13 @@ const MyFridge = () => {
                 ))
               )}
             </div>
+          )}
+        </div>
+        <div>
+          {recipeList.length === 0 ? (
+            ""
+          ) : (
+            <MyFridgeSearchResults recipeList={recipeList} />
           )}
         </div>
       </div>

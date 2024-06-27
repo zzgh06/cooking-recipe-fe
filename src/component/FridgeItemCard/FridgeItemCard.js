@@ -11,21 +11,21 @@ const FridgeItemCard = ({ item, id, isChecked, onCheckboxChange }) => {
     await dispatch(deleteFridgeItem(id));
     dispatch(fetchFridgeItems());
   };
-  console.log("FridgeItemCard", id);
+
   return (
     <div className="fridge-item-card">
-      <div className="fridge-item-card-icon">
+      <div className="fridge-item-card__icon">
       <FontAwesomeIcon
         icon={isChecked ? faCircleCheck : faCircle}
         onClick={onCheckboxChange}
         className="fridge-item-checkbox"
       />
-        <button className="fridge-item-delete-button" onClick={handleDelete}>
+        <button className="fridge-item-delete__button" onClick={handleDelete}>
           <FontAwesomeIcon icon={faTrashCan}/>
         </button>
       </div>
-      <img src={item.image} alt={item.name} className="fridge-item-image" />
-      <p className="fridge-item-name">{item.name}</p>
+      <img src={item.image} alt={item.name} className="fridge-item__image" />
+      <p className="fridge-item__name">{item.name}</p>
     </div>
   );
 };
