@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { fetchRecipeById } from '../redux/recipeSlice';
+import Review from '../component/Review/Review';
 import '../style/RecipeDetail.style.css';
 
 const RecipeDetail = () => {
@@ -84,6 +85,9 @@ const RecipeDetail = () => {
                 ))}
               </ul>
             </div>
+          </div>
+          <div className="recipe-detail-reviews">
+            <Review type="recipe" itemId={recipeDetail._id} />
           </div>
         </>
       )}

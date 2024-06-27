@@ -12,7 +12,11 @@ const RecipePage = () => {
   const { recipes, loading, error } = useSelector(state => state.recipe);
 
   useEffect(() => {
-    dispatch(fetchRecipes());
+    const searchQuery = {
+      name: "", // 검색어를 추가할 수 있습니다.
+      page: 1 // 페이지 번호를 추가할 수 있습니다.
+    };
+    dispatch(fetchRecipes(searchQuery));
   }, [dispatch]);
 
   console.log("recipes", recipes);

@@ -19,7 +19,7 @@ const AdminIngredientsPage = () => {
   const ingredientList = useSelector(state => state.ingredients.ingredients || []); 
   const totalPageNumber = useSelector(state => state.ingredients.totalPages || 0); 
 
-  const tableHeader = ["#", "Name", "Description", "Price", "Category", "Stock", "Status", "Image", "Actions"];
+  const tableHeader = ["#", "Name", "Description", "Price", "Discount %", "Category", "Stock", "Status", "Review Count", "Image", "Actions"];
 
   useEffect(() => {
     dispatch(fetchIngredients(searchQuery));
@@ -63,7 +63,7 @@ const AdminIngredientsPage = () => {
       <Container className="container-custom">
         <div className="mt-2 top-container">
           <SearchBox
-            onCheckEnter = {handleSearch}
+            onCheckEnter={handleSearch}
             placeholder="재료 이름으로 검색"
             field="name"
           />
@@ -84,7 +84,7 @@ const AdminIngredientsPage = () => {
           openEditForm={openEditForm}
         />
 
-<ReactPaginate
+        <ReactPaginate
           nextLabel="next >"
           onPageChange={handlePageClick}
           pageRangeDisplayed={5}

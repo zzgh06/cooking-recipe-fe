@@ -19,12 +19,12 @@ const AdminRecipePage = () => {
   const recipeList = useSelector(state => state.recipe.recipes || []); 
   const totalPageNumber = useSelector(state => state.recipe.totalPages || 0); 
 
-  const tableHeader = ["#", "Name", "Category", "Time", "Servings", "Difficulty", "Images", "Actions"];
+  const tableHeader = ["#", "Name", "Category", "Time", "Servings", "Difficulty","reviewCnt", "Images", "Actions"];
 
   useEffect(() => {
     dispatch(fetchRecipes(searchQuery));
   }, [dispatch, searchQuery]);
-
+   console.log("recipeList",recipeList)
   useEffect(() => {
     console.log('Redux State:', recipeList); 
     console.log('Total Pages:', totalPageNumber);

@@ -12,17 +12,7 @@ export const createRecipe = createAsyncThunk(
         return rejectWithValue(err.response.data);
       }
     }
-  );
-
-  export const fetchIngredients = createAsyncThunk(
-    "ingredients/fetchIngredients",
-    async (searchQuery) => {
-      const response = await api.get(
-        `/ingredient?name=${searchQuery.name}&page=${searchQuery.page}`
-      );
-      return response.data;
-    }
-  );
+  ); 
 
   export const fetchRecipes = createAsyncThunk(
     'recipe/fetchRecipes',
