@@ -37,9 +37,23 @@ export const deleteFridgeItem = createAsyncThunk(
   }
 );
 
+export const fridgeIngredientRecipeResult = createAsyncThunk(
+  "fridge/fridgeIngredientRecipeResult",
+  async (query, { rejectWithValue }) => {
+    try {
+      const response = await api.get('/recipe/frige', { params: query });
+      console.log(response)
+      return response.data.data.recipeList;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+)
+
 
 const initialState = {
   fridgeItems: [],
+  recipeList: null,
   error: null,
 };
 
@@ -83,7 +97,17 @@ const fridgeSlice = createSlice({
       })
       .addCase(deleteFridgeItem.rejected, (state, action) => {
         state.error = action.payload;
-      });
+      })
+      .addCase(fridgeIngredientRecipeResult.pending, (state) => {
+        state.error = null;
+      })
+      .addCase(fridgeIngredientRecipeResult.fulfilled, (state, action) => {
+        state.recipeList = action.payload;
+        state.error = null;
+      })
+      .addCase(fridgeIngredientRecipeResult.rejected, (state, action) => {
+        state.error = action.payload;
+      })
   },
 });
 
