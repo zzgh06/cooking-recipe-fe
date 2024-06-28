@@ -21,7 +21,9 @@ const CartPage = () => {
   },[user]);
 
   useEffect(()=>{
-    dispatch(calculateTotalPrice());
+    if (cartItem.length > 0) {
+      dispatch(calculateTotalPrice());
+    }
   },[cartItem]);
 
   return (
@@ -33,8 +35,8 @@ const CartPage = () => {
         :
           <>
             <div className="cart-page-width margin-right">
-                {cartItem.map((item)=>(
-                  <CartItem key={item.ingredientId} ingredientId={item.ingredientId} qty={item.qty}/>
+                {cartItem.map((item, index)=>(
+                  <CartItem key={item.ingredientId || index} ingredientId={item.ingredientId} qty={item.qty}/>
                 ))}
             </div>
             <div className="cart-page-width">
