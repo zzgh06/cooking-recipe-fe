@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { Col, Row } from "react-bootstrap";
-import Sidebar from "../component/SideBar/Sidebar";
+import Sidebar from "../component/SideBar/SideBar";
 import Navbar from "../component/Navbar/Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import Footer from "../component/Footer/Footer";
@@ -23,7 +23,8 @@ const AppLayout = ({ children }) => {
   }, [location]);
 
   useEffect(() => {
-    const viewedItems = JSON.parse(localStorage.getItem("viewedIngredients")) || [];
+    const viewedItems =
+      JSON.parse(localStorage.getItem("viewedIngredients")) || [];
     setRecentlyViewedItems(viewedItems);
   }, [location]);
 
