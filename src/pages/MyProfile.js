@@ -3,37 +3,51 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import UserInfo from '../component/UserInfo/UserInfo';
-import OrderPage from '../component/OrderPage/OrderPage';
-import ProfileEditPage from '../component/ProfileEditPage/ProfileEditPage';
+import MyOrderComponent from '../component/MyOrderComponent/MyOrderComponent';
+import MyProfileEditComponent from '../component/MyProfileEditComponent/MyProfileEditComponent';
+import MyRecipeComponent from '../component/MyRecipeComponent/MyRecipeComponent';
 import '../style/myprofile.style.css';
 
 const MyProfile = () => {
   const user = useSelector((state) => state.auth.user);
   const navigate = useNavigate();
-  const [showProfileEdit, setShowProfileEdit] = useState(false);
+  const [currentView, setCurrentView] = useState('내 주문');
 
   useEffect(() => {
     if (!user) {
-      navigate('/login'); // 로그인되지 않은 경우 로그인 페이지로 리디렉션
+      navigate('/login');
     }
   }, [user, navigate]);
 
   if (!user) {
-    return <div>Loading...</div>; // 리디렉션 중에는 로딩 메시지를 표시
+    return <div>Loading...</div>; 
   }
 
-  const handleEditProfile = () => {
-    setShowProfileEdit(true);
+  const handleButtonClick = (value) => {
+    setCurrentView(value);
+  };
+
+  const renderComponent = () => {
+    switch (currentView) {
+      case '내 레시피':
+        return <MyRecipeComponent />;
+      case '내 주문':
+        return <MyOrderComponent />;
+      case '프로필수정':
+        return <MyProfileEditComponent />;
+      default:
+        return <MyOrderComponent />;
+    }
   };
 
   return (
     <Container className="custom-container">
-      <Row >
-        <Col lg={4} className="user-info-col">
-          <UserInfo user={user} onEditProfile={handleEditProfile}/>
+      <Row>
+        <Col lg={5} className="user-info-col">
+          <UserInfo onButtonClick={handleButtonClick} />
         </Col>
-        <Col lg={8}>
-          {showProfileEdit ? <ProfileEditPage /> : <OrderPage />}
+        <Col lg={7}>
+          {renderComponent()}
         </Col>
       </Row>
     </Container>

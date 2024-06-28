@@ -1,24 +1,23 @@
 import React from 'react';
-import { useDispatch,useSelector  } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Image, Row, Col, Container } from 'react-bootstrap';
 import { logout } from '../../redux/userSlice';
 import { useNavigate } from 'react-router-dom';
 import './UserInfo.style.css';
 
-const UserInfo = ({onEditProfile }) => {
+const UserInfo = ({ onButtonClick }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.user);
- 
 
   const handleLogout = async () => {
     await dispatch(logout());
     navigate("/");
   };
 
-  const handleEditProfileClick = () => {
-    console.log('프로필 수정을 눌렀습니다.');
-    onEditProfile();
+  const handleButtonClick = (value) => {
+    console.log(`${value} 버튼을 눌렀습니다.`);
+    onButtonClick(value);
   };
 
   return (
@@ -34,24 +33,27 @@ const UserInfo = ({onEditProfile }) => {
         </Col>
         <Col xs={9}>
           <div className="d-flex flex-column align-items-end">
-            <div className="d-flex justify-content-between w-100">
-              <span className="name-span">{user?.user.name} 님</span>
+            <div className="d-flex justify-content-between w-100">              
+              <span className="name-span"><strong>{user?.user.name}</strong> 님</span>
               <span onClick={handleLogout} style={{ cursor: 'pointer', color: 'blue' }}>로그아웃</span>
             </div>
-            <p className="mb-1">{user?.user.email}</p>
+            
+            <p>ID: {user?.user.id} </p>
+            <p>{user?.user.email}</p>
             <p>Phone: {user?.user.contact}</p>
+            
           </div>
         </Col>
       </Row>
       <Row className="additional-info">
         <Col>
-          <button className="w-105 mb-2">내 레시피</button>
+          <button className="w-105 mb-2" onClick={() => handleButtonClick('내 레시피')}>내 레시피</button>
         </Col>
         <Col>
-          <button className="w-105 mb-2">내 주문</button>
+          <button className="w-105 mb-2" onClick={() => handleButtonClick('내 주문')}>내 주문</button>
         </Col>
         <Col>
-          <button className="w-105 mb-2" onClick={handleEditProfileClick}>프로필수정</button>
+          <button className="w-105 mb-2" onClick={() => handleButtonClick('프로필수정')}>프로필수정</button>
         </Col>
       </Row>
     </Container>
