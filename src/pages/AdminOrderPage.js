@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Container, Row } from "react-bootstrap";
 import ReactPaginate from "react-paginate";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import SearchBox from "../component/Navbar/SearchBox";
 import { useDispatch, useSelector } from "react-redux";
 import OrderTable from "../component/OrderTable/OrderTable";
 import DashBoardCard from "../component/DashBoardCard/DashboardCard";
 import OrderDetailDialog from "../component/OrderDetailDialog/OrderDetailDialog";
 import { getOrderList, setSelectedOrder } from "../redux/orderSlice";
+import SearchBox from "../component/SearchBox/SerachBox";
+
 const AdminOrderPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();

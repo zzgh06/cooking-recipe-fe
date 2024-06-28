@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateUser } from '../../redux/userSlice';
+import './MyProfileEditComponent.style.css'
 
-const ProfileEditPage = () => {
+const MyProfileEditComponent = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const [formData, setFormData] = useState({
@@ -78,4 +79,4 @@ const ProfileEditPage = () => {
   )
 }
 
-export default ProfileEditPage;
+export default MyProfileEditComponent;

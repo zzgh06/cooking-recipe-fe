@@ -90,4 +90,13 @@
     max-width: 800px; 
   }
 
+  .recipes{
+    margin-bottom: 10px !important;
+    background-color: green !important;
+    width: 200px;
+  }
  
+
+  .recipes:hover{
+    background-color: rgb(7, 45, 7) !important;
+  }

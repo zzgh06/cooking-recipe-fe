@@ -1,11 +1,11 @@
 import React from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import "../../style/recipeSlider.style.css"; 
-import { recipeResponsive } from "../../constants/responsive";
-import RecipeCard from "../RecipeCard/RecipeCard";
+import "../../style/ingredientsSlider.style.css";
+import { ingredientResponsive } from "../../constants/responsive";
+import IngredientCard from "../IngredientCard/IngredientCard";
 
-const RecipeSlider = ({ title, recipes }) => {
+const IngredientSlider = ({ title, ingredientsList }) => {
   const CustomLeftArrow2 = ({ onClick }) => (
     <button className="custom-arrow-recipe left-recipe" onClick={onClick}>
       ◀
@@ -17,23 +17,22 @@ const RecipeSlider = ({ title, recipes }) => {
       ▶
     </button>
   );
-
   return (
-    <div className="recipe-carousel-wrapper">
-      <h3 className="recipe-title">{title}</h3>
+    <div className="ingredient-carousel-wrapper">
+      <h3 className="ingredient-title">{title}</h3>
       <Carousel
         infinite={true}
-        containerClass="recipe-carousel-container"
-        responsive={recipeResponsive}
+        containerClass="ingredient-carousel-container"
+        responsive={ingredientResponsive}
         customLeftArrow={<CustomLeftArrow2 />}
         customRightArrow={<CustomRightArrow2 />}
       >
-        {recipes.map((recipe) => (
-          <RecipeCard key={recipe._id} item={recipe} />
+        {ingredientsList.map((ing) => (
+          <IngredientCard key={ing._id} item={ing} />
         ))}
       </Carousel>
     </div>
   );
 };
 
-export default RecipeSlider;
+export default IngredientSlider;

@@ -14,7 +14,8 @@ import "../Navbar/Navbar.style.css";
 import Dropdown from "./Dropdown";
 import { logout } from "../../redux/userSlice";
 import { useDispatch, useSelector } from "react-redux";
-import SearchBox from "./SearchBox";
+import SearchBox from "../SearchBox/SerachBox";
+
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -35,6 +36,7 @@ const Navbar = () => {
   };
 
   const user = useSelector((state) => state.auth.user);
+   
 
   const onCheckEnter = (event) => {
     if (event.key === "Enter") {
