@@ -14,9 +14,6 @@ const MyOrderComponent = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const user = useSelector(state => state.auth.user);
 
-  console.log("user", user);
-  console.log("orders", orderList.data);
-
   useEffect(() => {
     if (!user) {
       navigate("/login");

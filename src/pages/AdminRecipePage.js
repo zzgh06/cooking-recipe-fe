@@ -24,11 +24,6 @@ const AdminRecipePage = () => {
   useEffect(() => {
     dispatch(fetchRecipes(searchQuery));
   }, [dispatch, searchQuery]);
-   console.log("recipeList",recipeList)
-  useEffect(() => {
-    console.log('Redux State:', recipeList); 
-    console.log('Total Pages:', totalPageNumber);
-  }, [recipeList, totalPageNumber]);
 
   const handleShowAll = () => {
     setSearchQuery({ page: 1, name: "" });
@@ -41,7 +36,6 @@ const AdminRecipePage = () => {
   };
 
   const openEditForm = (recipe) => {
-    console.log('Editing recipe with ID:', recipe._id); 
     setSelectedRecipe(recipe);
     setMode("edit");
     setShowForm(true);
@@ -56,7 +50,6 @@ const AdminRecipePage = () => {
   };
 
   const deleteItem = (id) => {
-    console.log('deleteItem recipe with ID:', id); 
     dispatch(deleteRecipe(id));
   };
 
@@ -64,7 +57,6 @@ const AdminRecipePage = () => {
     if (mode === "new") {
       dispatch(createRecipe(recipeData));
     } else {
-      console.log("selectedRecipe id",selectedRecipe._id)
       dispatch(editRecipe({ id: selectedRecipe._id, updatedData: recipeData }));
     }
     setShowForm(false);

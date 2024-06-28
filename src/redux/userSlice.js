@@ -46,7 +46,6 @@ export const loginWithToken = createAsyncThunk(
     try {
       const response = await api.get("/user/me");
       if (response.status !== 200) throw new Error(response.error);
-      console.log("response",response.data)
       return response.data;
     } catch (error) {
       thunkAPI.dispatch(logout());
@@ -63,7 +62,6 @@ export const getUsersInfo = createAsyncThunk(
     try {
       const response = await api.get("/user/admin");
       if (response.status !== 200) throw new Error(response.error);
-      console.log(response.data);
       return {
         usersData: response.data.data,
         totalPageNum: response.data.totalPageNum,
@@ -92,7 +90,6 @@ export const updateUser = createAsyncThunk(
   async ({ id, userData }, { rejectWithValue }) => {
     try {
       const response = await api.put(`user/${id}`, userData);
-      console.log("response", response)
       if (response.status !== 200) throw new Error(response.error);
       return response.data;
     } catch (error) {

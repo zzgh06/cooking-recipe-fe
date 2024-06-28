@@ -1,3 +1,39 @@
 .ingredient-all__container {
   padding: 50px 150px 10px 150px;
 }
+
+.ingredient-all__container h3 {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.load-more-button {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #4a9c75, #0095b3);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: none;
+  color: white;
+  width: 250px;
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 30px;
+}
+
+.load-more-button:hover {
+  background: linear-gradient(90deg, #00b35f, #0095b3);
+  box-shadow: 0 6px 20px rgba(0, 255, 221, 0.5);
+}
+
+.load-more-button:focus {
+  outline: none;
+}
+
+.text-center {
+  display: flex;
+  justify-content: center;
+}
+
+.text-center .spinner-border {
+  margin-top: 20px;
+}

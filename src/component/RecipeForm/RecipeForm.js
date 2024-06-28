@@ -41,10 +41,6 @@ const RecipeForm = ({ onSubmit, initialData }) => {
     }
   }, [initialData]);
 
-  useEffect(() => {
-    console.log('Form Data:', formData);
-  }, [formData]);
-
   const handleAddIngredient = () => {
     setFormData({
       ...formData,
@@ -117,8 +113,6 @@ const RecipeForm = ({ onSubmit, initialData }) => {
       difficulty,
       images
     };
-
-    console.log('recipeData to be submitted:', recipeData);
 
     onSubmit(recipeData);
   };

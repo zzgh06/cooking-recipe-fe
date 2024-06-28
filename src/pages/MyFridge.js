@@ -12,6 +12,7 @@ import {
 } from "../redux/fridgeSlice";
 import FridgeItemCard from "../component/FridgeItemCard/FridgeItemCard";
 import SearchBox from "../component/SearchBox/SerachBox";
+import RecentlyViewed from "../component/RecentlyViewed/RecentlyViewed";
 
 const MyFridge = () => {
   const dispatch = useDispatch();
@@ -29,6 +30,13 @@ const MyFridge = () => {
   });
   const [hasSearched, setHasSearched] = useState(false);
   const [checkedItems, setCheckedItems] = useState(new Set());
+  const [recentlyViewedItems, setRecentlyViewedItems] = useState([]);
+  useEffect(() => {
+    const viewedItems =
+      JSON.parse(localStorage.getItem("viewedIngredients")) || [];
+    setRecentlyViewedItems(viewedItems);
+  }, []);
+
 
   useEffect(() => {
     if (searchQuery.name) {
@@ -74,8 +82,6 @@ const MyFridge = () => {
     }
   };
 
-  console.log("recipeList", recipeList);
-  console.log("checkedItems", checkedItems.size);
 
   return (
     <>
@@ -148,6 +154,11 @@ const MyFridge = () => {
           )}
         </div>
       </div>
+      {recentlyViewedItems.length >= 1 ? (
+        <RecentlyViewed recentlyViewedItems={recentlyViewedItems} />
+      ) : (
+        ""
+      )}
     </>
   );
 };

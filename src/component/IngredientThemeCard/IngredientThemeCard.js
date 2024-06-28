@@ -3,7 +3,7 @@ import { Col, Row } from "react-bootstrap";
 import IngredientCard from "../IngredientCard/IngredientCard";
 import "../../style/ingredientThemeCard.style.css"
 
-const IngredientThemeCard = ({ ingredientsList }) => {
+const IngredientThemeCard = ({ ingredients }) => {
   return (
     <div className="ingredient-theme-card__container">
       <Row>
@@ -12,7 +12,7 @@ const IngredientThemeCard = ({ ingredientsList }) => {
           <p>상반기 인기 상품 득템 찬스</p>
         </Col>
         <Col lg={9} className="ingredient-theme-cards">
-          {ingredientsList.slice(9, 11).map((ing) => (
+          {ingredients.map((ing) => (
             <IngredientCard key={ing._id} item={ing} />
           ))}
         </Col>

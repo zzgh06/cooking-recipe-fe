@@ -2,7 +2,6 @@ import React from "react";
 import { Col } from "react-bootstrap";
 
 const DashBoardCard = ({ status, count, borderColor }) => {
-  console.log(borderColor);
   return (
     <Col lg="3" md="6" sm="12">
       <div className="dashboard-card">
