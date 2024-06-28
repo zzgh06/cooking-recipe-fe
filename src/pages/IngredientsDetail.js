@@ -1,17 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { getIngredient } from "../redux/ingredientSlice";
-import { Col, Container, Row } from "react-bootstrap";
+import { Col, Container, Row, Button } from "react-bootstrap";
 import { currencyFormat } from "../utils/number";
 import "../style/IngredientsDetail.style.css";
 import AddressInput from "../component/AddressInput/AddressInput";
 import DeliveryEstimate from "../component/DeliveryEstimate/DeliveryEstimate";
 import Review from "../component/Review/Review";
-
+//import { addItemToCart } from "../redux/cartSlice";
+import { addItemToCart } from "../redux/cartSlice";
 const IngredientsDetail = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => {
+    console.log(state);
+    return state.auth;
+  });
+  const navigate = useNavigate();
+
   const [address, setAddress] = useState("지역을 선택해주세요");
   const selectedIngredient = useSelector(
     (state) => state.ingredients.selectedIngredient || []
@@ -45,8 +52,11 @@ const IngredientsDetail = () => {
     );
   }, [selectedIngredient]);
 
-  console.log("selectedIngredient id",selectedIngredient._id)
-
+  //console.log("selectedIngredient id", selectedIngredient._id);
+  const addCart = () => {
+    if (!user) navigate("/login");
+    dispatch(addItemToCart({ ingredientId: id }));
+  };
   return (
     <div>
       <Container fluid className="ingredient-container">
@@ -73,11 +83,15 @@ const IngredientsDetail = () => {
               <AddressInput setAddress={setAddress} />
               <DeliveryEstimate address={address} />
             </div>
-            
+            <div>
+              <Button className="add-button" onClick={addCart}>
+                카트에 담기
+              </Button>
+            </div>
           </Col>
           <div className="recipe-detail-reviews">
-              <Review type="ingredient" itemId={selectedIngredient._id} />
-            </div>
+            <Review type="ingredient" itemId={selectedIngredient._id} />
+          </div>
         </Row>
       </Container>
     </div>

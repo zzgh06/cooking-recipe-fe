@@ -46,7 +46,14 @@
 .delivery-info > div {
   margin-bottom: 10px;
 }
-
+.add-button {
+  background-color: green;
+  border-color: green;
+}
+.add-button:hover {
+  background-color: rgb(0, 97, 0);
+  border-color: rgb(0, 97, 0);
+}
 @media (max-width: 994px) {
   .ingredient-container {
     padding: 50px 100px;
