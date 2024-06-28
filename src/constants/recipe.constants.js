@@ -21,7 +21,7 @@ export const foodCategory = [
   ];
   
   export const etcCategory = [
-    "기타"
+    "한식","중식","일식","양식","기타"
   ];
 
   export const servings =[

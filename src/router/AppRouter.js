@@ -19,6 +19,7 @@ import StorePage from '../pages/StorePage'
 import MyRecipePage from '../pages/MyRecipePage'
 import RecipePage from '../pages/RecipePage'
 import RecipeDetailPage from '../pages/RecipeDetailPage'
+import CategoryRecipePage from '../pages/CategoryRecipePage'
 
 
 const AppRouter = () => {
@@ -33,6 +34,7 @@ const AppRouter = () => {
       <Route path="/ingredients/:id" element={<IngredientsDetail />} />
       <Route path="/recipe" element={<RecipePage />} />
       <Route path="/recipe/:id" element={<RecipeDetailPage />} />
+      <Route path="/recipe/category/:category" element={<CategoryRecipePage />} />
       <Route element={<PrivateRoute permissionLevel="customer" />}>
         <Route path="/fridge" element={<MyFridge />} />
         <Route path="/cart" element={<CartPage />} />        

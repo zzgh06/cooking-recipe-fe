@@ -1,0 +1,10 @@
+.category-recipe-page {
+    text-align: center;
+  }
+  
+  .recipe-card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
