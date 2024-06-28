@@ -11,12 +11,7 @@ const Review = ({ type, itemId }) => {
   const user = useSelector(state => state.auth.user || null);
   const [showForm, setShowForm] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [currentReview, setCurrentReview] = useState(null);
-
-  console.log("user in reviews", user)
-  console.log("reviews in reviews", reviews)
-  console.log("type in reviews", type)
-  console.log("itemId = recipe in reviews", itemId)
+  const [currentReview, setCurrentReview] = useState(null);  
 
   useEffect(() => {
     dispatch(fetchReviews({ type, id: itemId }));
@@ -48,8 +43,7 @@ const Review = ({ type, itemId }) => {
     setCurrentReview(review);
   };
 
-  const handleDelete = (reviewId, type) => {
-    console.log("click", reviewId)
+  const handleDelete = (reviewId, type) => { 
     dispatch(deleteReview({ id: reviewId, type }));
     dispatch(fetchReviews({ type, id: itemId }));
   };
