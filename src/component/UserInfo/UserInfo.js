@@ -15,8 +15,7 @@ const UserInfo = ({ onButtonClick }) => {
     navigate("/");
   };
 
-  const handleButtonClick = (value) => {
-    console.log(`${value} 버튼을 눌렀습니다.`);
+  const handleButtonClick = (value) => {    
     onButtonClick(value);
   };
 
