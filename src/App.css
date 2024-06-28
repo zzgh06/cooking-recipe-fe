@@ -1,6 +1,10 @@
+body{
+  font-family: sans-serif;
+  /* background-color: rgb(244, 248, 243) !important; */
+}
+
 .layout {
   padding-top: 190px;
-  
 }
 
 .overflow-x{
