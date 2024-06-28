@@ -23,6 +23,7 @@ const RecipeTable = ({ header = [], data = [], deleteItem, openEditForm }) => {
                 <td>{item?.time || "N/A"}</td>
                 <td>{item?.servings || "N/A"}</td>
                 <td>{item?.difficulty || "N/A"}</td>
+                <td>{item?.reviewCnt || "N/A"}</td>
                 <td>
                   {item?.images && item.images.length > 0 ? (
                     <img src={item.images[0]} alt="Recipe" style={{ width: "100px" }} />

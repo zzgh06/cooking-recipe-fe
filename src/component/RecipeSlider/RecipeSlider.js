@@ -6,8 +6,6 @@ import { recipeResponsive } from "../../constants/responsive";
 import RecipeCard from "../RecipeCard/RecipeCard";
 
 const RecipeSlider = ({ title, recipes }) => {
-
-  console.log("recipes",recipes)
   const CustomLeftArrow2 = ({ onClick }) => (
     <button className="custom-arrow-recipe left-recipe" onClick={onClick}>
       ◀

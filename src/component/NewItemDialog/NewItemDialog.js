@@ -11,12 +11,15 @@ const InitialFormData = {
   stock: 0,
   image: "",
   description: "",
-  category: "",
+  category: [],
   status: "active",
   price: 0,
+  discountPrice: 0,
+  reviewCnt: 0,
+  unit: "",
 };
 
-const NewItemDialog = ({ mode, showDialog, setShowDialog, selectedIngredient }) => {  
+const NewItemDialog = ({ mode, showDialog, setShowDialog, selectedIngredient }) => {
   const dispatch = useDispatch();
   const [formData, setFormData] = useState(InitialFormData);
   const [stockError, setStockError] = useState(false);
@@ -31,7 +34,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog, selectedIngredient }) 
     event.preventDefault();
     if (formData.stock === 0) return setStockError(true);
 
-    if (mode === "new") {         
+    if (mode === "new") {
       dispatch(createIngredient(formData));
     } else {
       dispatch(editIngredient({ id: selectedIngredient._id, ingredient: formData }));
@@ -44,8 +47,13 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog, selectedIngredient }) 
     setFormData({ ...formData, [id]: value });
   };
 
+  const onHandleCategory = (event) => {
+    const selectedOptions = Array.from(event.target.selectedOptions, (option) => option.value);
+    setFormData({ ...formData, category: selectedOptions });
+  };
+
   const uploadImage = (url) => {
-    setFormData({ ...formData, image: url });
+    setFormData((prevData) => ({ ...prevData, image: url }));
   };
 
   useEffect(() => {
@@ -73,7 +81,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog, selectedIngredient }) 
             <Form.Label>Name</Form.Label>
             <Form.Control
               onChange={handleChange}
-              type="string"
+              type="text"
               placeholder="Name"
               required
               value={formData.name}
@@ -83,7 +91,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog, selectedIngredient }) 
         <Form.Group className="mb-3" controlId="description">
           <Form.Label>Description</Form.Label>
           <Form.Control
-            type="string"
+            type="text"
             placeholder="Description"
             as="textarea"
             onChange={handleChange}
@@ -126,17 +134,33 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog, selectedIngredient }) 
               placeholder="0"
             />
           </Form.Group>
+          <Form.Group as={Col} controlId="discountPrice">
+            <Form.Label>Discount %</Form.Label>
+            <Form.Control
+              value={formData.discountPrice}
+              onChange={handleChange}
+              type="number"
+              placeholder="0"
+            />
+          </Form.Group>
+          <Form.Group as={Col} controlId="reviewCnt">
+            <Form.Label>Review Count</Form.Label>
+            <Form.Control
+              value={formData.reviewCnt}
+              onChange={handleChange}
+              type="number"
+              placeholder="0"
+            />
+          </Form.Group>
           <Form.Group as={Col} controlId="category">
             <Form.Label>Category</Form.Label>
             <Form.Control
               as="select"
-              onChange={handleChange}
+              multiple
+              onChange={onHandleCategory}
               value={formData.category}
               required
             >
-              <option value="" disabled hidden>
-                Please Choose...
-              </option>
               {CATEGORY.map((item, idx) => (
                 <option key={idx} value={item.toLowerCase()}>
                   {item}

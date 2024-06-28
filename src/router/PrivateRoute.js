@@ -4,10 +4,10 @@ import { Navigate, Outlet } from "react-router-dom";
 
 const PrivateRoute = ({ permissionLevel }) => {
   console.log("privateroute")
-  // const user = useSelector((state) => state.user.user);
+  // const user = useSelector((state) => state.auth.user);
 
   const user = { level: "admin" };
-  console.log("user",user)
+  console.log("PrivateRoute user", user)
 
   if (!user) {
     console.log("User not found or not logged in");

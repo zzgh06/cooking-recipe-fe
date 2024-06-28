@@ -3,33 +3,33 @@ import { Form, Modal, Button, Col, Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { currencyFormat } from "../../utils/number";
 import { ORDER_STATUS } from "../../constants/order.constants";
-
+import { updateOrder, getOrderList } from "../../redux/orderSlice";
 const OrderDetailDialog = ({ open, handleClose }) => {
   const dispatch = useDispatch();
-  const selectedOrder = [
-    {
-      orderNum: "1213132",
-      createdAt: "2024년 06월 20일",
-      userId: { email: "admin@gmail.com" },
-      items: [{ productId: { name: "홍길동" } }],
-      shipTo: { address: "경기도 안산시", city: "안산" },
-      totalPrice: 30000,
-      status: "preparing",
-    }
-  ];
-  // const { selectedOrder, updateOrder, getOrderList } = useSelector(
-  //   (state) => state.orders
-  // );
+  // const selectedOrder = [
+  //   {
+  //     orderNum: "1213132",
+  //     createdAt: "2024년 06월 20일",
+  //     userId: { email: "admin@gmail.com" },
+  //     items: [{ productId: { name: "홍길동" } }],
+  //     shipTo: { address: "경기도 안산시", city: "안산" },
+  //     totalPrice: 30000,
+  //     status: "preparing",
+  //   }
+  // ];
+  const { selectedOrder } = useSelector((state) => state.order);
   const [orderStatus, setOrderStatus] = useState(selectedOrder.status);
-
+  console.log(selectedOrder);
   const handleStatusChange = (event) => {
     setOrderStatus(event.target.value);
   };
 
   const submitStatus = async (event) => {
     event.preventDefault();
-    // await dispatch(updateOrder(selectedOrder._id, orderStatus));
-    // await dispatch(getOrderList(searchQuery));
+    console.log(selectedOrder._id);
+    console.log(orderStatus);
+    dispatch(updateOrder({ id: selectedOrder._id, status: orderStatus }));
+    await dispatch(getOrderList());
     handleClose();
   };
 
@@ -42,15 +42,18 @@ const OrderDetailDialog = ({ open, handleClose }) => {
         <Modal.Title>Order Detail</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p>예약번호: {selectedOrder[0].orderNum}</p>
-        <p>주문날짜: {selectedOrder[0].createdAt.slice(0, 10)}</p>
-        <p>이메일: {selectedOrder[0].userId.email}</p>
+        <p>예약번호: {selectedOrder.orderNum}</p>
+        <p>주문날짜: {selectedOrder.createdAt.slice(0, 10)}</p>
+        <p>이메일: {selectedOrder.userId.email}</p>
         <p>
-          주소:{selectedOrder[0].shipTo.address + " " + selectedOrder[0].shipTo.city}
+          주소:
+          {selectedOrder.contactInfo.shipTo.address +
+            " " +
+            selectedOrder.contactInfo.shipTo.city}
         </p>
         <p>
           연락처:
-          {/* {`${selectedOrder[0].contact.contact}`} */}
+          {selectedOrder.contactInfo.contact.contact}
         </p>
         <p>주문내역</p>
         <div className="overflow-x">
@@ -65,11 +68,11 @@ const OrderDetailDialog = ({ open, handleClose }) => {
               </tr>
             </thead>
             <tbody>
-              {selectedOrder[0].items.length > 0 &&
-                selectedOrder[0].items.map((item) => (
+              {selectedOrder.items.length > 0 &&
+                selectedOrder.items.map((item) => (
                   <tr key={item._id}>
                     <td>{item._id}</td>
-                    <td>{item.productId.name}</td>
+                    <td>{item.ingredientId.name}</td>
                     <td>{currencyFormat(item.price)}</td>
                     <td>{item.qty}</td>
                     <td>{currencyFormat(item.price * item.qty)}</td>
@@ -77,7 +80,7 @@ const OrderDetailDialog = ({ open, handleClose }) => {
                 ))}
               <tr>
                 <td colSpan={4}>총계:</td>
-                <td>{currencyFormat(selectedOrder[0].totalPrice)}</td>
+                <td>{currencyFormat(selectedOrder.totalPrice)}</td>
               </tr>
             </tbody>
           </Table>
