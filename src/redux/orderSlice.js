@@ -57,7 +57,7 @@ export const updateOrder = createAsyncThunk(
       //   dispatch(
       //     commonUiActions.showToastMessage("오더 업데이트 완료!", "success")
       //   );
-      dispatch(getOrderList()); // assuming you want to refresh the order list
+      //dispatch(getOrderList()); // assuming you want to refresh the order list
       return response.data;
     } catch (error) {
       //   dispatch(commonUiActions.showToastMessage(error.message, "error"));
@@ -68,7 +68,11 @@ export const updateOrder = createAsyncThunk(
 const orderSlice = createSlice({
   name: "order",
   initialState,
-  reducers: {},
+  reducers: {
+    setSelectedOrder(state, action) {
+      state.selectedOrder = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       // createOrder actions
@@ -127,5 +131,5 @@ const orderSlice = createSlice({
       });
   },
 });
-
+export const { setSelectedOrder } = orderSlice.actions;
 export default orderSlice.reducer;

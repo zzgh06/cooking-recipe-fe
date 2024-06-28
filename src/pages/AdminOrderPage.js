@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import OrderTable from "../component/OrderTable/OrderTable";
 import DashBoardCard from "../component/DashBoardCard/DashboardCard";
 import OrderDetailDialog from "../component/OrderDetailDialog/OrderDetailDialog";
-import { getOrderList } from "../redux/orderSlice";
+import { getOrderList, setSelectedOrder } from "../redux/orderSlice";
 const AdminOrderPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -86,7 +86,7 @@ const AdminOrderPage = () => {
 
   const openEditForm = (order) => {
     setOpen(true);
-    // setSelectedOrder(order);
+    dispatch(setSelectedOrder(order));
   };
 
   const handlePageClick = ({ selected }) => {
@@ -100,6 +100,7 @@ const AdminOrderPage = () => {
   const getOrderCountByStatus = (status) => {
     console.log(orderList);
     //return 0;
+    if (orderList.length == 0) return 0;
     return orderList.data.filter((order) => order.status === status).length;
   };
   return (
