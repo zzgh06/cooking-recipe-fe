@@ -1,0 +1,38 @@
+.status-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 20px;
+    background-color: #fff;
+  }
+  
+  .order-info {
+    padding-left: 16px;
+  }
+  
+  .vertical-middle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .text-12 {
+    font-size: 12px;
+  }
+  
+  .text-align-center {
+    text-align: center;
+  }
+  
+  .badge {
+    display: inline-block;
+    padding: 0.5em 1em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.375rem;
+  }
+  
