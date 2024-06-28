@@ -3,6 +3,7 @@ import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 
 const RecipeTable = ({ header = [], data = [], deleteItem, openEditForm }) => {
+  console.log(" RecipeTable data",data)
   return (
     <div className="overflow-x">
       <Table striped bordered hover>
@@ -19,7 +20,7 @@ const RecipeTable = ({ header = [], data = [], deleteItem, openEditForm }) => {
               <tr key={index}>
                 <td>{index + 1}</td>
                 <td style={{ minWidth: "100px" }}>{item?.name || "N/A"}</td>
-                <td>{item?.categories?.food || "N/A"}</td>
+                <td>{item?.categories?.etc || "N/A"}</td>
                 <td>{item?.time || "N/A"}</td>
                 <td>{item?.servings || "N/A"}</td>
                 <td>{item?.difficulty || "N/A"}</td>

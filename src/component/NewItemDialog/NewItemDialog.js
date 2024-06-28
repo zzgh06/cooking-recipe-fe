@@ -47,6 +47,11 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog, selectedIngredient }) 
     setFormData({ ...formData, [id]: value });
   };
 
+  const handleStockChange = (event) => {
+    const value = event.target.value;
+    setFormData({ ...formData, stock: value ? parseInt(value, 10) : "" });
+  };
+
   const onHandleCategory = (event) => {
     const selectedOptions = Array.from(event.target.selectedOptions, (option) => option.value);
     setFormData({ ...formData, category: selectedOptions });
@@ -106,7 +111,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog, selectedIngredient }) 
             <span className="error-message">재고를 추가해주세요</span>
           )}
           <Form.Control
-            onChange={(e) => setFormData({ ...formData, stock: parseInt(e.target.value) })}
+            onChange={handleStockChange}
             type="number"
             placeholder="Enter stock"
             value={formData.stock}

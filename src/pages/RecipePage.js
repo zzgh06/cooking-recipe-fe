@@ -11,8 +11,6 @@ const RecipePage = () => {
   const dispatch = useDispatch();
   const { recipes, loading, error } = useSelector(state => state.recipe);
 
-
-
   useEffect(() => {
     const searchQuery = {
       name: "", // 검색어를 추가할 수 있습니다.
@@ -20,8 +18,15 @@ const RecipePage = () => {
     };
     dispatch(fetchRecipes(searchQuery));
   }, [dispatch]);
+  console.log("RecipePage recipes", recipes)
+  const popularRecipes = recipes.filter(recipe => recipe.reviewCnt > 0);
 
-  console.log("recipes", recipes);
+  console.log("RecipePage popularRecipes", popularRecipes);
+  const asianCuisineRecipes = recipes.filter(recipe =>
+    ["한식", "중식", "일식"].includes(recipe.categories.etc)
+  );
+
+
 
   const subImages = [
     "https://product-image.kurly.com/hdims/resize/%3E1050x%3E140/quality/85/src/banner/random-band/pc/img/8d074afe-a6b2-4eba-a0a7-a3f1839c78e9.jpg",
@@ -33,9 +38,9 @@ const RecipePage = () => {
       {/* <BannerComponent images={} /> */}
       {loading && <p>Loading...</p>}
       {error && <p>Error: {error}</p>}
-      <RecipeSlider title={"인기 레시피"} recipes={recipes} />
+      <RecipeSlider title={"베스트 레시피"} recipes={popularRecipes} />
       <SubBanner img={subImages[0]} />
-      <RecipeSlider title={"신규 레시피"} recipes={recipes} />
+      <RecipeSlider title={"한식 중식 일식 레시피"} recipes={asianCuisineRecipes} />
       <SubBanner img={subImages[1]} />
       <RecipeAll />
     </div>

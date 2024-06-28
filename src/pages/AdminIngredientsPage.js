@@ -36,6 +36,7 @@ const AdminIngredientsPage = () => {
 
   const handleClickNewItem = () => {
     setMode("new");
+    setSelectedIngredient(null);
     setShowDialog(true);
   };
 
