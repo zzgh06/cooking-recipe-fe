@@ -8,6 +8,7 @@ import {
   faClose,
   faUtensils,
   faUser,
+  faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 import "../Navbar/Navbar.style.css";
 
@@ -22,15 +23,13 @@ const Navbar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [query, setQuery] = useSearchParams();
-  const [searchQuery, setSearchQuery] = useState({
-    page: query.get("page") || 1,
-    name: query.get("name") || "",
-  });
-  const menuList = ["레시피", "스토어", "베스트", "My 냉장고"];
+  const [keyword, setKeyword] = useState(query.get("name") || "");
+  const [isSearchVisible, setSearchVisible] = useState(false); // State to manage visibility of search input
+
+  const menuList = ["레시피", "스토어", "My 냉장고"];
   const menuPathMapping = {
     레시피: "recipe",
     스토어: "store",
-    베스트: "best",
     "My 냉장고": "fridge",
   };
 
@@ -53,6 +52,10 @@ const Navbar = () => {
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
+  };
+
+  const toggleSearch = () => {
+    setSearchVisible(!isSearchVisible); // Toggle search visibility
   };
 
   const showDropdown = () => {
@@ -87,16 +90,42 @@ const Navbar = () => {
           </>
         )}
       </div>
-      <div className="nav-middle">
-        <div className="nav-logo" onClick={() => navigate("/")}>
+      <div className="nav-middle" onMouseLeave={hideDropdown}>
+        <div className="nav-logo" onClick={() => navigate("/")} onMouseEnter={showDropdown}>
           What’s in your fridge
         </div>
+        {/* <Dropdown
+          dropdownVisible={dropdownVisible}
+          showDropdown={showDropdown}
+          hideDropdown={hideDropdown}
+        /> */}
+        <div className="nav-menu">
+          {menuList.map((menu, index) => (
+            <li key={index}>
+              <Link
+                to={`/${menuPathMapping[menu]}`}
+                key={index}
+              >
+                {menu}
+              </Link>
+            </li>
+          ))}
+        </div>
         <div className="search-box-container">
-          <SearchBox
-            name={"search-box"}
-            onCheckEnter={onCheckEnter}
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
+          {isSearchVisible && (
+            <input
+              type="text"
+              className="search-input"
+              placeholder="검색어를 입력하세요"
+              value={keyword}
+              onChange={(event) => setKeyword(event.target.value)}
+              onKeyPress={onCheckEnter}
+            />
+          )}
+          <FontAwesomeIcon
+            className="search-icon"
+            icon={faSearch}
+            onClick={toggleSearch}
           />
         </div>
         <div className="user-menu">
@@ -110,7 +139,6 @@ const Navbar = () => {
             icon={faUtensils}
             onClick={() => navigate("/account/recipe")}
           />
-          <FontAwesomeIcon className="nav-icon" icon={faHeart} />
           <FontAwesomeIcon
             className="nav-icon"
             icon={faCartPlus}
@@ -121,30 +149,6 @@ const Navbar = () => {
           <FontAwesomeIcon icon={faBars} onClick={toggleSidebar} />
         </div>
       </div>
-      <div className="nav-bottom" onMouseLeave={hideDropdown}>
-        <div className="nav-category" onMouseEnter={showDropdown}>
-          <FontAwesomeIcon icon={faBars} />
-          <span>카테고리</span>
-        </div>
-        <div className="nav-menu">
-          {menuList.map((menu, index) => (
-            <li key={index}>
-              <Link
-                to={`/${menuPathMapping[menu]}`}
-                key={index}
-                onClick={toggleSidebar}
-              >
-                {menu}
-              </Link>
-            </li>
-          ))}
-        </div>
-        <Dropdown
-          dropdownVisible={dropdownVisible}
-          showDropdown={showDropdown}
-          hideDropdown={hideDropdown}
-        />
-      </div>
 
       <div className={`sidebar ${sidebarOpen ? "open" : ""}`}>
         <div className="sidebar-header">
@@ -153,7 +157,11 @@ const Navbar = () => {
         </div>
         <div className="sidebar-menu">
           {menuList.map((menu, index) => (
-            <Link to="/" key={index} onClick={toggleSidebar}>
+            <Link
+              to={`/${menuPathMapping[menu]}`}
+              key={index}
+              onClick={toggleSidebar}
+            >
               {menu}
             </Link>
           ))}
