@@ -14,6 +14,7 @@ const IngredientsDetail = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => {
+    console.log(state);
     return state.auth;
   });
   const navigate = useNavigate();
@@ -51,6 +52,7 @@ const IngredientsDetail = () => {
     );
   }, [selectedIngredient]);
 
+  //console.log("selectedIngredient id", selectedIngredient._id);
   const addCart = () => {
     if (!user) navigate("/login");
     dispatch(addItemToCart({ ingredientId: id }));
