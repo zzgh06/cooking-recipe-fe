@@ -13,6 +13,7 @@ import {
 import FridgeItemCard from "../component/FridgeItemCard/FridgeItemCard";
 import SearchBox from "../component/SearchBox/SerachBox";
 import RecentlyViewed from "../component/RecentlyViewed/RecentlyViewed";
+import { Spinner } from "react-bootstrap";
 
 const MyFridge = () => {
   const dispatch = useDispatch();
@@ -20,9 +21,13 @@ const MyFridge = () => {
   const ingredient = useSelector(
     (state) => state.ingredients.ingredients || []
   );
-  const { fridgeItems, recipeList } = useSelector(
-    (state) => state.fridge || []
-  );
+  const {
+    fridgeItems,
+    recipeList,
+    loading,
+    recipeLoading,
+    addIngredientLoading,
+  } = useSelector((state) => state.fridge || []);
   const [query, setQuery] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState({
     page: query.get("page") || 1,
@@ -31,18 +36,20 @@ const MyFridge = () => {
   const [hasSearched, setHasSearched] = useState(false);
   const [checkedItems, setCheckedItems] = useState(new Set());
   const [recentlyViewedItems, setRecentlyViewedItems] = useState([]);
+  const [recommendClicked, setRecommendClicked] = useState(false);
+
   useEffect(() => {
     const viewedItems =
       JSON.parse(localStorage.getItem("viewedIngredients")) || [];
     setRecentlyViewedItems(viewedItems);
   }, []);
 
-
   useEffect(() => {
     if (searchQuery.name) {
       dispatch(fetchIngredients(searchQuery));
       dispatch(fridgeIngredientRecipeResult(searchQuery));
       setHasSearched(true);
+      setRecommendClicked(false); // Reset recommendClicked when performing a search
     } else {
       dispatch(fridgeIngredientRecipeResult(searchQuery));
     }
@@ -79,9 +86,10 @@ const MyFridge = () => {
     if (checkedItems.size > 0) {
       const selectedIngredients = Array.from(checkedItems);
       dispatch(fetchRecommendedRecipes(selectedIngredients));
+      setRecommendClicked(true);
+      setHasSearched(false); // Reset hasSearched when recommending recipes
     }
   };
-
 
   return (
     <>
@@ -136,7 +144,11 @@ const MyFridge = () => {
           </div>
           {hasSearched && (
             <div className="fridge-search-result">
-              {ingredient.length === 0 ? (
+              {loading ? (
+                <div className="text-center my-3">
+                  <Spinner animation="border" />
+                </div>
+              ) : ingredient.length === 0 ? (
                 <p>일치하는 재료가 없습니다.</p>
               ) : (
                 ingredient.map((item) => (
@@ -146,13 +158,17 @@ const MyFridge = () => {
             </div>
           )}
         </div>
-        <div>
-          {recipeList.length === 0 ? (
-            ""
-          ) : (
-            <MyFridgeSearchResults recipeList={recipeList} />
-          )}
-        </div>
+        {(hasSearched || recommendClicked) && (
+          <div>
+            {recipeLoading ? (
+              <div className="text-center my-3">
+                <Spinner animation="border" />
+              </div>
+            ) : (
+              <MyFridgeSearchResults recipeList={recipeList} />
+            )}
+          </div>
+        )}
       </div>
       {recentlyViewedItems.length >= 1 ? (
         <RecentlyViewed recentlyViewedItems={recentlyViewedItems} />
