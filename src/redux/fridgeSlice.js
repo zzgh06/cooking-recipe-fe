@@ -84,23 +84,29 @@ const fridgeSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(addIngredientToFridge.pending, (state) => {
+        state.loading = true;
         state.error = null;
       })
       .addCase(addIngredientToFridge.fulfilled, (state, action) => {
-        state.fridgeItems = action.payload; 
+        state.fridgeItems = action.payload;
+        state.loading = false;
         state.error = null;
       })
       .addCase(addIngredientToFridge.rejected, (state, action) => {
+        state.loading = false;
         state.error = action.payload;
       })
       .addCase(fetchFridgeItems.pending, (state) => {
+        state.loading = true;
         state.error = null;
       })
       .addCase(fetchFridgeItems.fulfilled, (state, action) => {
         state.fridgeItems = action.payload;
+        state.loading = false;
         state.error = null;
       })
       .addCase(fetchFridgeItems.rejected, (state, action) => {
+        state.loading = false;
         state.error = action.payload;
       })
       .addCase(deleteFridgeItem.fulfilled, (state, action) => {
@@ -112,23 +118,29 @@ const fridgeSlice = createSlice({
         state.error = action.payload;
       })
       .addCase(fridgeIngredientRecipeResult.pending, (state) => {
+        state.loading = true;
         state.error = null;
       })
       .addCase(fridgeIngredientRecipeResult.fulfilled, (state, action) => {
         state.recipeList = action.payload;
+        state.loading = false;
         state.error = null;
       })
       .addCase(fridgeIngredientRecipeResult.rejected, (state, action) => {
+        state.loading = false;
         state.error = action.payload;
       })
       .addCase(fetchRecommendedRecipes.pending, (state) => {
+        state.recipeLoading = true;
         state.error = null;
       })
       .addCase(fetchRecommendedRecipes.fulfilled, (state, action) => {
         state.recipeList = action.payload;
+        state.recipeLoading = false;
         state.error = null;
       })
       .addCase(fetchRecommendedRecipes.rejected, (state, action) => {
+        state.recipeLoading = false;
         state.error = action.payload;
       });
   },

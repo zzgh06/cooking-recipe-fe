@@ -25,17 +25,21 @@ const Review = ({ type, itemId }) => {
 
   const handleFormSubmit = (comment, rating) => {
     if (editMode && currentReview) {
-      dispatch(updateReview({ id: currentReview._id, type, comment, rating }));
-      dispatch(fetchReviews({ type, id: itemId }))
+       dispatch(updateReview({ id: currentReview._id, type, comment, rating }));
     } else {
-      
-      dispatch(createReview({ type, userId: user._id, recipeId: itemId, comment, rating }));
+       dispatch(createReview({ type, userId: user._id, recipeId: itemId, comment, rating }));
     }
+
     setShowForm(false);
     setEditMode(false);
     setCurrentReview(null);
-    dispatch(fetchReviews({ type, id: itemId })); 
+
+
+    setTimeout(() => {
+      dispatch(fetchReviews({ type, id: itemId }));
+    }, 500); 
   };
+
 
   const handleEdit = (review) => {
     setShowForm(true);
