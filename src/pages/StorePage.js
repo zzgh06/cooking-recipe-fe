@@ -26,6 +26,8 @@ const StorePage = () => {
   const {ingredients} = useSelector(
     (state) => state.ingredients || []
   );
+
+  
   const [recentlyViewedItems, setRecentlyViewedItems] = useState([]);
   useEffect(() => {
     const viewedItems =
@@ -36,6 +38,10 @@ const StorePage = () => {
   const newIngredients = ingredients.filter((ing) =>
     ing.category.includes("신상")
   );
+
+  const bestIngredients = ingredients.filter((ing)=>ing.totalSales > 0);
+  console.log("bestIngredients", bestIngredients)
+  
   const topDiscountedIngredients = ingredients
     .filter((ing) => ing.discountPrice !== undefined)
     .sort((a, b) => b.discountPrice - a.discountPrice)
@@ -48,9 +54,9 @@ const StorePage = () => {
   return (
     <div>
       <BannerComponent images={images} />
-      <IngredientSlider title={"베스트 상품"} ingredients={ingredients} />
+      <IngredientSlider title={"베스트 상품"} ingredients={bestIngredients} />
       <SubBanner img={subImages[0]} />
-      <IngredientSlider title={"신상품"} ingredients={newIngredients} />
+      <IngredientSlider title={"신상품"} ingredients={newIngredients.slice(0, 8)} />
       <IngredientThemeCard ingredients={topDiscountedIngredients} />
       <SubBanner img={subImages[1]} />
       <IngredientAll />

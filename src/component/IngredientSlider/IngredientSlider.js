@@ -2,8 +2,8 @@ import React from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import "../../style/ingredientsSlider.style.css";
-import { ingredientResponsive } from "../../constants/responsive";
 import IngredientCard from "../IngredientCard/IngredientCard";
+import { recipeResponsive } from "../../constants/responsive";
 
 const IngredientSlider = ({ title, ingredients }) => {
 
@@ -25,11 +25,11 @@ const IngredientSlider = ({ title, ingredients }) => {
       <Carousel
         infinite={true}
         containerClass="ingredient-carousel-container"
-        responsive={ingredientResponsive}
+        responsive={recipeResponsive}
         customLeftArrow={<CustomLeftArrow2 />}
         customRightArrow={<CustomRightArrow2 />}
       >
-        {ingredients?.slice(8, 16)?.map((ing) => (
+        {ingredients?.map((ing) => (
           <IngredientCard key={ing._id} item={ing} />
         ))}
       </Carousel>
