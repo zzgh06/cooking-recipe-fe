@@ -63,7 +63,7 @@ const RegisterPage = () => {
                 </div>
                 <div className="form-group">
                     <label htmlFor="email">이메일<span className="span-start">*</span></label>
-                    <input type="email" id="email" placeholder="예: marketkurly@kurly.com" onChange={handleChange} required />
+                    <input type="email" id="email" placeholder="예: fridge@naver.com" onChange={handleChange} required />
                 </div>
                 <div className="form-group">
                     <label htmlFor="password">비밀번호<span className="span-start">*</span></label>

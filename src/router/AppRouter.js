@@ -20,6 +20,7 @@ import MyRecipePage from '../pages/MyRecipePage'
 import RecipePage from '../pages/RecipePage'
 import RecipeDetailPage from '../pages/RecipeDetailPage'
 import CategoryRecipePage from '../pages/CategoryRecipePage'
+import SearchResults from '../pages/SearchResults'
 
 
 const AppRouter = () => {
@@ -43,6 +44,7 @@ const AppRouter = () => {
         <Route path="/account/purchase" element={<MyPage />} />
         <Route path="/account/profile" element={<MyProfile />} />
         <Route path="/account/recipe" element={<MyRecipePage />} />
+        <Route path="/search" element={<SearchResults />} />
       </Route>
       <Route element={<PrivateRoute permissionLevel="admin" />}>
         <Route path="/admin/recipe" element={<AdminRecipePage />} />

@@ -62,9 +62,9 @@ export const loginWithToken = createAsyncThunk(
 
 export const getUsersInfo = createAsyncThunk(
   "auth/getUsersInfo",
-  async (_, thunkAPI) => {
+  async (searchQuery, thunkAPI) => {
     try {
-      const response = await api.get("/user/admin");
+      const response = await api.get(`/user/admin?name=${searchQuery.name}&page=${searchQuery.page}`);
       if (response.status !== 200) throw new Error(response.error);
       return {
         usersData: response.data.data,

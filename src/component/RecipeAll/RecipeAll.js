@@ -15,7 +15,6 @@ const RecipeAll = () => {
     dispatch(fetchRecipes());
   }, [dispatch]);
 
-  console.log(recipes)
   const filteredRecipes = selectedCategory === '모두보기' 
     ? recipes 
     : recipes.filter(recipe => recipe.categories.etc === selectedCategory);

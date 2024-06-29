@@ -34,14 +34,13 @@ const Navbar = () => {
   };
 
   const user = useSelector((state) => state.auth.user);
-  console.log(user);
 
   const onCheckEnter = (event) => {
     if (event.key === "Enter") {
       if (event.target.value === "") {
         return navigate(`/`);
       }
-      navigate(`?name=${event.target.value}`);
+      navigate(`/search?name=${event.target.value}`); 
     }
   };
 

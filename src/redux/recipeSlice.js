@@ -40,15 +40,12 @@ export const fetchRecipes = createAsyncThunk(
   "recipe/fetchRecipes",
   async (searchQuery, { rejectWithValue }) => {
     try {
-      if (searchQuery.page === undefined) {
-        const response = await api.get(`/recipe?name=${searchQuery.name}`);
-        return response.data;
-      }
-      const response = await api.get(
-        `/recipe?name=${searchQuery.name}&page=${searchQuery.page}`
-      );
-      console.log(searchQuery.page);
-      console.log(response.data);
+      // 페이지 정보가 없으면 전체 데이터를 불러옴
+      const url = searchQuery.page 
+        ? `/recipe?name=${searchQuery.name}&page=${searchQuery.page}` 
+        : `/recipe?name=${searchQuery.name}`;
+      const response = await api.get(url);
+      console.log("API response:", response.data);
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -134,6 +131,7 @@ const recipeSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchRecipes.fulfilled, (state, action) => {
+        console.log("Fetched recipes:", action.payload);
         state.loading = false;
         state.recipes = action.payload.data;
         state.totalPages = action.payload.totalPageNum;

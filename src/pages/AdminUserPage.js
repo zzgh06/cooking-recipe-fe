@@ -30,8 +30,8 @@ const AdminUserPage = () => {
   ];
 
   useEffect(() => {
-    dispatch(getUsersInfo());
-  }, []);
+    dispatch(getUsersInfo(searchQuery));
+  }, [dispatch, searchQuery]);
 
   useEffect(() => {
     if (searchQuery.name === "") {
@@ -71,8 +71,8 @@ const AdminUserPage = () => {
           <SearchBox
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
-            placeholder="오더번호"
-            field="orderNum"
+            placeholder="유저명 입력"
+            field="name"
           />
         </div>
 

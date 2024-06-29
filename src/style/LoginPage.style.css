@@ -66,7 +66,9 @@ button:hover {
 }
 
 .googleLogin{
-    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    margin: 20px auto;
 }
 
 .admin-box{
