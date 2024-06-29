@@ -6,7 +6,6 @@ export const fetchReviews = createAsyncThunk(
   async ({ type, id }, { rejectWithValue }) => {
     try {       
       const response = await api.get(`/review/${type}/${id}`);
-      console.log("response.data.reviews",response.data.reviews);
       return response.data.reviews;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -18,7 +17,6 @@ export const createReview = createAsyncThunk(
     'reviews/createReview',
     async ({ type, userId, recipeId, comment, rating }, { rejectWithValue }) => {
       try {
-        console.log("createReview: type, userId, recipeId, comment, rating", type, userId, recipeId, comment, rating)
         const response = await api.post(`/review/${type}`, { userId, recipeId, comment, rating });
         return response.data.data;
       } catch (err) {
@@ -31,7 +29,6 @@ export const createReview = createAsyncThunk(
     'reviews/deleteReview',
     async ({ id, type }, { rejectWithValue }) => {
       try {
-        console.log("id, type in deleteReview", id, type)
         const response = await api.delete(`/review/${type}/${id}`);
         return { id, deletedCount: response.data.deletedCount };
       } catch (err) {
@@ -68,7 +65,6 @@ const reviewSlice = createSlice({
       .addCase(fetchReviews.fulfilled, (state, action) => {
         state.loading = false;
         state.reviews = action.payload;
-        console.log("state.reviews", state.reviews)
       })
       .addCase(fetchReviews.rejected, (state, action) => {
         state.loading = false;

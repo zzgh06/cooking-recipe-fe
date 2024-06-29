@@ -12,9 +12,6 @@ const MyOrderComponent = () => {
   const { orderList, loading, error } = useSelector((state) => state.order); 
   const user = useSelector(state => state.auth.user);
 
-  console.log("user", user.user._id);
-  console.log("orders", orderList);
-
   useEffect(() => {
     if (!user) {
       navigate("/login");

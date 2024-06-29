@@ -7,7 +7,7 @@ const SearchBox = ({searchQuery, setSearchQuery, onCheckEnter, placeholder, fiel
   const [query] = useSearchParams();
   const [keyword, setKeyword] = useState(query.get(field) || "");
   let navigate = useNavigate()
-  console.log(keyword)
+
   
   return (
     <div className="search-box">

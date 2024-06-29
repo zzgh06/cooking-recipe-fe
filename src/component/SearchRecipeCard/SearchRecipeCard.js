@@ -3,7 +3,6 @@ import "../../style/searchRecipeCard.style.css"
 import { useNavigate } from 'react-router-dom';
 
 const SearchRecipeCard = ({item}) => {
-  console.log("SearchRecipeCard", item)
   const navigate = useNavigate();
   const showRecipe = (id) => {
     navigate(`/recipe/${id}`);

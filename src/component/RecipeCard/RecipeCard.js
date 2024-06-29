@@ -3,7 +3,7 @@ import "../../style/RecipeCard.style.css";
 import { useNavigate } from "react-router-dom";
 
 const RecipeCard = ({ item }) => {
-  //console.log("item",item)
+
   const navigate = useNavigate();
   const showRecipe = (id) => {
     navigate(`/recipe/${id}`);

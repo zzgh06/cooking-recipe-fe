@@ -25,10 +25,6 @@ const AdminIngredientsPage = () => {
     dispatch(fetchIngredients(searchQuery));
   }, [dispatch, searchQuery]);
 
-  useEffect(() => {
-    console.log('Redux State:', ingredientList); 
-    console.log('Total Pages:', totalPageNumber);
-  }, [ingredientList, totalPageNumber]);
 
   const handleShowAll = () => {
     setSearchQuery({ page: 1, name: "" });

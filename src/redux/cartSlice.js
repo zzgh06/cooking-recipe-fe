@@ -17,8 +17,6 @@ export const addItemToCart = createAsyncThunk(
 export const editCartItem = createAsyncThunk(
   "cart/editCartItem",
   async ({ ingredientId, qty }) => {
-    console.log("ingredientId", ingredientId);
-    console.log("qty", qty);
     const response = await api.put(`/cart/${ingredientId}`, { qty });
     return response.data;
   }
@@ -58,8 +56,6 @@ const cartSlice = createSlice({
         state.cartItem =
           action.payload.data !== null ? action.payload.data.items : [];
         state.cartItemCount = state.cartItem.length;
-        console.log("rrrrrrrrrrrrr", state.cartItem);
-        console.log("state.totalPrice", state.totalPrice);
       })
       .addCase(getCart.rejected, (state, action) => {
         state.status = "failed";
@@ -69,7 +65,6 @@ const cartSlice = createSlice({
         state.status = "succeeded";
         state.cartItem.push(action.payload.data);
         state.cartItemCount = state.cartItem.length;
-        console.log(state.cartItem, state.cartItemCount);
       })
       .addCase(addItemToCart.rejected, (state, action) => {
         state.status = "failed";
@@ -92,7 +87,6 @@ const cartSlice = createSlice({
         state.status = "succeeded";
         state.cartItem = action.payload.data;
         state.cartItemCount = state.cartItem.length;
-        console.log(state.cartItem, state.cartItemCount);
       })
       .addCase(deleteCartItem.rejected, (state, action) => {
         state.status = "failed";

@@ -20,7 +20,6 @@ const AdminUserPage = () => {
   const [showDialog, setShowDialog] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const { usersData, totalPageNum } = useSelector(state => state.auth);
-  console.log("totalPageNum", totalPageNum)
   const tableHeader = [
     "#",
     "Name",

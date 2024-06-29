@@ -5,7 +5,9 @@ import "../../style/ingredientsSlider.style.css";
 import { ingredientResponsive } from "../../constants/responsive";
 import IngredientCard from "../IngredientCard/IngredientCard";
 
-const IngredientSlider = ({ title, ingredientsList }) => {
+const IngredientSlider = ({ title, ingredients }) => {
+
+
   const CustomLeftArrow2 = ({ onClick }) => (
     <button className="custom-arrow-recipe left-recipe" onClick={onClick}>
       ◀
@@ -27,7 +29,7 @@ const IngredientSlider = ({ title, ingredientsList }) => {
         customLeftArrow={<CustomLeftArrow2 />}
         customRightArrow={<CustomRightArrow2 />}
       >
-        {ingredientsList.map((ing) => (
+        {ingredients?.slice(8, 16)?.map((ing) => (
           <IngredientCard key={ing._id} item={ing} />
         ))}
       </Carousel>

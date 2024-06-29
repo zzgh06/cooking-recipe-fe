@@ -11,3 +11,7 @@
 .ingredient-theme-cards .ingredient-card {
   min-width: 275px;
 }
+
+.ingredient-theme-card__desc h3 {
+  font-weight: 600;
+}

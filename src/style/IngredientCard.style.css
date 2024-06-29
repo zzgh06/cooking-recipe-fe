@@ -30,14 +30,13 @@
 }
 
 .card-disc .price {
-  font-size: 15px;
-  color: rgb(164, 164, 164);
-  text-decoration:line-through
+  margin-top: 8px; 
 }
 
-.card-disc .discount-price {
-  font-size: 19px;
-  font-weight: 600;
+.card-disc .origin-price {
+  font-size: 15px;
+  color: rgb(164, 164, 164);
+  text-decoration: line-through;
 }
 
 .card-disc .discount-rate {
@@ -46,3 +45,14 @@
   color: orangered;
 }
 
+.card-disc .discount-price {
+  font-size: 19px; 
+  font-weight: 600;
+  color: black; 
+}
+
+.price {
+  font-size: 19px; 
+  font-weight: 600;
+  color: black;
+}

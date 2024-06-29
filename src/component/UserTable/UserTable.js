@@ -2,7 +2,6 @@ import React from "react";
 import { Button, Table } from "react-bootstrap";
 
 const UserTable = ({ header, data, onRowClick }) => {
-  console.log(data);
 
   return (
     <div className="overflow-x">

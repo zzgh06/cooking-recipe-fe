@@ -21,10 +21,8 @@ const AdminOrderPage = () => {
   const [mode, setMode] = useState("new");
   const [open, setOpen] = useState(false);
   const { orderList } = useSelector((state) => {
-    //console.log(state);
     return state.order;
   });
-  console.log("orderList", orderList);
   const badgeBg = {
     preparing: "primary",
     shipping: "warning",
@@ -99,9 +97,7 @@ const AdminOrderPage = () => {
   };
 
   const getOrderCountByStatus = (status) => {
-    console.log(orderList);
-    //return 0;
-    if (orderList.length == 0) return 0;
+    if (orderList.length === 0) return 0;
     return orderList.data.filter((order) => order.status === status).length;
   };
   return (
