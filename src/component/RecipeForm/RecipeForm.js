@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Row, Col, Button } from 'react-bootstrap';
+import { Form, Row, Col, Button, Modal } from 'react-bootstrap';
 import CategorySelect from '../CategorySelect/CategorySelect';
 import CloudinaryUploadWidget from '../../utils/CloudinaryUploadWidget';
 import { foodCategory, moodCategory, methodCategory, ingredientCategory, etcCategory, servings, difficulty, time } from '../../constants/recipe.constants';
@@ -23,11 +23,12 @@ const RecipeForm = ({ onSubmit, initialData }) => {
   };
 
   const [formData, setFormData] = useState(initialFormData);
+  const [showSubmitModal, setShowSubmitModal] = useState(false);
 
   useEffect(() => {
     if (initialData) {
-      setFormData({
-        ...initialFormData,
+      setFormData(prevData => ({
+        ...prevData,
         ...initialData,
         images: initialData.images || [],
         foodCategory: initialData.categories?.food || '',
@@ -37,59 +38,70 @@ const RecipeForm = ({ onSubmit, initialData }) => {
         etcCategory: initialData.categories?.etc || '',
         ingredients: initialData.ingredients?.length > 0 ? initialData.ingredients : [{ name: '', qty: '', unit: '' }],
         steps: initialData.steps?.length > 0 ? initialData.steps : [{ description: '', image: null }]
-      });
+      }));
     }
   }, [initialData]);
 
   const handleAddIngredient = () => {
-    setFormData({
-      ...formData,
-      ingredients: [...formData.ingredients, { name: '', qty: '', unit: '' }]
-    });
+    setFormData(prevData => ({
+      ...prevData,
+      ingredients: [...prevData.ingredients, { name: '', qty: '', unit: '' }]
+    }));
   };
 
   const handleAddStep = () => {
-    setFormData({
-      ...formData,
-      steps: [...formData.steps, { description: '', image: null }]
-    });
+    setFormData(prevData => ({
+      ...prevData,
+      steps: [...prevData.steps, { description: '', image: null }]
+    }));
   };
 
   const handleChange = (index, field, value, type) => {
     const updatedArray = [...formData[type]];
-    updatedArray[index] = { ...updatedArray[index], [field]: value }; 
-    setFormData({
-      ...formData,
+    updatedArray[index] = { ...updatedArray[index], [field]: value };
+    setFormData(prevData => ({
+      ...prevData,
       [type]: updatedArray
-    });
+    }));
   };
 
   const uploadMainImage = (url) => {
-    setFormData(prevFormData => ({
-      ...prevFormData,
-      images: [...prevFormData.images, url]
+    setFormData(prevData => ({
+      ...prevData,
+      images: [...prevData.images, url]
     }));
   };
 
   const uploadStepImage = (url, type, index) => {
     if (type === 'steps') {
-      const updatedSteps = [...formData.steps];
-      updatedSteps[index] = { ...updatedSteps[index], image: url }; 
-      setFormData(prevFormData => ({
-        ...prevFormData,
-        steps: updatedSteps
-      }));
+      setFormData(prevData => {
+        const updatedSteps = [...prevData.steps];
+        updatedSteps[index] = {
+          ...updatedSteps[index],
+          image: url
+        };
+        return {
+          ...prevData,
+          steps: updatedSteps
+        };
+      });
     }
   };
 
   const handleDeleteIngredient = (index) => {
     const updatedIngredients = formData.ingredients.filter((_, i) => i !== index);
-    setFormData({ ...formData, ingredients: updatedIngredients });
+    setFormData(prevData => ({
+      ...prevData,
+      ingredients: updatedIngredients
+    }));
   };
 
   const handleDeleteStep = (index) => {
     const updatedSteps = formData.steps.filter((_, i) => i !== index);
-    setFormData({ ...formData, steps: updatedSteps });
+    setFormData(prevData => ({
+      ...prevData,
+      steps: updatedSteps
+    }));
   };
 
   const handleSubmit = (event) => {
@@ -114,7 +126,21 @@ const RecipeForm = ({ onSubmit, initialData }) => {
       images
     };
 
+<<<<<<< HEAD
+    console.log('recipeData to be submitted:', recipeData);
+
+    // Simulating form submission success
+=======
+>>>>>>> bf48ed46b25e775c691d5c53a0e7e81c8862a632
     onSubmit(recipeData);
+
+    // Show submit modal
+    setShowSubmitModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowSubmitModal(false);
+    setFormData(initialFormData); // Reset form data when modal is closed
   };
 
   return (
@@ -272,7 +298,7 @@ const RecipeForm = ({ onSubmit, initialData }) => {
             />
           </Col>
           <Col>
-            <CloudinaryUploadWidget uploadImage={uploadStepImage} type="steps" index={index} />
+            <CloudinaryUploadWidget uploadImage={(url) => uploadStepImage(url, 'steps', index)} type="steps" index={index} />
             {step.image && (
               <img
                 id={`uploadedimage_steps_${index}`}
@@ -289,6 +315,20 @@ const RecipeForm = ({ onSubmit, initialData }) => {
       ))}
       <Button className="btn-green" onClick={handleAddStep}>요리 순서 추가</Button>
       <Button type="submit" className="btn-green mt-3">레시피 제출</Button>
+
+      <Modal show={showSubmitModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>레시피 제출 완료</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          레시피 제출이 완료되었습니다.
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={handleCloseModal}>
+            닫기
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Form>
   );
 };

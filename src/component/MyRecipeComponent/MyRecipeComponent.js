@@ -10,7 +10,7 @@ const MyRecipeComponent = () => {
 
   return (
     <div className="my-recipe-list">
-        <h2><stron>{user.user.name}</stron> 님의 레시피</h2>
+        <h2><strong>{user.user.name}</strong> 님의 레시피</h2>
        {userRecipes.length > 0 ? (
         <div className="recipe-list">
           {userRecipes.map(recipe => (
