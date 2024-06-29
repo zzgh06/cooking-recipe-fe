@@ -10,12 +10,9 @@ import RecipeAll from "../component/RecipeAll/RecipeAll";
 const RecipePage = () => {
   const dispatch = useDispatch();
   const { recipes, loading, error } = useSelector((state) => state.recipe);
-  //console.log(recipes);
+
   useEffect(() => {
-    const searchQuery = {
-      name: "", // 검색어를 추가할 수 있습니다.
-      //page: , // 페이지 번호를 추가할 수 있습니다.
-    };
+    const searchQuery = { name: "" }; // 페이지 정보 없이 요청
     dispatch(fetchRecipes(searchQuery));
   }, [dispatch]);
 
@@ -32,8 +29,6 @@ const RecipePage = () => {
 
   return (
     <div>
-      {/* <BannerComponent images={} /> */}
-      {loading && <p>Loading...</p>}
       {error && <p>Error: {error}</p>}
       <RecipeSlider title={"베스트 레시피"} recipes={popularRecipes} />
       <SubBanner img={subImages[0]} />

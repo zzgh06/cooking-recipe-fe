@@ -1,25 +1,45 @@
 import React, { useEffect, useState } from "react";
 import { Container, Button, Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import SearchBox from '../component/SearchBox/SerachBox';
-import RecipeTable from '../component/RecipeTable/RecipeTable';
+import SearchBox from "../component/SearchBox/SerachBox";
+import RecipeTable from "../component/RecipeTable/RecipeTable";
 import ReactPaginate from "react-paginate";
-import { fetchRecipes, createRecipe, editRecipe, deleteRecipe } from "../redux/recipeSlice";
-import RecipeForm from '../component/RecipeForm/RecipeForm';
-import { useSearchParams } from "react-router-dom";
-import '../style/adminRecipe.style.css';
+import {
+  fetchRecipes,
+  createRecipe,
+  editRecipe,
+  deleteRecipe,
+} from "../redux/recipeSlice";
+import RecipeForm from "../component/RecipeForm/RecipeForm";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import "../style/adminRecipe.style.css";
 
 const AdminRecipePage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [query, setQuery] = useSearchParams();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [searchQuery, setSearchQuery] = useState({ page: 1, name: "" });
+  const [searchQuery, setSearchQuery] = useState({
+    page: query.get("page") || 1,
+    name: query.get("name") || "",
+  });
   const [showForm, setShowForm] = useState(false);
   const [mode, setMode] = useState("new");
   const [selectedRecipe, setSelectedRecipe] = useState(null);
-  const recipeList = useSelector(state => state.recipe.recipes || []); 
-  const totalPageNumber = useSelector(state => state.recipe.totalPages || 0); 
+  const recipeList = useSelector((state) => state.recipe.recipes || []);
+  const totalPageNumber = useSelector((state) => state.recipe.totalPages || 0);
 
-  const tableHeader = ["#", "Name", "Category", "Time", "Servings", "Difficulty","reviewCnt", "Images", "Actions"];
+  const tableHeader = [
+    "#",
+    "Name",
+    "Category",
+    "Time",
+    "Servings",
+    "Difficulty",
+    "reviewCnt",
+    "Images",
+    "Actions",
+  ];
 
   useEffect(() => {
     dispatch(fetchRecipes(searchQuery));
@@ -45,10 +65,6 @@ const AdminRecipePage = () => {
     setSearchQuery({ ...searchQuery, page: event.selected + 1 });
   };
 
-  const handleSearch = (searchTerm) => {
-    setSearchQuery({ ...searchQuery, name: searchTerm, page: 1 });
-  };
-
   const deleteItem = (id) => {
     dispatch(deleteRecipe(id));
   };
@@ -67,7 +83,8 @@ const AdminRecipePage = () => {
       <Container className="container-custom">
         <div className="mt-2 top-container">
           <SearchBox
-            onCheckEnter = {handleSearch}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
             placeholder="레시피 이름으로 검색"
             field="name"
           />
@@ -83,10 +100,15 @@ const AdminRecipePage = () => {
 
         <Modal show={showForm} onHide={() => setShowForm(false)}>
           <Modal.Header closeButton>
-            <Modal.Title>{mode === "new" ? "Add New Recipe" : "Edit Recipe"}</Modal.Title>
+            <Modal.Title>
+              {mode === "new" ? "Add New Recipe" : "Edit Recipe"}
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <RecipeForm onSubmit={handleFormSubmit} initialData={selectedRecipe} />
+            <RecipeForm
+              onSubmit={handleFormSubmit}
+              initialData={selectedRecipe}
+            />
           </Modal.Body>
         </Modal>
 

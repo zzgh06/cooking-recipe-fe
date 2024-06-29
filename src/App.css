@@ -47,6 +47,7 @@ body{
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 30px;
   margin-right: 25px;
   margin-bottom: 30px;
   max-width: 330px;
@@ -93,6 +94,15 @@ body{
 .cart-none {
   display: flex;
   justify-content: space-between;
+}
+
+.search-results {
+  margin: 20px 150px;
+}
+
+.search-results h2 {
+  margin-bottom: 50px;
+  text-align: center;
 }
 
 @media (max-width: 994px) {

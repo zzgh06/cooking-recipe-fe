@@ -70,7 +70,6 @@ const AdminOrderPage = () => {
   };
 
   const getOrderCountByStatus = (status) => {
-    console.log(orderList);
     if (orderList.length === 0 || orderList.data === undefined) return 0;
     return orderList.data.filter((order) => order.status === status).length;
   };

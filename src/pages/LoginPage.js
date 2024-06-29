@@ -91,9 +91,6 @@ const LoginPage = () => {
         </div>
         {error && <p className="error">{error}</p>}
         <button type="submit">로그인</button>
-        <div className="admin-box">
-          <p>Email: admin@gmail.com PW: 123</p>
-        </div>
       </form>
       <div className="googleLogin">
         <GoogleLogin
