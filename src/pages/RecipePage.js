@@ -21,11 +21,11 @@ const RecipePage = () => {
   console.log("RecipePage recipes", recipes)
   const popularRecipes = recipes.filter(recipe => recipe.reviewCnt > 0);
 
-  console.log("RecipePage popularRecipes", popularRecipes);
+  
   const asianCuisineRecipes = recipes.filter(recipe =>
     ["한식", "중식", "일식"].includes(recipe.categories.etc)
   );
-
+  console.log("asianCuisineRecipes", asianCuisineRecipes);
 
 
   const subImages = [

@@ -17,9 +17,8 @@ export const fetchReviews = createAsyncThunk(
 export const createReview = createAsyncThunk(
     'reviews/createReview',
     async ({ type, userId, recipeId, comment, rating }, { rejectWithValue }) => {
-      try {
-        console.log("createReview: type, userId, recipeId, comment, rating", type, userId, recipeId, comment, rating)
-        const response = await api.post(`/review/${type}`, { userId, recipeId, comment, rating });
+      try {        
+        const response = await api.post(`/review/${type}`, { userId, recipeId, comment, rating });        
         return response.data.data;
       } catch (err) {
         return rejectWithValue(err.response.data);
