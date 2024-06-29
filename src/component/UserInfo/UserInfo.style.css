@@ -1,9 +1,12 @@
-/* src/style/UserInfo.style.css */
 .user-info {
-    background-color: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
-  }
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.user-info-col {
+  height: 500px;
+}
   
   .profile-image {
     width: 100px;
