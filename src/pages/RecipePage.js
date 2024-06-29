@@ -19,20 +19,12 @@ const RecipePage = () => {
     dispatch(fetchRecipes(searchQuery));
   }, [dispatch]);
 
-<<<<<<< HEAD
-  
-  const asianCuisineRecipes = recipes.filter(recipe =>
-    ["한식", "중식", "일식"].includes(recipe.categories.etc)
-  );
-  console.log("asianCuisineRecipes", asianCuisineRecipes);
-
-=======
   const popularRecipes = recipes.filter((recipe) => recipe.reviewCnt > 0);
 
-  const asianCuisineRecipes = recipes.filter((recipe) =>
+  const asianCuisineRecipes = recipes.filter(recipe =>
     ["한식", "중식", "일식"].includes(recipe.categories.etc)
-  );
->>>>>>> bf48ed46b25e775c691d5c53a0e7e81c8862a632
+  );  
+
 
   const subImages = [
     "https://product-image.kurly.com/hdims/resize/%3E1050x%3E140/quality/85/src/banner/random-band/pc/img/8d074afe-a6b2-4eba-a0a7-a3f1839c78e9.jpg",
