@@ -14,8 +14,6 @@ const RecipeDetail = () => {
     dispatch(fetchRecipeById(id));
   }, [dispatch, id]);
 
-  console.log("recipeDetail", recipeDetail);
-
   if (loading) {
     return <div>Loading...</div>;
   }

@@ -1,13 +1,11 @@
 .ingredient-carousel-wrapper {
   position: relative;
-  padding: 50px 150px 10px 150px;
+  padding: 50px 250px 10px 250px;
   width: 100vw;
 }
 
 .ingredient-carousel-container {
-  display: flex;
   justify-content: center;
-  position: relative;
 }
 
 .ingredient-title {

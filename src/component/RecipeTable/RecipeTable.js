@@ -3,7 +3,6 @@ import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 
 const RecipeTable = ({ header = [], data = [], deleteItem, openEditForm }) => {
-  console.log(" RecipeTable data",data)
   return (
     <div className="overflow-x">
       <Table striped bordered hover>
@@ -27,16 +26,21 @@ const RecipeTable = ({ header = [], data = [], deleteItem, openEditForm }) => {
                 <td>{item?.reviewCnt || "N/A"}</td>
                 <td>
                   {item?.images && item.images.length > 0 ? (
-                    <img src={item.images[0]} alt="Recipe" style={{ width: "100px" }} />
-                  ) : "N/A"}
+                    <img
+                      src={item.images[0]}
+                      alt="Recipe"
+                      style={{ width: "100px" }}
+                    />
+                  ) : (
+                    "N/A"
+                  )}
                 </td>
                 <td style={{ minWidth: "100px" }}>
-                  <div className="d-flex justify-content-between"> 
+                  <div className="d-flex justify-content-between">
                     <Button
                       size="sm"
                       variant="danger"
                       onClick={() => {
-                        console.log('Deleting recipe with ID:', item._id);
                         deleteItem(item._id);
                       }}
                       className="mr-1"
@@ -52,7 +56,9 @@ const RecipeTable = ({ header = [], data = [], deleteItem, openEditForm }) => {
             ))
           ) : (
             <tr>
-              <td colSpan={header.length} className="text-center">No Data to show</td>
+              <td colSpan={header.length} className="text-center">
+                No Data to show
+              </td>
             </tr>
           )}
         </tbody>

@@ -6,28 +6,16 @@ import { ORDER_STATUS } from "../../constants/order.constants";
 import { updateOrder, getOrderList } from "../../redux/orderSlice";
 const OrderDetailDialog = ({ open, handleClose }) => {
   const dispatch = useDispatch();
-  // const selectedOrder = [
-  //   {
-  //     orderNum: "1213132",
-  //     createdAt: "2024년 06월 20일",
-  //     userId: { email: "admin@gmail.com" },
-  //     items: [{ productId: { name: "홍길동" } }],
-  //     shipTo: { address: "경기도 안산시", city: "안산" },
-  //     totalPrice: 30000,
-  //     status: "preparing",
-  //   }
-  // ];
+
   const { selectedOrder } = useSelector((state) => state.order);
   const [orderStatus, setOrderStatus] = useState(selectedOrder.status);
-  console.log(selectedOrder);
+
   const handleStatusChange = (event) => {
     setOrderStatus(event.target.value);
   };
 
   const submitStatus = async (event) => {
     event.preventDefault();
-    console.log(selectedOrder._id);
-    console.log(orderStatus);
     dispatch(updateOrder({ id: selectedOrder._id, status: orderStatus }));
     await dispatch(getOrderList());
     handleClose();

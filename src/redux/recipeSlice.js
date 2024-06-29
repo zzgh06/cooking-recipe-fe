@@ -6,7 +6,6 @@ export const createRecipe = createAsyncThunk(
   async (recipeData, { rejectWithValue }) => {
     try {
       const response = await api.post("/recipe", recipeData);
-      console.log("response", response);
       return response.data.recipe;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -31,7 +30,6 @@ export const fetchRecipes = createAsyncThunk(
       const response = await api.get(
         `/recipe?name=${searchQuery.name}&page=${searchQuery.page}`
       );
-      console.log("fetchRecipes", response.data);
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -55,9 +53,7 @@ export const editRecipe = createAsyncThunk(
   "recipe/editRecipe",
   async ({ id, updatedData }, { rejectWithValue }) => {
     try {
-      console.log("ID:", id); // ID 확인
       const response = await api.put(`/recipe/${id}`, updatedData);
-      console.log("API Response:", response.data); // 응답 데이터 확인
       return response.data.data;
     } catch (err) {
       console.error("API Error:", err.response.data);
@@ -71,7 +67,6 @@ export const deleteRecipe = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const response = await api.delete(`/recipe/${id}`);
-      console.log("Recipe deleted:", response.data);
       return id;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -96,7 +91,6 @@ const recipeSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchRecipes.fulfilled, (state, action) => {
-        console.log("fetchRecipes.fulfilled", action.payload);
         state.loading = false;
         state.recipes = action.payload.data;
         state.totalPages = action.payload.totalPageNum;
@@ -122,7 +116,6 @@ const recipeSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchRecipeById.fulfilled, (state, action) => {
-        console.log("fetchRecipeById.fulfilled", action.payload);
         state.loading = false;
         state.recipeDetail = action.payload;
       })
@@ -134,7 +127,6 @@ const recipeSlice = createSlice({
         state.loading = true;
       })
       .addCase(editRecipe.fulfilled, (state, action) => {
-        console.log("Updated Recipe Payload:", action.payload);
         state.loading = false;
         if (action.payload && action.payload._id) {
           const index = state.recipes.findIndex(

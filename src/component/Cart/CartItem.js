@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { editCartItem } from '../../redux/cartSlice';
 import { deleteCartItem } from '../../redux/cartSlice';
@@ -6,7 +6,6 @@ import { currencyFormat } from '../../utils/number';
 
 const CartItem = ({ingredientId, qty}) => {
     const {name, price, unit, image, _id} = ingredientId;
-    console.log("_id", _id);
     const cartItem = useSelector((state) => state.cart.cartItem);
     const dispatch = useDispatch();
 

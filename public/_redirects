@@ -1,0 +1,2 @@
+/api/* http://what-is-your-fridge.us-east-1.elasticbeanstalk.com/api/:splat 200
+/*    /index.html   200

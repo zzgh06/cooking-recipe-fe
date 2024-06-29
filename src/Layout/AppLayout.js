@@ -43,11 +43,6 @@ const AppLayout = ({ children }) => {
         <>
           <Navbar user={user} />
           <div className="layout">{children}</div>
-          {recentlyViewedItems.length >= 1 ? (
-            <RecentlyViewed recentlyViewedItems={recentlyViewedItems} />
-          ) : (
-            ""
-          )}
           <Footer />
         </>
       )}

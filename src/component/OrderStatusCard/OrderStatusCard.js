@@ -12,7 +12,6 @@ const badgeBg = {
 };
 
 const OrderStatusCard = ({ orderItem }) => {
-  console.log("orderItem",orderItem)
 
   const orderNum = orderItem.orderNum || "N/A";
   const createdAt = orderItem.createdAt ? orderItem.createdAt.slice(0, 10) : "N/A";

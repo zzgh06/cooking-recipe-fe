@@ -22,7 +22,6 @@ const MyRecipePage = () => {
       ...data,
       userId: user.user._id,
     };
-    console.log("recipeData to be submitted:", recipeData);
     const resultAction = await dispatch(createRecipe(recipeData));
   };
 

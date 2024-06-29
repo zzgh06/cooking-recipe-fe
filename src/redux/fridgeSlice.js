@@ -42,7 +42,6 @@ export const fridgeIngredientRecipeResult = createAsyncThunk(
   async (query, { rejectWithValue }) => {
     try {
       const response = await api.get('/recipe/frige', { params: query });
-      console.log(response.data.recipeList)
       return response.data.recipeList;
     } catch (error) {
       return rejectWithValue(error.message);

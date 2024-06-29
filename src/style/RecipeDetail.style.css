@@ -1,7 +1,6 @@
 .recipe-detail-container {
     font-family: Arial, sans-serif;
-    margin: 20px;
-    margin-left: 350px;
+    margin: 20px auto;
     max-width: 1200px;
     width: 100%;
     background: #fff;

@@ -126,9 +126,12 @@ const RecipeForm = ({ onSubmit, initialData }) => {
       images
     };
 
+<<<<<<< HEAD
     console.log('recipeData to be submitted:', recipeData);
 
     // Simulating form submission success
+=======
+>>>>>>> bf48ed46b25e775c691d5c53a0e7e81c8862a632
     onSubmit(recipeData);
 
     // Show submit modal
