@@ -26,7 +26,7 @@ export const addItemToCart = createAsyncThunk(
           status: "error",
         })
       );
-      console.log("setToastMessage");
+
       return rejectWithValue(error.message);
     }
   }
