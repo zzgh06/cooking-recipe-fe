@@ -18,7 +18,7 @@ const OrderCompletePage = () => {
       <div>
         주문 확인은 마이페이지에서 확인해주세요
         <div className="text-align-center">
-          <Link to={"/account/purchase"}>내 주문 바로가기</Link>
+          <Link to={"/account/profile"}>내 주문 바로가기</Link>
         </div>
       </div>
     </Container>

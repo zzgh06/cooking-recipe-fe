@@ -40,9 +40,15 @@ export const fetchRecipes = createAsyncThunk(
   "recipe/fetchRecipes",
   async (searchQuery, { rejectWithValue }) => {
     try {
+      if (searchQuery.page === undefined) {
+        const response = await api.get(`/recipe?name=${searchQuery.name}`);
+        return response.data;
+      }
       const response = await api.get(
         `/recipe?name=${searchQuery.name}&page=${searchQuery.page}`
       );
+      console.log(searchQuery.page);
+      console.log(response.data);
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response.data);

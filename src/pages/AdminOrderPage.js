@@ -20,6 +20,7 @@ const AdminOrderPage = () => {
   const [showDialog, setShowDialog] = useState(false);
   const [mode, setMode] = useState("new");
   const [open, setOpen] = useState(false);
+  const totalPageNum = useSelector((state) => state.order.totalPageNum);
   const { orderList } = useSelector((state) => {
     return state.order;
   });
@@ -29,35 +30,7 @@ const AdminOrderPage = () => {
     refund: "danger",
     delivered: "success",
   };
-  // const orderList = [
-  //   {
-  //     orderNum: "1213132",
-  //     createdAt: "2024년 06월 20일",
-  //     userId: { email: "admin@gmail.com" },
-  //     items: [{ productId: { name: "홍길동" } }],
-  //     shipTo: { address: "경기도 안산시", city: "안산" },
-  //     totalPrice: 30000,
-  //     status: "preparing",
-  //   },
-  //   {
-  //     orderNum: "1213132",
-  //     createdAt: "2024년 06월 20일",
-  //     userId: { email: "admin@gmail.com" },
-  //     items: [{ productId: { name: "홍길동" } }],
-  //     shipTo: { address: "경기도 안산시", city: "안산" },
-  //     totalPrice: 30000,
-  //     status: "preparing",
-  //   },
-  //   {
-  //     orderNum: "1213132",
-  //     createdAt: "2024년 06월 20일",
-  //     userId: { email: "admin@gmail.com" },
-  //     items: [{ productId: { name: "홍길동" } }],
-  //     shipTo: { address: "경기도 안산시", city: "안산" },
-  //     totalPrice: 30000,
-  //     status: "preparing",
-  //   },
-  // ];
+
   const tableHeader = [
     "#",
     "Order#",
@@ -98,7 +71,7 @@ const AdminOrderPage = () => {
 
   const getOrderCountByStatus = (status) => {
     console.log(orderList);
-    if (orderList.length === 0 || orderList === undefined) return 0;
+    if (orderList.length === 0 || orderList.data === undefined) return 0;
     return orderList.data.filter((order) => order.status === status).length;
   };
   return (
@@ -134,7 +107,7 @@ const AdminOrderPage = () => {
           nextLabel="next >"
           onPageChange={handlePageClick}
           pageRangeDisplayed={5}
-          // pageCount={totalPageNum}
+          pageCount={totalPageNum}
           forcePage={searchQuery.page - 1}
           previousLabel="< previous"
           renderOnZeroPageCount={null}

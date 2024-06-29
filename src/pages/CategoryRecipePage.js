@@ -13,7 +13,7 @@ const CategoryRecipePage = () => {
   useEffect(() => {
     const searchQuery = {
       name: "",
-      page: 1,
+      //page: 1,
     };
 
     dispatch(fetchRecipes(searchQuery));

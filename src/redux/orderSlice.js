@@ -41,6 +41,7 @@ export const getOrderList = createAsyncThunk(
   async (query, { dispatch, rejectWithValue }) => {
     try {
       const response = await api.get("/order", { params: { ...query } });
+      console.log(response);
       return response.data;
     } catch (error) {
       //dispatch(commonUiActions.showToastMessage(error.message, "error"));

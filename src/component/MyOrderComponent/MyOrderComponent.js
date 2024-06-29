@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { getOrder } from "../../redux/orderSlice"; 
+import { getOrder } from "../../redux/orderSlice";
 import OrderStatusCard from "../OrderStatusCard/OrderStatusCard";
 import "./MyOrderComponent.style.css";
 import { useNavigate } from "react-router";
@@ -9,9 +9,9 @@ import { useNavigate } from "react-router";
 const MyOrderComponent = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { orderList, loading, error } = useSelector((state) => state.order); 
-  const user = useSelector(state => state.auth.user);
-
+  const { orderList, loading, error } = useSelector((state) => state.order);
+  const user = useSelector((state) => state.auth.user);
+  console.log(orderList);
   useEffect(() => {
     if (!user) {
       navigate("/login");
