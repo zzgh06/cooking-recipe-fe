@@ -16,7 +16,6 @@ import { logout } from "../../redux/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import SearchBox from "../SearchBox/SerachBox";
 
-
 const Navbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -36,7 +35,7 @@ const Navbar = () => {
   };
 
   const user = useSelector((state) => state.auth.user);
-   
+  console.log(user);
 
   const onCheckEnter = (event) => {
     if (event.key === "Enter") {
@@ -106,9 +105,9 @@ const Navbar = () => {
             icon={faUser}
             onClick={() => navigate("/account/profile")}
           />
-          <FontAwesomeIcon 
-            className="nav-icon" 
-            icon={faUtensils} 
+          <FontAwesomeIcon
+            className="nav-icon"
+            icon={faUtensils}
             onClick={() => navigate("/account/recipe")}
           />
           <FontAwesomeIcon className="nav-icon" icon={faHeart} />

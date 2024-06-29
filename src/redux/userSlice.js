@@ -20,6 +20,7 @@ export const loginUser = createAsyncThunk(
     try {
       const response = await api.post("/auth/login", userData);
       sessionStorage.setItem("token", response.data.token);
+      console.log(response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -32,7 +33,9 @@ export const loginWithGoogle = createAsyncThunk(
   async (token, { rejectWithValue }) => {
     try {
       const response = await api.post("/auth/google", { token });
+      //console.log(response.data.token);
       sessionStorage.setItem("token", response.data.token);
+      console.log(response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -45,6 +48,7 @@ export const loginWithToken = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const response = await api.get("/user/me");
+      console.log(1);
       if (response.status !== 200) throw new Error(response.error);
       return response.data;
     } catch (error) {
@@ -220,7 +224,7 @@ const userSlice = createSlice({
       })
       .addCase(updateUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = { user: action.payload.data }; 
+        state.user = { user: action.payload.data };
         state.error = null;
       })
       .addCase(updateUser.rejected, (state, action) => {
