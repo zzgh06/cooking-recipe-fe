@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Footer from "../component/Footer/Footer";
 import { loginWithToken } from "../redux/userSlice";
 import RecentlyViewed from "../component/RecentlyViewed/RecentlyViewed";
+import ToastMessage from "../component/ToastMessage/ToastMessage";
 
 const AppLayout = ({ children }) => {
   const location = useLocation();
@@ -30,6 +31,7 @@ const AppLayout = ({ children }) => {
 
   return (
     <div>
+      <ToastMessage />
       {location.pathname.includes("admin") ? (
         <Row className="vh-100">
           <Col xs={12} md={3}>

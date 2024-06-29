@@ -1,5 +1,5 @@
 import React from "react";
-import "../../style/ingredientCard.style.css";
+import "../../style/IngredientCard.style.css";
 import { useNavigate } from "react-router-dom";
 
 const IngredientCard = ({ item }) => {
@@ -26,9 +26,7 @@ const IngredientCard = ({ item }) => {
         <div className="price">
           {item?.discountPrice ? (
             <>
-              <div className="origin-price">
-                {item?.price}원
-              </div>
+              <div className="origin-price">{item?.price}원</div>
               <div className="discount-rate">
                 {item?.discountPrice}%{" "}
                 <span className="discount-price">
@@ -37,9 +35,7 @@ const IngredientCard = ({ item }) => {
               </div>
             </>
           ) : (
-            <div className="price">
-              {item?.price}원
-            </div>
+            <div className="price">{item?.price}원</div>
           )}
         </div>
       </div>

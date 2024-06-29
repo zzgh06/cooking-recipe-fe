@@ -1,13 +1,26 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../utils/api";
+import { setToastMessage } from "./commonUISlice";
 
 export const createRecipe = createAsyncThunk(
   "recipe/createRecipe",
-  async (recipeData, { rejectWithValue }) => {
+  async (recipeData, { dispatch, rejectWithValue }) => {
     try {
       const response = await api.post("/recipe", recipeData);
+      dispatch(
+        setToastMessage({
+          message: "레시피가 생성되었습니다",
+          status: "success",
+        })
+      );
       return response.data.recipe;
     } catch (err) {
+      dispatch(
+        setToastMessage({
+          message: err.error,
+          status: "error",
+        })
+      );
       return rejectWithValue(err.response.data);
     }
   }
@@ -51,12 +64,24 @@ export const fetchRecipeById = createAsyncThunk(
 
 export const editRecipe = createAsyncThunk(
   "recipe/editRecipe",
-  async ({ id, updatedData }, { rejectWithValue }) => {
+  async ({ id, updatedData }, { dispatch, rejectWithValue }) => {
     try {
       const response = await api.put(`/recipe/${id}`, updatedData);
+      dispatch(
+        setToastMessage({
+          message: "레시피가 수정되었습니다",
+          status: "success",
+        })
+      );
       return response.data.data;
     } catch (err) {
-      console.error("API Error:", err.response.data);
+      dispatch(
+        setToastMessage({
+          message: err.error,
+          status: "error",
+        })
+      );
+      //console.error("API Error:", err.response.data);
       return rejectWithValue(err.response.data);
     }
   }
@@ -64,11 +89,23 @@ export const editRecipe = createAsyncThunk(
 
 export const deleteRecipe = createAsyncThunk(
   "recipe/deleteRecipe",
-  async (id, { rejectWithValue }) => {
+  async (id, { dispatch, rejectWithValue }) => {
     try {
       const response = await api.delete(`/recipe/${id}`);
+      dispatch(
+        setToastMessage({
+          message: "레시피가 삭제되었습니다",
+          status: "success",
+        })
+      );
       return id;
     } catch (err) {
+      dispatch(
+        setToastMessage({
+          message: err.error,
+          status: "error",
+        })
+      );
       return rejectWithValue(err.response.data);
     }
   }

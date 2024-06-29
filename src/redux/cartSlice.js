@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../utils/api";
+import { setToastMessage } from "./commonUISlice";
 
 export const getCart = createAsyncThunk("cart/getCart", async () => {
   const response = await api.get(`/cart`);
@@ -8,9 +9,26 @@ export const getCart = createAsyncThunk("cart/getCart", async () => {
 
 export const addItemToCart = createAsyncThunk(
   "cart/addItemToCart",
-  async ({ ingredientId, qty }) => {
-    const response = await api.post(`/cart`, { ingredientId, qty });
-    return response.data;
+  async ({ ingredientId, qty }, { dispatch, rejectWithValue }) => {
+    try {
+      const response = await api.post(`/cart`, { ingredientId, qty });
+      dispatch(
+        setToastMessage({
+          message: "카트에 상품이 추가됐습니다",
+          status: "success",
+        })
+      );
+      return response.data;
+    } catch (error) {
+      dispatch(
+        setToastMessage({
+          message: error.error,
+          status: "error",
+        })
+      );
+      console.log("setToastMessage");
+      return rejectWithValue(error.message);
+    }
   }
 );
 
@@ -63,6 +81,7 @@ const cartSlice = createSlice({
       })
       .addCase(addItemToCart.fulfilled, (state, action) => {
         state.status = "succeeded";
+        //console.log(action.payload);
         state.cartItem.push(action.payload.data);
         state.cartItemCount = state.cartItem.length;
       })

@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../utils/api";
+import { setToastMessage } from "./commonUISlice";
 //import { cartActions } from "./cartSlice";
 const initialState = {
   orderList: [],
@@ -53,13 +54,20 @@ export const updateOrder = createAsyncThunk(
   async ({ id, status }, { dispatch, rejectWithValue }) => {
     try {
       const response = await api.put(`/order/${id}`, { status });
-      //   dispatch(
-      //     commonUiActions.showToastMessage("오더 업데이트 완료!", "success")
-      //   );
-      //dispatch(getOrderList()); // assuming you want to refresh the order list
+      dispatch(
+        setToastMessage({
+          message: "오더 추가됐습니다",
+          status: "success",
+        })
+      );
       return response.data;
     } catch (error) {
-      //   dispatch(commonUiActions.showToastMessage(error.message, "error"));
+      dispatch(
+        setToastMessage({
+          message: error.error,
+          status: "error",
+        })
+      );
       return rejectWithValue(error.message);
     }
   }
