@@ -1,13 +1,19 @@
-import React from 'react'
+import React from 'react';
+import '../../style/category.style.css';
+
 const categories = [
-  '모두보기', '메인요리', '밑반찬', '간식', '간단요리', '초대요리', '채식', '한식', '양식', '일식', '중식'
+  '모두보기', '한식', '중식', '일식', '양식', '기타'
 ];
 
-const Category = () => {
+const Category = ({ selectedCategory, onSelectCategory }) => {
   return (
     <div className="category-container">
       {categories.map((category, index) => (
-        <div key={index} className="category-item">
+        <div 
+          key={index} 
+          className={`category-item ${selectedCategory === category ? 'active' : ''}`}
+          onClick={() => onSelectCategory(category)}
+        >
           {category}
         </div>
       ))}
@@ -15,4 +21,4 @@ const Category = () => {
   );
 }
 
-export default Category
+export default Category;
