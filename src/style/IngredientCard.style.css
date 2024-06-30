@@ -4,7 +4,7 @@
   margin-bottom: 10px;
   width: 100%;
   padding: 10px 25px;
-  overflow: hidden;
+  /* overflow: hidden; */
   transition: all 0.5s;
 }
 
@@ -30,7 +30,7 @@
 }
 
 .card-disc .price {
-  margin-top: 8px; 
+  margin-top: 8px;
 }
 
 .card-disc .origin-price {
@@ -46,13 +46,13 @@
 }
 
 .card-disc .discount-price {
-  font-size: 19px; 
+  font-size: 19px;
   font-weight: 600;
-  color: black; 
+  color: black;
 }
 
 .price {
-  font-size: 19px; 
+  font-size: 19px;
   font-weight: 600;
   color: black;
 }

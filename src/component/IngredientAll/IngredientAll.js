@@ -21,7 +21,7 @@ const IngredientAll = () => {
     const name = searchParams.get("name") || "";
     setCurrentPage(1); // Reset to first page on new search
     setDisplayCount(8); // Reset display count on new search
-    dispatch(fetchIngredients({ page: 1, name }));
+    dispatch(fetchIngredients({ name }));
   }, [dispatch, searchParams]);
 
   const loadMore = () => {
@@ -29,7 +29,13 @@ const IngredientAll = () => {
       setDisplayCount(displayCount + 4);
     } else if (currentPage < totalPages) {
       const nextPage = currentPage + 1;
-      dispatch(fetchIngredients({ page: nextPage, name: searchParams.get("name") || "", category: searchParams.get("category") || "" }));
+      dispatch(
+        fetchIngredients({
+          page: nextPage,
+          name: searchParams.get("name") || "",
+          category: searchParams.get("category") || "",
+        })
+      );
       setCurrentPage(nextPage);
     } else {
       setHasMore(false);
@@ -46,16 +52,16 @@ const IngredientAll = () => {
           </Col>
         ))}
       </Row>
-      {status === 'loading' && <p>Loading...</p>}
+      {status === "loading" && <p>Loading...</p>}
       {error && <p>Error: {error}</p>}
-      {hasMore && status !== 'loading' && (
+      {hasMore && status !== "loading" && (
         <div className="text-center my-3">
           <Button className="load-more-button" onClick={loadMore}>
             더보기
           </Button>
         </div>
       )}
-      {status === 'loading' && (
+      {status === "loading" && (
         <div className="text-center my-3">
           <Spinner animation="border" />
         </div>
