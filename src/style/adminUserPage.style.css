@@ -1,0 +1,14 @@
+.custom-modal {
+  max-width: 500px; 
+}
+
+.custom-modal {
+  overflow-y: auto;
+}
+
+.display-flex{
+  width: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

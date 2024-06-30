@@ -1,0 +1,62 @@
+/* 사이드바 전체 스타일 */
+.admin-sidebar {
+  width: 100%;
+  max-width: 300px;
+  padding: 20px;
+  background-color: green;
+  color: #fff;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  overflow-y: auto;
+}
+
+/* 로고와 헤더 스타일 */
+.admin-sidebar a {
+  text-decoration: none;
+  color: #fff;
+}
+
+.admin-sidebar a:hover {
+  text-decoration: underline;
+}
+
+.admin-sidebar-title {
+  margin: 20px 0;
+  cursor: pointer;
+  font-size: 1.2em; 
+  font-weight: bold;
+}
+
+.admin-sidebar-item {
+  margin: 20px 0;
+  cursor: pointer;
+  font-size: 1.2em;
+}
+
+.admin-sidebar-item:hover {
+  color: white;
+  background-color: darkgreen;
+  padding-left: 10px;
+  transition: 0.3s;
+}
+
+/* 리스트 아이템 스타일 */
+.admin-sidebar-area {
+  list-style-type: none;
+  padding: 0;
+}
+
+.admin-sidebar-area .admin-sidebar-item {
+  padding: 10px;
+  border-bottom: 1px solid black;
+}
+
+.admin-sidebar-area .admin-sidebar-item:hover {
+  background-color: darkgreen;
+  color: white;
+  padding-left: 15px;
+  transition: all 0.3s ease;
+}
