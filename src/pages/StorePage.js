@@ -51,7 +51,7 @@ const StorePage = () => {
   return (
     <div>
       <BannerComponent images={images} />
-      <IngredientSlider title={"베스트 상품"} ingredients={bestIngredients} />
+      <IngredientSlider title={"베스트 상품"} ingredients={bestIngredients.slice(0,8)} />
       <SubBanner img={subImages[0]} />
       <IngredientSlider
         title={"신상품"}

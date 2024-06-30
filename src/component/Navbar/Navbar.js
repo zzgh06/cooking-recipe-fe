@@ -24,7 +24,7 @@ const Navbar = () => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [query, setQuery] = useSearchParams();
   const [keyword, setKeyword] = useState(query.get("name") || "");
-  const [isSearchVisible, setSearchVisible] = useState(false); // State to manage visibility of search input
+  const [isSearchVisible, setSearchVisible] = useState(false);
 
   const menuList = ["레시피", "스토어", "My 냉장고"];
   const menuPathMapping = {
@@ -93,11 +93,7 @@ const Navbar = () => {
         <div className="nav-logo" onClick={() => navigate("/")} onMouseEnter={showDropdown}>
           What’s in your fridge
         </div>
-        {/* <Dropdown
-          dropdownVisible={dropdownVisible}
-          showDropdown={showDropdown}
-          hideDropdown={hideDropdown}
-        /> */}
+
         <div className="nav-menu">
           {menuList.map((menu, index) => (
             <li key={index}>
@@ -152,7 +148,14 @@ const Navbar = () => {
       <div className={`sidebar ${sidebarOpen ? "open" : ""}`}>
         <div className="sidebar-header">
           <FontAwesomeIcon icon={faClose} onClick={toggleSidebar} />
-          <SearchBox name={"sidebar-search-box"} onCheckEnter={onCheckEnter} />
+          <input
+              type="text"
+              className="search-input"
+              placeholder="검색어를 입력하세요"
+              value={keyword}
+              onChange={(event) => setKeyword(event.target.value)}
+              onKeyPress={onCheckEnter}
+            />
         </div>
         <div className="sidebar-menu">
           {menuList.map((menu, index) => (

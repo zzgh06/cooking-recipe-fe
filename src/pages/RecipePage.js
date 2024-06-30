@@ -12,7 +12,7 @@ const RecipePage = () => {
   const { recipes, loading, error } = useSelector((state) => state.recipe);
 
   useEffect(() => {
-    const searchQuery = { name: "" }; // 페이지 정보 없이 요청
+    const searchQuery = { name: "" };
     dispatch(fetchRecipes(searchQuery));
   }, [dispatch]);
 
