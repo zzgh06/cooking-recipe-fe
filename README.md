@@ -116,7 +116,7 @@ What’s in your fridge 는 사용자가 다양한 레시피를 확인하고, �
 - ![API Recipe](./public/image/api_recipe.png)
 - ![API Cart](./public/image/api_cart.png)
 - ![API Review Recipe](./public/image/api_review_recipe.png)
-- ![API Review Ingredient](./public/image/api_review_ingredient.png)
+- ![API Review Ingredient](./public/image/api_reivew_ingredient.png)
 - ![API Order](./public/image/api_order.png)
 
 ### 프론트앤드
