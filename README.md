@@ -83,6 +83,12 @@ What’s in your fridge 는 사용자가 다양한 레시피를 확인하고, �
 ## 프로젝트 구조
 -백앤드
 [cooking-recipe-be](./cooking-recipe-be.txt)
+
+ERD 
+![ERD](./public/image/erd.png)
+
+
+
 -프론트앤드
 [cooking-recipe-fe](./cooking-recipe-fe.txt)
 
