@@ -10,18 +10,18 @@ What’s in your fridge 는 사용자가 다양한 레시피를 확인하고, �
 - 백앤드 구현: 2022-06-18 ~ 2022-06-27
 - 프론트앤드 및 기능 구현: 2022-06-18 ~ 2022-06-30
 
-## 배포 주소
+### 배포 주소
 
 ><div>프론트 서버 : https://whats-is-your-fridge.netlify.app/</div>
 >백엔드 서버 : http://what-is-your-fridge.us-east-1.elasticbeanstalk.com/
 <br>
 
-## 테스트 계정
+### 테스트 계정
 
 - **Test ID**: admin@gmail.com
 - **Test PW**: 123
 
-### 프로젝트 소개
+## 프로젝트 소개
 
 **What’s in your fridge**는 요리를 할 때 여러 사이트를 돌아다니며 레시피를 찾고 식재료를 따로 구매하는 번거로움을 없애기 위해 기획하게 되었습니다.
 - 사용자가 요리 레시피를 쉽게 검색하고, 해당 레시피에 필요한 식재료를 바로 구매할 수 있도록 돕고, 
@@ -75,7 +75,7 @@ What’s in your fridge 는 사용자가 다양한 레시피를 확인하고, �
 
 ## 채택한 개발 기술과 브랜치 전략
 
-### React
+## React
 
 **React**
 
@@ -88,7 +88,7 @@ What’s in your fridge 는 사용자가 다양한 레시피를 확인하고, �
 - Redux Toolkit은 기존 Redux보다 설정이 간단하고, 보일러플레이트 코드가 적어 학습 비용을 줄일 수 있었습니다.
 - createSlice와 createAsyncThunk 등을 사용하여 상태와 비동기 로직을 효율적으로 관리했습니다.
 
-### 브랜치 전략
+## 브랜치 전략
 
 - Git-flow 전략을 기반으로 master, develop 브랜치와 feature 보조 브랜치를 운용했습니다.
 - master, develop, Feat 브랜치로 나누어 개발을 하였습니다.
@@ -96,11 +96,11 @@ What’s in your fridge 는 사용자가 다양한 레시피를 확인하고, �
 - develop 브랜치는 개발 단계에서 git-flow의 master 역할을 하는 브랜치입니다.
 - Feat 브랜치는 기능 단위로 독립적인 개발 환경을 위하여 사용하고 merge 후 각 브랜치를 삭제해주었습니다.
 
-# 프로젝트 구조
+## 프로젝트 구조
 
 ### 백앤드
 
-## 백앤드 폴더 구조
+### 백앤드 폴더 구조
 
 [cooking-recipe-be.md](./cooking-recipe-be.txt)
 
@@ -120,9 +120,9 @@ What’s in your fridge 는 사용자가 다양한 레시피를 확인하고, �
 - ![API Review Ingredient](./public/image/api_reivew_ingredient.png)
 - ![API Order](./public/image/api_order.png)
 
-### 프론트앤드
+## 프론트앤드
 
-## 프론트앤드 폴더구조
+### 프론트앤드 폴더구조
 
 [cooking-recipe-fe.md](./cooking-recipe-fe.txt)
 
