@@ -73,6 +73,7 @@ const AdminOrderPage = () => {
     if (orderList.length === 0 || orderList.data === undefined) return 0;
     return orderList.data.filter((order) => order.status === status).length;
   };
+  console.log(orderList.data);
   return (
     <div className="locate-center">
       <Container className="container-custom">

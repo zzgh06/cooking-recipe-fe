@@ -3,7 +3,6 @@ import { Table, Badge } from "react-bootstrap";
 import { currencyFormat } from "../../utils/number";
 
 const OrderTable = ({ header, data, openEditForm, badgeBg }) => {
-
   return (
     <div className="overflow-x">
       <Table striped bordered hover>
@@ -24,7 +23,7 @@ const OrderTable = ({ header, data, openEditForm, badgeBg }) => {
                 <th>{item.userId.email}</th>
                 {item.items.length > 0 ? (
                   <th>
-                    {item.items[0].ingredientId.name}
+                    {item.items[0].ingredientId?.name}
                     {item.items.length > 1 && ` 외 ${item.items.length - 1}개`}
                   </th>
                 ) : (
