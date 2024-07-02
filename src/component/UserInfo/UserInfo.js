@@ -19,6 +19,7 @@ const UserInfo = ({ onButtonClick }) => {
     onButtonClick(value);
   };
 
+  console.log("user", user)
   return (
     <Container className="user-info">
       <Row className="align-items-center mb-3">

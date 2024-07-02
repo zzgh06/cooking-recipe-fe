@@ -20,7 +20,6 @@ export const loginUser = createAsyncThunk(
     try {
       const response = await api.post("/auth/login", userData);
       sessionStorage.setItem("token", response.data.token);
-      console.log(response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -48,7 +47,6 @@ export const loginWithToken = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const response = await api.get("/user/me");
-      console.log(1);
       if (response.status !== 200) throw new Error(response.error);
       return response.data;
     } catch (error) {
@@ -64,7 +62,9 @@ export const getUsersInfo = createAsyncThunk(
   "auth/getUsersInfo",
   async (searchQuery, thunkAPI) => {
     try {
-      const response = await api.get(`/user/admin?name=${searchQuery.name}&page=${searchQuery.page}`);
+      const response = await api.get(
+        `/user/admin?name=${searchQuery.name}&page=${searchQuery.page}`
+      );
       if (response.status !== 200) throw new Error(response.error);
       return {
         usersData: response.data.data,
@@ -91,10 +91,11 @@ export const logout = createAsyncThunk(
 
 export const updateUser = createAsyncThunk(
   "auth/updateUser",
-  async ({ id, userData }, { rejectWithValue }) => {
+  async ( formData, { rejectWithValue }) => {
     try {
-      const response = await api.put(`user/${id}`, userData);
+      const response = await api.put(`user/me`, formData);
       if (response.status !== 200) throw new Error(response.error);
+      console.log(response.data)
       return response.data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -113,6 +114,33 @@ export const deleteUser = createAsyncThunk(
     }
   }
 );
+
+export const forgotPassword = createAsyncThunk(
+  "auth/forgotPassword",
+  async ({ email }, { rejectWithValue }) => {
+    try {
+      const response = await api.post("/password/forgot-password", { email });
+      if (response.status !== 200) throw new Error(response.error);
+      alert("비밀번호 재설정 이메일이 발송되었습니다 !");
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const resetPassword = createAsyncThunk(
+  "auth/resetPassword",
+  async ({password, token}, {rejectWithValue}) => {
+    try {
+      const response = await api.post(`/password/reset-password/${token}`, { password });
+      if (response.status !== 200) throw new Error(response.error);
+      alert('새 비밀번호가 설정되었습니다!\n로그인 후 이용해 주세요.');
+    } catch(error) {
+      alert('만료된 토큰입니다.\n비밀번호 재설정 링크를 다시 받아주세요.');
+      return rejectWithValue(error.message);
+    }
+  }
+)
 
 const initialState = {
   registrationData: null,
@@ -228,6 +256,18 @@ const userSlice = createSlice({
         state.error = null;
       })
       .addCase(updateUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(forgotPassword.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(forgotPassword.fulfilled, (state) => {
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(forgotPassword.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
