@@ -21,6 +21,9 @@ import RecipePage from '../pages/RecipePage'
 import RecipeDetailPage from '../pages/RecipeDetailPage'
 import CategoryRecipePage from '../pages/CategoryRecipePage'
 import SearchResults from '../pages/SearchResults'
+import FindPasswordPage from '../pages/FindPasswordPage'
+import FindEmailPage from '../pages/FindEmailPage'
+import ResetPasswordPage from '../pages/ResetPasswordPage'
 
 
 const AppRouter = () => {
@@ -32,6 +35,9 @@ const AppRouter = () => {
       <Route path="/store" element={<StorePage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
+      <Route path="/find-password" element={<FindPasswordPage />} />
+      <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+      <Route path="/find-email" element={<FindEmailPage />} />
       <Route path="/ingredients/:id" element={<IngredientsDetail />} />
       <Route path="/recipe" element={<RecipePage />} />
       <Route path="/recipe/:id" element={<RecipeDetailPage />} />

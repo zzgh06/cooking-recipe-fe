@@ -43,10 +43,10 @@ const MyProfile = () => {
   return (
     <Container className="custom-container">
       <Row>
-        <Col lg={5} className="user-info-col">
+        <Col lg={3} className="user-info-col">
           <UserInfo onButtonClick={handleButtonClick} />
         </Col>
-        <Col lg={7}>
+        <Col lg={9}>
           {renderComponent()}
         </Col>
       </Row>

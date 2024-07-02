@@ -9,12 +9,13 @@ import {
 } from "../redux/userSlice";
 import { GoogleLogin } from "@react-oauth/google";
 import "../style/LoginPage.style.css";
+import { Link } from "react-router-dom";
 
 const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    email: "",
+    id: "",
     password: "",
   });
 
@@ -38,9 +39,9 @@ const LoginPage = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault();
-    const { email, password } = formData;
+    const { id, password } = formData;
     try {
-      await dispatch(loginUser({ email, password })).unwrap();
+      await dispatch(loginUser({ id, password })).unwrap();
       console.log("로그인 성공");
       await dispatch(loginWithToken()).unwrap();
       navigate("/");
@@ -58,20 +59,20 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="container">
+    <div className="login-container">
       <div className="head-container">
         <h2>로그인</h2>
       </div>
       <form onSubmit={handleLogin}>
         <div className="form-group">
-          <label htmlFor="email">
-            Email <span className="span-start">*</span>
+          <label htmlFor="id">
+            아이디 <span className="span-start">*</span>
           </label>
           <input
             type="text"
-            id="email"
-            name="email"
-            placeholder="이메일을 입력해 주세요"
+            id="id"
+            name="id"
+            placeholder="아이디를 입력해 주세요"
             onChange={handleChange}
             required
           />
@@ -92,6 +93,14 @@ const LoginPage = () => {
         {error && <p className="error">{error}</p>}
         <button type="submit">로그인</button>
       </form>
+      <div className="find-user">
+        <div className="find-id">
+          <Link to="/find-id">아이디 찾기</Link>{" "}
+        </div>
+        <div className="find-password">
+          <Link to="/find-password">비밀번호 찾기</Link>{" "}
+        </div>
+      </div>
       <div className="googleLogin">
         <GoogleLogin
           onSuccess={handleGoogleSuccess}
