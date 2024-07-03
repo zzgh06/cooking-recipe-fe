@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import {
   faBars,
   faCartPlus,
@@ -11,11 +10,9 @@ import {
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 import "../Navbar/Navbar.style.css";
-
-import Dropdown from "./Dropdown";
 import { logout } from "../../redux/userSlice";
 import { useDispatch, useSelector } from "react-redux";
-import SearchBox from "../SearchBox/SerachBox";
+
 
 const Navbar = () => {
   const navigate = useNavigate();

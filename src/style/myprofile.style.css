@@ -1,24 +1,47 @@
 .custom-container {
-    width: 90%; /* 원하는 너비를 설정 */
-    max-width: 1200px; /* 최대 너비를 설정 */
-    margin: 0 auto; /* 가운데 정렬 */
-  }
+  width: 100%; 
+  max-width: 1200px; 
+  margin: 0 auto; 
+}
+
+.user-info {
+  background-color: #fff;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 15px;
+  width: 90%;
+  height: 200px;
+  border: 1px solid lightgray;
+}
   
-  .user-info-col {
-    background-color: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
-  }
-  
-  .order-history-col {
-    padding: 20px;
-  }
-  
-  .profile-image {
-    width: 100px;
-    height: 100px;
-  }
-  
-  .additional-info button {
-    font-size: 0.9em;
-  }
+.user-info-menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 15px;
+  border: 1px solid lightgray;
+  width: 90%;
+}
+
+.user-info-menu p {
+  margin-bottom: 5px;
+}
+
+.shopping-menu {
+  width: 90%;
+  padding: 5px 0 15px;
+  border-bottom: 1px solid lightgray;
+}
+
+.shopping-menu:last-child {
+  padding : 15px 0 0;
+  border-bottom: none;
+}
+
+.shopping-menu > div {
+  padding-left: 10px;
+  padding-bottom: 5px;
+} 
