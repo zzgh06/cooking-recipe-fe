@@ -91,11 +91,11 @@ export const logout = createAsyncThunk(
 
 export const updateUser = createAsyncThunk(
   "auth/updateUser",
-  async ( formData, { rejectWithValue }) => {
+  async (formData, { rejectWithValue }) => {
     try {
       const response = await api.put(`user/me`, formData);
       if (response.status !== 200) throw new Error(response.error);
-      console.log(response.data)
+      console.log(response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -130,17 +130,50 @@ export const forgotPassword = createAsyncThunk(
 
 export const resetPassword = createAsyncThunk(
   "auth/resetPassword",
-  async ({password, token}, {rejectWithValue}) => {
+  async ({ password, token }, { rejectWithValue }) => {
     try {
-      const response = await api.post(`/password/reset-password/${token}`, { password });
+      const response = await api.post(`/password/reset-password/${token}`, {
+        password,
+      });
       if (response.status !== 200) throw new Error(response.error);
-      alert('새 비밀번호가 설정되었습니다!\n로그인 후 이용해 주세요.');
-    } catch(error) {
-      alert('만료된 토큰입니다.\n비밀번호 재설정 링크를 다시 받아주세요.');
+      alert("새 비밀번호가 설정되었습니다!\n로그인 후 이용해 주세요.");
+    } catch (error) {
+      alert("만료된 토큰입니다.\n비밀번호 재설정 링크를 다시 받아주세요.");
       return rejectWithValue(error.message);
     }
   }
-)
+);
+
+export const verifyCurrentPassword = createAsyncThunk(
+  "auth/verifyCurrentPassword",
+  async (currentPassword, { rejectWithValue }) => {
+    try {
+      const response = await api.post("/password/verify-password", {
+        currentPassword,
+      });
+      if (response.status !== 200) throw new Error(response.error);
+      console.log(response)
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+export const changePassword = createAsyncThunk(
+  "auth/changePassword",
+  async (newPassword, { rejectWithValue }) => {
+    try {
+      const response = await api.put("/password/change-password", {
+        newPassword,
+      });
+      if (response.status !== 200) throw new Error(response.error);
+      alert(`${response.data.message}`)
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
 
 const initialState = {
   registrationData: null,
@@ -150,6 +183,7 @@ const initialState = {
   totalPageNum: 0,
   error: null,
   loading: false,
+  isAuthenticated: false,
 };
 
 const userSlice = createSlice({
@@ -270,6 +304,21 @@ const userSlice = createSlice({
       .addCase(forgotPassword.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(verifyCurrentPassword.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.isAuthenticated = false;
+      })
+      .addCase(verifyCurrentPassword.fulfilled, (state) => {
+        state.loading = false;
+        state.error = null;
+        state.isAuthenticated = true;
+      })
+      .addCase(verifyCurrentPassword.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.isAuthenticated = false;
       });
   },
 });

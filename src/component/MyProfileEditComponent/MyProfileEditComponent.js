@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginWithToken, updateUser } from "../../redux/userSlice";
 import "./MyProfileEditComponent.style.css";
-import { Col, Container, Form } from "react-bootstrap";
+import { Col, Form } from "react-bootstrap";
 import CloudinaryUploadWidget from "../../utils/CloudinaryUploadWidget";
 import { useNavigate } from "react-router-dom";
 import defaultProfile from "../../assets/img/profile_user.png";
@@ -122,7 +122,7 @@ const MyProfileEditComponent = () => {
         <p>프로필 수정</p>
       </div>
       <div className="profile-container">
-        <Form className="edit_user_form_container" onSubmit={handleSubmit}>
+        <Form className="edit-user-form_container" onSubmit={handleSubmit}>
           <Form.Group as={Col} controlId="image" className="profile_image">
             <Form.Label>프로필 이미지</Form.Label>
             <div class="upload_img_area">
@@ -199,7 +199,7 @@ const MyProfileEditComponent = () => {
               </Form.Control.Feedback>
             </Form.Group>
 
-            <button className="edit_submit_btn" type="submit">
+            <button className="edit-submit_btn" type="submit">
               저장하기
             </button>
           </Col>

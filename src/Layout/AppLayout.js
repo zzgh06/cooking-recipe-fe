@@ -6,7 +6,6 @@ import Navbar from "../component/Navbar/Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import Footer from "../component/Footer/Footer";
 import { loginWithToken } from "../redux/userSlice";
-import RecentlyViewed from "../component/RecentlyViewed/RecentlyViewed";
 import ToastMessage from "../component/ToastMessage/ToastMessage";
 
 const AppLayout = ({ children }) => {

@@ -16,10 +16,11 @@
   height: 100%;
 }
 
-.edit_user_form_container {
+.edit-user-form_container {
   display: flex;
   border: none;
   background-color: white;
+  box-shadow: none;
   gap: 25px;
 }
 
@@ -44,4 +45,8 @@
 
 .upload_img_area .edit_image_box {
   width: 200px;
+}
+
+.upload_img_area .edit_image_box img {
+  border-radius: 50%;
 }
