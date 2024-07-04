@@ -10,8 +10,9 @@
 
 .recipe-title {
   display: flex;
-  justify-content: center;
-  margin-bottom: 30px;
+  justify-content: space-between;
+  padding: 0 15px;
+  margin-bottom: 10px;
   font-weight: 600;
 }
 

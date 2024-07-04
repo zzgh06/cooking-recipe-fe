@@ -4,6 +4,7 @@
   justify-content: center;
   align-items: center;
   width: 100vw;
+  margin-top: 100px;
 }
 
 .recipe-all-title {
@@ -34,4 +35,10 @@
 
 .category-container {
   display: flex;
+}
+
+@media (max-width: 994px) {
+  .recipe-all-container {
+    margin-top: 30px;
+  }
 }

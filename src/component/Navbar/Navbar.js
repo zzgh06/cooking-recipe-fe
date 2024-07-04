@@ -25,7 +25,7 @@ const Navbar = () => {
 
   const menuList = ["레시피", "스토어", "My 냉장고"];
   const menuPathMapping = {
-    레시피: "recipe",
+    레시피: "recipes/all",
     스토어: "store",
     "My 냉장고": "fridge",
   };

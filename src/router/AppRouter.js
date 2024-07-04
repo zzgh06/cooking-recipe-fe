@@ -31,7 +31,7 @@ const AppRouter = () => {
   return (
     <>
       <Routes>
-        <Route path="/" element={<RecipePage />} />
+        <Route path="/" element={<MainPage />} />
         <Route path="/store" element={<StorePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
@@ -39,7 +39,13 @@ const AppRouter = () => {
         <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
         <Route path="/find-email" element={<FindEmailPage />} />
         <Route path="/ingredients/:id" element={<IngredientsDetail />} />
-        <Route path="/recipe" element={<RecipePage />} />
+        <Route path="/recipes/all" element={<RecipePage />} />
+        <Route path="/recipes/best" element={<RecipePage />} />
+        <Route path="/recipes/new" element={<RecipePage />} />
+        <Route path="/recipes/korean" element={<RecipePage />} />
+        <Route path="/recipes/chinese" element={<RecipePage />} />
+        <Route path="/recipes/japanese" element={<RecipePage />} />
+        <Route path="/recipes/western" element={<RecipePage />} />
         <Route path="/recipe/:id" element={<RecipeDetailPage />} />
         <Route
           path="/recipe/category/:category"

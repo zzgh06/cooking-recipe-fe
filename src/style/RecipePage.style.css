@@ -1,10 +1,23 @@
-.banner-image {
+.recipe-category-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 95px;
   width: 100%;
-  padding: 30px 150px;
+  height: 70px;
+  padding: 0 120px;
+  border-top: 3px solid green;
+  border-bottom : 3px solid green;
+  background-color: white;
+  z-index: 999;
 }
 
-.banner-image img {
-  width : 100%;
+.recipe-category-bar a {
+  font-weight: 600;
+  text-decoration: none;
+  color: black;
+  padding-right: 25px;
 }
 
 @media (max-width: 994px) {
