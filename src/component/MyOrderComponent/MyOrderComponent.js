@@ -20,14 +20,20 @@ import {
   useMediaQuery,
   TableContainer,
   Paper,
+  styled,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { getOrder, getOrderList } from "../../redux/orderSlice";
-import { format, isValid, startOfDay, endOfDay } from 'date-fns';
+import {
+  getOrder,
+  getOrderList,
+  setSelectedOrder,
+} from "../../redux/orderSlice";
+import { format, isValid, startOfDay, endOfDay } from "date-fns";
 import { useNavigate } from "react-router";
 import { useSearchParams } from "react-router-dom";
 import DateFilterCondition from "../DateFilterCondition/DateFilterCondition";
 import { currencyFormat } from "../../utils/number";
+import MyPageOrderDialog from "../MyPageOrderDialog/MyPageOrderDialog";
 
 const MyOrderComponent = () => {
   const dispatch = useDispatch();
@@ -112,6 +118,7 @@ const MyOrderComponent = () => {
   // 주문 상세 다이얼로그 열기
   const handleOpenDialog = (order) => {
     setDialogOpen(true);
+    dispatch(setSelectedOrder(order));
   };
 
   // 주문 상세 다이얼로그 닫기
@@ -120,15 +127,37 @@ const MyOrderComponent = () => {
   };
 
   // 테이블 셀 스타일
-  const cellStyle = {
+  const cellStyle1 = {
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    maxWidth: "150px",
+    color : "white"
+  };
+
+  const cellStyle2 = {
     whiteSpace: "nowrap",
     overflow: "hidden",
     textOverflow: "ellipsis",
     maxWidth: "150px",
   };
 
+  const HeadContainer = styled("div")({
+    display: "flex",
+    justifyContent: "flex-start",
+    alignItems: "baseline",
+    borderBottom: "4px solid black",
+    paddingLeft: "10px",
+  });
+
   return (
     <Grid container>
+      <Grid item xs={12} md={12}>
+        <HeadContainer>
+          <Typography variant="h5">쇼핑</Typography>
+          <Typography variant="subtitle1">내주문</Typography>
+        </HeadContainer>
+      </Grid>
       <Grid item xs={12} md={12}>
         <Box mt={2}>
           <Typography variant="subtitle" ml={1} mb={1}>
@@ -230,16 +259,18 @@ const MyOrderComponent = () => {
             </FormGroup>
           </Box>
           {/* 주문 내역 테이블 */}
-          <Typography variant="h6">주문 내역/배송 상태</Typography>
+          <Typography variant="h6" sx={{ marginBottom: "10px" }}>
+            주문 내역/배송 상태
+          </Typography>
           <TableContainer component={Paper}>
             <Table>
               <TableHead>
-                <TableRow>
-                  <TableCell style={cellStyle}>주문번호</TableCell>
-                  <TableCell style={cellStyle}>주문일자</TableCell>
-                  <TableCell style={cellStyle}>주문내역</TableCell>
-                  <TableCell style={cellStyle}>총주문액</TableCell>
-                  <TableCell style={cellStyle}>주문상태</TableCell>
+                <TableRow sx={{backgroundColor: 'green'}}>
+                  <TableCell style={cellStyle1}>주문번호</TableCell>
+                  <TableCell style={cellStyle1}>주문일자</TableCell>
+                  <TableCell style={cellStyle1}>주문내역</TableCell>
+                  <TableCell style={cellStyle1}>총주문액</TableCell>
+                  <TableCell style={cellStyle1}>주문상태</TableCell>
                 </TableRow>
               </TableHead>
               {/* 테이블 바디 */}
@@ -250,13 +281,13 @@ const MyOrderComponent = () => {
                       key={item._id}
                       onClick={() => handleOpenDialog(item)}
                     >
-                      <TableCell style={{ ...cellStyle, cursor: "pointer" }}>
+                      <TableCell style={{ ...cellStyle2, cursor: "pointer" }}>
                         {item.orderNum}
                       </TableCell>
-                      <TableCell style={cellStyle}>
+                      <TableCell style={cellStyle2}>
                         {item.createdAt.slice(0, 10)}
                       </TableCell>
-                      <TableCell style={cellStyle}>
+                      <TableCell style={cellStyle2}>
                         {item?.items
                           ?.map((item) => item.ingredientId?.name)
                           .join(", ")
@@ -267,16 +298,18 @@ const MyOrderComponent = () => {
                           ? "..."
                           : ""}
                       </TableCell>
-                      <TableCell style={cellStyle}>
+                      <TableCell style={cellStyle2}>
                         {currencyFormat(item.totalPrice)}
                       </TableCell>
-                      <TableCell style={cellStyle}>{item.status}</TableCell>
+                      <TableCell style={cellStyle2}>{item.status}</TableCell>
                     </TableRow>
                   ))}
               </TableBody>
             </Table>
           </TableContainer>
         </Box>
+        {/* 주문 상세 다이얼로그 */}
+        <MyPageOrderDialog open={dialogOpen} handleClose={handleCloseDialog} />
       </Grid>
     </Grid>
   );

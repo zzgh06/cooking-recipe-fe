@@ -1,30 +1,82 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginWithToken, updateUser } from "../../redux/userSlice";
-import "./MyProfileEditComponent.style.css";
-import { Col, Form } from "react-bootstrap";
+import { Grid, Typography, TextField, Button, styled } from "@mui/material";
 import CloudinaryUploadWidget from "../../utils/CloudinaryUploadWidget";
 import { useNavigate } from "react-router-dom";
 import defaultProfile from "../../assets/img/profile_user.png";
 
+const HeadContainer = styled('div')({
+  display: 'flex',
+  justifyContent: 'flex-start',
+  alignItems: 'baseline',
+  borderBottom: '4px solid black',
+  paddingLeft: '10px',
+});
+
+const ProfileContainer = styled('div')({
+  width: '100%',
+  height: '100%',
+  display: 'flex',
+  justifyContent: 'center',
+});
+
+const EditUserFormContainer = styled('form')({
+  display: 'flex',
+  flexDirection: 'column',
+  backgroundColor: 'white',
+  boxShadow: 'none',
+  gap: '16px',
+  padding: '16px',
+});
+
+const UploadImgArea = styled('div')({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+});
+
+const UploadImage = styled('img')({
+  width: '200px',
+  height: '200px',
+  objectFit: 'cover',
+  borderRadius: '50%',
+  border: '2px solid lightgrey'
+});
+
+const EditSubmitBtn = styled(Button)({
+  margin: '0 auto',
+  marginTop: '16px',
+  width: '150px',
+});
+
+const ProfileImage = styled('div')({
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  textAlign: 'center'
+})
+
+
 const MyProfileEditComponent = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [showModal, setShowModal] = useState(false);
-  const { user, loading, error } = useSelector((state) => state.auth);
-  const [emailError, setEmailError] = useState("");
-  const [nameError, setNameError] = useState("");
-  const [contactError, setContactError] = useState("");
-  const [shipToError, setShipToError] = useState("");
   const [formData, setFormData] = useState({
     image: "",
     email: "",
     name: "",
     contact: "",
-    shipTo: ""
+    shipTo: "",
   });
+  const [formErrors, setFormErrors] = useState({
+    email: "",
+    name: "",
+    contact: "",
+    shipTo: "",
+  });
+  const { user } = useSelector((state) => state.auth);
 
-  // 이메일 유효성 검사
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   useEffect(() => {
@@ -38,7 +90,7 @@ const MyProfileEditComponent = () => {
         email: user?.user.email || "",
         name: user?.user.name || "",
         contact: formatPhoneNumber(user?.user.contact) || "",
-        shipTo : user?.user.shipTo || ""
+        shipTo: user?.user.shipTo || "",
       });
     }
   }, [user]);
@@ -51,23 +103,12 @@ const MyProfileEditComponent = () => {
       [id]: formattedValue,
     }));
 
-    if (id === "email") {
-      setEmailError("");
-    }
-
-    if (id === "name") {
-      setNameError("");
-    }
-
-    if (id === "contact") {
-      const cleanedContact = formattedValue.replace(/\D/g, "");
-      if (cleanedContact.length === 11) {
-        setContactError("");
-      }
-    }
+    setFormErrors((prevFormErrors) => ({
+      ...prevFormErrors,
+      [id]: "",
+    }));
   };
 
-  // 이미지 업로드
   const uploadImage = (url) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -78,25 +119,27 @@ const MyProfileEditComponent = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const { image, email, name, contact, shipTo } = formData;
-  
-    // 유효성 검사
+
+    const errors = {};
     if (!emailRegex.test(email)) {
-      setEmailError("유효한 이메일 주소를 입력해 주세요.");
-      return;
+      errors.email = "유효한 이메일 주소를 입력해 주세요.";
     }
     const nameRegex = /^[a-zA-Z가-힣]+$/;
     if (!nameRegex.test(name)) {
-      setNameError("이름은 한글이나 영어만 입력할 수 있습니다.");
-      return;
+      errors.name = "이름은 한글이나 영어만 입력할 수 있습니다.";
     }
     const cleanedContact = contact.replace(/\D/g, "");
     if (cleanedContact.length !== 11) {
-      setContactError("전화번호는 11자리 숫자여야 합니다.");
+      errors.contact = "전화번호는 11자리 숫자여야 합니다.";
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
       return;
     }
-  
+
     await dispatch(updateUser({ image, email, name, contact, shipTo }));
-    navigate('/account/profile')
+    navigate("/account/profile");
   };
 
   const formatPhoneNumber = (value) => {
@@ -115,102 +158,89 @@ const MyProfileEditComponent = () => {
 
     return cleanValue;
   };
-  return (
-    <div>
-      <div className="head-container">
-        <h2>나의 계정</h2>
-        <p>프로필 수정</p>
-      </div>
-      <div className="profile-container">
-        <Form className="edit-user-form_container" onSubmit={handleSubmit}>
-          <Form.Group as={Col} controlId="image" className="profile_image">
-            <Form.Label>프로필 이미지</Form.Label>
-            <div class="upload_img_area">
-              <div class="edit_image_box">
-                <img
-                  id="uploadedimage"
-                  src={formData?.image === "" ? defaultProfile : formData?.image}
-                  className="upload-image"
-                  alt="uploadedimage"
-                ></img>
-              </div>
-              <CloudinaryUploadWidget uploadImage={uploadImage} />
-            </div>
-          </Form.Group>
-          <Col>
-            <Form.Group as={Col} controlId="email">
-              <Form.Label>이메일</Form.Label>
-              <Form.Control
-                id="email"
-                onChange={handleChange}
-                type="text"
-                placeholder="이메일을 입력해 주세요"
-                required
-                value={formData.email}
-                isInvalid={!!emailError}
-              />
-              <Form.Control.Feedback type="invalid">
-                {emailError}
-              </Form.Control.Feedback>
-            </Form.Group>
-            <Form.Group as={Col} controlId="name">
-              <Form.Label>이름</Form.Label>
-              <Form.Control
-                id="name"
-                onChange={handleChange}
-                type="text"
-                placeholder="한글 또는 영어로 입력해 주세요"
-                required
-                value={formData.name}
-                isInvalid={!!nameError}
-              />
-              <Form.Control.Feedback type="invalid">
-                {nameError}
-              </Form.Control.Feedback>
-            </Form.Group>
-            <Form.Group as={Col} controlId="contact">
-              <Form.Label>연락처</Form.Label>
-              <Form.Control
-                onChange={handleChange}
-                type="text"
-                placeholder="11자리로 입력해 주세요"
-                required
-                id="contact"
-                value={formData.contact}
-                isInvalid={!!contactError}
-              />
-              <Form.Control.Feedback type="invalid">
-                {contactError}
-              </Form.Control.Feedback>
-            </Form.Group>
-            <Form.Group as={Col} controlId="shipTo">
-              <Form.Label>주소</Form.Label>
-              <Form.Control
-                onChange={handleChange}
-                type="text"
-                placeholder="주소를 입력해주세요."
-                required
-                id="shipTo"
-                value={formData.shipTo}
-                isInvalid={!!shipToError}
-              />
-              <Form.Control.Feedback type="invalid">
-                {shipToError}
-              </Form.Control.Feedback>
-            </Form.Group>
 
-            <button className="edit-submit_btn" type="submit">
-              저장하기
-            </button>
-          </Col>
-        </Form>
-        {/* <div class="outMember_container" style={{ width: "fit-content" }}>
-          <p className="outMember_btn" onClick={handleMemberOut}>
-            회원탈퇴하기
-          </p>
-        </div> */}
-      </div>
-    </div>
+  return (
+    <Grid container>
+      <Grid item xs={12}>
+        <HeadContainer>
+          <Typography variant="h4">나의 계정</Typography>
+          <Typography variant="subtitle1">회원정보 수정</Typography>
+        </HeadContainer>
+      </Grid>
+      <Grid item xs={12} sx={{marginTop : '50px'}}>
+        <ProfileContainer>
+          <EditUserFormContainer onSubmit={handleSubmit}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={6}>
+                <ProfileImage>
+                  <Typography variant="h6" sx={{fontWeight: '600'}}>프로필 이미지</Typography>
+                  <UploadImgArea>
+                    <UploadImage
+                      id="uploadedimage"
+                      src={formData?.image === "" ? defaultProfile : formData?.image}
+                      alt="uploadedimage"
+                    />
+                    <CloudinaryUploadWidget uploadImage={uploadImage} />
+                  </UploadImgArea>
+                </ProfileImage>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  id="email"
+                  label="이메일"
+                  variant="outlined"
+                  fullWidth
+                  value={formData.email}
+                  onChange={handleChange}
+                  error={!!formErrors.email}
+                  helperText={formErrors.email}
+                  sx={{ marginBottom: '16px' }}
+                />
+                <TextField
+                  id="name"
+                  label="이름"
+                  variant="outlined"
+                  fullWidth
+                  value={formData.name}
+                  onChange={handleChange}
+                  error={!!formErrors.name}
+                  helperText={formErrors.name}
+                  sx={{ marginBottom: '16px' }}
+                />
+                <TextField
+                  id="contact"
+                  label="연락처"
+                  variant="outlined"
+                  fullWidth
+                  value={formData.contact}
+                  onChange={handleChange}
+                  error={!!formErrors.contact}
+                  helperText={formErrors.contact}
+                  sx={{ marginBottom: '16px' }}
+                />
+                <TextField
+                  id="shipTo"
+                  label="주소"
+                  variant="outlined"
+                  fullWidth
+                  value={formData.shipTo}
+                  onChange={handleChange}
+                  error={!!formErrors.shipTo}
+                  helperText={formErrors.shipTo}
+                />
+                <EditSubmitBtn
+                  variant="contained"
+                  color="primary"
+                  type="submit"
+                >
+                  저장하기
+                </EditSubmitBtn>
+              </Grid>
+            </Grid>
+          </EditUserFormContainer>
+        </ProfileContainer>
+      </Grid>
+    </Grid>
   );
 };
 
