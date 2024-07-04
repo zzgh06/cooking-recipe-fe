@@ -41,10 +41,9 @@ export const getOrderList = createAsyncThunk(
   async (query, { dispatch, rejectWithValue }) => {
     try {
       const response = await api.get("/order", { params: { ...query } });
-      console.log(response);
+      console.log("Order List Response:", response.data);
       return response.data;
     } catch (error) {
-      //dispatch(commonUiActions.showToastMessage(error.message, "error"));
       return rejectWithValue(error.message);
     }
   }
@@ -83,7 +82,6 @@ const orderSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // createOrder actions
       .addCase(createOrder.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -96,7 +94,6 @@ const orderSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      // getOrder actions
       .addCase(getOrder.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -110,28 +107,25 @@ const orderSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      // getOrderList actions
       .addCase(getOrderList.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(getOrderList.fulfilled, (state, action) => {
         state.loading = false;
-        state.orderList = action.payload;
+        state.orderList = action.payload.data;
         state.totalPageNum = action.payload.totalPageNum;
       })
       .addCase(getOrderList.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
-      // updateOrder actions
       .addCase(updateOrder.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(updateOrder.fulfilled, (state, action) => {
         state.loading = false;
-        // Update logic if needed
       })
       .addCase(updateOrder.rejected, (state, action) => {
         state.loading = false;

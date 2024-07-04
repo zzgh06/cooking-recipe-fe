@@ -1,42 +1,67 @@
 import React, { useState } from "react";
-import { Button, Form } from "react-bootstrap";
+import { Button, Grid, TextField, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { changePassword, logout } from "../redux/userSlice";
-import '../style/ChangePasswordPage.style.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye } from "@fortawesome/free-regular-svg-icons";
-import { faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
+import { styled } from "@mui/system";
+import "../style/ChangePasswordPage.style.css";
+
+const HeadContainer = styled("div")({
+  display: "flex",
+  justifyContent: "flex-start",
+  alignItems: "baseline",
+  borderBottom: "4px solid black",
+  paddingLeft: "10px",
+});
+
+const ChangePasswordContainer = styled("div")({
+  width: "100%",
+  height: "100%",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+});
+
+const ErrorMessage = styled("div")({
+  display: "flex",
+  alignItems: "center",
+  marginBottom: "8px",
+});
+
+const SubmitBtn = styled(Button)({
+  marginTop: "16px",
+  width: "100%",
+});
 
 const ChangePasswordPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error, isAuthenticated } = useSelector(
-    (state) => state.auth,
-  );
+  const { loading, error } = useSelector((state) => state.auth);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [gapMessage, setGapMessage] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [gapMessage, setGapMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (newPassword.includes(' ')) {
-      setGapMessage('비밀번호에는 공백을 포함할 수 없습니다.');
+    if (newPassword.includes(" ")) {
+      setGapMessage("비밀번호에는 공백을 포함할 수 없습니다.");
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      setErrorMessage('비밀번호가 일치하지 않습니다.');
+      setErrorMessage("비밀번호가 일치하지 않습니다.");
       return;
     }
 
     await dispatch(changePassword(newPassword));
-    await dispatch(logout())
-    navigate('/login')
+    await dispatch(logout());
+    navigate("/login");
   };
 
   const togglePasswordVisibility = () => {
@@ -49,13 +74,13 @@ const ChangePasswordPage = () => {
 
   return (
     <>
-      <div className="head-container">
-        <h2>나의 계정</h2>
-        <p>비밀번호 변경</p>
-      </div>
-      <div className="change-password-container">
+      <HeadContainer>
+        <Typography variant="h4">나의 계정</Typography>
+        <Typography variant="subtitle1">비밀번호 변경</Typography>
+      </HeadContainer>
+      <ChangePasswordContainer>
         {gapMessage && (
-          <div className="error-message">
+          <ErrorMessage>
             <svg
               className="svg_icon"
               xmlns="http://www.w3.org/2000/svg"
@@ -63,23 +88,22 @@ const ChangePasswordPage = () => {
               height="20"
               fill="none"
               viewBox="0 0 24 24"
-              class="icon-md"
-              style={{ color: 'rgb(231, 94, 94)', marginBottom: '3px' }}
+              style={{ color: "rgb(231, 94, 94)", marginBottom: "3px" }}
             >
               <path
                 stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
                 d="M15 19a3 3 0 1 1-6 0M15.865 16A7.54 7.54 0 0 0 19.5 9.538C19.5 5.375 16.142 2 12 2S4.5 5.375 4.5 9.538A7.54 7.54 0 0 0 8.135 16m7.73 0h-7.73m7.73 0v3h-7.73v-3"
               ></path>
             </svg>
             {gapMessage}
-          </div>
+          </ErrorMessage>
         )}
-        <Form className="reset-password-form" onSubmit={handleSubmit}>
+        <form className="reset-password-form" onSubmit={handleSubmit}>
           {error && (
-            <div className="error-message">
+            <ErrorMessage>
               <svg
                 className="svg_icon"
                 xmlns="http://www.w3.org/2000/svg"
@@ -87,81 +111,93 @@ const ChangePasswordPage = () => {
                 height="20"
                 fill="none"
                 viewBox="0 0 24 24"
-                class="icon-md"
-                style={{ color: 'rgb(231, 94, 94)', marginBottom: '3px' }}
+                style={{ color: "rgb(231, 94, 94)", marginBottom: "3px" }}
               >
                 <path
                   stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   d="M15 19a3 3 0 1 1-6 0M15.865 16A7.54 7.54 0 0 0 19.5 9.538C19.5 5.375 16.142 2 12 2S4.5 5.375 4.5 9.538A7.54 7.54 0 0 0 8.135 16m7.73 0h-7.73m7.73 0v3h-7.73v-3"
                 ></path>
               </svg>
               {error}
-            </div>
+            </ErrorMessage>
           )}
-          <Form.Group controlId="formBasicPassword">
-            <Form.Label>새 비밀번호</Form.Label>
-            <div className="password-input-wrap">
-              <Form.Control
-                type={showPassword ? 'text' : 'password'}
-                placeholder="새 비밀번호를 입력하세요"
+          <Grid container spacing={2} alignItems="center">
+            <Grid item xs={12}>
+              <Typography>새 비밀번호</Typography>
+              <TextField
+                id="newPassword"
+                label="새 비밀번호"
+                type={showPassword ? "text" : "password"}
+                fullWidth
+                variant="outlined"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 required
                 onFocus={() => {
-                  setErrorMessage('');
-                  setGapMessage('');
+                  setErrorMessage("");
+                  setGapMessage("");
+                }}
+                InputProps={{
+                  endAdornment: (
+                    <span
+                      className="password-toggle-icon"
+                      onClick={togglePasswordVisibility}
+                    >
+                      <FontAwesomeIcon
+                        icon={showPassword ? faEye : faEyeSlash}
+                      />
+                    </span>
+                  ),
                 }}
               />
-              <span
-                className="password-toggle-icon"
-                onClick={togglePasswordVisibility}
-              >
-                {showPassword ? (
-                  <FontAwesomeIcon icon={faEye} />
-                ) : (
-                  <FontAwesomeIcon icon={faEyeSlash} />
-                )}
-              </span>
-            </div>
-          </Form.Group>
-          <Form.Group controlId="formBasicConfirmPassword">
-            <Form.Label>새 비밀번호 재확인</Form.Label>
-            <div className="password-input-wrap">
-              <Form.Control
-                type={showConfirmPassword ? 'text' : 'password'}
-                placeholder="새 비밀번호를 다시 입력하세요"
+            </Grid>
+            <Grid item xs={12}>
+              <Typography>새 비밀번호 재확인</Typography>
+              <TextField
+                id="confirmPassword"
+                label="새 비밀번호 재확인"
+                type={showConfirmPassword ? "text" : "password"}
+                fullWidth
+                variant="outlined"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
-                isInvalid={!!errorMessage}
                 onFocus={() => {
-                  setErrorMessage('');
-                  setGapMessage('');
+                  setErrorMessage("");
+                  setGapMessage("");
+                }}
+                error={!!errorMessage}
+                helperText={errorMessage}
+                InputProps={{
+                  endAdornment: (
+                    <span
+                      className="password-toggle-icon"
+                      onClick={toggleConfirmPasswordVisibility}
+                    >
+                      <FontAwesomeIcon
+                        icon={showConfirmPassword ? faEye : faEyeSlash}
+                      />
+                    </span>
+                  ),
                 }}
               />
-              <span
-                className="password-toggle-icon"
-                onClick={toggleConfirmPasswordVisibility}
+            </Grid>
+            <Grid item xs={12}>
+              <SubmitBtn
+                variant="contained"
+                color="primary"
+                type="submit"
+                disabled={loading}
               >
-                {showConfirmPassword ? (
-                  <FontAwesomeIcon icon={faEye} />
-                ) : (
-                  <FontAwesomeIcon icon={faEyeSlash} />
-                )}
-              </span>
-              <Form.Control.Feedback type="invalid">
-                {errorMessage}
-              </Form.Control.Feedback>
-            </div>
-          </Form.Group>
-          <button className="submit-btn" type="submit" disabled={loading}>
-            {loading ? '변경 중...' : '비밀번호 재설정'}
-          </button>
-        </Form>
-      </div>
+                {loading ? "변경 중..." : "비밀번호 재설정"}
+              </SubmitBtn>
+            </Grid>
+          </Grid>
+        </form>
+      </ChangePasswordContainer>
     </>
   );
 };
