@@ -1,11 +1,39 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchRecipes } from "../redux/recipeSlice";
-import BannerComponent from "../component/Banner/BannerComponent";
-import RecipeSlider from "../component/RecipeSlider/RecipeSlider";
-import "../style/RecipePage.style.css";
-import SubBanner from "../component/SubBanner/SubBanner";
 import RecipeAll from "../component/RecipeAll/RecipeAll";
+import { styled, Box, Link, Typography } from "@mui/material";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
+
+const RecipeCategoryBar = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  position: 'fixed',
+  top: '95px',
+  width: '100%',
+  height: '70px',
+  padding: '0 120px',
+  borderTop: '3px solid green',
+  borderBottom: '3px solid green',
+  backgroundColor: 'white',
+  zIndex: 999,
+  [theme.breakpoints.down('md')]: {
+    display : 'none'
+  },
+}));
+
+const RecipeBtn = styled(Box)({
+  display: 'flex',
+  gap: '25px',
+});
+
+const RecipeLink = styled(Link)({
+  fontWeight: 600,
+  textDecoration: 'none',
+  color: 'black',
+});
 
 const RecipePage = () => {
   const dispatch = useDispatch();
@@ -16,29 +44,21 @@ const RecipePage = () => {
     dispatch(fetchRecipes(searchQuery));
   }, [dispatch]);
 
-  const popularRecipes = recipes.filter((recipe) => recipe.reviewCnt > 0);
-
-  const asianCuisineRecipes = recipes.filter((recipe) =>
-    ["한식", "중식", "일식"].includes(recipe.categories.etc)
-  );
-
-  const subImages = [
-    "https://product-image.kurly.com/hdims/resize/%3E1050x%3E140/quality/85/src/banner/random-band/pc/img/8d074afe-a6b2-4eba-a0a7-a3f1839c78e9.jpg",
-    "https://product-image.kurly.com/hdims/resize/%3E1050x%3E140/quality/85/src/banner/random-band/pc/img/e433cdf3-36c6-463e-8b2a-42ffcc65507b.jpg",
-  ];
-
   return (
-    <div>
-      {error && <p>Error: {error}</p>}
-      <RecipeSlider title={"베스트 레시피"} recipes={popularRecipes} />
-      <SubBanner img={subImages[0]} />
-      <RecipeSlider
-        title={"한식 중식 일식 레시피"}
-        recipes={asianCuisineRecipes}
-      />
-      <SubBanner img={subImages[1]} />
+    <Box>
+      <RecipeCategoryBar>
+        <RecipeBtn>
+          <RecipeLink href="/recipes/all">전체 레시피</RecipeLink>
+          <RecipeLink href="/recipes/new">최신 레시피</RecipeLink>
+          <RecipeLink href="/recipes/korean">한식</RecipeLink>
+          <RecipeLink href="/recipes/japanese">일식</RecipeLink>
+          <RecipeLink href="/recipes/western">양식</RecipeLink>
+          <RecipeLink href="/recipes/chinese">중식</RecipeLink>
+        </RecipeBtn>
+        <FontAwesomeIcon icon={faBars} />
+      </RecipeCategoryBar>
       <RecipeAll />
-    </div>
+    </Box>
   );
 };
 
