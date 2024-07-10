@@ -40,15 +40,38 @@ export const fetchRecipes = createAsyncThunk(
   "recipe/fetchRecipes",
   async (searchQuery, { rejectWithValue }) => {
     try {
-      // 페이지 정보가 없으면 전체 데이터를 불러옴
-      const url = searchQuery.page 
-        ? `/recipe?name=${searchQuery.name}&page=${searchQuery.page}` 
-        : `/recipe?name=${searchQuery.name}`;
+      const url = `/recipe?name=${searchQuery.name || ""}&page=${
+        searchQuery.page
+      }`;
       const response = await api.get(url);
-      console.log("API response:", response.data);
       return response.data;
     } catch (err) {
-      return rejectWithValue(err.response.data);
+      console.log("API error:", err.response);
+      return rejectWithValue(err.response?.data);
+    }
+  }
+);
+
+export const fetchRecipesByCategory = createAsyncThunk(
+  "recipe/fetchRecipesByCategory",
+  async ({ food, mood, method, ingredient, etc, page=1}, { rejectWithValue }) => {
+    try {
+      const queryParams = new URLSearchParams({
+        ...(food && { food }),
+        ...(mood && { mood }),
+        ...(method && { method }),
+        ...(ingredient && { ingredient }),
+        ...(etc && { etc }),
+        page
+      }).toString();
+
+      const url = `/recipe/category?${queryParams}`;
+      const response = await api.get(url);
+      console.log("response.data", response.data)
+      return response.data;
+    } catch (err) {
+      console.log("API error:", err.response);
+      return rejectWithValue(err.response?.data);
     }
   }
 );
@@ -84,7 +107,6 @@ export const editRecipe = createAsyncThunk(
           status: "error",
         })
       );
-      //console.error("API Error:", err.response.data);
       return rejectWithValue(err.response.data);
     }
   }
@@ -131,12 +153,26 @@ const recipeSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchRecipes.fulfilled, (state, action) => {
-        console.log("Fetched recipes:", action.payload);
+        console.log("fetchRecipes fulfilled", action.payload);
         state.loading = false;
         state.recipes = action.payload.data;
         state.totalPages = action.payload.totalPageNum;
       })
       .addCase(fetchRecipes.rejected, (state, action) => {
+        console.log("fetchRecipes rejected", action.payload);
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(fetchRecipesByCategory.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchRecipesByCategory.fulfilled, (state, action) => {
+        state.loading = false;
+        state.recipes = action.payload.recipeList;
+        state.totalPages = action.payload.totalPages;
+      })
+      .addCase(fetchRecipesByCategory.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })

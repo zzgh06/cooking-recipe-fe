@@ -17,15 +17,15 @@ import AdminUserPage from "../pages/AdminUserPage";
 import AdminRecipePage from "../pages/AdminRecipePage";
 import StorePage from "../pages/StorePage";
 import MyRecipePage from "../pages/MyRecipePage";
-import RecipePage from "../pages/RecipePage";
+
 import RecipeDetailPage from "../pages/RecipeDetailPage";
-import CategoryRecipePage from "../pages/CategoryRecipePage";
 import SearchResults from "../pages/SearchResults";
 import FindPasswordPage from "../pages/FindPasswordPage";
 import FindEmailPage from "../pages/FindEmailPage";
 import ResetPasswordPage from "../pages/ResetPasswordPage";
 import ChangePasswordPage from "../pages/ChangePasswordPage";
 import VerifyCurrentPassword from "../pages/VerifyCurrentPassword";
+import RecipePage from "../pages/Recipe/RecipePage";
 
 const AppRouter = () => {
   return (
@@ -42,15 +42,8 @@ const AppRouter = () => {
         <Route path="/recipes/all" element={<RecipePage />} />
         <Route path="/recipes/best" element={<RecipePage />} />
         <Route path="/recipes/new" element={<RecipePage />} />
-        <Route path="/recipes/korean" element={<RecipePage />} />
-        <Route path="/recipes/chinese" element={<RecipePage />} />
-        <Route path="/recipes/japanese" element={<RecipePage />} />
-        <Route path="/recipes/western" element={<RecipePage />} />
+        <Route path="/recipes/:category" element={<RecipePage />} />
         <Route path="/recipe/:id" element={<RecipeDetailPage />} />
-        <Route
-          path="/recipe/category/:category"
-          element={<CategoryRecipePage />}
-        />
         <Route element={<PrivateRoute permissionLevel="customer" />}>
           <Route path="/fridge" element={<MyFridge />} />
           <Route path="/cart" element={<CartPage />} />

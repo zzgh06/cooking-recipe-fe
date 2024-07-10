@@ -1,7 +1,7 @@
 .recipe-carousel-wrapper {
   position: relative;
-  padding: 50px 150px 10px 150px;
-  width: 100vw;
+  margin: 50px 0 10px 0;
+  width: 100%;
 }
 
 .recipe-carousel-container {

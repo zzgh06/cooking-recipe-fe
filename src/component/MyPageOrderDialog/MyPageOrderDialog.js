@@ -40,8 +40,6 @@ const cellStyle = {
 const MyPageOrderDialog = ({ open, handleClose }) => {
   const { selectedOrder } = useSelector((state) => state.order);
 
-  console.log("selectedOrder", selectedOrder)
-
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>주문 상세 정보</DialogTitle>
