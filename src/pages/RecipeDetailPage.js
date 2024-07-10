@@ -8,12 +8,34 @@ import {
   getRecipeFavorite,
 } from "../redux/favoriteSlice";
 import Review from "../component/Review/Review";
-import "../style/RecipeDetail.style.css";
 import { Spinner } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBookmark as solidBookmark } from "@fortawesome/free-solid-svg-icons";
-import { faBookmark as regularBookmark } from "@fortawesome/free-regular-svg-icons";
+import {
+  faCartShopping,
+  faSearch,
+  faBookmark as solidBookmark,
+} from "@fortawesome/free-solid-svg-icons";
+import {
+  faShareFromSquare,
+  faBookmark as regularBookmark,
+} from "@fortawesome/free-regular-svg-icons";
 import RecipeCategory from "../component/RecipeCategory/RecipeCategory";
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  styled,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
+import KakaoShareButton from "../component/KakaoShareButton/KakaoShareButton";
 
 const RecipeDetail = () => {
   const { id } = useParams();
@@ -21,6 +43,55 @@ const RecipeDetail = () => {
   const { recipeDetail, loading, error } = useSelector((state) => state.recipe);
   const { recipeFavorite } = useSelector((state) => state.favorite);
   const [isFavorite, setIsFavorite] = useState(false);
+
+  const RecipeImage = styled("img")({
+    width: "100%",
+    borderRadius: "8px",
+    marginBottom: "20px",
+  });
+
+  const RecipeInfoContainer = styled(Box)({
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "20px",
+  });
+
+  const DifficultyBox = styled(Box)({
+    display: "flex",
+    gap: "20px",
+    marginTop: "10px",
+    paddingBottom: "30px",
+    borderBottom: "3px solid lightgrey",
+  });
+
+  const HeadContainer = styled("div")({
+    marginTop: "20px",
+  });
+
+  const RecipeIngredientButton = styled("div")({
+    display: "flex",
+    padding: "10px 15px",
+  });
+
+  const StyledButton = styled(Button)({
+    width: "150px",
+    marginRight: "15px",
+    "&:last-child": {
+      marginRight: 0,
+    },
+  });
+
+  const RecipeStepContainer = styled(Box)({
+    display: "flex",
+    justifyContent: "space-between",
+  });
+
+  const Steps = styled("div")({
+    display: "flex",
+    alignItems: "baseline",
+    height: "187px"
+  });
 
   useEffect(() => {
     dispatch(fetchRecipeById(id));
@@ -54,100 +125,154 @@ const RecipeDetail = () => {
     return <div>Error: {error}</div>;
   }
 
+  const getDifficultyStars = (difficulty) => {
+    switch (difficulty) {
+      case "아무나":
+        return "⭐";
+      case "초급":
+        return "⭐⭐";
+      case "중급":
+        return "⭐⭐⭐";
+      case "고급":
+        return "⭐⭐⭐⭐";
+      case "신의경지":
+        return "⭐⭐⭐⭐⭐";
+      default:
+        return "";
+    }
+  };
+
+  console.log(recipeDetail);
+
   return (
     <>
       <RecipeCategory />
-      <div className="recipe-detail-container">
-        {recipeDetail && (
-          <>
-            <div className="recipe-detail-header">
-              <img
-                src={recipeDetail.images[0]}
-                alt={recipeDetail.name}
-                className="recipe-detail-image"
-              />
-            </div>
-            <div className="recipe-detail-main">
-              <div className="recipe-detail-left">
-                <h1>{recipeDetail.name}</h1>
-                <button
+      <Container maxWidth="md" sx={{ marginTop: "80px" }}>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <RecipeImage
+              src={recipeDetail?.images[0]}
+              alt={recipeDetail?.name}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <RecipeInfoContainer>
+              <Typography variant="h4" component="h1">
+                {recipeDetail?.name}
+              </Typography>
+              <Box sx={{ display: "flex" }}>
+                <Box
                   onClick={handleFavoriteClick}
-                  className="favorite-button"
+                  sx={{ cursor: "pointer", marginRight: "25px" }}
                 >
                   {isFavorite ? (
-                    <FontAwesomeIcon icon={solidBookmark} />
+                    <FontAwesomeIcon icon={regularBookmark} size="lg" />
                   ) : (
-                    <FontAwesomeIcon icon={regularBookmark} />
+                    <FontAwesomeIcon icon={solidBookmark} size="lg" />
                   )}
-                </button>
-                <p>{recipeDetail.description}</p>
-                <h2>카테고리</h2>
-                <ol>
-                  {recipeDetail.steps.length > 0 ? (
-                    recipeDetail.steps.map((step, index) => (
-                      <li key={index} className="step-item">
-                        {step.image && (
-                          <img
-                            src={step.image}
-                            alt={`step-${index + 1}`}
-                            className="step-image"
-                          />
-                        )}
-                        <p>{step.description}</p>
-                      </li>
-                    ))
-                  ) : (
-                    <li>만드는 방법이 없습니다.</li>
-                  )}
-                </ol>
-              </div>
-              <div className="recipe-detail-right">
-                <div className="recipe-detail-meta">
-                  <div className="meta-item">
-                    <div className="meta-text">준비 시간</div>
-                    <div className="meta-data">{recipeDetail.time}</div>
-                    <span className="meta-icon">⏱</span>
-                  </div>
-                  <div className="meta-item">
-                    <div className="meta-text">인분</div>
-                    <div className="meta-data">{recipeDetail.servings}</div>
-                    <span className="meta-icon">🍽</span>
-                  </div>
-                  <div className="meta-item">
-                    <div className="meta-text">난이도</div>
-                    <div className="meta-data"> {recipeDetail.difficulty} </div>
-                    <span className="meta-icon">⭐</span>
-                  </div>
-                </div>
-                <h2>레시피 카테고리</h2>
-                <ul>
-                  <li>음식 종류: {recipeDetail.categories.food}</li>
-                  <li>상황: {recipeDetail.categories.mood}</li>
-                  <li>방법: {recipeDetail.categories.method}</li>
-                  <li>재료: {recipeDetail.categories.ingredient}</li>
-                  <li>
-                    기타:{" "}
-                    {Array.isArray(recipeDetail.categories.etc)
-                      ? recipeDetail.categories.etc.join(", ")
-                      : recipeDetail.categories.etc}
-                  </li>
-                </ul>
-                <h2>레시피 재료</h2>
-                <ul>
-                  {recipeDetail.ingredients.map((ingredient) => (
-                    <li key={ingredient._id}>
-                      {ingredient.name} - {ingredient.qty} {ingredient.unit}
-                    </li>
+                </Box>
+                <KakaoShareButton recipeDetail={recipeDetail} />
+              </Box>
+            </RecipeInfoContainer>
+            <Typography
+              variant="body1"
+              component="p"
+              sx={{ marginBottom: "20px" }}
+            >
+              {recipeDetail?.description}
+            </Typography>
+            <DifficultyBox>
+              <Typography variant="body2" component="p">
+                난이도 : {getDifficultyStars(recipeDetail?.difficulty)}
+              </Typography>
+              <Typography variant="body2" component="p">
+                소요시간 ⏰ : {recipeDetail?.time}
+              </Typography>
+            </DifficultyBox>
+          </Grid>
+          <Grid item xs={12}>
+            <HeadContainer>
+              <Typography variant="h5" component="p">
+                재료
+              </Typography>
+            </HeadContainer>
+            <RecipeIngredientButton>
+              <StyledButton variant="outlined">
+                <FontAwesomeIcon icon={faSearch} />
+                <Box component="span" sx={{ ml: 1 }}>
+                  재료검색
+                </Box>
+              </StyledButton>
+              <StyledButton variant="outlined">
+                <FontAwesomeIcon icon={faCartShopping} />
+                <Box component="span" sx={{ ml: 1 }}>
+                  장보기
+                </Box>
+              </StyledButton>
+            </RecipeIngredientButton>
+            <TableContainer component={Paper} sx={{ boxShadow: "none" }}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>재료</TableCell>
+                    <TableCell align="right">양</TableCell>
+                    <TableCell align="right">구매</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {recipeDetail?.ingredients.map((ingredient, index) => (
+                    <TableRow key={index}>
+                      <TableCell component="th" scope="row">
+                        {ingredient.name}
+                      </TableCell>
+                      <TableCell align="right">
+                        {ingredient.qty}
+                        {ingredient.unit}
+                      </TableCell>
+                      <TableCell align="right">
+                        <Button variant="outlined" sx={{ width: "150px" }}>
+                          구매
+                        </Button>
+                      </TableCell>
+                    </TableRow>
                   ))}
-                </ul>
-              </div>
-            </div>
-            <div className="recipe-detail-reviews">
-              <Review type="recipe" itemId={recipeDetail._id} />
-            </div>
-          </>
-        )}
-      </div>
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Grid>
+          <Grid item xs={12}>
+            <HeadContainer>
+              <Typography variant="h5" component="p">
+                조리순서
+              </Typography>
+            </HeadContainer>
+          </Grid>
+          <Grid item xs={12}>
+            {recipeDetail?.steps.map((step, index) => (
+              <RecipeStepContainer key={index}>
+                <Steps>
+                  <Typography variant="h3" component="h3">
+                    {index + 1}.
+                  </Typography>
+                  <Typography variant="h6" component="span" ml={2}>
+                    {step?.description}
+                  </Typography>
+                </Steps>
+                {step?.image && (
+                  <RecipeImage
+                    src={step?.image}
+                    alt={step?._id}
+                    sx={{ ml: 2, width: "200px", height: "auto" }}
+                  />
+                )}
+              </RecipeStepContainer>
+            ))}
+          </Grid>
+          <Grid item xs={12}>
+            <Review type="recipe" itemId={recipeDetail?._id} />
+          </Grid>
+        </Grid>
+      </Container>
     </>
   );
 };

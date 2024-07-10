@@ -28,9 +28,10 @@ export const foodCategory = [
     "1인분","2인분","3인분","4인분","5인분","6인분이상"
   ];
 
-  export const difficulty =[
+  export const difficulty = [
     "아무나","초급","중급","고급","신의경지"
-  ];
+  ]
+
 
   export const time =[
     "5분 이내","10분 이내","15분 이내","20분 이내","30분 이내","60분 이내","90분 이내","120분 이상"
