@@ -38,7 +38,7 @@ import MyPageOrderDialog from "../MyPageOrderDialog/MyPageOrderDialog";
 const MyOrderComponent = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { orderList, loading, error } = useSelector((state) => state.order);
+  const { orderList } = useSelector((state) => state.order);
   const user = useSelector((state) => state.auth.user);
   const [recentChecked, setRecentChecked] = useState(false);
   const [oldChecked, setOldChecked] = useState(false);
