@@ -39,7 +39,6 @@ const IngredientSlider = ({ title, ingredients }) => {
         customRightArrow={<CustomRightArrow2 />}
       >
         {carouselItems.map((ing) => {
-          //console.log(ing._id);
 
           return <IngredientCard key={ing._id} item={ing} />;
         })}

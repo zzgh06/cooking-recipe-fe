@@ -1,10 +1,13 @@
+import { styled } from "@mui/material";
 import React from "react";
-
+const BannerImage = styled('div')({
+  paddingLeft : '51px'
+})
 const SubBanner = ({ img }) => {
   return (
-    <div className="banner-image">
+    <BannerImage>
       <img src={img} alt={img} />
-    </div>
+    </BannerImage>
   );
 };
 

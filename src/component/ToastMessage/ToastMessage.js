@@ -7,7 +7,6 @@ import { resetToastMessage } from "../../redux/commonUISlice";
 const ToastMessage = () => {
   const { toastMessage } = useSelector((state) => state.ui);
   const dispatch = useDispatch();
-  console.log(toastMessage);
   useEffect(() => {
     if (toastMessage) {
       const { message, status } = toastMessage;

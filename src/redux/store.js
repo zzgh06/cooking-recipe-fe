@@ -7,6 +7,7 @@ import cartReducer from "./cartSlice";
 import orderReducer from "./orderSlice";
 import reviewReducer from "./reviewSlice";
 import commonUiReducer from "./commonUISlice";
+import favoriteReducer from "./favoriteSlice";
 export const store = configureStore({
   reducer: {
     auth: userReducer,
@@ -16,6 +17,7 @@ export const store = configureStore({
     fridge: fridgeReducer,
     cart: cartReducer,
     review: reviewReducer,
+    favorite: favoriteReducer,
     ui: commonUiReducer,
   },
 });

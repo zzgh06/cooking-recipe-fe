@@ -19,9 +19,3 @@
   color: black;
   padding-right: 25px;
 }
-
-@media (max-width: 994px) {
-  .banner-image {
-    padding: 10px 50px;
-  }
-}

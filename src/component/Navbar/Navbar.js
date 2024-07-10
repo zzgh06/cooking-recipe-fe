@@ -32,8 +32,6 @@ const Navbar = () => {
 
   const user = useSelector((state) => state.auth.user);
 
-  console.log("user", user)
-
   const onCheckEnter = (event) => {
     if (event.key === "Enter") {
       if (event.target.value === "") {
@@ -53,7 +51,7 @@ const Navbar = () => {
   };
 
   const toggleSearch = () => {
-    setSearchVisible(!isSearchVisible); // Toggle search visibility
+    setSearchVisible(!isSearchVisible); 
   };
 
   const showDropdown = () => {

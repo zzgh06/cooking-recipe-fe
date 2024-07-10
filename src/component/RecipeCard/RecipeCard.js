@@ -45,8 +45,6 @@ const RecipeCard = ({ item }) => {
     navigate(`/recipe/${id}`);
   };
 
-  console.log(item);
-
   return (
     <RecipeCardContainer>
       <RecipeImage

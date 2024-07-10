@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchRecipes } from '../redux/recipeSlice';
 import RecipeSlider from '../component/RecipeSlider/RecipeSlider';
 import SubBanner from '../component/SubBanner/SubBanner';
+import { Container, styled } from '@mui/material';
 
 
 const MainPage = () => {
@@ -23,7 +24,7 @@ const MainPage = () => {
   ];
 
   return (
-    <div>
+    <Container>
       <RecipeSlider title={"베스트 레시피"} recipes={popularRecipes} />
       <SubBanner img={subImages[0]} />
       <RecipeSlider
@@ -31,7 +32,7 @@ const MainPage = () => {
         recipes={newRecipes}
       />
       <SubBanner img={subImages[1]} />
-    </div>
+    </Container>
   )
 }
 
