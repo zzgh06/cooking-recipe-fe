@@ -26,8 +26,12 @@ const MyFridge = () => {
     recipeList,
     loading,
     recipeLoading,
-    addIngredientLoading,
   } = useSelector((state) => state.fridge || []);
+
+
+  const selectedIngredients = useSelector(
+    (state) => state.ingredients.selectedIngredients
+  );
   const [query, setQuery] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState({
     page: query.get("page") || 1,
@@ -49,7 +53,7 @@ const MyFridge = () => {
       dispatch(fetchIngredients(searchQuery));
       dispatch(fridgeIngredientRecipeResult(searchQuery));
       setHasSearched(true);
-      setRecommendClicked(false); // Reset recommendClicked when performing a search
+      setRecommendClicked(false);
     } else {
       dispatch(fridgeIngredientRecipeResult(searchQuery));
     }
@@ -87,7 +91,7 @@ const MyFridge = () => {
       const selectedIngredients = Array.from(checkedItems);
       dispatch(fetchRecommendedRecipes(selectedIngredients));
       setRecommendClicked(true);
-      setHasSearched(false); // Reset hasSearched when recommending recipes
+      setHasSearched(false);
     }
   };
 
@@ -137,6 +141,7 @@ const MyFridge = () => {
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
               onCheckEnter={handleSearchChange}
+              selectedIngredients={selectedIngredients}
               placeholder="냉장고 속 재료 검색"
               field="name"
               page="fridge"

@@ -1,30 +1,63 @@
-import React from 'react';
-import './ReviewList.style.css'; // 스타일링을 위한 CSS 파일 추가
+import React from "react";
+import { Box, Typography, Button } from "@mui/material";
+import ReviewStars from "./ReviewStars";
 
 const ReviewList = ({ type, reviews, userId, onEdit, onDelete }) => {
-   
   return (
-    <div>
-      {reviews.map(review => (
-        <div key={review._id} className="review-item">
-          <div className='review-info'> 
-          <strong>평점: {review.rating}</strong> ({new Date(review.createdAt).toLocaleString()})
-          <div className="id-container">작성자: {review.userId.id}</div> 
-          </div>
-          <div className='comment-container'>            
-          <p>{review.comment}</p>
-          
-           
-          {userId && userId.user && userId.user._id === review.userId._id && (
-              <div className="button-container">
-                <button className="button delete" onClick={() => onDelete(review._id, type)}>삭제</button>
-                <button className="button edit" onClick={() => onEdit(review)}>수정</button>
-              </div>
+    <Box>
+      {reviews.map((review) => (
+        <Box
+          key={review._id}
+          sx={{
+            border: "1px solid #ccc",
+            p: 2,
+            mb: 2,
+            borderRadius: 1,
+            backgroundColor: "#f9f9f9",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+            }}
+          >
+            <Typography variant="body1">
+              평점:
+            </Typography>
+            <ReviewStars startNum={review.rating} />
+            <Typography variant="body2" component="span">
+              ({new Date(review.createdAt).toLocaleString()})
+            </Typography>
+            <Typography variant="body2" sx={{ ml: "auto" }}>
+              작성자: {review.userId.id}
+            </Typography>
+          </Box>
+          <Box sx={{ mt: 1, display: "flex", alignItems: "center" }}>
+            <Typography variant="body1">{review.comment}</Typography>
+            {userId && userId.user && userId.user._id === review.userId._id && (
+              <Box sx={{ ml: "auto", display: "flex", gap: 1 }}>
+                <Button
+                  variant="outlined"
+                  color="error"
+                  onClick={() => onDelete(review._id, type)}
+                >
+                  삭제
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={() => onEdit(review)}
+                >
+                  수정
+                </Button>
+              </Box>
             )}
-          </div>
-        </div>
+          </Box>
+        </Box>
       ))}
-    </div>
+    </Box>
   );
 };
 

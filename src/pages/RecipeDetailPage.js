@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { fetchRecipeById } from "../redux/recipeSlice";
 import {
   addRecipeFavorite,
@@ -36,62 +36,67 @@ import {
   Paper,
 } from "@mui/material";
 import KakaoShareButton from "../component/KakaoShareButton/KakaoShareButton";
+import CopyClipButton from "../component/CopyClipButton/CopyClipButton";
+import IngredientDialog from "../component/IngredientDialog/IngredientDialog";
+import RecipeDetailSkeleton from "../component/Skeleton/RecipeDetailSkeleton";
+
+const RecipeImage = styled("img")({
+  width: "100%",
+  borderRadius: "8px",
+  marginBottom: "20px",
+});
+
+const RecipeInfoContainer = styled(Box)({
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  marginBottom: "20px",
+});
+
+const DifficultyBox = styled(Box)({
+  display: "flex",
+  gap: "20px",
+  marginTop: "10px",
+  paddingBottom: "30px",
+  borderBottom: "3px solid lightgrey",
+});
+
+const HeadContainer = styled("div")({
+  marginTop: "20px",
+});
+
+const RecipeIngredientButton = styled("div")({
+  display: "flex",
+  padding: "10px 15px",
+});
+
+const StyledButton = styled(Button)({
+  width: "150px",
+  marginRight: "15px",
+  "&:last-child": {
+    marginRight: 0,
+  },
+});
+
+const RecipeStepContainer = styled(Box)({
+  display: "flex",
+  justifyContent: "space-between",
+});
+
+const Steps = styled("div")({
+  display: "flex",
+  alignItems: "baseline",
+  height: "187px",
+});
 
 const RecipeDetail = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { recipeDetail, loading, error } = useSelector((state) => state.recipe);
   const { recipeFavorite } = useSelector((state) => state.favorite);
   const [isFavorite, setIsFavorite] = useState(false);
-
-  const RecipeImage = styled("img")({
-    width: "100%",
-    borderRadius: "8px",
-    marginBottom: "20px",
-  });
-
-  const RecipeInfoContainer = styled(Box)({
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: "20px",
-  });
-
-  const DifficultyBox = styled(Box)({
-    display: "flex",
-    gap: "20px",
-    marginTop: "10px",
-    paddingBottom: "30px",
-    borderBottom: "3px solid lightgrey",
-  });
-
-  const HeadContainer = styled("div")({
-    marginTop: "20px",
-  });
-
-  const RecipeIngredientButton = styled("div")({
-    display: "flex",
-    padding: "10px 15px",
-  });
-
-  const StyledButton = styled(Button)({
-    width: "150px",
-    marginRight: "15px",
-    "&:last-child": {
-      marginRight: 0,
-    },
-  });
-
-  const RecipeStepContainer = styled(Box)({
-    display: "flex",
-    justifyContent: "space-between",
-  });
-
-  const Steps = styled("div")({
-    display: "flex",
-    alignItems: "baseline",
-    height: "187px"
-  });
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     dispatch(fetchRecipeById(id));
@@ -113,17 +118,17 @@ const RecipeDetail = () => {
     setIsFavorite(!isFavorite);
   };
 
-  if (loading) {
-    return (
-      <div className="text-center my-3">
-        <Spinner animation="border" />
-      </div>
-    );
-  }
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handlePurchaseClick = (ingredientName) => {
+    navigate(`/ingredients?name=${encodeURIComponent(ingredientName)}`);
+  };
 
   const getDifficultyStars = (difficulty) => {
     switch (difficulty) {
@@ -142,7 +147,15 @@ const RecipeDetail = () => {
     }
   };
 
-  console.log(recipeDetail);
+  if (loading) {
+    return (
+      <RecipeDetailSkeleton />
+    );
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <>
@@ -171,7 +184,12 @@ const RecipeDetail = () => {
                     <FontAwesomeIcon icon={solidBookmark} size="lg" />
                   )}
                 </Box>
-                <KakaoShareButton recipeDetail={recipeDetail} />
+                <Box sx={{ cursor: "pointer", marginRight: "20px" }}>
+                  <KakaoShareButton recipeDetail={recipeDetail} />
+                </Box>
+                <Box sx={{ cursor: "pointer" }}>
+                  <CopyClipButton recipeDetail={recipeDetail} />
+                </Box>
               </Box>
             </RecipeInfoContainer>
             <Typography
@@ -197,7 +215,7 @@ const RecipeDetail = () => {
               </Typography>
             </HeadContainer>
             <RecipeIngredientButton>
-              <StyledButton variant="outlined">
+              <StyledButton variant="outlined" onClick={handleClickOpen}>
                 <FontAwesomeIcon icon={faSearch} />
                 <Box component="span" sx={{ ml: 1 }}>
                   재료검색
@@ -230,7 +248,11 @@ const RecipeDetail = () => {
                         {ingredient.unit}
                       </TableCell>
                       <TableCell align="right">
-                        <Button variant="outlined" sx={{ width: "150px" }}>
+                        <Button
+                          variant="outlined"
+                          onClick={() => handlePurchaseClick(ingredient.name)}
+                          sx={{ width: "150px" }}
+                        >
                           구매
                         </Button>
                       </TableCell>
@@ -273,6 +295,11 @@ const RecipeDetail = () => {
           </Grid>
         </Grid>
       </Container>
+      <IngredientDialog
+        open={open}
+        handleClose={handleClose}
+        ingredients={recipeDetail?.ingredients || []}
+      />
     </>
   );
 };

@@ -1,17 +1,32 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchReviews, createReview, updateReview, deleteReview } from '../../redux/reviewSlice';
-import ReviewForm from './ReviewForm';
-import ReviewList from './ReviewList';
-import './Review.style.css'
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchReviews,
+  createReview,
+  updateReview,
+  deleteReview,
+} from "../../redux/reviewSlice";
+import ReviewForm from "./ReviewForm";
+import ReviewList from "./ReviewList";
+import { Button, styled, Typography } from "@mui/material";
+
+const HeadContainer = styled('div')({
+  display: 'flex',
+  justifyContent: 'flex-start',
+  alignItems: 'baseline',
+  borderBottom: '4px solid black',
+  paddingBottom : "5px",
+  marginBottom : "15px"
+});
+
 
 const Review = ({ type, itemId }) => {
   const dispatch = useDispatch();
-  const reviews = useSelector(state => state.review.reviews || []);
-  const user = useSelector(state => state.auth.user || null);
+  const reviews = useSelector((state) => state.review.reviews || []);
+  const user = useSelector((state) => state.auth.user || null);
   const [showForm, setShowForm] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [currentReview, setCurrentReview] = useState(null);  
+  const [currentReview, setCurrentReview] = useState(null);
 
   useEffect(() => {
     dispatch(fetchReviews({ type, id: itemId }));
@@ -23,23 +38,35 @@ const Review = ({ type, itemId }) => {
     setCurrentReview(null);
   };
 
+  const handleCloseForm = () => {
+    setShowForm(false);
+    setEditMode(false);
+    setCurrentReview(null);
+  };
+
   const handleFormSubmit = (comment, rating) => {
     if (editMode && currentReview) {
-       dispatch(updateReview({ id: currentReview._id, type, comment, rating }));
+      dispatch(updateReview({ id: currentReview._id, type, comment, rating }));
     } else {
-       dispatch(createReview({ type, userId: user._id, recipeId: itemId, comment, rating }));
+      dispatch(
+        createReview({
+          type,
+          userId: user._id,
+          recipeId: itemId,
+          comment,
+          rating,
+        })
+      );
     }
 
     setShowForm(false);
     setEditMode(false);
     setCurrentReview(null);
 
-
     setTimeout(() => {
       dispatch(fetchReviews({ type, id: itemId }));
-    }, 500); 
+    }, 500);
   };
-
 
   const handleEdit = (review) => {
     setShowForm(true);
@@ -47,29 +74,40 @@ const Review = ({ type, itemId }) => {
     setCurrentReview(review);
   };
 
-  const handleDelete = (reviewId, type) => { 
+  const handleDelete = (reviewId, type) => {
     dispatch(deleteReview({ id: reviewId, type }));
     dispatch(fetchReviews({ type, id: itemId }));
   };
 
   return (
     <div>
-      <h2>Reviews</h2>
-      {!showForm && <button className="click-button"onClick={handleShowForm}>글쓰기</button>}
+      <HeadContainer>
+        <Typography variant="h4" component="strong">리뷰</Typography>
+      </HeadContainer>
+      {!showForm && (
+        <Button
+          variant="contained"
+          onClick={handleShowForm}
+          sx={{ width: "120px", p : 1, marginBottom: "20px" }}
+        >
+          리뷰 작성
+        </Button>
+      )}
       {showForm && (
-        <ReviewForm 
-          type={type} 
-          itemId={itemId} 
-          initialComment={currentReview ? currentReview.comment : ''}
+        <ReviewForm
+          type={type}
+          itemId={itemId}
+          initialComment={currentReview ? currentReview.comment : ""}
           initialRating={currentReview ? currentReview.rating : 0}
-          onFormSubmit={handleFormSubmit} 
+          onFormSubmit={handleFormSubmit}
+          onClose={handleCloseForm}
         />
       )}
-      <ReviewList 
-        type ={type}
-        reviews={reviews} 
-        userId={user ? user : null} 
-        onEdit={handleEdit} 
+      <ReviewList
+        type={type}
+        reviews={reviews}
+        userId={user ? user : null}
+        onEdit={handleEdit}
         onDelete={handleDelete}
       />
     </div>

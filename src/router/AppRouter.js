@@ -26,6 +26,7 @@ import ResetPasswordPage from "../pages/ResetPasswordPage";
 import ChangePasswordPage from "../pages/ChangePasswordPage";
 import VerifyCurrentPassword from "../pages/VerifyCurrentPassword";
 import RecipePage from "../pages/Recipe/RecipePage";
+import NotFoundPage from "../pages/NotFoundPage";
 
 const AppRouter = () => {
   return (
@@ -39,6 +40,7 @@ const AppRouter = () => {
         <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
         <Route path="/find-email" element={<FindEmailPage />} />
         <Route path="/ingredients/:id" element={<IngredientsDetail />} />
+        <Route path="/ingredients" element={<IngredientsDetail />} />
         <Route path="/recipes/all" element={<RecipePage />} />
         <Route path="/recipes/best" element={<RecipePage />} />
         <Route path="/recipes/new" element={<RecipePage />} />
@@ -68,6 +70,7 @@ const AppRouter = () => {
           <Route path="/admin/order" element={<AdminOrderPage />} />
           <Route path="/admin/user" element={<AdminUserPage />} />
         </Route>
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </>
   );

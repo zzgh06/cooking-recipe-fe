@@ -20,6 +20,16 @@ export const getIngredient = createAsyncThunk(
   }
 );
 
+// 이름으로 ingredient 정보 불러오기
+export const getIngredientByName = createAsyncThunk(
+  "ingredients/getIngredientByName",
+  async (name) => {
+    const response = await api.get(`/ingredient?name=${name}`);
+    console.log("response", response.data.data.ingredients[0])
+    return response.data.data.ingredients[0];
+  }
+);
+
 export const createIngredient = createAsyncThunk(
   "ingredients/createIngredient",
   async (ingredient, { dispatch, rejectWithValue }) => {
@@ -104,7 +114,11 @@ const ingredientSlice = createSlice({
     status: "idle",
     error: null,
   },
-  reducers: {},
+  reducers: {
+    setSelectedIngredients: (state, action) => {
+      state.selectedIngredients = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchIngredients.pending, (state) => {
@@ -145,8 +159,20 @@ const ingredientSlice = createSlice({
       .addCase(getIngredient.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
+      })
+      .addCase(getIngredientByName.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getIngredientByName.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.selectedIngredient = action.payload;
+      })
+      .addCase(getIngredientByName.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
       });
   },
 });
 
+export const { setSelectedIngredients } = ingredientSlice.actions;
 export default ingredientSlice.reducer;
