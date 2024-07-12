@@ -54,7 +54,7 @@ export const fetchRecipes = createAsyncThunk(
 
 export const fetchRecipesByCategory = createAsyncThunk(
   "recipe/fetchRecipesByCategory",
-  async ({ food, mood, method, ingredient, etc, page=1}, { rejectWithValue }) => {
+  async ({ food, mood, method, ingredient, etc, page }, { rejectWithValue }) => {
     try {
       const queryParams = new URLSearchParams({
         ...(food && { food }),
@@ -62,15 +62,12 @@ export const fetchRecipesByCategory = createAsyncThunk(
         ...(method && { method }),
         ...(ingredient && { ingredient }),
         ...(etc && { etc }),
-        page
+        ...(page && { page })
       }).toString();
-
       const url = `/recipe/category?${queryParams}`;
       const response = await api.get(url);
-      console.log("response.data", response.data)
       return response.data;
     } catch (err) {
-      console.log("API error:", err.response);
       return rejectWithValue(err.response?.data);
     }
   }

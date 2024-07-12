@@ -1,29 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchRecipesByCategory } from "../../redux/recipeSlice";
 import RecipeCard from "../../component/RecipeCard/RecipeCard";
 import "../../style/RecipeAll.style.css";
 import { Row, Col } from "react-bootstrap";
-import { Pagination } from "@mui/material";
 import RecipeCardSkeleton from "../../component/Skeleton/RecipeCardSkeleton";
 
-const RecipeAll = ({ category, path }) => {
+const RecipeCondition = ({ category, path }) => {
   const dispatch = useDispatch();
-  const { recipes, loading, totalPages } = useSelector((state) => state.recipe);
-  const [page, setPage] = useState(1);
-  const [prevCategory, setPrevCategory] = useState(category);
+  const { recipes, loading } = useSelector((state) => state.recipe);
 
   useEffect(() => {
-    if (prevCategory !== category) {
-      setPage(1);
-      setPrevCategory(category);
-    }
-    dispatch(fetchRecipesByCategory({ etc: category, page }));
-  }, [dispatch, category, page, prevCategory]);
+    dispatch(fetchRecipesByCategory({ etc: category }));
+  }, [dispatch]);
 
-  const handlePageChange = (event, value) => {
-    setPage(value);
-  };
+  const bestRecipes = [...recipes].sort((a, b) => b.viewCnt - a.viewCnt);
+  const newRecipes = [...recipes].sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  );
 
   return (
     <div className="recipe-all-container">
@@ -34,21 +28,19 @@ const RecipeAll = ({ category, path }) => {
                 <RecipeCardSkeleton />
               </Col>
             ))
-          : recipes.map((recipe) => (
+          : (path === "best"
+              ? bestRecipes.slice(0, 16)
+              : path === "new"
+              ? newRecipes.slice(0, 16)
+              : []
+            ).map((recipe) => (
               <Col key={recipe._id} xs={12} md={6} lg={3}>
                 <RecipeCard item={recipe} />
               </Col>
             ))}
       </Row>
-      <Pagination
-        count={totalPages}
-        size="large"
-        sx={{ marginBottom: "20px" }}
-        page={page}
-        onChange={handlePageChange}
-      />
     </div>
   );
 };
 
-export default RecipeAll;
+export default RecipeCondition;
