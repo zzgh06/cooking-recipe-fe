@@ -25,34 +25,41 @@ export const createReview = createAsyncThunk(
     }
   );
 
-  export const deleteReview = createAsyncThunk(
-    'reviews/deleteReview',
-    async ({ id, type }, { rejectWithValue }) => {
-      try {
-        const response = await api.delete(`/review/${type}/${id}`);
-        return { id, deletedCount: response.data.deletedCount };
-      } catch (err) {
-        return rejectWithValue(err.response.data);
-      }
+export const deleteReview = createAsyncThunk(
+  'reviews/deleteReview',
+  async ({ id, type }, { rejectWithValue }) => {
+    try {
+      const response = await api.delete(`/review/${type}/${id}`);
+      return { id, deletedCount: response.data.deletedCount };
+    } catch (err) {
+      return rejectWithValue(err.response.data);
     }
-  );
+  }
+);
 
-  export const updateReview = createAsyncThunk(
-    'reviews/updateReview',
-    async ({ id,type, comment, rating }, { rejectWithValue }) => {
-      try {
-        const response = await api.put(`/review/${type}/${id}`, { comment, rating });
-        return response.data.data;
-      } catch (err) {
-        return rejectWithValue(err.response.data);
-      }
+export const updateReview = createAsyncThunk(
+  'reviews/updateReview',
+  async ({ id,type, comment, rating }, { rejectWithValue }) => {
+    try {
+      const response = await api.put(`/review/${type}/${id}`, { comment, rating });
+      return response.data.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
     }
-  );
+  }
+);
+
+const calculateAverageRating = (reviews) => {
+  if (reviews.length === 0) return 0;
+  const totalRating = reviews?.reduce((acc, review) => acc + review?.rating, 0);
+  return (totalRating / reviews?.length).toFixed(1);
+};
 
 const reviewSlice = createSlice({
   name: 'reviews',
   initialState: {
     reviews: [],
+    averageRating: 0,
     loading: false,
     error: null,
   },
@@ -65,6 +72,7 @@ const reviewSlice = createSlice({
       .addCase(fetchReviews.fulfilled, (state, action) => {
         state.loading = false;
         state.reviews = action.payload;
+        state.averageRating = calculateAverageRating(action.payload);
       })
       .addCase(fetchReviews.rejected, (state, action) => {
         state.loading = false;
@@ -76,6 +84,7 @@ const reviewSlice = createSlice({
       .addCase(createReview.fulfilled, (state, action) => {
         state.loading = false;
         state.reviews.push(action.payload);
+        state.averageRating = calculateAverageRating(state.reviews);
       })
       .addCase(createReview.rejected, (state, action) => {
         state.loading = false;
@@ -87,6 +96,7 @@ const reviewSlice = createSlice({
       .addCase(deleteReview.fulfilled, (state, action) => {
         state.loading = false;
         state.reviews = state.reviews.filter(review => review._id !== action.payload.id);
+        state.averageRating = calculateAverageRating(state.reviews);
       })
       .addCase(deleteReview.rejected, (state, action) => {
         state.loading = false;
@@ -101,14 +111,13 @@ const reviewSlice = createSlice({
         if (index !== -1) {
           state.reviews[index] = action.payload;
         }
+        state.averageRating = calculateAverageRating(state.reviews);
       })
       .addCase(updateReview.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
-      
   },
 });
-
 
 export default reviewSlice.reducer;
