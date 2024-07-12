@@ -10,19 +10,19 @@ import ReviewForm from "./ReviewForm";
 import ReviewList from "./ReviewList";
 import { Button, styled, Typography } from "@mui/material";
 
-const HeadContainer = styled('div')({
-  display: 'flex',
-  justifyContent: 'flex-start',
-  alignItems: 'baseline',
-  borderBottom: '4px solid black',
-  paddingBottom : "5px",
-  marginBottom : "15px"
+const HeadContainer = styled("div")({
+  display: "flex",
+  justifyContent: "flex-start",
+  alignItems: "baseline",
+  borderBottom: "4px solid black",
+  paddingBottom: "5px",
+  marginBottom: "15px",
 });
-
 
 const Review = ({ type, itemId }) => {
   const dispatch = useDispatch();
   const reviews = useSelector((state) => state.review.reviews || []);
+  const averageRating = useSelector((state) => state.review.averageRating);
   const user = useSelector((state) => state.auth.user || null);
   const [showForm, setShowForm] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -82,13 +82,16 @@ const Review = ({ type, itemId }) => {
   return (
     <div>
       <HeadContainer>
-        <Typography variant="h4" component="strong">리뷰</Typography>
+        <Typography variant="h4" component="strong">
+          리뷰
+        </Typography>
+        <Typography variant="h6">⭐{averageRating}</Typography>
       </HeadContainer>
       {!showForm && (
         <Button
           variant="contained"
           onClick={handleShowForm}
-          sx={{ width: "120px", p : 1, marginBottom: "20px" }}
+          sx={{ width: "120px", p: 1, marginBottom: "20px" }}
         >
           리뷰 작성
         </Button>
