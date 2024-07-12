@@ -8,7 +8,7 @@ import {
 } from "../../redux/reviewSlice";
 import ReviewForm from "./ReviewForm";
 import ReviewList from "./ReviewList";
-import { Button, styled, Typography } from "@mui/material";
+import { Box, Button, styled, Typography } from "@mui/material";
 
 const HeadContainer = styled("div")({
   display: "flex",
@@ -79,6 +79,8 @@ const Review = ({ type, itemId }) => {
     dispatch(fetchReviews({ type, id: itemId }));
   };
 
+  console.log(reviews)
+
   return (
     <div>
       <HeadContainer>
@@ -106,13 +108,14 @@ const Review = ({ type, itemId }) => {
           onClose={handleCloseForm}
         />
       )}
-      <ReviewList
-        type={type}
-        reviews={reviews}
-        userId={user ? user : null}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-      />
+    
+        <ReviewList
+          type={type}
+          reviews={reviews}
+          userId={user ? user : null}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
     </div>
   );
 };
