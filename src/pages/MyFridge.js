@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../style/myFridge.style.css";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchIngredients } from "../redux/ingredientSlice";
+import { fetchIngredients, setSelectedIngredients } from "../redux/ingredientSlice";
 import MyFridgeSearchResults from "../component/MyFridgeSearchResults/MyFridgeSearchResults";
 import SearchResultCard from "../component/SearchResultCard/SearchResultCard";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -61,6 +61,12 @@ const MyFridge = () => {
 
   useEffect(() => {
     dispatch(fetchFridgeItems());
+  }, [dispatch]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(setSelectedIngredients([]));
+    };
   }, [dispatch]);
 
   const handleSearchChange = (e) => {
