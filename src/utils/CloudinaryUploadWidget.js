@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { Button } from "react-bootstrap";
 import PropTypes from "prop-types";
 import "../App.css";
 import "../style/common.style.css";
+import { Button } from "@mui/material";
 
 const CLOUDNAME = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
 const UPLOADPRESET = process.env.REACT_APP_CLOUDINARY_PRESET;
@@ -48,7 +48,7 @@ class CloudinaryUploadWidget extends Component {
     const { type, index } = this.props;
     const uploadButtonId = `upload_widget_${type}${index !== null ? `_${index}` : ''}`;
     return (
-      <Button id={uploadButtonId} size="sm" className="btn-green ml-2">
+      <Button id={uploadButtonId} variant="contained" color="primary" sx={{ ml: 2, width: "200px" }}>
         Upload Image +
       </Button>
     );
