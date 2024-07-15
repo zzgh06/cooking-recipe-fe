@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Container } from "react-bootstrap";
 import { createRecipe } from "../redux/recipeSlice";
 import RecipeForm from "../component/RecipeForm/RecipeForm";
 
 import { useNavigate } from "react-router-dom";
+import { Container } from "@mui/material";
 
 const MyRecipePage = () => {
   const dispatch = useDispatch();
@@ -30,7 +30,7 @@ const MyRecipePage = () => {
   }
 
   return (
-    <Container style={{ maxWidth: "1200px" }}>
+    <Container sx={{ maxWidth: "1200px", marginTop: "50px" }}>
       <h1>레시피 등록</h1>
       <RecipeForm onSubmit={handleSubmit} />
     </Container>

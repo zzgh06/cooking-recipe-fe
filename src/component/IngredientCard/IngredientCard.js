@@ -17,8 +17,8 @@ const IngredientCard = ({ item }) => {
   return (
     <div className="ingredient-card">
       <img
-        alt={item.image}
-        src={item.image}
+        src={item.images[0]}
+        alt={item.images}
         onClick={() => showIngredient(item?._id)}
       />
       <div className="card-disc">

@@ -23,10 +23,10 @@ const ReviewContainer = styled(Box)({
   justifyContent: "flex-start",
   flexDirection: "column",
   gap: 2,
-  p: 2,
+  padding: "15px",
   marginBottom: "15px",
   border: "1px solid #ccc",
-  borderRadius: 1,
+  borderRadius: "5px",
   backgroundColor: "#f9f9f9",
 });
 
@@ -38,9 +38,10 @@ const RatingStar = styled(Box)({
 });
 
 const TextBox = styled(Box)({
-  width: "100%",
   display: "flex",
   flexDirection: "column",
+  width: "100%",
+  marginBottom: "5px"
 });
 
 const CustomTextField = styled(TextField)({
