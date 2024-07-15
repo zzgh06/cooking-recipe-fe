@@ -1,12 +1,15 @@
 import React from "react";
-import { Button } from "react-bootstrap";
-import { useNavigate } from "react-router";
 import { useLocation } from "react-router-dom";
 import { currencyFormat } from "../../utils/number";
 import "./OrderReceipt.style.css";
-const OrderReceipt = ({ cartItem, totalPrice }) => {
+import { Button } from "@mui/material";
+const OrderReceipt = ({
+  cartItem,
+  totalPrice,
+  handlePurchase,
+  selectedItems,
+}) => {
   const location = useLocation();
-  const navigate = useNavigate();
   return (
     <div className="receipt-container">
       <h3 className="receipt-title">주문 내역</h3>
@@ -34,11 +37,14 @@ const OrderReceipt = ({ cartItem, totalPrice }) => {
       </div>
       {location.pathname.includes("/cart") && cartItem?.length > 0 && (
         <Button
-          variant="dark"
-          className="payment-button"
-          onClick={() => navigate("/payment")}
+          variant="contained"
+          color="success"
+          onClick={handlePurchase}
+          disabled={selectedItems.length === 0}
+          fullWidth
+          sx={{ mt: 2 }}
         >
-          결제 계속하기
+          결제하기
         </Button>
       )}
 

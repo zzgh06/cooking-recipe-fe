@@ -1,56 +1,94 @@
 import React, { useState, useEffect } from "react";
-import CartItem from "../component/Cart/CartItem";
-import "../style/cartPage.style.css";
 import { useDispatch, useSelector } from "react-redux";
-import { getCart, calculateTotalPrice } from "../redux/cartSlice";
+import { Container, Grid, Typography, Box } from "@mui/material";
+import CartItem from "../component/Cart/CartItem";
 import OrderReceipt from "../component/OrderReceipt/OrderReceipt";
+import { getCart, calculateTotalPrice } from "../redux/cartSlice";
+import { useNavigate } from "react-router-dom";
 
 const CartPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const user = useSelector((state) => state.auth.user);
   const cartItem = useSelector((state) => state.cart.cartItem);
   const totalPrice = useSelector((state) => state.cart.totalPrice);
+  const [selectedItems, setSelectedItems] = useState([]);
 
   useEffect(() => {
     if (user) {
       dispatch(getCart());
     }
-  }, [user]);
+  }, [user, dispatch]);
 
   useEffect(() => {
     if (cartItem?.length > 0) {
       dispatch(calculateTotalPrice());
+      // 모든 항목을 초기 선택 상태로 설정
+      setSelectedItems(cartItem.map(item => item.ingredientId._id));
     }
-  }, [cartItem]);
+  }, [cartItem, dispatch]);
+
+  const handleSelectItem = (id) => {
+    setSelectedItems((prevSelectedItems) =>
+      prevSelectedItems.includes(id)
+        ? prevSelectedItems.filter((item) => item !== id)
+        : [...prevSelectedItems, id]
+    );
+  };
+
+  const calculateSelectedTotalPrice = () => {
+    return cartItem
+      .filter((item) => selectedItems.includes(item.ingredientId._id))
+      .reduce((total, item) => total + item.ingredientId.price * item.qty, 0);
+  };
+
+
+  const handlePurchase = () => {
+    const selectedCartItems = cartItem.filter((item) =>
+      selectedItems.includes(item.ingredientId._id)
+    );
+    navigate('/payment')
+  };
+
 
   return (
-    <div className="cart-page-margin-bottom">
-      <h2 className="cart-page-title">Cart</h2>
-      <div className="cart-page-box">
+    <Container sx={{ mb: 4 }}>
+      <Typography variant="h4" component="h2" align="center" sx={{ my: 5 }}>
+        장바구니
+      </Typography>
+      <Box sx={{ display: "flex", justifyContent: "center", flexWrap: "wrap" }}>
         {!user || cartItem?.length === 0 ? (
-          <div className="cart-none">
-            <div className="empty-cart">장바구니가 비어 있습니다.</div>
+          <Box sx={{ textAlign: "center", width: "100%" }}>
+            <Typography variant="h6">장바구니가 비어 있습니다.</Typography>
             <OrderReceipt />
-          </div>
+          </Box>
         ) : (
-          <>
-            <div className="cart-page-width margin-right">
+          <Grid container spacing={2} justifyContent="center">
+            <Grid item xs={12} md={7}>
               {cartItem.map((item, index) => (
                 <CartItem
-                  key={item.ingredientId || index}
-                  ingredientId={item.ingredientId}
+                  key={item.ingredientId._id || index}
+                  item={item}
                   qty={item.qty}
+                  selectedItems={selectedItems}
+                  selectItem={handleSelectItem}
                 />
               ))}
-            </div>
-            <div className="cart-page-width">
-              {/* <OrderList totalPrice={totalPrice}/> */}
-              <OrderReceipt cartItem={cartItem} totalPrice={totalPrice} />
-            </div>
-          </>
+            </Grid>
+            <Grid item xs={12} md={5}>
+              <OrderReceipt
+                cartItem={cartItem.filter((item) =>
+                  selectedItems.includes(item.ingredientId._id)
+                )}
+                totalPrice={calculateSelectedTotalPrice()}
+                handlePurchase={handlePurchase}
+                selectedItems={selectedItems}
+              />
+            </Grid>
+          </Grid>
         )}
-      </div>
-    </div>
+      </Box>
+    </Container>
   );
 };
 
