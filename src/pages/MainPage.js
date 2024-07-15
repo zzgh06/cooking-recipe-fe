@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchRecipes } from '../redux/recipeSlice';
 import RecipeSlider from '../component/RecipeSlider/RecipeSlider';
 import SubBanner from '../component/SubBanner/SubBanner';
-import { Container, styled } from '@mui/material';
+import { Container } from '@mui/material';
 
 
 const MainPage = () => {
