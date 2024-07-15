@@ -1,55 +1,87 @@
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { editCartItem } from '../../redux/cartSlice';
-import { deleteCartItem } from '../../redux/cartSlice';
-import { currencyFormat } from '../../utils/number';
+import React from "react";
+import { useDispatch } from "react-redux";
+import { editCartItem, deleteCartItem } from "../../redux/cartSlice";
+import { currencyFormat } from "../../utils/number";
+import {
+  Card,
+  CardMedia,
+  CardContent,
+  Typography,
+  Select,
+  MenuItem,
+  IconButton,
+  Checkbox,
+  Box
+} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-const CartItem = ({ingredientId, qty}) => {
-    const {name, price, unit, image, _id} = ingredientId;
-    const cartItem = useSelector((state) => state.cart.cartItem);
-    const dispatch = useDispatch();
+const CartItem = ({ item, qty, selectedItems, selectItem }) => {
+  const { name, price, unit, images, _id } = item.ingredientId;
+  const dispatch = useDispatch();
 
-    const handleQtyChange = (event, id) => {
-        dispatch(editCartItem({ingredientId: id, qty:event.target.value}));
-    };
+  const handleQtyChange = (event) => {
+    dispatch(editCartItem({ ingredientId: _id, qty: event.target.value }));
+  };
 
-    const deleteItem = () =>{
-        dispatch(deleteCartItem({ingredientId: _id}));
-    }
+  const deleteItem = () => {
+    dispatch(deleteCartItem({ ingredientId: _id }));
+  };
 
-    return(
-        <div className="cart-item-box">
-            <div className="cart-item">
-                <img
-                    className="cart-item-image" 
-                    src={image}
-                    alt={name}
-                />
-                <div className="cart-item-description-box">
-                    <p className="cart-item-name">{name}</p>
-                    <p>{unit}</p>
-                    <p>갯수</p>
-                    <select value={`${qty}`} onChange={(event) => handleQtyChange(event, _id)}>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                    </select> 
-                    <p className="cart-item-price">₩ {currencyFormat(price * qty)}</p>
-                </div>
+  const isSelected = selectedItems.includes(_id);
 
-            </div>
-            <div>
-                <button className="cart-item-delete-button" onClick={deleteItem}>삭제</button>
-            </div>
-        </div>
-    );
+  return (
+    <Card sx={{ display: 'flex', mb: 2, p: 2, alignItems: 'center', border: "1px solid lightgrey", boxShadow: "none" }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', flex: '1 0 auto', gap: 2 }}>
+        <Checkbox
+          checked={isSelected}
+          onChange={() => selectItem(_id)}
+          color="success"
+        />
+        <CardMedia
+          component="img"
+          sx={{ width: 100, height: 100, objectFit: 'cover', borderRadius: 1 }}
+          image={images[0]}
+          alt={name}
+        />
+        <Box sx={{ flex: '1 0 auto' }}>
+          <Typography variant="h6" component="div">
+            {name}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {unit}
+          </Typography>
+          <Typography variant="h6" component="div" sx={{ mt: 1 }}>
+            ₩ {currencyFormat(price * qty)}
+          </Typography>
+        </Box>
+      </Box>
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1, ml: 2 }}>
+        <Typography variant="body2" color="text.secondary">
+          갯수
+        </Typography>
+        <Select
+          value={qty}
+          onChange={handleQtyChange}
+          defaultChecked
+          sx={{ minWidth: 60 }}
+        >
+          {[...Array(10).keys()].map((n) => (
+            <MenuItem key={n + 1} value={n + 1}>
+              {n + 1}
+            </MenuItem>
+          ))}
+        </Select>
+      </Box>
+      <IconButton
+        aria-label="delete"
+        color="error"
+        onClick={deleteItem}
+        sx={{ ml: 2, width: "20px" }}
+      >
+        <DeleteIcon />
+      </IconButton>
+    </Card>
+  );
 };
 
 export default CartItem;
