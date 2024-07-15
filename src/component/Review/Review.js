@@ -79,8 +79,6 @@ const Review = ({ type, itemId }) => {
     dispatch(fetchReviews({ type, id: itemId }));
   };
 
-  console.log(reviews)
-
   return (
     <div>
       <HeadContainer>

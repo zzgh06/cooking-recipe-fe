@@ -272,7 +272,7 @@ const RecipeForm = ({ onSubmit, initialData }) => {
               요리 대표 사진을 등록해주세요.
             </Typography>
             <Typography variant="body1" component="p">
-              요리 대표 사진을 등록해주세요.
+              음식사진 외 사람/동물 등의 사진은 삼가해주세요.
             </Typography>
           </PlaceholderImage>
         )}

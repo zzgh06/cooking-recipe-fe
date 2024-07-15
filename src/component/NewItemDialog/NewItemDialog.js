@@ -9,7 +9,7 @@ import "../../style/adminIngredient.style.css";
 const InitialFormData = {
   name: "",
   stock: 0,
-  image: "",
+  images: [],
   description: "",
   category: [],
   status: "active",
@@ -58,7 +58,10 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog, selectedIngredient }) 
   };
 
   const uploadImage = (url) => {
-    setFormData((prevData) => ({ ...prevData, image: url }));
+    setFormData((prevData) => ({
+      ...prevData,
+      images: [...prevData.images, url],
+    }));
   };
 
   useEffect(() => {
@@ -121,12 +124,21 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog, selectedIngredient }) 
         <Form.Group className="mb-3" controlId="Image" required>
           <Form.Label>Image</Form.Label>
           <CloudinaryUploadWidget uploadImage={uploadImage} />
-          <img
-            id="uploadedimage"
-            src={formData.image}
-            className="upload-image mt-2"
-            alt="uploadedimage"
-          />
+          {formData.images.map((img, idx) => (
+            <img
+              key={idx}
+              id={`uploadedimage_main_${idx}`}
+              src={img}
+              className="upload-image mt-2"
+              alt="uploadedimage"
+              style={{
+                maxWidth: "100%",
+                height: "auto",
+                marginTop: 10,
+                borderRadius: 5,
+              }}
+            />
+          ))}
         </Form.Group>
         <Row className="mb-3">
           <Form.Group as={Col} controlId="price">
