@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Form, Row } from "react-bootstrap";
+import { Grid, TextField, Box } from "@mui/material";
 import Cards from "react-credit-cards-2";
 import "react-credit-cards-2/dist/es/styles-compiled.css";
 
@@ -9,68 +9,85 @@ const PaymentForm = ({
   handlePaymentInfoChange,
 }) => {
   return (
-    <Row className="">
-      <Col md={50} xs={20}>
-        <Cards
-          cvc={cardValue.cvc}
-          expiry={cardValue.expiry}
-          focused={cardValue.focus}
-          name={cardValue.name}
-          number={cardValue.number}
-        />
-      </Col>
-      <Col md={40} xs={100}>
-        <div className="form-area">
-          <Form.Control
+    <Grid container spacing={2}>
+      <Grid item md={6} xs={12}>
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          height="100%"
+        >
+          <Cards
+            cvc={cardValue.cvc}
+            expiry={cardValue.expiry}
+            focused={cardValue.focus}
+            name={cardValue.name}
+            number={cardValue.number}
+          />
+        </Box>
+      </Grid>
+      <Grid item md={6} xs={12}>
+        <Box className="form-area">
+          <TextField
             type="tel"
             name="number"
-            placeholder="Card Number"
+            label="Card Number"
+            variant="outlined"
+            fullWidth
             onChange={handlePaymentInfoChange}
             onFocus={handleInputFocus}
             required
-            maxLength={16}
-            minLength={16}
+            inputProps={{ maxLength: 16 }}
             value={cardValue.number}
+            margin="normal"
           />
-
-          <Form.Control
+          <TextField
             type="text"
             name="name"
-            placeholder="Name"
+            label="Name"
+            variant="outlined"
+            fullWidth
             onChange={handlePaymentInfoChange}
             onFocus={handleInputFocus}
             required
             value={cardValue.name}
+            margin="normal"
           />
-          <Row>
-            <Col>
-              <Form.Control
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <TextField
                 type="text"
                 name="expiry"
-                placeholder="MM/DD"
+                label="MM/DD"
+                variant="outlined"
+                fullWidth
                 onChange={handlePaymentInfoChange}
                 onFocus={handleInputFocus}
                 required
                 value={cardValue.expiry}
-                maxLength={7}
+                inputProps={{ maxLength: 7 }}
+                margin="normal"
               />
-            </Col>
-            <Col>
-              <Form.Control
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
                 type="text"
                 name="cvc"
-                placeholder="CVC"
+                label="CVC"
+                variant="outlined"
+                fullWidth
                 onChange={handlePaymentInfoChange}
                 onFocus={handleInputFocus}
                 required
-                maxLength={3}
+                inputProps={{ maxLength: 3 }}
                 value={cardValue.cvc}
+                margin="normal"
               />
-            </Col>
-          </Row>
-        </div>
-      </Col>
-    </Row>
+            </Grid>
+          </Grid>
+        </Box>
+      </Grid>
+    </Grid>
   );
 };
 

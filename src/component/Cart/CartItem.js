@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { editCartItem, deleteCartItem } from "../../redux/cartSlice";
+import { editCartItem, deleteCartItem, toggleSelectItem } from "../../redux/cartSlice";
 import { currencyFormat } from "../../utils/number";
 import {
   Card,
@@ -16,18 +16,17 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 
 const CartItem = ({ item, qty, selectedItems, selectItem }) => {
-  const { name, price, unit, images, _id } = item.ingredientId;
   const dispatch = useDispatch();
+  const { name, price, unit, images = [], _id } = item.ingredientId;
+  const isSelected = selectedItems.includes(_id);
 
   const handleQtyChange = (event) => {
     dispatch(editCartItem({ ingredientId: _id, qty: event.target.value }));
   };
 
-  const deleteItem = () => {
+  const handleDelete = () => {
     dispatch(deleteCartItem({ ingredientId: _id }));
   };
-
-  const isSelected = selectedItems.includes(_id);
 
   return (
     <Card sx={{ display: 'flex', mb: 2, p: 2, alignItems: 'center', border: "1px solid lightgrey", boxShadow: "none" }}>
@@ -40,7 +39,7 @@ const CartItem = ({ item, qty, selectedItems, selectItem }) => {
         <CardMedia
           component="img"
           sx={{ width: 100, height: 100, objectFit: 'cover', borderRadius: 1 }}
-          image={images[0]}
+          image={images.length > 0 ? images[0] : "path/to/default/image.jpg"}
           alt={name}
         />
         <Box sx={{ flex: '1 0 auto' }}>
@@ -62,7 +61,6 @@ const CartItem = ({ item, qty, selectedItems, selectItem }) => {
         <Select
           value={qty}
           onChange={handleQtyChange}
-          defaultChecked
           sx={{ minWidth: 60 }}
         >
           {[...Array(10).keys()].map((n) => (
@@ -75,7 +73,7 @@ const CartItem = ({ item, qty, selectedItems, selectItem }) => {
       <IconButton
         aria-label="delete"
         color="error"
-        onClick={deleteItem}
+        onClick={handleDelete}
         sx={{ ml: 2, width: "20px" }}
       >
         <DeleteIcon />

@@ -4,7 +4,8 @@ import { setToastMessage } from "./commonUISlice";
 
 export const getCart = createAsyncThunk("cart/getCart", async () => {
   const response = await api.get(`/cart`);
-  return response.data;
+  console.log("response", response.data.data);
+  return response.data.data;
 });
 
 export const addItemToCart = createAsyncThunk(
@@ -44,24 +45,68 @@ export const deleteCartItem = createAsyncThunk(
   "cart/deleteCartItem",
   async ({ ingredientId }) => {
     const response = await api.delete(`/cart/${ingredientId}`);
-    return response.data;
+    console.log("deleteCartItem - ingredientId:", ingredientId);
+    console.log("deleteCartItem - response data:", response.data.data);
+    return response.data.data;
   }
 );
+
+export const deleteSelectedCartItems = createAsyncThunk(
+  "cart/deleteSelectedCartItems",
+  async (_, { dispatch, getState, rejectWithValue }) => {
+    const state = getState();
+    const selectedItems = state.cart.selectedItems;
+    console.log("deleteSelectedCartItems - selectedItems:", selectedItems);
+    
+    try {
+      for (const id of selectedItems) {
+        const resultAction = await dispatch(deleteCartItem({ ingredientId: id })).unwrap();
+        console.log("deleteCartItem result:", resultAction);
+      }
+    } catch (error) {
+      console.error("deleteSelectedCartItems - error:", error);
+      dispatch(
+        setToastMessage({
+          message: error.error,
+          status: "error",
+        })
+      );
+
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 
 const cartSlice = createSlice({
   name: "cart",
   initialState: {
     cartItem: [],
+    selectedItems: [],
     cartItemCount: 0,
     totalPrice: 0,
+    selectedTotalPrice: 0,
     status: "idle",
     error: null,
   },
   reducers: {
-    calculateTotalPrice: (state) => {
-      state.totalPrice = state.cartItem.reduce((total, item) => {
-        return total + item.ingredientId.price * item.qty;
-      }, 0);
+    calculateSelectedTotalPrice: (state) => {
+      state.selectedTotalPrice = state.cartItem
+        .filter((item) => state.selectedItems.includes(item.ingredientId._id))
+        .reduce((total, item) => total + item.ingredientId.price * item.qty, 0);
+    },
+    toggleSelectItem: (state, action) => {
+      const id = action.payload;
+      if (state.selectedItems.includes(id)) {
+        state.selectedItems = state.selectedItems.filter(
+          (itemId) => itemId !== id
+        );
+      } else {
+        state.selectedItems.push(id);
+      }
+    },
+    clearSelectedItems: (state) => {
+      state.selectedItems = [];
     },
   },
   extraReducers: (builder) => {
@@ -70,10 +115,9 @@ const cartSlice = createSlice({
         state.status = "loading";
       })
       .addCase(getCart.fulfilled, (state, action) => {
+        console.log("Fetched cart items:", action.payload);
         state.status = "succeeded";
-        state.cartItem =
-          action.payload.data !== null ? action.payload.data.items : [];
-        state.cartItemCount = state.cartItem.length;
+        state.cartItem = action.payload;
       })
       .addCase(getCart.rejected, (state, action) => {
         state.status = "failed";
@@ -81,9 +125,7 @@ const cartSlice = createSlice({
       })
       .addCase(addItemToCart.fulfilled, (state, action) => {
         state.status = "succeeded";
-        //console.log(action.payload);
         state.cartItem.push(action.payload.data);
-        state.cartItemCount = state.cartItem.length;
       })
       .addCase(addItemToCart.rejected, (state, action) => {
         state.status = "failed";
@@ -103,16 +145,22 @@ const cartSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(deleteCartItem.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.cartItem = action.payload.data;
-        state.cartItemCount = state.cartItem.length;
+        console.log("deleteCartItem fulfilled - previous state:", state.cartItem);
+        if (action.payload && action.payload.length > 0) {
+          state.cartItem = action.payload;
+        } else {
+          state.cartItem = state.cartItem.filter(
+            (item) => !state.selectedItems.includes(item.ingredientId._id)
+          );
+        }
+        console.log("deleteCartItem fulfilled - updated state:", state.cartItem);
       })
-      .addCase(deleteCartItem.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.error.message;
-      });
   },
 });
 
-export const { calculateTotalPrice } = cartSlice.actions;
+export const {
+  calculateSelectedTotalPrice,
+  toggleSelectItem,
+  clearSelectedItems,
+} = cartSlice.actions;
 export default cartSlice.reducer;

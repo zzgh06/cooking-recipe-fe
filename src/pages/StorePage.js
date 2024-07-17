@@ -37,8 +37,6 @@ const StorePage = () => {
   );
 
   const bestIngredients = ingredients.filter((ing) => ing.totalSales > 0);
-  console.log("bestIngredients", bestIngredients);
-  console.log("abc", newIngredients.slice(0, 8));
   const topDiscountedIngredients = ingredients
     .filter((ing) => ing.discountPrice !== undefined)
     .sort((a, b) => b.discountPrice - a.discountPrice)
