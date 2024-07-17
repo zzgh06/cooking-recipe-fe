@@ -1,55 +1,40 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Container, Grid, Typography, Box } from "@mui/material";
+import { Container, Grid, Typography, Box, Button } from "@mui/material";
 import CartItem from "../component/Cart/CartItem";
 import OrderReceipt from "../component/OrderReceipt/OrderReceipt";
-import { getCart, calculateTotalPrice } from "../redux/cartSlice";
+import {
+  getCart,
+  calculateSelectedTotalPrice,
+  toggleSelectItem,
+} from "../redux/cartSlice";
 import { useNavigate } from "react-router-dom";
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 const CartPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.user);
-  const cartItem = useSelector((state) => state.cart.cartItem);
-  const totalPrice = useSelector((state) => state.cart.totalPrice);
-  const [selectedItems, setSelectedItems] = useState([]);
+  const { cartItem, selectedItems, selectedTotalPrice } = useSelector(
+    (state) => state.cart
+  );
 
   useEffect(() => {
     if (user) {
-      dispatch(getCart());
+      dispatch(getCart())
+        .unwrap()
+        .then(() => {
+          dispatch(calculateSelectedTotalPrice());
+        })
+        .catch((error) => {
+          console.error("Failed to load cart:", error);
+        });
     }
   }, [user, dispatch]);
 
-  useEffect(() => {
-    if (cartItem?.length > 0) {
-      dispatch(calculateTotalPrice());
-      // 모든 항목을 초기 선택 상태로 설정
-      setSelectedItems(cartItem.map(item => item.ingredientId._id));
-    }
-  }, [cartItem, dispatch]);
-
   const handleSelectItem = (id) => {
-    setSelectedItems((prevSelectedItems) =>
-      prevSelectedItems.includes(id)
-        ? prevSelectedItems.filter((item) => item !== id)
-        : [...prevSelectedItems, id]
-    );
+    dispatch(toggleSelectItem(id));
   };
-
-  const calculateSelectedTotalPrice = () => {
-    return cartItem
-      .filter((item) => selectedItems.includes(item.ingredientId._id))
-      .reduce((total, item) => total + item.ingredientId.price * item.qty, 0);
-  };
-
-
-  const handlePurchase = () => {
-    const selectedCartItems = cartItem.filter((item) =>
-      selectedItems.includes(item.ingredientId._id)
-    );
-    navigate('/payment')
-  };
-
 
   return (
     <Container sx={{ mb: 4 }}>
@@ -57,17 +42,43 @@ const CartPage = () => {
         장바구니
       </Typography>
       <Box sx={{ display: "flex", justifyContent: "center", flexWrap: "wrap" }}>
-        {!user || cartItem?.length === 0 ? (
-          <Box sx={{ textAlign: "center", width: "100%" }}>
-            <Typography variant="h6">장바구니가 비어 있습니다.</Typography>
-            <OrderReceipt />
+        {!user || cartItem.length === 0 ? (
+          <Box
+            sx={{
+              textAlign: "center",
+              width: "60%",
+              p: 3,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              minHeight: "300px",
+              borderRadius: 2,
+              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.3)",
+            }}
+          >
+            <ShoppingCartIcon sx={{ fontSize: 80, color: "grey.500", mb: 2 }} />
+            <Typography variant="h5" sx={{ mb: 2 }}>
+              장바구니가 비어 있습니다.
+            </Typography>
+            <Typography variant="body1" sx={{ mb: 3 }}>
+              현재 장바구니에 담긴 아이템이 없습니다. 새로운 상품을 추가해보세요!
+            </Typography>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => navigate("/")}
+              sx={{width: "90%"}}
+            >
+              쇼핑하러 가기
+            </Button>
           </Box>
         ) : (
           <Grid container spacing={2} justifyContent="center">
             <Grid item xs={12} md={7}>
-              {cartItem.map((item, index) => (
+              {cartItem.map((item) => (
                 <CartItem
-                  key={item.ingredientId._id || index}
+                  key={item.ingredientId._id}
                   item={item}
                   qty={item.qty}
                   selectedItems={selectedItems}
@@ -80,9 +91,7 @@ const CartPage = () => {
                 cartItem={cartItem.filter((item) =>
                   selectedItems.includes(item.ingredientId._id)
                 )}
-                totalPrice={calculateSelectedTotalPrice()}
-                handlePurchase={handlePurchase}
-                selectedItems={selectedItems}
+                totalPrice={selectedTotalPrice}
               />
             </Grid>
           </Grid>

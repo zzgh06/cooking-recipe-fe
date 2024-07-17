@@ -14,9 +14,9 @@ const initialState = {
 export const createOrder = createAsyncThunk(
   "order/createOrder",
   async ({ payload, navigate }, { dispatch, rejectWithValue }) => {
+    console.log("payload", payload)
     try {
       const response = await api.post("/order", payload);
-      //dispatch(cartActions.getCartQty());
       navigate("/payment/success");
       return response.data.orderNum;
     } catch (error) {

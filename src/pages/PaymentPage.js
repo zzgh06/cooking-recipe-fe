@@ -1,23 +1,17 @@
-import React, { useState } from "react";
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Container, Grid, TextField, Button, Typography, Box } from "@mui/material";
 import PaymentForm from "../component/PaymentForm/PaymentForm";
 import "../style/paymentPage.style.css";
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import { cc_expires_format } from "../utils/number";
-import {
-  createOrder,
-  getOrder,
-  getOrderList,
-  updateOrder,
-} from "../redux/orderSlice";
+import { createOrder } from "../redux/orderSlice";
 import OrderReceipt from "../component/OrderReceipt/OrderReceipt";
+import { deleteSelectedCartItems } from "../redux/cartSlice";
 
 const PaymentPage = () => {
   const dispatch = useDispatch();
-  const { cartItem, totalPrice } = useSelector((state) => state.cart);
-
+  const { cartItem, selectedTotalPrice, selectedItems } = useSelector((state) => state.cart);
   const [cardValue, setCardValue] = useState({
     cvc: "",
     expiry: "",
@@ -26,7 +20,6 @@ const PaymentPage = () => {
     number: "",
   });
   const navigate = useNavigate();
-  const [firstLoading, setFirstLoading] = useState(true);
   const [shipInfo, setShipInfo] = useState({
     firstName: "",
     lastName: "",
@@ -36,37 +29,35 @@ const PaymentPage = () => {
     zip: "",
   });
 
-  //맨처음 페이지 로딩할때는 넘어가고  오더번호를 받으면 성공페이지로 넘어가기
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const { firstName, lastName, contact, address, city, zip } = shipInfo;
     const data = {
-      totalPrice,
+      totalPrice: selectedTotalPrice,
       contactInfo: {
         shipTo: { address, city, zip },
         contact: { firstName, lastName, contact },
       },
-      items: cartItem.map((item) => {
+      items: selectedItems.map((id) => {
+        const item = cartItem.find((item) => item?.ingredientId._id === id);
         return {
-          ingredientId: item.ingredientId._id,
-          price: item.ingredientId.price,
-          qty: item.qty,
+          ingredientId: id,
+          price: item?.ingredientId.price,
+          qty: item?.qty,
         };
       }),
     };
-    //오더 생성하기
-    dispatch(createOrder({ payload: data, navigate }));
+
+    await dispatch(deleteSelectedCartItems());
+    await dispatch(createOrder({ payload: data, navigate }));
   };
 
   const handleFormChange = (event) => {
-    //shipInfo에 값 넣어주기
     const { name, value } = event.target;
     setShipInfo({ ...shipInfo, [name]: value });
   };
 
   const handlePaymentInfoChange = (event) => {
-    //카드정보 넣어주기
     const { name, value } = event.target;
     if (name === "expiry") {
       let newValue = cc_expires_format(value);
@@ -79,108 +70,112 @@ const PaymentPage = () => {
   const handleInputFocus = (e) => {
     setCardValue({ ...cardValue, focus: e.target.name });
   };
-  //카트에 아이템이 없다면 다시 카트페이지로 돌아가기 (결제할 아이템이 없으니 결제페이지로 가면 안됌)
-  if (cartItem?.length === 0) {
-    navigate("/cart");
-  }
+
+  useEffect(() => {
+    if (cartItem.length === 0) {
+      navigate("/cart");
+    }
+  }, [cartItem.length, navigate]);
 
   return (
-    <div className="payment-container">
-      <Row>
-        <Col lg={7}>
-          <div>
-            <h2 className="mb-2">배송 주소</h2>
-            <div>
-              <Form onSubmit={handleSubmit}>
-                <Row className="mb-3">
-                  <Form.Group as={Col} controlId="lastName">
-                    <Form.Label>성</Form.Label>
-                    <Form.Control
-                      type="text"
-                      onChange={handleFormChange}
-                      required
-                      name="lastName"
-                    />
-                  </Form.Group>
-
-                  <Form.Group as={Col} controlId="firstName">
-                    <Form.Label>이름</Form.Label>
-                    <Form.Control
-                      type="text"
-                      onChange={handleFormChange}
-                      required
-                      name="firstName"
-                    />
-                  </Form.Group>
-                </Row>
-
-                <Form.Group className="mb-3" controlId="formGridAddress1">
-                  <Form.Label>연락처</Form.Label>
-                  <Form.Control
-                    placeholder="010-xxx-xxxxx"
+    <Container sx={{my: 3}}>
+      <Grid container spacing={2}>
+        <Grid item lg={7}>
+          <Box>
+            <Typography variant="h4" component="h2" className="mb-2">배송 주소</Typography>
+            <Box component="form" onSubmit={handleSubmit}>
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    label="성"
+                    variant="outlined"
+                    fullWidth
+                    onChange={handleFormChange}
+                    required
+                    name="lastName"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    label="이름"
+                    variant="outlined"
+                    fullWidth
+                    onChange={handleFormChange}
+                    required
+                    name="firstName"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    label="연락처"
+                    variant="outlined"
+                    fullWidth
                     onChange={handleFormChange}
                     required
                     name="contact"
                   />
-                </Form.Group>
-
-                <Form.Group className="mb-3" controlId="formGridAddress2">
-                  <Form.Label>주소</Form.Label>
-                  <Form.Control
-                    placeholder="Apartment, studio, or floor"
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    label="주소"
+                    variant="outlined"
+                    fullWidth
                     onChange={handleFormChange}
                     required
                     name="address"
                   />
-                </Form.Group>
-
-                <Row className="mb-3">
-                  <Form.Group as={Col} controlId="formGridCity">
-                    <Form.Label>City</Form.Label>
-                    <Form.Control
-                      onChange={handleFormChange}
-                      required
-                      name="city"
-                    />
-                  </Form.Group>
-
-                  <Form.Group as={Col} controlId="formGridZip">
-                    <Form.Label>Zip</Form.Label>
-                    <Form.Control
-                      onChange={handleFormChange}
-                      required
-                      name="zip"
-                    />
-                  </Form.Group>
-                </Row>
-                <div className="mobile-receipt-area">
-                  <OrderReceipt cartItem={cartItem} totalPrice={totalPrice} />
-                </div>
-                <div>
-                  <h2 className="payment-title">결제 정보</h2>
-                  <PaymentForm
-                    cardValue={cardValue}
-                    handleInputFocus={handleInputFocus}
-                    handlePaymentInfoChange={handlePaymentInfoChange}
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    label="City"
+                    variant="outlined"
+                    fullWidth
+                    onChange={handleFormChange}
+                    required
+                    name="city"
                   />
-                </div>
-
-                <Button
-                  variant="dark"
-                  className="payment-button pay-button"
-                  type="submit"
-                >
-                  결제하기
-                </Button>
-              </Form>
-            </div>
-          </div>
-        </Col>
-        <Col lg={5} className="receipt-area">
-          <OrderReceipt cartItem={cartItem} totalPrice={totalPrice} />
-        </Col>
-      </Row>
-    </div>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    label="Zip"
+                    variant="outlined"
+                    fullWidth
+                    onChange={handleFormChange}
+                    required
+                    name="zip"
+                  />
+                </Grid>
+              </Grid>
+              <Box className="mobile-receipt-area">
+                <OrderReceipt
+                  cartItem={cartItem.filter((item) => selectedItems.includes(item.ingredientId._id))}
+                  totalPrice={selectedTotalPrice}
+                />
+              </Box>
+              <Box sx={{marginTop: "20px"}}>
+                <Typography variant="h4" component="h2" className="payment-title">결제 정보</Typography>
+                <PaymentForm
+                  cardValue={cardValue}
+                  handleInputFocus={handleInputFocus}
+                  handlePaymentInfoChange={handlePaymentInfoChange}
+                />
+              </Box>
+              <Button
+                variant="contained"
+                color="primary"
+                className="payment-button pay-button"
+                type="submit"
+              >
+                결제하기
+              </Button>
+            </Box>
+          </Box>
+        </Grid>
+        <Grid item lg={5} className="receipt-area">
+          <OrderReceipt cartItem={cartItem.filter((item) => selectedItems.includes(item.ingredientId._id))} totalPrice={selectedTotalPrice} />
+        </Grid>
+      </Grid>
+    </Container>
   );
 };
 

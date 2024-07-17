@@ -210,7 +210,7 @@ const IngredientCard = ({ item }) => {
               sx={{ display: "flex", justifyContent: "space-between" }}
             >
               <Typography variant="h6">합계</Typography>
-              <Typography variant="h6">{currencyFormat(item.price * qty)}원</Typography>
+              <Typography variant="h6">{calculateDiscountedPrice(item?.price, item?.discountPrice) * qty}원</Typography>
             </Grid>
             <Grid item xs={6}>
               <Button variant="outlined" color="error" onClick={handleClose}>
