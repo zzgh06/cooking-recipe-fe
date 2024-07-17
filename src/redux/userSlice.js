@@ -42,6 +42,21 @@ export const loginWithGoogle = createAsyncThunk(
   }
 );
 
+export const loginWithKakao = createAsyncThunk(
+  "auth/loginWithKakao",
+  async (token, {rejectWithValue}) => {
+    try {
+      const response = await api.post('/auth/kakao', { token });
+      if (response.status !== 200) throw new Error(response.error);
+      sessionStorage.setItem("token", response.data.token);
+      console.log(response.data)
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+) 
+
 export const loginWithToken = createAsyncThunk(
   "auth/loginWithToken",
   async (_, thunkAPI) => {
@@ -232,6 +247,19 @@ const userSlice = createSlice({
         state.error = null;
       })
       .addCase(loginWithGoogle.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(loginWithKakao.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(loginWithKakao.fulfilled, (state, action) => {
+        state.loading = false;
+        state.loginData = action.payload;
+        state.error = null;
+      })
+      .addCase(loginWithKakao.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
