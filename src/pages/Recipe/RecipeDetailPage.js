@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchRecipeById } from "../redux/recipeSlice";
+import { fetchRecipeById } from "../../redux/recipeSlice";
 import {
   addRecipeFavorite,
   deleteRecipeFavorite,
   getRecipeFavorite,
-} from "../redux/favoriteSlice";
-import Review from "../component/Review/Review";
+} from "../../redux/favoriteSlice";
+import Review from "../../component/Review/Review";
 import { Spinner } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -19,7 +19,7 @@ import {
   faShareFromSquare,
   faBookmark as regularBookmark,
 } from "@fortawesome/free-regular-svg-icons";
-import RecipeCategory from "../component/RecipeCategory/RecipeCategory";
+import RecipeCategory from "../../component/RecipeCategory/RecipeCategory";
 import {
   Box,
   Button,
@@ -35,10 +35,10 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
-import KakaoShareButton from "../component/KakaoShareButton/KakaoShareButton";
-import CopyClipButton from "../component/CopyClipButton/CopyClipButton";
-import IngredientDialog from "../component/IngredientDialog/IngredientDialog";
-import RecipeDetailSkeleton from "../component/Skeleton/RecipeDetailSkeleton";
+import KakaoShareButton from "../../component/KakaoShareButton/KakaoShareButton";
+import CopyClipButton from "../../component/CopyClipButton/CopyClipButton";
+import IngredientDialog from "../../component/IngredientDialog/IngredientDialog";
+import RecipeDetailSkeleton from "../../component/Skeleton/RecipeDetailSkeleton";
 
 const RecipeImage = styled("img")({
   width: "100%",
@@ -170,7 +170,7 @@ const RecipeDetail = () => {
           </Grid>
           <Grid item xs={12}>
             <RecipeInfoContainer>
-              <Typography variant="h4" component="h1">
+              <Typography variant="h4" component="h1" fontWeight="600">
                 {recipeDetail?.name}
               </Typography>
               <Box sx={{ display: "flex" }}>
@@ -264,7 +264,7 @@ const RecipeDetail = () => {
           </Grid>
           <Grid item xs={12}>
             <HeadContainer>
-              <Typography variant="h5" component="p">
+              <Typography variant="h5" component="p" fontWeight="600">
                 조리순서
               </Typography>
             </HeadContainer>
@@ -276,7 +276,7 @@ const RecipeDetail = () => {
                   <Typography variant="h3" component="h3">
                     {index + 1}.
                   </Typography>
-                  <Typography variant="h6" component="span" ml={2}>
+                  <Typography variant="h6" component="span" ml={2} fontWeight="600">
                     {step?.description}
                   </Typography>
                 </Steps>

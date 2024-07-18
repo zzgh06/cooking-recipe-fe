@@ -1,15 +1,36 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import "../../style/ingredientAll.style.css";
 import IngredientCard from "../IngredientCard/IngredientCard";
-import { Col, Row, Button, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchIngredients } from "../../redux/ingredientSlice";
+import { Box, Grid, Button, CircularProgress, Typography, Container } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import IngredientCardSkeleton from "../Skeleton/IngredientCardSkeleton";
+
+const LoadMoreButton = styled(Button)(({ theme }) => ({
+  border: "1px solid #ddd",
+  borderRadius: "8px",
+  background: "linear-gradient(90deg, #4a9c75, #0095b3)",
+  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+  border: "none",
+  color: "white",
+  width: "250px",
+  fontSize: "16px",
+  padding: "10px 20px",
+  borderRadius: "30px",
+  "&:hover": {
+    background: "linear-gradient(90deg, #00b35f, #0095b3)",
+    boxShadow: "0 6px 20px rgba(0, 255, 221, 0.5)",
+  },
+  "&:focus": {
+    outline: "none",
+  },
+}));
 
 const IngredientAll = () => {
   const [searchParams] = useSearchParams();
   const dispatch = useDispatch();
-  const { ingredients, totalPages, status, error } = useSelector(
+  const { ingredients, totalPages, loading, error } = useSelector(
     (state) => state.ingredients
   );
 
@@ -19,17 +40,17 @@ const IngredientAll = () => {
 
   useEffect(() => {
     const name = searchParams.get("name") || "";
-    setCurrentPage(1); // Reset to first page on new search
-    setDisplayCount(8); // Reset display count on new search
+    setCurrentPage(1);
+    setDisplayCount(8);
     dispatch(fetchIngredients({ name }));
   }, [dispatch, searchParams]);
 
-  const loadMore = () => {
+  const loadMore = async () => {
     if (displayCount < ingredients.length) {
       setDisplayCount(displayCount + 4);
     } else if (currentPage < totalPages) {
       const nextPage = currentPage + 1;
-      dispatch(
+      await dispatch(
         fetchIngredients({
           page: nextPage,
           name: searchParams.get("name") || "",
@@ -43,30 +64,35 @@ const IngredientAll = () => {
   };
 
   return (
-    <div className="ingredient-all__container">
-      <h3>모든 상품</h3>
-      <Row>
-        {ingredients.slice(0, displayCount).map((ing) => (
-          <Col lg={3} key={ing._id}>
-            <IngredientCard key={ing._id} item={ing} />
-          </Col>
-        ))}
-      </Row>
-      {status === "loading" && <p>Loading...</p>}
-      {error && <p>Error: {error}</p>}
-      {hasMore && status !== "loading" && (
-        <div className="text-center my-3">
-          <Button className="load-more-button" onClick={loadMore}>
-            더보기
-          </Button>
-        </div>
+    <Container sx={{p: 3}}>
+      <Typography
+        variant="h4"
+        fontWeight="600"
+        marginBottom="20px"
+        textAlign="center"
+      >
+        모든 상품
+      </Typography>
+      <Grid container spacing={2}>
+        {loading
+          ? Array.from(new Array(8)).map((_, index) => (
+              <Grid key={index} item xs={12} md={6} lg={3}>
+                <IngredientCardSkeleton />
+              </Grid>
+            ))
+          : ingredients.slice(0, displayCount).map((ing) => (
+              <Grid item xs={12} md={6} lg={3} key={ing._id}>
+                <IngredientCard key={ing._id} item={ing} />
+              </Grid>
+            ))}
+      </Grid>
+      {error && <Typography>Error: {error}</Typography>}
+      {hasMore && !loading && (
+        <Box sx={{ textAlign: "center", my: 3 }}>
+          <LoadMoreButton onClick={loadMore}>더보기</LoadMoreButton>
+        </Box>
       )}
-      {status === "loading" && (
-        <div className="text-center my-3">
-          <Spinner animation="border" />
-        </div>
-      )}
-    </div>
+    </Container>
   );
 };
 

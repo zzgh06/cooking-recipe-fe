@@ -8,6 +8,17 @@ import SubBanner from "../component/SubBanner/SubBanner";
 import IngredientThemeCard from "../component/IngredientThemeCard/IngredientThemeCard";
 import IngredientAll from "../component/IngredientAll/IngredientAll";
 import RecentlyViewed from "../component/RecentlyViewed/RecentlyViewed";
+import { Box, Skeleton, styled } from "@mui/material";
+
+const SubBannerSkeleton = styled(Box)(({ theme }) => ({
+  display: "flex",
+  justifyContent: "center",
+  width: "100%",
+  padding: "0 200px",
+  [theme.breakpoints.down("md")]: {
+    padding: "0 50px",
+  },
+}));
 
 const StorePage = () => {
   const images = [
@@ -23,7 +34,9 @@ const StorePage = () => {
   const dispatch = useDispatch();
   const [query, setQuery] = useSearchParams();
   const name = query.get("name");
-  const { ingredients } = useSelector((state) => state.ingredients || []);
+  const { ingredients, loading } = useSelector(
+    (state) => state.ingredients || []
+  );
 
   const [recentlyViewedItems, setRecentlyViewedItems] = useState([]);
   useEffect(() => {
@@ -40,7 +53,7 @@ const StorePage = () => {
   const topDiscountedIngredients = ingredients
     .filter((ing) => ing.discountPrice !== undefined)
     .sort((a, b) => b.discountPrice - a.discountPrice)
-    .slice(0, 2);
+    .slice(0, 3);
 
   useEffect(() => {
     dispatch(fetchIngredients({ name }));
@@ -49,14 +62,33 @@ const StorePage = () => {
   return (
     <div>
       <BannerComponent images={images} />
-      <IngredientSlider title={"베스트 상품"} ingredients={bestIngredients.slice(0,8)} />
-      <SubBanner img={subImages[0]} />
+      <IngredientSlider
+        title={"베스트 상품"}
+        ingredients={bestIngredients.slice(0, 8)}
+        loading={loading}
+      />
+      {loading ? (
+        <SubBannerSkeleton>
+          <Skeleton variant="rectangular" width="100%" height={130} />
+        </SubBannerSkeleton>
+      ) : (
+        <SubBanner img={subImages[0]} />
+      )}
       <IngredientSlider
         title={"신상품"}
         ingredients={newIngredients.slice(0, 8)}
+        loading={loading}
       />
-      <IngredientThemeCard ingredients={topDiscountedIngredients} />
-      <SubBanner img={subImages[1]} />
+      <Box>
+        <IngredientThemeCard ingredients={topDiscountedIngredients} loading={loading} />
+      </Box>
+      {loading ? (
+        <SubBannerSkeleton>
+          <Skeleton variant="rectangular" width="100%" height={130} />
+        </SubBannerSkeleton>
+      ) : (
+        <SubBanner img={subImages[1]} />
+      )}
       <IngredientAll />
       {recentlyViewedItems.length >= 1 ? (
         <RecentlyViewed recentlyViewedItems={recentlyViewedItems} />
