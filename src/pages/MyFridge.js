@@ -28,9 +28,10 @@ import {
   DialogActions,
 } from "@mui/material";
 
-const FridgeContainer = styled(Box)({
+const FridgeContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
+  justifyContent: "center",
   alignItems: "center",
   padding: "20px",
   marginBottom: "20px",
@@ -39,14 +40,22 @@ const FridgeContainer = styled(Box)({
   minWidth: "500px",
   minHeight: "400px",
   border: "2px solid lightgrey",
-});
+  [theme.breakpoints.down("sm")]: {
+    minWidth: "100%",
+    padding: "10px",
+    marginBottom: "10px",
+  },
+}));
 
-const GridContainer = styled(Box)({
+const GridContainer = styled(Box)(({ theme }) => ({
   display: "grid",
   gridTemplateColumns: "1fr 1fr",
   gap: "20px",
   alignItems: "start",
-});
+  [theme.breakpoints.down("sm")]: {
+    gridTemplateColumns: "1fr",
+  },
+}));
 
 const MyFridge = () => {
   const dispatch = useDispatch();
@@ -137,8 +146,9 @@ const MyFridge = () => {
     setOpen(false);
     setRecommendClicked(false);
   };
+
   return (
-    <Box sx={{ padding: "30px 150px" }}>
+    <Box sx={{ padding: { xs: "20px", md: "30px 150px" } }}>
       <Box sx={{ textAlign: "center", marginBottom: "40px" }}>
         <Typography variant="h4" gutterBottom>
           My 냉장고
@@ -151,7 +161,7 @@ const MyFridge = () => {
       <GridContainer>
         <FridgeContainer>
           {fridgeItems.length === 0 ? (
-            <Typography variant="h6" sx={{ textAlign: "center" }}>
+            <Typography variant="h6">
               냉장고가 텅 비워져 있습니다 😅 <br />
               My 냉장고를 가득 채워주세요.
             </Typography>
@@ -189,7 +199,7 @@ const MyFridge = () => {
                 <Button
                   variant="contained"
                   onClick={handleRecommendRecipes}
-                  sx={{ width: "350px" }}
+                  sx={{ width: { xs: "100%", sm: "350px" } }}
                 >
                   레시피 추천
                 </Button>
@@ -205,7 +215,7 @@ const MyFridge = () => {
               justifyContent: "center",
               flexDirection: "column",
               alignItems: "center",
-              padding: "0 50px",
+              padding: { xs: "0 20px", sm: "0 50px" },
               marginBottom: "40px",
             }}
           >
