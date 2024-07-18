@@ -86,7 +86,7 @@ const IngredientCard = ({ item }) => {
     navigate(`/ingredients/${id}`);
   };
 
-  const calculateDiscountedPrice = (price, discountRate) => {
+  const calculateDiscountedPrice = (price, discountRate=0) => {
     const discountedPrice = price * (1 - discountRate / 100);
     return Math.floor(discountedPrice);
   };
@@ -130,13 +130,13 @@ const IngredientCard = ({ item }) => {
                 <Box display="flex" alignItems="center">
                   <DiscountRate>{item?.discountPrice}%</DiscountRate>
                   <DiscountPrice>
-                    {calculateDiscountedPrice(item?.price, item?.discountPrice)}
+                    {currencyFormat(calculateDiscountedPrice(item?.price, item?.discountPrice))}
                     원
                   </DiscountPrice>
                 </Box>
               </>
             ) : (
-              <Price>{item?.price}원</Price>
+              <Price>{currencyFormat(item?.price)}원</Price>
             )}
           </Box>
         </CardContent>

@@ -17,8 +17,6 @@ import AdminUserPage from "../pages/AdminUserPage";
 import AdminRecipePage from "../pages/AdminRecipePage";
 import StorePage from "../pages/StorePage";
 import MyRecipePage from "../pages/MyRecipePage";
-
-import RecipeDetailPage from "../pages/RecipeDetailPage";
 import SearchResults from "../pages/SearchResults";
 import FindPasswordPage from "../pages/FindPasswordPage";
 import FindEmailPage from "../pages/FindEmailPage";
@@ -27,6 +25,7 @@ import ChangePasswordPage from "../pages/ChangePasswordPage";
 import VerifyCurrentPassword from "../pages/VerifyCurrentPassword";
 import RecipePage from "../pages/Recipe/RecipePage";
 import NotFoundPage from "../pages/NotFoundPage";
+import RecipeDetail from "../pages/Recipe/RecipeDetailPage";
 
 const AppRouter = () => {
   return (
@@ -45,7 +44,7 @@ const AppRouter = () => {
         <Route path="/recipes/best" element={<RecipePage />} />
         <Route path="/recipes/new" element={<RecipePage />} />
         <Route path="/recipes/:category" element={<RecipePage />} />
-        <Route path="/recipe/:id" element={<RecipeDetailPage />} />
+        <Route path="/recipe/:id" element={<RecipeDetail />} />
         <Route element={<PrivateRoute permissionLevel="customer" />}>
           <Route path="/fridge" element={<MyFridge />} />
           <Route path="/cart" element={<CartPage />} />

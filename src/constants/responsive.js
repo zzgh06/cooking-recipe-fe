@@ -39,6 +39,6 @@ export const ingredientResponsive = {
   },
   mobile: {
     breakpoint: { max: 464, min: 0 },
-    items: 2,
+    items: 1,
   },
 };

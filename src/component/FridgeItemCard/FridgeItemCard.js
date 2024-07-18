@@ -24,7 +24,7 @@ const FridgeItemCard = ({ item, id, isChecked, onCheckboxChange }) => {
           <FontAwesomeIcon icon={faTrashCan}/>
         </button>
       </div>
-      <img src={item.image} alt={item.name} className="fridge-item__image" />
+      <img src={item.images[0]} alt={item.name} className="fridge-item__image" />
       <p className="fridge-item__name">{item.name}</p>
     </div>
   );

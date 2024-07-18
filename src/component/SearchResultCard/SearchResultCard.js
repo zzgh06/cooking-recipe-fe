@@ -12,7 +12,7 @@ const SearchResultCard = ({ item }) => {
   return (
     <div className='search-resultCard'>
       <div className='search-resultCard__img'>
-        <img src={item.image} alt={item.name} />
+        <img src={item.images[0]} alt={item.name} />
       </div>
       <div className='search-resultCard__desc'>
         <p className='search-resultCard__name'>{item.name}</p>

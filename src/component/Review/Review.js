@@ -82,7 +82,7 @@ const Review = ({ type, itemId }) => {
   return (
     <div>
       <HeadContainer>
-        <Typography variant="h4" component="strong">
+        <Typography variant="h4" fontWeight="600">
           리뷰
         </Typography>
         <Typography variant="h6">⭐{averageRating}</Typography>

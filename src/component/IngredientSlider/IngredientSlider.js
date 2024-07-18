@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import { Box, Typography, IconButton, styled } from "@mui/material";
+import { Box, Typography, IconButton, styled, Grid } from "@mui/material";
 import IngredientCard from "../IngredientCard/IngredientCard";
 import { ingredientResponsive } from "../../constants/responsive";
+import IngredientCardSkeleton from "../Skeleton/IngredientCardSkeleton";
 
 const IngredientCarouselWrapper = styled(Box)(({ theme }) => ({
   position: "relative",
@@ -24,7 +25,7 @@ const IngredientTitle = styled(Typography)(({ theme }) => ({
   },
 }));
 
-const CustomArrowRecipe = styled(IconButton)(({ theme }) => ({
+const CustomArrowIngredient = styled(IconButton)(({ theme }) => ({
   position: "absolute",
   top: "40%",
   transform: "translateY(-70%)",
@@ -48,15 +49,15 @@ const CustomArrowRecipe = styled(IconButton)(({ theme }) => ({
   },
 }));
 
-const LeftArrow = styled(CustomArrowRecipe)({
+const LeftArrow = styled(CustomArrowIngredient)({
   left: 0,
 });
 
-const RightArrow = styled(CustomArrowRecipe)({
+const RightArrow = styled(CustomArrowIngredient)({
   right: 0,
 });
 
-const IngredientSlider = ({ title, ingredients }) => {
+const IngredientSlider = ({ title, ingredients, loading }) => {
   const [carouselItems, setCarouselItems] = useState([]);
 
   useEffect(() => {
@@ -88,9 +89,15 @@ const IngredientSlider = ({ title, ingredients }) => {
         customLeftArrow={<LeftArrow className="custom-arrow-recipe">◀</LeftArrow>}
         customRightArrow={<RightArrow className="custom-arrow-recipe">▶</RightArrow>}
       >
-        {carouselItems.map((ing) => (
+        {loading ? (
+          Array.from(new Array(8)).map((_, index) => (
+            <Grid key={index} xs={12} md={6} lg={3}>
+              <IngredientCardSkeleton />
+            </Grid>
+          ))
+        ) : (carouselItems.map((ing) => (
           <IngredientCard key={ing._id} item={ing} />
-        ))}
+        )))}
       </Carousel>
     </IngredientCarouselWrapper>
   );

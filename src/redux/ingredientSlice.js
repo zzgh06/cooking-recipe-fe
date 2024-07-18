@@ -25,7 +25,6 @@ export const getIngredientByName = createAsyncThunk(
   "ingredients/getIngredientByName",
   async (name) => {
     const response = await api.get(`/ingredient?name=${name}`);
-    console.log("response", response.data.data.ingredients[0])
     return response.data.data.ingredients[0];
   }
 );
@@ -88,7 +87,7 @@ export const deleteIngredient = createAsyncThunk(
       dispatch(
         setToastMessage({
           message: "재료가 삭제됐습니다",
-          status: "success",
+          loading: "success",
         })
       );
       return response.data;
@@ -96,7 +95,7 @@ export const deleteIngredient = createAsyncThunk(
       dispatch(
         setToastMessage({
           message: error.error,
-          status: "error",
+          loading: "error",
         })
       );
 
@@ -111,7 +110,7 @@ const ingredientSlice = createSlice({
     ingredients: [],
     selectedIngredient: null,
     totalPages: 0,
-    status: "idle",
+    loading: false,
     error: null,
   },
   reducers: {
@@ -122,15 +121,15 @@ const ingredientSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchIngredients.pending, (state) => {
-        state.status = "loading";
+        state.loading = true;
       })
       .addCase(fetchIngredients.fulfilled, (state, action) => {
-        state.status = "succeeded";
+        state.loading = false;
         state.ingredients = action.payload.data.ingredients;
         state.totalPages = action.payload.data.totalPageNum;
       })
       .addCase(fetchIngredients.rejected, (state, action) => {
-        state.status = "failed";
+        state.loading = false;
         state.error = action.error.message;
       })
       .addCase(createIngredient.fulfilled, (state, action) => {
@@ -150,25 +149,25 @@ const ingredientSlice = createSlice({
         );
       })
       .addCase(getIngredient.pending, (state) => {
-        state.status = "loading";
+        state.loading = true;
       })
       .addCase(getIngredient.fulfilled, (state, action) => {
-        state.status = "succeeded";
+        state.loading = false;
         state.selectedIngredient = action.payload.ingredient;
       })
       .addCase(getIngredient.rejected, (state, action) => {
-        state.status = "failed";
+        state.loading = false;
         state.error = action.error.message;
       })
       .addCase(getIngredientByName.pending, (state) => {
-        state.status = "loading";
+        state.loading = true;
       })
       .addCase(getIngredientByName.fulfilled, (state, action) => {
-        state.status = "succeeded";
+        state.loading = false;
         state.selectedIngredient = action.payload;
       })
       .addCase(getIngredientByName.rejected, (state, action) => {
-        state.status = "failed";
+        state.loading = false;
         state.error = action.error.message;
       });
   },
