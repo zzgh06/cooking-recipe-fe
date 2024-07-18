@@ -7,7 +7,7 @@ import UserTable from '../component/UserTable/UserTable';
 import { deleteUser, getUsersInfo } from '../redux/userSlice';
 import UserDetailDialog from '../component/UserDetailDialog/UserDetailDialog';
 import "../style/adminUserPage.style.css";
-import SearchBox from '../component/SearchBox/SerachBox';
+import SearchBox from '../component/SearchBox/SearchBox';
 
 const AdminUserPage = () => {
   const dispatch = useDispatch();

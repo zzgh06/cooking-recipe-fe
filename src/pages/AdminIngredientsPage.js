@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import SearchBox from "../component/SearchBox/SerachBox";
+import SearchBox from "../component/SearchBox/SearchBox";
 import IngredientTable from "../component/IngredientTable/IngredientTable";
 import NewItemDialog from "../component/NewItemDialog/NewItemDialog";
 import ReactPaginate from "react-paginate";

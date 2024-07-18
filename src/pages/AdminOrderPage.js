@@ -7,7 +7,7 @@ import OrderTable from "../component/OrderTable/OrderTable";
 import DashBoardCard from "../component/DashBoardCard/DashboardCard";
 import OrderDetailDialog from "../component/OrderDetailDialog/OrderDetailDialog";
 import { getOrderList, setSelectedOrder } from "../redux/orderSlice";
-import SearchBox from "../component/SearchBox/SerachBox";
+import SearchBox from "../component/SearchBox/SearchBox";
 
 const AdminOrderPage = () => {
   const dispatch = useDispatch();
