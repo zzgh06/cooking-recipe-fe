@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container, Button, Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import SearchBox from "../component/SearchBox/SerachBox";
+import SearchBox from "../component/SearchBox/SearchBox";
 import RecipeTable from "../component/RecipeTable/RecipeTable";
 import ReactPaginate from "react-paginate";
 import {

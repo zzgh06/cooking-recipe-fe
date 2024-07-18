@@ -1,20 +1,29 @@
 import React from "react";
+import { Grid, Typography, Box } from "@mui/material";
 import SearchRecipeCard from "../SearchRecipeCard/SearchRecipeCard";
 
-const MyFridgeSearchResults = ({recipeList}) => {
+const MyFridgeSearchResults = ({ recipeList }) => {
   return (
-    <div className="recommend-recipe">
-      <h2>레시피 추천</h2>
-      <div className="recipe-list-container">
+    <Box sx={{ padding: 2 }}>
+      <Grid container spacing={2} justifyContent="center">
         {recipeList.length === 0 ? (
-          <p>추천 레시피가 없습니다.</p>
+          <Box height="300px" textAlign="center" alignContent="center">
+            <Typography variant="body1" fontSize="30px" sx={{ p: 1 }}>
+              추천 레시피가 없습니다.
+            </Typography>
+            <Typography variant="body1" fontSize="17px">
+              당신만의 레시피로 What’s in your fridge를 가득 채워주세요. 👨‍🍳👩‍🍳
+            </Typography>
+          </Box>
         ) : (
           recipeList.map((item) => (
-            <SearchRecipeCard key={item._id} item={item} />
+            <Grid item key={item._id} xs={12} sm={6} md={4}>
+              <SearchRecipeCard item={item} />
+            </Grid>
           ))
         )}
-      </div>
-    </div>
+      </Grid>
+    </Box>
   );
 };
 

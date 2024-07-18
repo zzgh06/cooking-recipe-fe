@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
-import "../style/myFridge.style.css";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchIngredients, setSelectedIngredients } from "../redux/ingredientSlice";
+import {
+  fetchIngredients,
+  setSelectedIngredients,
+} from "../redux/ingredientSlice";
 import MyFridgeSearchResults from "../component/MyFridgeSearchResults/MyFridgeSearchResults";
 import SearchResultCard from "../component/SearchResultCard/SearchResultCard";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -11,9 +13,49 @@ import {
   fridgeIngredientRecipeResult,
 } from "../redux/fridgeSlice";
 import FridgeItemCard from "../component/FridgeItemCard/FridgeItemCard";
-import SearchBox from "../component/SearchBox/SerachBox";
+import SearchBox from "../component/SearchBox/SearchBox";
 import RecentlyViewed from "../component/RecentlyViewed/RecentlyViewed";
-import { Spinner } from "react-bootstrap";
+import {
+  CircularProgress,
+  Box,
+  Button,
+  Typography,
+  Grid,
+  styled,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
+
+const FridgeContainer = styled(Box)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  padding: "20px",
+  marginBottom: "20px",
+  borderRadius: "10px",
+  boxShadow: "0 3px 5px rgba(0,0,0,0.2)",
+  minWidth: "500px",
+  minHeight: "400px",
+  border: "2px solid lightgrey",
+  [theme.breakpoints.down("sm")]: {
+    minWidth: "100%",
+    padding: "10px",
+    marginBottom: "10px",
+  },
+}));
+
+const GridContainer = styled(Box)(({ theme }) => ({
+  display: "grid",
+  gridTemplateColumns: "1fr 1fr",
+  gap: "20px",
+  alignItems: "start",
+  [theme.breakpoints.down("sm")]: {
+    gridTemplateColumns: "1fr",
+  },
+}));
 
 const MyFridge = () => {
   const dispatch = useDispatch();
@@ -21,13 +63,9 @@ const MyFridge = () => {
   const ingredient = useSelector(
     (state) => state.ingredients.ingredients || []
   );
-  const {
-    fridgeItems,
-    recipeList,
-    loading,
-    recipeLoading,
-  } = useSelector((state) => state.fridge || []);
-
+  const { fridgeItems, recipeList, loading, recipeLoading } = useSelector(
+    (state) => state.fridge || []
+  );
 
   const selectedIngredients = useSelector(
     (state) => state.ingredients.selectedIngredients
@@ -41,6 +79,7 @@ const MyFridge = () => {
   const [checkedItems, setCheckedItems] = useState(new Set());
   const [recentlyViewedItems, setRecentlyViewedItems] = useState([]);
   const [recommendClicked, setRecommendClicked] = useState(false);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const viewedItems =
@@ -55,7 +94,8 @@ const MyFridge = () => {
       setHasSearched(true);
       setRecommendClicked(false);
     } else {
-      dispatch(fridgeIngredientRecipeResult(searchQuery));
+      dispatch(setSelectedIngredients([]));
+      setHasSearched(false);
     }
   }, [dispatch, searchQuery]);
 
@@ -98,51 +138,93 @@ const MyFridge = () => {
       dispatch(fetchRecommendedRecipes(selectedIngredients));
       setRecommendClicked(true);
       setHasSearched(false);
+      setOpen(true);
     }
   };
 
-  return (
-    <>
-      <div className="fridge-container">
-        <div className="fridge-title">
-          <h2>My 냉장고</h2>
-          <p>나만의 냉장고에 재료를 추가하고 최적의 레시피를 추천해드려요</p>
-        </div>
+  const handleClose = () => {
+    setOpen(false);
+    setRecommendClicked(false);
+  };
 
-        {fridgeItems.length === 0 ? (
-          <div className="fridge">
-            <div className="fridge-empty-message">
-              <p>
-                냉장고가 텅 비워져 있습니다 😅 <br />
-                My 냉장고를 가득 채워주세요.{" "}
-              </p>
-            </div>
-          </div>
-        ) : (
-          <>
-            <div className="fridge">
-              {fridgeItems.map((item) => (
-                <FridgeItemCard
-                  key={item.ingredientId._id}
-                  item={item.ingredientId}
-                  id={item._id}
-                  isChecked={checkedItems.has(item.ingredientId.name)}
-                  onCheckboxChange={() =>
-                    handleCheckboxChange(item.ingredientId.name)
-                  }
-                />
-              ))}
-            </div>
-            <div className="recipe-recommend__button">
-              <button type="button" onClick={handleRecommendRecipes}>
-                레시피 추천
-              </button>
-            </div>
-          </>
-        )}
-        <div className="fridge-ingredient-search">
-          <div className="search-layout">
-            <p className="title">원하시는 식재료를 검색해주세요</p>
+  return (
+    <Box sx={{ padding: { xs: "20px", md: "30px 150px" } }}>
+      <Box sx={{ textAlign: "center", marginBottom: "40px" }}>
+        <Typography variant="h4" gutterBottom>
+          My 냉장고
+        </Typography>
+        <Typography variant="subtitle1">
+          나만의 냉장고에 재료를 추가하고 최적의 레시피를 추천해드려요
+        </Typography>
+      </Box>
+
+      <GridContainer>
+        <FridgeContainer>
+          {fridgeItems.length === 0 ? (
+            <Typography variant="h6">
+              냉장고가 텅 비워져 있습니다 😅 <br />
+              My 냉장고를 가득 채워주세요.
+            </Typography>
+          ) : (
+            <>
+              <Grid
+                container
+                spacing={2}
+                sx={{
+                  alignContent: "flex-start",
+                  justifyContent: "center",
+                  marginBottom: "20px",
+                }}
+              >
+                {fridgeItems.map((item) => (
+                  <Grid item key={item.ingredientId._id}>
+                    <FridgeItemCard
+                      item={item.ingredientId}
+                      id={item._id}
+                      isChecked={checkedItems.has(item.ingredientId.name)}
+                      onCheckboxChange={() =>
+                        handleCheckboxChange(item.ingredientId.name)
+                      }
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginBottom: "20px",
+                }}
+              >
+                <Button
+                  variant="contained"
+                  onClick={handleRecommendRecipes}
+                  sx={{ width: { xs: "100%", sm: "350px" } }}
+                >
+                  레시피 추천
+                </Button>
+              </Box>
+            </>
+          )}
+        </FridgeContainer>
+
+        <Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              flexDirection: "column",
+              alignItems: "center",
+              padding: { xs: "0 20px", sm: "0 50px" },
+              marginBottom: "40px",
+            }}
+          >
+            <Typography
+              variant="h5"
+              sx={{ fontWeight: "600", marginBottom: "20px" }}
+            >
+              원하시는 식재료를 검색해주세요
+            </Typography>
             <SearchBox
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
@@ -152,41 +234,59 @@ const MyFridge = () => {
               field="name"
               page="fridge"
             />
-          </div>
+          </Box>
+
           {hasSearched && (
-            <div className="fridge-search-result">
+            <Box
+              sx={{
+                textAlign: "center",
+                padding: "20px 0",
+                borderTop: "1px solid lightgrey",
+                borderBottom: "1px solid lightgrey",
+                marginBottom: "40px",
+              }}
+            >
               {loading ? (
-                <div className="text-center my-3">
-                  <Spinner animation="border" />
-                </div>
+                <CircularProgress />
               ) : ingredient.length === 0 ? (
-                <p>일치하는 재료가 없습니다.</p>
+                <Typography>일치하는 재료가 없습니다.</Typography>
               ) : (
                 ingredient.map((item) => (
                   <SearchResultCard key={item._id} item={item} />
                 ))
               )}
-            </div>
+            </Box>
           )}
-        </div>
-        {(hasSearched || recommendClicked) && (
-          <div>
-            {recipeLoading ? (
-              <div className="text-center my-3">
-                <Spinner animation="border" />
-              </div>
-            ) : (
-              <MyFridgeSearchResults recipeList={recipeList} />
-            )}
-          </div>
-        )}
-      </div>
-      {recentlyViewedItems.length >= 1 ? (
+
+          <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
+            <DialogTitle variant="h4" sx={{ textAlign: "center" }}>
+              추천 레시피
+            </DialogTitle>
+            <DialogContent>
+              {recipeLoading ? (
+                <CircularProgress />
+              ) : (
+                <MyFridgeSearchResults recipeList={recipeList} />
+              )}
+            </DialogContent>
+            <DialogActions sx={{ display: "flex", justifyContent: "center" }}>
+              <Button
+                variant="contained"
+                onClick={handleClose}
+                color="primary"
+                sx={{ width: "400px" }}
+              >
+                닫기
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </Box>
+      </GridContainer>
+
+      {recentlyViewedItems.length >= 1 && (
         <RecentlyViewed recentlyViewedItems={recentlyViewedItems} />
-      ) : (
-        ""
       )}
-    </>
+    </Box>
   );
 };
 

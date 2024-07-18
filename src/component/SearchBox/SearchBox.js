@@ -1,12 +1,9 @@
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
-import { fetchRecommendedRecipes } from '../../redux/fridgeSlice';
 
 const SearchBox = ({ searchQuery, setSearchQuery, placeholder, field, page = 'store', selectedIngredients }) => {
-  const dispatch = useDispatch();
   const [query] = useSearchParams();
   const [keyword, setKeyword] = useState(query.get(field) || '');
 
@@ -37,7 +34,6 @@ const SearchBox = ({ searchQuery, setSearchQuery, placeholder, field, page = 'st
       setSearchQuery({ ...searchQuery, page: 1, [field]: '' });
     } else {
       setSearchQuery({ ...searchQuery, page: 1, [field]: keyword });
-      dispatch(fetchRecommendedRecipes(selectedIngredients));
     }
   };
 
