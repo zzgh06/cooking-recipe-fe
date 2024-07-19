@@ -163,7 +163,7 @@ const MyProfileEditComponent = () => {
     <Grid container>
       <Grid item xs={12}>
         <HeadContainer>
-          <Typography variant="h4">나의 계정</Typography>
+          <Typography variant="h5">나의 정보</Typography>
           <Typography variant="subtitle1">회원정보 수정</Typography>
         </HeadContainer>
       </Grid>

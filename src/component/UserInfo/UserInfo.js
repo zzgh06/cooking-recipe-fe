@@ -1,7 +1,6 @@
 import React from "react";
 import { Typography, Grid, Box } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/system";
 
 const UserInfoContainer = styled("div")({
@@ -32,6 +31,15 @@ const ShoppingMenu = styled("div")({
   width: "90%",
   padding: "5px 0 15px",
   borderBottom: "1px solid lightgray",
+});
+
+const StyledLink = styled(Typography)({
+  cursor: 'pointer',
+  padding: '2px 10px',
+  borderRadius: '8px',
+  '&:hover': {
+    textDecoration: 'underline',
+  },
 });
 
 const UserInfo = ({ onButtonClick }) => {
@@ -66,21 +74,26 @@ const UserInfo = ({ onButtonClick }) => {
           <Typography variant="subtitle1" sx={{ fontWeight: "600" }}>
             쇼핑
           </Typography>
-          <div onClick={() => handleButtonClick("내 주문")}>내 주문</div>
-          <div>상품후기</div>
-          <div>상품문의</div>
+          <StyledLink onClick={() => handleButtonClick("내 주문")}>
+            내 주문
+          </StyledLink>
+          <StyledLink onClick={() => handleButtonClick("장보기 메모")}>
+            장보기 메모
+          </StyledLink>
         </ShoppingMenu>
         <ShoppingMenu>
           <Typography variant="subtitle1" sx={{ fontWeight: "600" }}>
             나의정보
           </Typography>
-          <div onClick={() => handleButtonClick("내 레시피")}>내 레시피</div>
-          <div onClick={() => handleButtonClick("회원정보 수정")}>
+          <StyledLink onClick={() => handleButtonClick("내 레시피")}>
+            내 레시피
+          </StyledLink>
+          <StyledLink onClick={() => handleButtonClick("회원정보 수정")}>
             회원정보 수정
-          </div>
-          <div onClick={() => handleButtonClick("비밀번호 수정")}>
+          </StyledLink>
+          <StyledLink onClick={() => handleButtonClick("비밀번호 수정")}>
             비밀번호 수정
-          </div>
+          </StyledLink>
         </ShoppingMenu>
       </UserInfoMenu>
     </>

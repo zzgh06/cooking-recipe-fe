@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Container, Button, Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+import { Button, Container, Modal, Typography, Box } from "@mui/material";
 import SearchBox from "../component/SearchBox/SearchBox";
 import RecipeTable from "../component/RecipeTable/RecipeTable";
 import ReactPaginate from "react-paginate";
@@ -12,7 +12,14 @@ import {
 } from "../redux/recipeSlice";
 import RecipeForm from "../component/RecipeForm/RecipeForm";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import "../style/adminRecipe.style.css";
+import { styled } from "@mui/material/styles";
+
+
+const PaginationContainer = styled('div')(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'center',
+  marginTop: theme.spacing(2),
+}));
 
 const AdminRecipePage = () => {
   const dispatch = useDispatch();
@@ -36,7 +43,7 @@ const AdminRecipePage = () => {
     "Time",
     "Servings",
     "Difficulty",
-    "reviewCnt",
+    "Review Count",
     "Images",
     "Actions",
   ];
@@ -79,37 +86,50 @@ const AdminRecipePage = () => {
   };
 
   return (
-    <div className="locate-center">
-      <Container className="container-custom">
-        <div className="mt-2 top-container">
+    <Container maxWidth="lg">
+      <Box sx={{ mt: 2 }}>
+        <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <SearchBox
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
-            placeholder="레시피 이름으로 검색"
+            placeholder="Search by recipe name"
             field="name"
           />
-          <Button className="recipes mt-2 mb-2" onClick={handleShowAll}>
+          <Button variant="contained" color="primary" onClick={handleShowAll} sx={{ width : "300px"}}>
             Show All
           </Button>
-        </div>
-        <div className="button-container">
-          <Button className="recipes mt-2 mb-2" onClick={handleClickNewItem}>
+        </Box>
+        <Box sx={{ mb: 2 }}>
+          <Button variant="contained" color="success" onClick={handleClickNewItem} sx={{ width : "300px"}}>
             Add New Recipe +
           </Button>
-        </div>
+        </Box>
 
-        <Modal show={showForm} onHide={() => setShowForm(false)}>
-          <Modal.Header closeButton>
-            <Modal.Title>
+        <Modal
+          open={showForm}
+          onClose={() => setShowForm(false)}
+          sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'scroll' }}
+        >
+          <Box
+            sx={{
+              p: 3,
+              width: '80%',
+              maxWidth: 800,
+              maxHeight: '80vh',
+              overflowY: 'auto',
+              bgcolor: 'background.paper',
+              borderRadius: 2,
+              boxShadow: 24,          
+            }}
+          >
+            <Typography variant="h6" gutterBottom>
               {mode === "new" ? "Add New Recipe" : "Edit Recipe"}
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
+            </Typography>
             <RecipeForm
               onSubmit={handleFormSubmit}
               initialData={selectedRecipe}
             />
-          </Modal.Body>
+          </Box>
         </Modal>
 
         <RecipeTable
@@ -119,28 +139,30 @@ const AdminRecipePage = () => {
           openEditForm={openEditForm}
         />
 
-        <ReactPaginate
-          nextLabel="next >"
-          onPageChange={handlePageClick}
-          pageRangeDisplayed={5}
-          pageCount={totalPageNumber}
-          forcePage={searchQuery.page - 1}
-          previousLabel="< previous"
-          renderOnZeroPageCount={null}
-          pageClassName="page-item"
-          pageLinkClassName="page-link"
-          previousClassName="page-item"
-          previousLinkClassName="page-link"
-          nextClassName="page-item"
-          nextLinkClassName="page-link"
-          breakLabel="..."
-          breakClassName="page-item"
-          breakLinkClassName="page-link"
-          containerClassName="pagination"
-          activeClassName="active"
-        />
-      </Container>
-    </div>
+        <PaginationContainer>
+          <ReactPaginate
+            nextLabel="next >"
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={5}
+            pageCount={totalPageNumber}
+            forcePage={searchQuery.page - 1}
+            previousLabel="< previous"
+            renderOnZeroPageCount={null}
+            pageClassName="page-item"
+            pageLinkClassName="page-link"
+            previousClassName="page-item"
+            previousLinkClassName="page-link"
+            nextClassName="page-item"
+            nextLinkClassName="page-link"
+            breakLabel="..."
+            breakClassName="page-item"
+            breakLinkClassName="page-link"
+            containerClassName="pagination"
+            activeClassName="active"
+          />
+        </PaginationContainer>
+      </Box>
+    </Container>
   );
 };
 

@@ -94,7 +94,6 @@ const MyFridge = () => {
       setHasSearched(true);
       setRecommendClicked(false);
     } else {
-      dispatch(setSelectedIngredients([]));
       setHasSearched(false);
     }
   }, [dispatch, searchQuery]);

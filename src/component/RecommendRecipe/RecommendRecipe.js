@@ -29,6 +29,12 @@ const Overlay = styled(Box)({
   fontSize: "20px",
 });
 
+const StyledImage = styled("img")({
+  width: "100%",
+  height: "100%",
+  objectFit: "cover",
+});
+
 const RecommendRecipe = ({ recommendRecipes }) => {
   const navigate = useNavigate();
 
@@ -50,10 +56,9 @@ const RecommendRecipe = ({ recommendRecipes }) => {
               showRecipe(recommendRecipes[0]?._id);
             }}
           >
-            <img
+            <StyledImage
               src={recommendRecipes[0]?.images[0]}
               alt={recommendRecipes[0]?.name}
-              style={{ width: "100%", height: "492px" }}
             />
             <Overlay className="overlay">{recommendRecipes[0]?.name}</Overlay>
           </ImageContainer>
@@ -65,10 +70,9 @@ const RecommendRecipe = ({ recommendRecipes }) => {
                 showRecipe(recommendRecipes[1]._id);
               }}
             >
-              <img
+              <StyledImage
                 src={recommendRecipes[1]?.images[0]}
                 alt={recommendRecipes[1]?.name}
-                style={{ width: "100%", height: "207px" }}
               />
               <Overlay className="overlay">{recommendRecipes[1]?.name}</Overlay>
             </ImageContainer>
@@ -79,10 +83,9 @@ const RecommendRecipe = ({ recommendRecipes }) => {
                 showRecipe(recommendRecipes[2]._id);
               }}
             >
-              <img
+              <StyledImage
                 src={recommendRecipes[2]?.images[0]}
                 alt={recommendRecipes[2]?.name}
-                style={{ width: "100%", height: "207px" }}
               />
               <Overlay className="overlay">{recommendRecipes[2]?.name}</Overlay>
             </ImageContainer>
@@ -93,10 +96,9 @@ const RecommendRecipe = ({ recommendRecipes }) => {
                 showRecipe(recommendRecipes[4]._id);
               }}
             >
-              <img
+              <StyledImage
                 src={recommendRecipes[4]?.images[0]}
                 alt={recommendRecipes[4]?.name}
-                style={{ width: "100%", height: "269px" }}
               />
               <Overlay className="overlay">{recommendRecipes[4]?.name}</Overlay>
             </ImageContainer>

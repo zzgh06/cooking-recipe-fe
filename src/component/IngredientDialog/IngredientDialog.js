@@ -21,7 +21,7 @@ const IngredientDialog = ({ open, handleClose, ingredients }) => {
   );
 
   const [checkedIngredients, setCheckedIngredients] = useState(
-    ingredients.map((ingredient) =>
+    ingredients?.map((ingredient) =>
       selectedIngredients?.includes(ingredient._id)
     )
   );
@@ -47,7 +47,7 @@ const IngredientDialog = ({ open, handleClose, ingredients }) => {
       <DialogContent>
         <DialogContentText>아래 목록에서 재료를 선택하세요.</DialogContentText>
         <Box>
-          {ingredients.map((ingredient, index) => (
+          {ingredients?.map((ingredient, index) => (
             <FormControlLabel
               key={index}
               control={

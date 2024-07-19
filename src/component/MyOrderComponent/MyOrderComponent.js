@@ -7,8 +7,6 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  Link,
-  Container,
   Grid,
   Select,
   MenuItem,
@@ -17,10 +15,10 @@ import {
   FormGroup,
   FormControlLabel,
   Checkbox,
-  useMediaQuery,
   TableContainer,
   Paper,
   styled,
+  Pagination,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -35,21 +33,44 @@ import DateFilterCondition from "../DateFilterCondition/DateFilterCondition";
 import { currencyFormat } from "../../utils/number";
 import MyPageOrderDialog from "../MyPageOrderDialog/MyPageOrderDialog";
 
+// 테이블 셀 스타일
+const cellStyle1 = {
+  whiteSpace: "nowrap",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  maxWidth: "150px",
+  color: "white",
+};
+
+const cellStyle2 = {
+  whiteSpace: "nowrap",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  maxWidth: "150px",
+};
+
+const HeadContainer = styled("div")({
+  display: "flex",
+  justifyContent: "flex-start",
+  alignItems: "baseline",
+  borderBottom: "4px solid black",
+  paddingLeft: "10px",
+});
+
 const MyOrderComponent = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { orderList } = useSelector((state) => state.order);
   const user = useSelector((state) => state.auth.user);
+  const { orderList, totalPageNum } = useSelector((state) => state.order);
   const [recentChecked, setRecentChecked] = useState(false);
   const [oldChecked, setOldChecked] = useState(false);
-  const [sortOrder, setSortOrder] = useState("recent");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [selectedOption, setSelectedOption] = useState("orderNum");
   const [searchQuery, setSearchQuery] = useState({});
-  const [query, setQuery] = useSearchParams();
   const [sortedOrderList, setSortedOrderList] = useState([]);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     dispatch(getOrder());
@@ -59,8 +80,8 @@ const MyOrderComponent = () => {
     if (searchQuery.orderNum === "") delete searchQuery.orderNum;
     const params = new URLSearchParams(searchQuery);
     navigate("?" + params.toString());
-    dispatch(getOrderList({ ...searchQuery }));
-  }, [searchQuery]);
+    dispatch(getOrderList({ ...searchQuery, page }));
+  }, [searchQuery, page]);
 
   useEffect(() => {
     setSortedOrderList(orderList);
@@ -126,29 +147,20 @@ const MyOrderComponent = () => {
     setDialogOpen(false);
   };
 
-  // 테이블 셀 스타일
-  const cellStyle1 = {
-    whiteSpace: "nowrap",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    maxWidth: "150px",
-    color : "white"
+  const handlePageChange = (event, value) => {
+    setPage(value);
   };
 
-  const cellStyle2 = {
-    whiteSpace: "nowrap",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    maxWidth: "150px",
+  const handleReset = () => {
+    // 필터 초기화
+    setRecentChecked(false);
+    setOldChecked(false);
+    setStartDate(null);
+    setEndDate(null);
+    setSelectedOption("orderNum");
+    setSearchQuery({});
+    setPage(1); // 페이지를 1로 초기화
   };
-
-  const HeadContainer = styled("div")({
-    display: "flex",
-    justifyContent: "flex-start",
-    alignItems: "baseline",
-    borderBottom: "4px solid black",
-    paddingLeft: "10px",
-  });
 
   return (
     <Grid container>
@@ -226,6 +238,7 @@ const MyOrderComponent = () => {
                   color="success"
                   size="small"
                   sx={{ marginRight: "10px", width: "13ch", height: "40px" }}
+                  onClick={handleReset}
                 >
                   초기화
                 </Button>
@@ -265,7 +278,7 @@ const MyOrderComponent = () => {
           <TableContainer component={Paper}>
             <Table>
               <TableHead>
-                <TableRow sx={{backgroundColor: 'green'}}>
+                <TableRow sx={{ backgroundColor: "green" }}>
                   <TableCell style={cellStyle1}>주문번호</TableCell>
                   <TableCell style={cellStyle1}>주문일자</TableCell>
                   <TableCell style={cellStyle1}>주문내역</TableCell>
@@ -307,6 +320,18 @@ const MyOrderComponent = () => {
               </TableBody>
             </Table>
           </TableContainer>
+        </Box>
+        <Box
+          sx={{ display: "flex", justifyContent: "center", marginTop: "20px" }}
+        >
+          <Pagination
+            count={totalPageNum}
+            size="large"
+            sx={{ marginBottom: "20px" }}
+            page={page}
+            onChange={handlePageChange}
+            color="primary"
+          />
         </Box>
         {/* 주문 상세 다이얼로그 */}
         <MyPageOrderDialog open={dialogOpen} handleClose={handleCloseDialog} />

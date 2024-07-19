@@ -108,7 +108,9 @@ const ingredientSlice = createSlice({
   name: "ingredients",
   initialState: {
     ingredients: [],
-    selectedIngredient: null,
+    selectedIngredients: null,
+    selectedShoppingList: [],
+    completedShoppingList: [],
     totalPages: 0,
     loading: false,
     error: null,
@@ -116,6 +118,30 @@ const ingredientSlice = createSlice({
   reducers: {
     setSelectedIngredients: (state, action) => {
       state.selectedIngredients = action.payload;
+    },
+    addToShoppingList: (state, action) => {
+      state.selectedShoppingList = [
+        ...state.selectedShoppingList,
+        ...action.payload,
+      ];
+    },
+    removeFromShoppingList: (state, action) => {
+      const removedItems = action.payload.map((item) => item._id);
+      state.selectedShoppingList = state.selectedShoppingList.filter(
+        (item) => !removedItems.includes(item._id)
+      );
+    },
+    addToCompletedList: (state, action) => {
+      state.completedShoppingList = [
+        ...state.completedShoppingList,
+        ...action.payload,
+      ];
+    },
+    removeFromCompletedList: (state, action) => {
+      const removedItems = action.payload.map((item) => item._id);
+      state.completedShoppingList = state.completedShoppingList.filter(
+        (item) => !removedItems.includes(item._id)
+      );
     },
   },
   extraReducers: (builder) => {
@@ -173,5 +199,12 @@ const ingredientSlice = createSlice({
   },
 });
 
-export const { setSelectedIngredients } = ingredientSlice.actions;
+export const {
+  setSelectedIngredients,
+  addToShoppingList,
+  removeFromShoppingList,
+  addToCompletedList,
+  removeFromCompletedList,
+} = ingredientSlice.actions;
+
 export default ingredientSlice.reducer;
