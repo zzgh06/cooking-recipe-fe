@@ -1,16 +1,41 @@
 import React from "react";
-import { Col } from "react-bootstrap";
+import { Card, CardContent, Typography, Box } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
-const DashBoardCard = ({ status, count, borderColor }) => {
+const StyledCard = styled(Card)(({ theme }) => ({
+  border: `2px solid green`,
+  borderRadius: theme.shape.borderRadius,
+  boxShadow: theme.shadows[3],
+  transition: 'transform 0.3s ease',
+  '&:hover': {
+    transform: 'scale(1.03)',
+    boxShadow: theme.shadows[6],
+  },
+}));
+
+const StyledCardContent = styled(CardContent)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  textAlign: 'center',
+}));
+
+const DashBoardCard = ({ status, count }) => {
+
+
   return (
-    <Col lg="3" md="6" sm="12">
-      <div className="dashboard-card">
-        <div className="dashboard-content">
-          <p>{status}</p>
-          <span>{count}</span>
-        </div>
-      </div>
-    </Col>
+    <Box sx={{ p: 1 }}>
+      <StyledCard>
+        <StyledCardContent>
+          <Typography variant="h6" component="div" color="textPrimary">
+            {status}
+          </Typography>
+          <Typography variant="h4" component="div" color="textSecondary" sx={{ mt: 1 }}>
+            {count}
+          </Typography>
+        </StyledCardContent>
+      </StyledCard>
+    </Box>
   );
 };
 

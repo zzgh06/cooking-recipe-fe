@@ -1,6 +1,49 @@
 import React from "react";
-import Button from "react-bootstrap/Button";
-import Table from "react-bootstrap/Table";
+import {
+  Box,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
+
+const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
+  boxShadow: theme.shadows[1],
+  borderRadius: theme.shape.borderRadius,
+  overflow: 'auto',
+}));
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  minWidth: 120,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover,
+  },
+}));
+
+
+const ImageCell = styled(StyledTableCell)(({ theme }) => ({
+  maxWidth: 120,
+  overflow: 'hidden',
+  whiteSpace: 'nowrap',
+}));
+
+const DescriptionCell = styled(StyledTableCell)(({ theme }) => ({
+  minWidth: 150,
+  maxWidth: 200, 
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+}));
 
 const IngredientTable = ({
   header = [],
@@ -8,73 +51,78 @@ const IngredientTable = ({
   deleteItem,
   openEditForm,
 }) => {
-  console.log("data", data);
   return (
-    <div className="overflow-x">
-      <Table striped bordered hover>
-        <thead>
-          <tr>
+    <StyledTableContainer>
+      <Table>
+        <TableHead>
+          <TableRow>
             {header.map((title, index) => (
-              <th key={index}>{title}</th>
+              <StyledTableCell key={index}>{title}</StyledTableCell>
             ))}
-          </tr>
-        </thead>
-        <tbody>
+          </TableRow>
+        </TableHead>
+        <TableBody>
           {data.length > 0 ? (
             data.map((item, index) => (
-              <tr key={index}>
-                <td>{index + 1}</td>
-                <td style={{ minWidth: "100px" }}>{item?.name || "N/A"}</td>
-                <td style={{ minWidth: "150px" }}>
-                  {item?.description || "N/A"}
-                </td>
-                <td>₩ {item?.price ? item.price.toFixed(2) : "N/A"}</td>
-                <td>
+              <StyledTableRow key={index}>
+                <StyledTableCell>{index + 1}</StyledTableCell>
+                <StyledTableCell>{item?.name || "N/A"}</StyledTableCell>
+                <DescriptionCell>{item?.description || "N/A"}</DescriptionCell>
+                <StyledTableCell>
+                  ₩ {item?.price ? item.price.toFixed(0) : "N/A"}
+                </StyledTableCell>
+                <StyledTableCell>
                   {item?.discountPrice ? item.discountPrice.toFixed(2) : "N/A"}
-                </td>
-                <td>
+                </StyledTableCell>
+                <StyledTableCell>
                   {Array.isArray(item?.category)
                     ? item.category.join(", ")
                     : "N/A"}
-                </td>
-                <td>{item?.stock || "N/A"}</td>
-                <td>{item?.status || "N/A"}</td>
-                <td>{item?.reviewCnt || "N/A"}</td>
-                <td>
+                </StyledTableCell>
+                <StyledTableCell>{item?.stock || "N/A"}</StyledTableCell>
+                <StyledTableCell>{item?.status || "N/A"}</StyledTableCell>
+                <StyledTableCell>{item?.reviewCnt || "N/A"}</StyledTableCell>
+                <ImageCell>
                   <img
-                    key={index}
                     src={item.images[0] || "default_image_url"}
                     alt={item.name || "default"}
-                    style={{ width: "100px" }}
+                    style={{ width: "100px", height: "auto" }}
                   />
-                </td>
-                <td style={{ minWidth: "100px" }}>
-                  <div className="d-flex justify-content-between">
+                </ImageCell>
+                <StyledTableCell>
+                  <Box display="flex" justifyContent="space-between">
                     <Button
-                      size="sm"
-                      variant="danger"
+                      size="small"
+                      variant="contained"
+                      color="error"
                       onClick={() => deleteItem(item?._id)}
-                      className="mr-1"
                     >
-                      -
+                      Delete
                     </Button>
-                    <Button size="sm" onClick={() => openEditForm(item)}>
+                    <Button
+                      size="small"
+                      variant="contained"
+                      color="primary"
+                      onClick={() => openEditForm(item)}
+                    >
                       Edit
                     </Button>
-                  </div>
-                </td>
-              </tr>
+                  </Box>
+                </StyledTableCell>
+              </StyledTableRow>
             ))
           ) : (
-            <tr>
-              <td colSpan={header.length} className="text-center">
-                No Data to show
-              </td>
-            </tr>
+            <TableRow>
+              <StyledTableCell colSpan={header.length} align="center">
+                <Typography variant="body2" color="textSecondary">
+                  No Data to show
+                </Typography>
+              </StyledTableCell>
+            </TableRow>
           )}
-        </tbody>
+        </TableBody>
       </Table>
-    </div>
+    </StyledTableContainer>
   );
 };
 

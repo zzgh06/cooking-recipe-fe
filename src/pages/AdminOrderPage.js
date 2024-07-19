@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row } from "react-bootstrap";
-import ReactPaginate from "react-paginate";
+import { Container, Grid, Typography, Box } from "@mui/material";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import OrderTable from "../component/OrderTable/OrderTable";
@@ -8,6 +7,21 @@ import DashBoardCard from "../component/DashBoardCard/DashboardCard";
 import OrderDetailDialog from "../component/OrderDetailDialog/OrderDetailDialog";
 import { getOrderList, setSelectedOrder } from "../redux/orderSlice";
 import SearchBox from "../component/SearchBox/SearchBox";
+import ReactPaginate from "react-paginate";
+import { styled } from "@mui/material/styles";
+
+const PaginationWrapper = styled(Box)(({ theme }) => ({
+  marginTop: theme.spacing(2),
+  display: 'flex',
+  justifyContent: 'center',
+}));
+
+const badgeBg = {
+  preparing: "primary",
+  shipping: "warning",
+  refund: "error",
+  delivered: "success",
+};
 
 const AdminOrderPage = () => {
   const dispatch = useDispatch();
@@ -17,19 +31,9 @@ const AdminOrderPage = () => {
     page: query.get("page") || 1,
     orderNum: query.get("orderNum") || "",
   });
-  const [showDialog, setShowDialog] = useState(false);
-  const [mode, setMode] = useState("new");
   const [open, setOpen] = useState(false);
   const totalPageNum = useSelector((state) => state.order.totalPageNum);
-  const { orderList } = useSelector((state) => {
-    return state.order;
-  });
-  const badgeBg = {
-    preparing: "primary",
-    shipping: "warning",
-    refund: "danger",
-    delivered: "success",
-  };
+  const { orderList } = useSelector((state) => state.order);
 
   const tableHeader = [
     "#",
@@ -44,7 +48,7 @@ const AdminOrderPage = () => {
 
   useEffect(() => {
     dispatch(getOrderList({ ...searchQuery }));
-  }, [searchQuery]);
+  }, [searchQuery, dispatch]);
 
   useEffect(() => {
     if (searchQuery.orderNum === "") {
@@ -52,9 +56,8 @@ const AdminOrderPage = () => {
     }
     const params = new URLSearchParams(searchQuery);
     const queryString = params.toString();
-
     navigate("?" + queryString);
-  }, [searchQuery]);
+  }, [searchQuery, navigate]);
 
   const openEditForm = (order) => {
     setOpen(true);
@@ -70,41 +73,40 @@ const AdminOrderPage = () => {
   };
 
   const getOrderCountByStatus = (status) => {
-    if (orderList.length === 0 || orderList === undefined) return 0;
-    return orderList.filter((order) => order.status === status).length;
+    return orderList?.filter((order) => order.status === status).length || 0;
   };
 
-  console.log("orderList", orderList)
-
   return (
-    <div className="locate-center">
-      <Container className="container-custom">
-        <div className="mt-2 display-center mb-2">
-          <SearchBox
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            placeholder="오더번호"
-            field="orderNum"
-          />
-        </div>
+    <Container sx={{ mt: 2 }}>
+      <Box sx={{ mb: 2, display: 'flex', justifyContent: 'center' }}>
+        <SearchBox
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          placeholder="오더번호"
+          field="orderNum"
+        />
+      </Box>
 
-        <Row className="overflow-x">
-          {Object.keys(badgeBg).map((status) => (
+      <Grid container spacing={1} sx={{ mb: 2 }}>
+        {Object.keys(badgeBg).map((status) => (
+          <Grid item xs={12} sm={6} md={3} key={status}>
             <DashBoardCard
-              key={status}
               status={status}
               count={getOrderCountByStatus(status)}
               borderColor={badgeBg[status]}
             />
-          ))}
-        </Row>
+          </Grid>
+        ))}
+      </Grid>
 
-        <OrderTable
-          header={tableHeader}
-          data={orderList}
-          openEditForm={openEditForm}
-          badgeBg={badgeBg}
-        />
+      <OrderTable
+        header={tableHeader}
+        data={orderList}
+        openEditForm={openEditForm}
+        badgeBg={badgeBg}
+      />
+
+      <PaginationWrapper>
         <ReactPaginate
           nextLabel="next >"
           onPageChange={handlePageClick}
@@ -125,10 +127,10 @@ const AdminOrderPage = () => {
           containerClassName="pagination"
           activeClassName="active"
         />
-      </Container>
+      </PaginationWrapper>
 
       {open && <OrderDetailDialog open={open} handleClose={handleClose} />}
-    </div>
+    </Container>
   );
 };
 

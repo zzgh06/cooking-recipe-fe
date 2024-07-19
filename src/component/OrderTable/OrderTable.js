@@ -1,53 +1,79 @@
 import React from "react";
-import { Table, Badge } from "react-bootstrap";
+import { Chip, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { currencyFormat } from "../../utils/number";
 
+const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
+  boxShadow: theme.shadows[1],
+  borderRadius: theme.shape.borderRadius,
+  overflow: 'hidden',
+}));
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  minWidth: 100,
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover,
+  },
+  cursor: 'pointer',
+  '&:hover': {
+    backgroundColor: theme.palette.action.selected,
+  },
+}));
+
 const OrderTable = ({ header, data, openEditForm, badgeBg }) => {
+
+  console.log(data)
   return (
-    <div className="overflow-x">
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            {header.map((title) => (
-              <th>{title}</th>
+    <StyledTableContainer>
+      <Table>
+        <TableHead>
+          <TableRow>
+            {header.map((title, index) => (
+              <StyledTableCell key={index}>{title}</StyledTableCell>
             ))}
-          </tr>
-        </thead>
-        <tbody>
+          </TableRow>
+        </TableHead>
+        <TableBody>
           {data?.length > 0 ? (
             data.map((item, index) => (
-              <tr onClick={() => openEditForm(item)}>
-                <th>{index}</th>
-                <th>{item.orderNum}</th>
-                <th>{item.createdAt.slice(0, 10)}</th>
-                <th>{item.userId?.email}</th>
-                {item.items.length > 0 ? (
-                  <th>
-                    {item.items[0].ingredientId?.name}
-                    {item.items.length > 1 && ` 외 ${item.items.length - 1}개`}
-                  </th>
-                ) : (
-                  <th></th>
-                )}
-
-                <th>
-                  {item.contactInfo.shipTo.address +
-                    " " +
-                    item.contactInfo.shipTo.city}
-                </th>
-
-                <th>{currencyFormat(item.totalPrice)}</th>
-                <th>
-                  <Badge bg={badgeBg[item.status]}>{item.status}</Badge>
-                </th>
-              </tr>
+              <StyledTableRow key={index} onClick={() => openEditForm(item)}>
+                <StyledTableCell>{index + 1}</StyledTableCell>
+                <StyledTableCell>{item.orderNum}</StyledTableCell>
+                <StyledTableCell>{item.createdAt.slice(0, 10)}</StyledTableCell>
+                <StyledTableCell>{item.userId?.email}</StyledTableCell>
+                <StyledTableCell>
+                  {item.items.length > 0 ? (
+                    <>
+                      {item.items[0].ingredientId?.name}
+                      {item.items.length > 1 && ` 외 ${item.items.length - 1}개`}
+                    </>
+                  ) : (
+                    "-"
+                  )}
+                </StyledTableCell>
+                <StyledTableCell>
+                  {item.contactInfo.shipTo.address + " " + item.contactInfo.shipTo.city}
+                </StyledTableCell>
+                <StyledTableCell>{currencyFormat(item.totalPrice)}</StyledTableCell>
+                <StyledTableCell>
+                  <Chip label={item.status} color={badgeBg[item.status] || 'default'} />
+                </StyledTableCell>
+              </StyledTableRow>
             ))
           ) : (
-            <tr>No Data to show</tr>
+            <TableRow>
+              <StyledTableCell colSpan={header.length} align="center">
+                <Typography>No Data to show</Typography>
+              </StyledTableCell>
+            </TableRow>
           )}
-        </tbody>
+        </TableBody>
       </Table>
-    </div>
+    </StyledTableContainer>
   );
 };
+
 export default OrderTable;
