@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Button } from "react-bootstrap";
+import { Box, Button, Container, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import SearchBox from "../component/SearchBox/SearchBox";
 import IngredientTable from "../component/IngredientTable/IngredientTable";
@@ -12,15 +12,13 @@ import {
   deleteIngredient,
 } from "../redux/ingredientSlice";
 import { useSearchParams } from "react-router-dom";
-import "../style/adminIngredient.style.css";
 
 const AdminIngredientsPage = () => {
   const dispatch = useDispatch();
   const [query, setQuery] = useSearchParams();
-  const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState({
     page: query.get("page") || 1,
-    orderNum: query.get("orderNum") || "",
+    name: query.get("name") || "",
   });
   const [showDialog, setShowDialog] = useState(false);
   const [mode, setMode] = useState("new");
@@ -75,35 +73,38 @@ const AdminIngredientsPage = () => {
   };
 
   return (
-    <div className="locate-center">
-      <Container className="container-custom">
-        <div className="mt-2 top-container">
+    <Container maxWidth="lg">
+      <Box sx={{ mt: 2, mb: 2 }}>
+        <Box display="flex" justifyContent="space-between" alignItems="center">
           <SearchBox
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
             placeholder="재료 이름으로 검색"
             field="name"
           />
-          <Button className="ingredients mt-2 mb-2" onClick={handleShowAll}>
+          <Button variant="contained" color="primary" onClick={handleShowAll} sx={{width: "300px"}}>
             Show All
           </Button>
-        </div>
-        <div className="button-container">
+        </Box>
+        <Box sx={{ mt: 2, width: "300px" }}>
           <Button
-            className="ingredients mt-2 mb-2"
+            variant="contained"
+            color="secondary"
             onClick={handleClickNewItem}
           >
             Add New Item +
           </Button>
-        </div>
+        </Box>
+      </Box>
 
-        <IngredientTable
-          header={tableHeader}
-          data={ingredientList}
-          deleteItem={deleteItem}
-          openEditForm={openEditForm}
-        />
+      <IngredientTable
+        header={tableHeader}
+        data={ingredientList}
+        deleteItem={deleteItem}
+        openEditForm={openEditForm}
+      />
 
+      <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
         <ReactPaginate
           nextLabel="next >"
           onPageChange={handlePageClick}
@@ -124,7 +125,7 @@ const AdminIngredientsPage = () => {
           containerClassName="pagination"
           activeClassName="active"
         />
-      </Container>
+      </Box>
 
       <NewItemDialog
         mode={mode}
@@ -132,7 +133,7 @@ const AdminIngredientsPage = () => {
         setShowDialog={setShowDialog}
         selectedIngredient={selectedIngredient}
       />
-    </div>
+    </Container>
   );
 };
 

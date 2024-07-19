@@ -1,4 +1,4 @@
-// src/redux/authSlice.js
+
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../utils/api";
 
@@ -76,6 +76,7 @@ export const loginWithToken = createAsyncThunk(
 export const getUsersInfo = createAsyncThunk(
   "auth/getUsersInfo",
   async (searchQuery, thunkAPI) => {
+    console.log("searchQuery", searchQuery)
     try {
       const response = await api.get(
         `/user/admin?name=${searchQuery.name}&page=${searchQuery.page}`
