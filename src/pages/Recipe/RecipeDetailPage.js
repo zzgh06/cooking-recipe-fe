@@ -8,7 +8,6 @@ import {
   getRecipeFavorite,
 } from "../../redux/favoriteSlice";
 import Review from "../../component/Review/Review";
-import { Spinner } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCartShopping,
@@ -39,6 +38,7 @@ import KakaoShareButton from "../../component/KakaoShareButton/KakaoShareButton"
 import CopyClipButton from "../../component/CopyClipButton/CopyClipButton";
 import IngredientDialog from "../../component/IngredientDialog/IngredientDialog";
 import RecipeDetailSkeleton from "../../component/Skeleton/RecipeDetailSkeleton";
+import ShoppingListDialog from "../../component/ShoppingListDialog/ShoppingListDialog";
 
 const RecipeImage = styled("img")({
   width: "100%",
@@ -95,13 +95,18 @@ const RecipeDetail = () => {
   const navigate = useNavigate();
   const { recipeDetail, loading, error } = useSelector((state) => state.recipe);
   const { recipeFavorite } = useSelector((state) => state.favorite);
+  const user = useSelector((state) => state.auth.user)
   const [isFavorite, setIsFavorite] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [openIngredientDialog, setOpenIngredientDialog] = useState(false);
+  const [openShoppingListDialog, setOpenShoppingListDialog] = useState(false);
+
 
   useEffect(() => {
     dispatch(fetchRecipeById(id));
-    dispatch(getRecipeFavorite());
-  }, [dispatch, id]);
+    if (user) {
+      dispatch(getRecipeFavorite());
+    }
+  }, [dispatch, id, user]);
 
   useEffect(() => {
     if (recipeDetail && recipeFavorite) {
@@ -110,6 +115,9 @@ const RecipeDetail = () => {
   }, [recipeDetail, recipeFavorite]);
 
   const handleFavoriteClick = () => {
+    if (!user) {
+      navigate("/login")
+    }
     if (isFavorite) {
       dispatch(deleteRecipeFavorite(recipeDetail._id));
     } else {
@@ -118,12 +126,20 @@ const RecipeDetail = () => {
     setIsFavorite(!isFavorite);
   };
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleClickOpenIngredientDialog = () => {
+    setOpenIngredientDialog(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleCloseIngredientDialog = () => {
+    setOpenIngredientDialog(false);
+  };
+
+  const handleClickOpenShoppingListDialog = () => {
+    setOpenShoppingListDialog(true);
+  };
+
+  const handleCloseShoppingListDialog = () => {
+    setOpenShoppingListDialog(false);
   };
 
   const handlePurchaseClick = (ingredientName) => {
@@ -153,10 +169,6 @@ const RecipeDetail = () => {
     );
   }
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
   return (
     <>
       <RecipeCategory />
@@ -170,7 +182,7 @@ const RecipeDetail = () => {
           </Grid>
           <Grid item xs={12}>
             <RecipeInfoContainer>
-              <Typography variant="h4" component="h1" fontWeight="600">
+              <Typography variant="h4" component="h2" fontWeight="600" fontSize="27px">
                 {recipeDetail?.name}
               </Typography>
               <Box sx={{ display: "flex" }}>
@@ -178,10 +190,10 @@ const RecipeDetail = () => {
                   onClick={handleFavoriteClick}
                   sx={{ cursor: "pointer", marginRight: "25px" }}
                 >
-                  {isFavorite ? (
-                    <FontAwesomeIcon icon={regularBookmark} size="lg" />
-                  ) : (
+                  {isFavorite && user ? (
                     <FontAwesomeIcon icon={solidBookmark} size="lg" />
+                  ) : (
+                    <FontAwesomeIcon icon={regularBookmark} size="lg" />
                   )}
                 </Box>
                 <Box sx={{ cursor: "pointer", marginRight: "20px" }}>
@@ -215,13 +227,13 @@ const RecipeDetail = () => {
               </Typography>
             </HeadContainer>
             <RecipeIngredientButton>
-              <StyledButton variant="outlined" onClick={handleClickOpen}>
+              <StyledButton variant="outlined" onClick={handleClickOpenIngredientDialog}>
                 <FontAwesomeIcon icon={faSearch} />
                 <Box component="span" sx={{ ml: 1 }}>
                   재료검색
                 </Box>
               </StyledButton>
-              <StyledButton variant="outlined">
+              <StyledButton variant="outlined" onClick={handleClickOpenShoppingListDialog}>
                 <FontAwesomeIcon icon={faCartShopping} />
                 <Box component="span" sx={{ ml: 1 }}>
                   장보기
@@ -296,9 +308,14 @@ const RecipeDetail = () => {
         </Grid>
       </Container>
       <IngredientDialog
-        open={open}
-        handleClose={handleClose}
-        ingredients={recipeDetail?.ingredients || []}
+        open={openIngredientDialog}
+        handleClose={handleCloseIngredientDialog}
+        ingredients={recipeDetail?.ingredients}
+      />
+      <ShoppingListDialog
+        open={openShoppingListDialog}
+        handleClose={handleCloseShoppingListDialog}
+        ingredients={recipeDetail?.ingredients}
       />
     </>
   );

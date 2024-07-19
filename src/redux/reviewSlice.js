@@ -3,10 +3,10 @@ import api from "../utils/api";
 
 export const fetchReviews = createAsyncThunk(
   'reviews/fetchReviews',
-  async ({ type, id }, { rejectWithValue }) => {
-    try {       
-      const response = await api.get(`/review/${type}/${id}`);
-      return response.data.reviews;
+  async ({ type, id, page, limit }, { rejectWithValue }) => {
+    try {
+      const response = await api.get(`/review/${type}/${id}?page=${page}&limit=${limit}`);
+      return response.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
     }
@@ -60,6 +60,7 @@ const reviewSlice = createSlice({
   initialState: {
     reviews: [],
     averageRating: 0,
+    totalReviews: 0,
     loading: false,
     error: null,
   },
@@ -71,8 +72,9 @@ const reviewSlice = createSlice({
       })
       .addCase(fetchReviews.fulfilled, (state, action) => {
         state.loading = false;
-        state.reviews = action.payload;
-        state.averageRating = calculateAverageRating(action.payload);
+        state.reviews = action.payload.reviews;
+        state.totalReviews = action.payload.totalReviews;
+        state.averageRating = calculateAverageRating(action.payload.allReviews);
       })
       .addCase(fetchReviews.rejected, (state, action) => {
         state.loading = false;

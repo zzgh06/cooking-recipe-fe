@@ -86,16 +86,6 @@ const ReviewForm = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!user) {
-      dispatch(
-        setToastMessage({
-          message: "로그인 후 리뷰를 작성해주세요",
-          status: "success",
-        })
-      );
-      navigate("/login");
-      return;
-    }
 
     if (rating < 1) {
       setStarError(true);

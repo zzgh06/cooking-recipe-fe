@@ -1,20 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../utils/api";
 import { setToastMessage } from "./commonUISlice";
-//import { cartActions } from "./cartSlice";
-const initialState = {
-  orderList: [],
-  selectedOrder: {},
-  totalPageNum: 1,
-  loading: false,
-  error: "",
-  orderNum: "",
-};
 
 export const createOrder = createAsyncThunk(
   "order/createOrder",
   async ({ payload, navigate }, { dispatch, rejectWithValue }) => {
-    console.log("payload", payload)
+    console.log("payload", payload);
     try {
       const response = await api.post("/order", payload);
       navigate("/payment/success");
@@ -36,12 +27,12 @@ export const getOrder = createAsyncThunk(
     }
   }
 );
+
 export const getOrderList = createAsyncThunk(
   "order/getOrderList",
-  async (query, { dispatch, rejectWithValue }) => {
+  async (query, { rejectWithValue }) => {
     try {
       const response = await api.get("/order", { params: { ...query } });
-      console.log("Order List Response:", response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -74,7 +65,14 @@ export const updateOrder = createAsyncThunk(
 );
 const orderSlice = createSlice({
   name: "order",
-  initialState,
+  initialState: {
+    orderList: [],
+    selectedOrder: {},
+    totalPageNum: 1,
+    loading: false,
+    error: "",
+    orderNum: "",
+  },
   reducers: {
     setSelectedOrder(state, action) {
       state.selectedOrder = action.payload;

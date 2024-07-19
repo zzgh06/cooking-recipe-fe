@@ -75,7 +75,7 @@ const ChangePasswordPage = () => {
   return (
     <>
       <HeadContainer>
-        <Typography variant="h4">나의 계정</Typography>
+        <Typography variant="h5">나의 정보</Typography>
         <Typography variant="subtitle1">비밀번호 변경</Typography>
       </HeadContainer>
       <ChangePasswordContainer>

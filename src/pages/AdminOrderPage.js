@@ -70,9 +70,11 @@ const AdminOrderPage = () => {
   };
 
   const getOrderCountByStatus = (status) => {
-    if (orderList.length === 0 || orderList.data === undefined) return 0;
-    return orderList.data.filter((order) => order.status === status).length;
+    if (orderList.length === 0 || orderList === undefined) return 0;
+    return orderList.filter((order) => order.status === status).length;
   };
+
+  console.log("orderList", orderList)
 
   return (
     <div className="locate-center">
@@ -99,7 +101,7 @@ const AdminOrderPage = () => {
 
         <OrderTable
           header={tableHeader}
-          data={orderList.data}
+          data={orderList}
           openEditForm={openEditForm}
           badgeBg={badgeBg}
         />
