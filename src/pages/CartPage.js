@@ -34,7 +34,10 @@ const CartPage = () => {
 
   const handleSelectItem = (id) => {
     dispatch(toggleSelectItem(id));
+    dispatch(calculateSelectedTotalPrice());
   };
+
+  console.log("cartItem", cartItem)
 
   return (
     <Container sx={{ mb: 4 }}>

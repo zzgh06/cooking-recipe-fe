@@ -7,7 +7,7 @@ import { useNavigate } from "react-router";
 import { cc_expires_format } from "../utils/number";
 import { createOrder } from "../redux/orderSlice";
 import OrderReceipt from "../component/OrderReceipt/OrderReceipt";
-import { deleteSelectedCartItems } from "../redux/cartSlice";
+import { clearSelectedItems, deleteSelectedCartItems } from "../redux/cartSlice";
 
 const PaymentPage = () => {
   const dispatch = useDispatch();

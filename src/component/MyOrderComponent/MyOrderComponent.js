@@ -80,7 +80,7 @@ const MyOrderComponent = () => {
     if (searchQuery.orderNum === "") delete searchQuery.orderNum;
     const params = new URLSearchParams(searchQuery);
     navigate("?" + params.toString());
-    dispatch(getOrderList({ ...searchQuery, page }));
+    dispatch(getOrder({ ...searchQuery, page }));
   }, [searchQuery, page]);
 
   useEffect(() => {

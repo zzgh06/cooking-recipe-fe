@@ -2,10 +2,13 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../utils/api";
 import { setToastMessage } from "./commonUISlice";
 
-export const getCart = createAsyncThunk("cart/getCart", async () => {
+export const getCart = createAsyncThunk("cart/getCart", async (_, {dispatch}) => {
   const response = await api.get(`/cart`);
-  console.log("response", response.data.data);
-  return response.data.data;
+  const data = response.data.data;
+
+  const selectedItems = data.map(item => item.ingredientId._id);
+  dispatch(setSelectedItems(selectedItems));
+  return data;
 });
 
 export const addItemToCart = createAsyncThunk(
@@ -45,8 +48,6 @@ export const deleteCartItem = createAsyncThunk(
   "cart/deleteCartItem",
   async ({ ingredientId }) => {
     const response = await api.delete(`/cart/${ingredientId}`);
-    console.log("deleteCartItem - ingredientId:", ingredientId);
-    console.log("deleteCartItem - response data:", response.data.data);
     return response.data.data;
   }
 );
@@ -56,15 +57,12 @@ export const deleteSelectedCartItems = createAsyncThunk(
   async (_, { dispatch, getState, rejectWithValue }) => {
     const state = getState();
     const selectedItems = state.cart.selectedItems;
-    console.log("deleteSelectedCartItems - selectedItems:", selectedItems);
     
     try {
       for (const id of selectedItems) {
         const resultAction = await dispatch(deleteCartItem({ ingredientId: id })).unwrap();
-        console.log("deleteCartItem result:", resultAction);
       }
     } catch (error) {
-      console.error("deleteSelectedCartItems - error:", error);
       dispatch(
         setToastMessage({
           message: error.error,
@@ -108,6 +106,9 @@ const cartSlice = createSlice({
     clearSelectedItems: (state) => {
       state.selectedItems = [];
     },
+    setSelectedItems: (state, action) => {
+      state.selectedItems = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -115,7 +116,6 @@ const cartSlice = createSlice({
         state.status = "loading";
       })
       .addCase(getCart.fulfilled, (state, action) => {
-        console.log("Fetched cart items:", action.payload);
         state.status = "succeeded";
         state.cartItem = action.payload;
       })
@@ -162,5 +162,6 @@ export const {
   calculateSelectedTotalPrice,
   toggleSelectItem,
   clearSelectedItems,
+  setSelectedItems,
 } = cartSlice.actions;
 export default cartSlice.reducer;
