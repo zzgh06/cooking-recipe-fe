@@ -12,6 +12,7 @@ import {
   styled,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { AddCircleOutline } from "@mui/icons-material";
 
 const HeadContainer = styled("div")({
   display: "flex",
@@ -21,22 +22,37 @@ const HeadContainer = styled("div")({
   paddingLeft: "10px",
 });
 
+const NoRecipesContainer = styled(Box)({
+  textAlign: "center",
+  marginTop: "40px",
+  padding: "20px",
+  borderRadius: "8px",
+  backgroundColor: "#f2f2f2",
+  border: "2px dashed #ccc",
+});
+
+const NoRecipesMessage = styled(Typography)({
+  color: "#555",
+  fontSize: "1.2rem",
+  fontWeight: "bold",
+  fontStyle: "italic",
+});
+
 const MyRecipeComponent = () => {
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.user);
   const recipes = useSelector((state) => state.recipe.recipes);
 
-  
   const userRecipes = recipes.filter(
     (recipe) => recipe.userId === user.user._id
   );
-  
+
   const handleRecipe = (id) => {
     navigate(`/recipe/${id}`);
   };
 
   return (
-    <>
+    <Container>
       <Box mb={3}>
         <HeadContainer>
           <Typography variant="h5">나의 정보</Typography>
@@ -66,9 +82,7 @@ const MyRecipeComponent = () => {
                   <Button
                     variant="contained"
                     color="primary"
-                    onClick={() => {
-                      handleRecipe(recipe._id);
-                    }}
+                    onClick={() => handleRecipe(recipe._id)}
                   >
                     보기
                   </Button>
@@ -78,11 +92,22 @@ const MyRecipeComponent = () => {
           ))}
         </Grid>
       ) : (
-        <Box sx={{ textAlign: "center", mt: 4 }}>
-          <Typography variant="body1">작성한 레시피가 없습니다.</Typography>
-        </Box>
+        <NoRecipesContainer>
+          <NoRecipesMessage>작성한 레시피가 없습니다.</NoRecipesMessage>
+          <Button
+            size="large"
+            endIcon={<AddCircleOutline />}
+            onClick={() => navigate("/account/recipe")}
+            sx={{ justifyContent: "flex-end", width: "170px", color: "black" }}
+          >
+            레시피 등록하기
+          </Button>
+          <Typography variant="body2" sx={{ marginTop: "8px" }}>
+            새로운 레시피를 추가하려면 위의 버튼을 클릭하세요.
+          </Typography>
+        </NoRecipesContainer>
       )}
-    </>
+    </Container>
   );
 };
 

@@ -59,11 +59,7 @@ const shoppingListSlice = createSlice({
     loading: false,
     error: null,
   },
-  reducers: {
-    setSelectedIngredients: (state, action) => {
-      state.selectedIngredients = action.payload;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchShoppingList.pending, (state) => {

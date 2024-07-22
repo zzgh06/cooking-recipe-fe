@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Button, TextField, Typography, Grid, styled } from "@mui/material";
+import { Button, TextField, Typography, Grid, Box, IconButton, CircularProgress } from "@mui/material";
 import { verifyCurrentPassword } from "../redux/userSlice";
-import "../style/VerifyCurrentPassword.style.css";
-
-const HeadContainer = styled('div')({
+import { styled } from "@mui/system";
+const HeadContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
   justifyContent: 'flex-start',
   alignItems: 'baseline',
   borderBottom: '4px solid black',
-  paddingLeft: '10px',
-});
+  paddingLeft: theme.spacing(1),
+}));
 
 const VerifyCurrentPassword = ({ onVerifySuccess }) => {
   const dispatch = useDispatch();
@@ -38,35 +37,58 @@ const VerifyCurrentPassword = ({ onVerifySuccess }) => {
           <Typography variant="subtitle1">비밀번호 수정</Typography>
         </HeadContainer>
       </Grid>
-      <div className="verify-password_container">
-        <div className="password-info_message">
-          <Typography variant="h5" sx={{fontSize: '25px'}}>비밀번호 재확인</Typography>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          mt: 4,
+          px: 2,
+          height: '100%',
+        }}
+      >
+        <Box
+          sx={{
+            mb: 3,
+            textAlign: 'center',
+          }}
+        >
+          <Typography variant="h5" sx={{ fontSize: '25px' }}>
+            비밀번호 재확인
+          </Typography>
           <Typography>
             회원님의 정보를 안전하게 보호하기 위해 비밀번호를 다시 한번 확인해주세요.
           </Typography>
-        </div>
-        <form onSubmit={handleSubmit} className="verify-password_form">
+        </Box>
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          sx={{
+            width: '100%',
+            maxWidth: '560px',
+            backgroundColor: '#fff',
+            boxShadow: 'none',
+            borderRadius: 0,
+            borderTop: '3px solid black',
+            borderBottom: '2px solid black',
+            p: 3,
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
           {error && (
-            <div className="error-message">
-              <svg
-                className="svg-icon"
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                fill="none"
-                viewBox="0 0 24 24"
-                style={{ color: "rgb(231, 94, 94)", marginBottom: "3px" }}
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M15 19a3 3 0 1 1-6 0M15.865 16A7.54 7.54 0 0 0 19.5 9.538C19.5 5.375 16.142 2 12 2S4.5 5.375 4.5 9.538A7.54 7.54 0 0 0 8.135 16m7.73 0h-7.73m7.73 0v3h-7.73v-3"
-                ></path>
-              </svg>
-              {error.error}
-            </div>
+            <Box
+              sx={{
+                mb: 2,
+                display: 'flex',
+                alignItems: 'center',
+                color: 'rgb(231, 94, 94)',
+              }}
+            >
+              <Typography variant="body2" sx={{ ml: 1 }}>
+                {error.error}
+              </Typography>
+            </Box>
           )}
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12}>
@@ -87,13 +109,14 @@ const VerifyCurrentPassword = ({ onVerifySuccess }) => {
                 color="primary"
                 type="submit"
                 disabled={loading}
+                endIcon={loading ? <CircularProgress size={20} /> : null}
               >
                 {loading ? "인증 중..." : "비밀번호 확인"}
               </Button>
             </Grid>
           </Grid>
-        </form>
-      </div>
+        </Box>
+      </Box>
     </>
   );
 };

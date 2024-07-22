@@ -40,7 +40,7 @@ const RecipeCategory = () => {
     padding: "5px 10px",
     transition: "all 0.3s ease",
     "&:hover": {
-      color: "white",
+      backgroundColor: "lightgrey",
     },
     width:"10%",
     [theme.breakpoints.down("md")]: {
