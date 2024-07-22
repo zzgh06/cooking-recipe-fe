@@ -17,6 +17,7 @@ import AddressInput from "../component/AddressInput/AddressInput";
 import DeliveryEstimate from "../component/DeliveryEstimate/DeliveryEstimate";
 import Review from "../component/Review/Review";
 import { addItemToCart } from "../redux/cartSlice";
+import IngredientsDetailSkeleton from "../component/Skeleton/IngredientsDetailSkeleton";
 
 const ShoppingTabs = styled(Tabs)({
   width: "100%",
@@ -51,8 +52,8 @@ const IngredientsDetail = () => {
   const location = useLocation();
 
   const [address, setAddress] = useState("지역을 선택해주세요");
-  const selectedIngredient = useSelector(
-    (state) => state.ingredients.selectedIngredient || {}
+  const {selectedIngredient, loading} = useSelector(
+    (state) => state.ingredients || {}
   );
   const [value, setValue] = useState(0);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -81,19 +82,19 @@ const IngredientsDetail = () => {
   }, [dispatch, id, location.search]);
 
   useEffect(() => {
-    if (!selectedIngredient._id) return;
+    if (!selectedIngredient?._id) return;
 
     const recentlyIngredient = {
-      id: selectedIngredient._id,
-      name: selectedIngredient.name,
-      images: selectedIngredient.images[0],
+      id: selectedIngredient?._id,
+      name: selectedIngredient?.name,
+      images: selectedIngredient?.images[0],
     };
 
     const viewedIngredients =
       JSON.parse(localStorage.getItem("viewedIngredients")) || [];
 
     const updatedViewedIngredients = viewedIngredients.filter(
-      (item) => item.id !== selectedIngredient._id
+      (item) => item.id !== selectedIngredient?._id
     );
 
     updatedViewedIngredients.unshift(recentlyIngredient);
@@ -122,21 +123,25 @@ const IngredientsDetail = () => {
     setIsExpanded(!isExpanded);
   };
 
+  if (loading) {
+    return <IngredientsDetailSkeleton />;
+  }
+
   return (
     <>
-      {selectedIngredient._id ? (
+      {selectedIngredient?._id ? (
         <Container maxWidth="lg" sx={{ padding: "50px 0" }}>
           <Grid container spacing={4}>
             <Grid item lg={6} xs={12} sx={{ textAlign: "center" }}>
               <img
-                src={selectedIngredient.images[0]}
-                alt={selectedIngredient.name}
+                src={selectedIngredient?.images[0]}
+                alt={selectedIngredient?.name}
                 style={{ maxWidth: "100%", height: "auto" }}
               />
             </Grid>
             <Grid item lg={6} xs={12}>
               <Typography variant="h4" component="div" gutterBottom>
-                {selectedIngredient.name}
+                {selectedIngredient?.name}
               </Typography>
               <Typography variant="h6" component="div">
                 {selectedIngredient?.discountPrice && (
@@ -150,14 +155,14 @@ const IngredientsDetail = () => {
                 )}
                 {currencyFormat(
                   calculateDiscountedPrice(
-                    selectedIngredient.price,
+                    selectedIngredient?.price,
                     selectedIngredient?.discountPrice
                   )
                 )}
                 원
               </Typography>
               <Typography variant="body1" component="div" sx={{ mt: 2 }}>
-                {selectedIngredient.description}
+                {selectedIngredient?.description}
               </Typography>
               <Box sx={{ mt: 4, borderTop: "1px solid #ddd", pt: 2 }}>
                 <Typography variant="body2" gutterBottom>
@@ -184,10 +189,10 @@ const IngredientsDetail = () => {
               <Box>
                 <Box ref={detailsRef}>
                   <ImageContainer isExpanded={isExpanded}>
-                    {selectedIngredient.images[1] ? (
+                    {selectedIngredient?.images[1] ? (
                       <img
-                        src={selectedIngredient.images[1]}
-                        alt={selectedIngredient.name}
+                        src={selectedIngredient?.images[1]}
+                        alt={selectedIngredient?.name}
                         style={{ maxWidth: "100%", height: "auto" }}
                       />
                     ) : (
@@ -214,12 +219,12 @@ const IngredientsDetail = () => {
                     </MoreButton>
                   </Box>
                   <Typography variant="body1" component="div" sx={{ mt: 2 }}>
-                    {selectedIngredient.detail}
+                    {selectedIngredient?.detail}
                   </Typography>
                 </Box>
               </Box>
               <Box ref={reviewsRef}>
-                <Review type="ingredient" itemId={selectedIngredient._id} />
+                <Review type="ingredient" itemId={selectedIngredient?._id} />
               </Box>
             </Grid>
           </Grid>

@@ -13,7 +13,7 @@ const RecipePage = () => {
   // URL 경로에서 마지막 부분 추출
   const pathArray = location.pathname.split("/");
   const path = pathArray[pathArray.length - 1];
-  console.log("path", path);
+
   return (
     <Box>
       <RecipeCategory />

@@ -115,7 +115,11 @@ const ingredientSlice = createSlice({
     loading: false,
     error: null,
   },
-  reducers: {},
+  reducers: {
+    setSelectedIngredients: (state, action) => {
+      state.selectedIngredients = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchIngredients.pending, (state) => {

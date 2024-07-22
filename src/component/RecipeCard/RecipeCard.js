@@ -5,7 +5,6 @@ import { Typography } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-regular-svg-icons";
 import { faSignal } from "@fortawesome/free-solid-svg-icons";
-import { useSelector } from "react-redux";
 
 const RecipeCardContainer = styled("div")({
   position: "relative",

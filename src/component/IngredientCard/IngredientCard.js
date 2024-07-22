@@ -113,7 +113,7 @@ const IngredientCard = ({ item }) => {
         />
         <Button
           variant="outlined"
-          sx={{ padding: "5px 0" }}
+          sx={{ width: "100%", padding: "5px 0" }}
           onClick={handleOpen}
         >
           <FontAwesomeIcon icon={faShoppingCart} />

@@ -11,7 +11,11 @@ import {
   IconButton,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { fetchShoppingList, removeFromShoppingList, moveToCompletedList } from "../../redux/shoppingListSlice";
+import {
+  fetchShoppingList,
+  removeFromShoppingList,
+  moveToCompletedList,
+} from "../../redux/shoppingListSlice";
 
 const HeadContainer = styled(Box)({
   display: "flex",
@@ -20,19 +24,22 @@ const HeadContainer = styled(Box)({
   borderBottom: "4px solid #333",
   paddingLeft: "10px",
 });
-
 const ListSection = styled(Box)({
   marginBottom: "24px",
+  padding: "16px",
+  backgroundColor: "#fff",
+  borderRadius: "4px",
+  boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
 });
 
 const ListItems = styled(ListItem)({
-  borderTop: "1px solid #e0e0e0",
-  padding: "8px 16px",
+  height: "50px",
+  borderBottom: "1px solid #eee",
+  padding: "12px 16px",
   borderRadius: "4px",
-  backgroundColor: "#ffffff",
-  boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+  backgroundColor: "#fafafa",
   "&:last-child": {
-    borderBottom: "1px solid #e0e0e0",
+    borderBottom: "none",
   },
 });
 
@@ -49,6 +56,13 @@ const DeleteButton = styled(IconButton)({
   height: "36px",
 });
 
+const NoItemsMessage = styled(Typography)({
+  color: "#aaa",
+  textAlign: "center",
+  marginTop: "16px",
+  fontStyle: "italic",
+});
+
 const MyGroceryNote = () => {
   const dispatch = useDispatch();
   const selectedShoppingList = useSelector(
@@ -57,7 +71,6 @@ const MyGroceryNote = () => {
   const completedShoppingList = useSelector(
     (state) => state.shoppingList.completedShoppingList
   );
-
 
   useEffect(() => {
     dispatch(fetchShoppingList());
@@ -78,6 +91,7 @@ const MyGroceryNote = () => {
       console.error("Failed to remove item:", error);
     }
   };
+
   return (
     <Grid container>
       <Grid item xs={12}>
@@ -92,25 +106,31 @@ const MyGroceryNote = () => {
                 장보기 목록
               </Typography>
               <List>
-                {selectedShoppingList?.map((item, index) => (
-                  <ListItems
-                    key={index}
-                    sx={{ display: "flex", alignItems: "center" }}
-                  >
-                    <StyledCheckbox
-                      checked={completedShoppingList?.some(
-                        (i) => i._id === item._id
-                      )}
-                      onChange={() => handleAddFromSelectedList(item)}
-                    />
-                    <Typography variant="body1" sx={{ flexGrow: 1 }}>
-                      {item.name}
-                    </Typography>
-                    <DeleteButton onClick={()=> handleRemoveFromShoppingList(item._id)}>
-                      <DeleteIcon />
-                    </DeleteButton>
-                  </ListItems>
-                ))}
+                {selectedShoppingList && selectedShoppingList.length > 0 ? (
+                  selectedShoppingList.map((item, index) => (
+                    <ListItems
+                      key={index}
+                      sx={{ display: "flex", alignItems: "center" }}
+                    >
+                      <StyledCheckbox
+                        checked={completedShoppingList?.some(
+                          (i) => i._id === item._id
+                        )}
+                        onChange={() => handleAddFromSelectedList(item)}
+                      />
+                      <Typography variant="body1" sx={{ flexGrow: 1 }}>
+                        {item.name}
+                      </Typography>
+                      <DeleteButton
+                        onClick={() => handleRemoveFromShoppingList(item._id)}
+                      >
+                        <DeleteIcon />
+                      </DeleteButton>
+                    </ListItems>
+                  ))
+                ) : (
+                  <NoItemsMessage>장보기 목록이 비어 있습니다.</NoItemsMessage>
+                )}
               </List>
             </ListSection>
           </Grid>
@@ -121,26 +141,34 @@ const MyGroceryNote = () => {
                 구매 완료 목록
               </Typography>
               <List>
-                {completedShoppingList?.map((item, index) => (
-                  <ListItems
-                    key={index}
-                    sx={{ display: "flex", alignItems: "center" }}
-                  >
-                    <Typography
-                      variant="body1"
-                      sx={{
-                        flexGrow: 1,
-                        textDecoration: "line-through",
-                        color: "gray",
-                      }}
+                {completedShoppingList && completedShoppingList.length > 0 ? (
+                  completedShoppingList.map((item, index) => (
+                    <ListItems
+                      key={index}
+                      sx={{ display: "flex", alignItems: "center" }}
                     >
-                      {item.name}
-                    </Typography>
-                    <DeleteButton onClick={()=> handleRemoveFromShoppingList(item._id)}>
-                      <DeleteIcon />
-                    </DeleteButton>
-                  </ListItems>
-                ))}
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          flexGrow: 1,
+                          textDecoration: "line-through",
+                          color: "gray",
+                        }}
+                      >
+                        {item.name}
+                      </Typography>
+                      <DeleteButton
+                        onClick={() => handleRemoveFromShoppingList(item._id)}
+                      >
+                        <DeleteIcon />
+                      </DeleteButton>
+                    </ListItems>
+                  ))
+                ) : (
+                  <NoItemsMessage>
+                    구매 완료 목록이 비어 있습니다.
+                  </NoItemsMessage>
+                )}
               </List>
             </ListSection>
           </Grid>
@@ -151,4 +179,3 @@ const MyGroceryNote = () => {
 };
 
 export default MyGroceryNote;
-

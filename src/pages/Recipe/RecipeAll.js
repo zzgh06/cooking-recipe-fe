@@ -2,10 +2,25 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchRecipesByCategory } from "../../redux/recipeSlice";
 import RecipeCard from "../../component/RecipeCard/RecipeCard";
-import "../../style/RecipeAll.style.css";
-import { Row, Col } from "react-bootstrap";
-import { Pagination } from "@mui/material";
 import RecipeCardSkeleton from "../../component/Skeleton/RecipeCardSkeleton";
+import { Container, Grid, Typography, Pagination, Box, styled } from "@mui/material";
+
+const RecipeAllContainer = styled(Container)({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  margin: "30px auto"
+});
+
+const RecipeCardContainer = styled(Grid)({
+  width: '100%',
+});
+
+const NoRecipesMessage = styled(Typography)({
+  marginTop: '20px',
+  color: '#888',
+  fontStyle: 'italic',
+});
 
 const RecipeAll = ({ category, path }) => {
   const dispatch = useDispatch();
@@ -26,28 +41,36 @@ const RecipeAll = ({ category, path }) => {
   };
 
   return (
-    <div className="recipe-all-container">
-      <Row className="recipe-card-container">
+    <RecipeAllContainer>
+      <RecipeCardContainer container spacing={1}>
         {loading
           ? Array.from(new Array(8)).map((_, index) => (
-              <Col key={index} xs={12} md={6} lg={3}>
+              <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
                 <RecipeCardSkeleton />
-              </Col>
+              </Grid>
             ))
-          : recipes.map((recipe) => (
-              <Col key={recipe._id} xs={12} md={6} lg={3}>
-                <RecipeCard item={recipe} />
-              </Col>
-            ))}
-      </Row>
-      <Pagination
-        count={totalPages}
-        size="large"
-        sx={{ marginBottom: "20px" }}
-        page={page}
-        onChange={handlePageChange}
-      />
-    </div>
+          : recipes.length > 0 ? (
+              recipes.map((recipe) => (
+                <Grid item xs={12} sm={6} md={4} lg={3} key={recipe._id}>
+                  <RecipeCard item={recipe} />
+                </Grid>
+              ))
+            ) : (
+              <NoRecipesMessage>작성한 레시피가 없습니다.</NoRecipesMessage>
+            )}
+      </RecipeCardContainer>
+      {totalPages > 1 && (
+        <Box sx={{ mt: 4 }}>
+          <Pagination
+            count={totalPages}
+            size="large"
+            page={page}
+            onChange={handlePageChange}
+            sx={{ display: 'flex', justifyContent: 'center' }}
+          />
+        </Box>
+      )}
+    </RecipeAllContainer>
   );
 };
 
