@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { editCartItem, deleteCartItem, toggleSelectItem } from "../../redux/cartSlice";
+import { editCartItem, deleteCartItem } from "../../redux/cartSlice";
 import { currencyFormat } from "../../utils/number";
 import {
   Card,
@@ -16,6 +16,7 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 
 const CartItem = ({ item, qty, selectedItems, selectItem }) => {
+  console.log("item", item)
   const dispatch = useDispatch();
   const { name, price, unit, images = [], _id } = item.ingredientId;
   const isSelected = selectedItems.includes(_id);

@@ -15,7 +15,6 @@ import { cc_expires_format } from "../utils/number";
 import { createOrder } from "../redux/orderSlice";
 import OrderReceipt from "../component/OrderReceipt/OrderReceipt";
 import {
-  clearSelectedItems,
   deleteSelectedCartItems,
 } from "../redux/cartSlice";
 
@@ -58,17 +57,20 @@ const PaymentPage = () => {
         shipTo: { address, city, zip },
         contact: { firstName, lastName, contact },
       },
-      orderList: selectedCartItems?.map((item) => {
+      items: selectedItems.map((id) => {
+        const item = cartItem.find((item) => item?.ingredientId._id === id);
         return {
-          ingredientId: item.ingredientId._id,
+          ingredientId: id,
           price: item?.ingredientId.price,
-          qty: item.qty,
+          qty: item?.qty,
         };
       }),
     };
-    await dispatch(createOrder({ data, navigate }));
-    handleContinuePayment();
+    
+    await dispatch(deleteSelectedCartItems()).unwrap();  
+    dispatch(createOrder({ data, navigate }));
   };
+  
 
   const handleFormChange = (event) => {
     const { name, value } = event.target;
@@ -94,10 +96,6 @@ const PaymentPage = () => {
       navigate("/cart");
     }
   }, [cartItem.length, navigate]);
-
-  const handleContinuePayment = async () => {
-    await deleteSelectedCartItems();
-  };
 
   return (
     <Container sx={{ my: 3 }}>

@@ -49,6 +49,7 @@ export const deleteCartItem = createAsyncThunk(
   "cart/deleteCartItem",
   async ({ ingredientId }) => {
     const response = await api.delete(`/cart/${ingredientId}`);
+    console.log("response", response)
     return response.data.data;
   }
 );
@@ -60,12 +61,20 @@ export const deleteSelectedCartItems = createAsyncThunk(
     const selectedItems = state.cart.selectedItems;
 
     try {
+      // 디버깅을 위해 로그 추가
+      console.log("Deleting selected items:", selectedItems);
+
       for (const id of selectedItems) {
         await dispatch(deleteCartItem({ ingredientId: id })).unwrap();
       }
-      await dispatch(getCart());
-      state.cart.selectedItems = [];
+
+      await dispatch(getCart());  // 갱신된 카트 데이터를 가져옵니다
+      dispatch(clearSelectedItems());  // 선택된 아이템을 초기화합니다
+
+      // 로그 추가
+      console.log("Finished deleting selected items");
     } catch (error) {
+      console.error("Error deleting selected cart items:", error);
       dispatch(
         setToastMessage({
           message: error.error,
@@ -77,6 +86,7 @@ export const deleteSelectedCartItems = createAsyncThunk(
     }
   }
 );
+
 
 const cartSlice = createSlice({
   name: "cart",
@@ -154,7 +164,6 @@ const cartSlice = createSlice({
 });
 
 export const {
-  calculateSelectedTotalPrice,
   toggleSelectItem,
   clearSelectedItems,
 } = cartSlice.actions;

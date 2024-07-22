@@ -26,7 +26,7 @@ const CartPage = () => {
   }, [user, dispatch]);
 
   const selectedCartItems = cartItem.filter((item) =>
-    selectedItems.includes(item.ingredientId._id)
+    selectedItems.includes(item.ingredientId?._id)
   );
 
   const totalPrice = selectedCartItems.reduce(
@@ -79,7 +79,7 @@ const CartPage = () => {
             <Grid item xs={12} md={7}>
               {cartItem.map((item) => (
                 <CartItem
-                  key={item.ingredientId._id}
+                  key={item.ingredientId?._id}
                   item={item}
                   qty={item.qty}
                   selectItem={toggleSelectItem}
