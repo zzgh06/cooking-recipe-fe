@@ -1,10 +1,10 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Box, Typography, Button, Container } from "@mui/material";
+import { Typography, Button, Container } from "@mui/material";
 import { Link } from "react-router-dom";
 
 const OrderCompletePage = () => {
-  const { orderNum } = useSelector((state) => state.order);
+  const { orderNum, loading } = useSelector((state) => state.order);
 
   return (
     <Container
