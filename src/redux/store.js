@@ -8,6 +8,7 @@ import orderReducer from "./orderSlice";
 import reviewReducer from "./reviewSlice";
 import commonUiReducer from "./commonUISlice";
 import favoriteReducer from "./favoriteSlice";
+import shoppingListReducer from "./shoppingListSlice";
 export const store = configureStore({
   reducer: {
     auth: userReducer,
@@ -18,6 +19,7 @@ export const store = configureStore({
     cart: cartReducer,
     review: reviewReducer,
     favorite: favoriteReducer,
+    shoppingList: shoppingListReducer,
     ui: commonUiReducer,
   },
 });

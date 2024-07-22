@@ -5,7 +5,6 @@ import { setToastMessage } from "./commonUISlice";
 export const createOrder = createAsyncThunk(
   "order/createOrder",
   async ({ data, navigate }, { dispatch, rejectWithValue }) => {
-    console.log("payload", data)
     try {
       const response = await api.post("/order", data);
       navigate("/payment/success");

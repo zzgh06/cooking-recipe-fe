@@ -13,7 +13,8 @@ import {
 } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { addToShoppingList } from "../../redux/ingredientSlice";
+import { addToShoppingList } from "../../redux/shoppingListSlice";
+import { setToastMessage } from "../../redux/commonUISlice";
 
 const HeadContainer = styled(Box)({
   display: "flex",
@@ -65,8 +66,11 @@ const ShoppingListDialog = ({ open, handleClose, ingredients }) => {
       (ingredient) => checkedItems[ingredient._id]
     );
   
-    dispatch(addToShoppingList(selectedIngredients));
-    
+    dispatch(addToShoppingList(selectedIngredients)); 
+    dispatch(setToastMessage({
+      message : "장보기 메모에 추가하였습니다.",
+      status : "success"
+    })); 
     navigate("/account/profile");
     handleClose();
   };

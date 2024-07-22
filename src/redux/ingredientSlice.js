@@ -115,35 +115,7 @@ const ingredientSlice = createSlice({
     loading: false,
     error: null,
   },
-  reducers: {
-    setSelectedIngredients: (state, action) => {
-      state.selectedIngredients = action.payload;
-    },
-    addToShoppingList: (state, action) => {
-      state.selectedShoppingList = [
-        ...state.selectedShoppingList,
-        ...action.payload,
-      ];
-    },
-    removeFromShoppingList: (state, action) => {
-      const removedItems = action.payload.map((item) => item._id);
-      state.selectedShoppingList = state.selectedShoppingList.filter(
-        (item) => !removedItems.includes(item._id)
-      );
-    },
-    addToCompletedList: (state, action) => {
-      state.completedShoppingList = [
-        ...state.completedShoppingList,
-        ...action.payload,
-      ];
-    },
-    removeFromCompletedList: (state, action) => {
-      const removedItems = action.payload.map((item) => item._id);
-      state.completedShoppingList = state.completedShoppingList.filter(
-        (item) => !removedItems.includes(item._id)
-      );
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchIngredients.pending, (state) => {
@@ -201,10 +173,6 @@ const ingredientSlice = createSlice({
 
 export const {
   setSelectedIngredients,
-  addToShoppingList,
-  removeFromShoppingList,
-  addToCompletedList,
-  removeFromCompletedList,
 } = ingredientSlice.actions;
 
 export default ingredientSlice.reducer;
