@@ -2,14 +2,14 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../utils/api";
 import { setToastMessage } from "./commonUISlice";
 
-export const getCart = createAsyncThunk("cart/getCart", async (_, {dispatch}) => {
-  const response = await api.get(`/cart`);
-  const data = response.data.data;
-
-  const selectedItems = data.map(item => item.ingredientId._id);
-  dispatch(setSelectedItems(selectedItems));
-  return data;
-});
+export const getCart = createAsyncThunk(
+  "cart/getCart",
+  async (_, { dispatch }) => {
+    const response = await api.get(`/cart`);
+    const cartItems = response.data.data;
+    return cartItems;
+  }
+);
 
 export const addItemToCart = createAsyncThunk(
   "cart/addItemToCart",
@@ -40,7 +40,8 @@ export const editCartItem = createAsyncThunk(
   "cart/editCartItem",
   async ({ ingredientId, qty }) => {
     const response = await api.put(`/cart/${ingredientId}`, { qty });
-    return response.data;
+
+    return response.data.data;
   }
 );
 
@@ -48,6 +49,7 @@ export const deleteCartItem = createAsyncThunk(
   "cart/deleteCartItem",
   async ({ ingredientId }) => {
     const response = await api.delete(`/cart/${ingredientId}`);
+    console.log("response", response)
     return response.data.data;
   }
 );
@@ -57,12 +59,22 @@ export const deleteSelectedCartItems = createAsyncThunk(
   async (_, { dispatch, getState, rejectWithValue }) => {
     const state = getState();
     const selectedItems = state.cart.selectedItems;
-    
+
     try {
+      // 디버깅을 위해 로그 추가
+      console.log("Deleting selected items:", selectedItems);
+
       for (const id of selectedItems) {
-        const resultAction = await dispatch(deleteCartItem({ ingredientId: id })).unwrap();
+        await dispatch(deleteCartItem({ ingredientId: id })).unwrap();
       }
+
+      await dispatch(getCart());  // 갱신된 카트 데이터를 가져옵니다
+      dispatch(clearSelectedItems());  // 선택된 아이템을 초기화합니다
+
+      // 로그 추가
+      console.log("Finished deleting selected items");
     } catch (error) {
+      console.error("Error deleting selected cart items:", error);
       dispatch(
         setToastMessage({
           message: error.error,
@@ -88,11 +100,6 @@ const cartSlice = createSlice({
     error: null,
   },
   reducers: {
-    calculateSelectedTotalPrice: (state) => {
-      state.selectedTotalPrice = state.cartItem
-        .filter((item) => state.selectedItems.includes(item.ingredientId._id))
-        .reduce((total, item) => total + item.ingredientId.price * item.qty, 0);
-    },
     toggleSelectItem: (state, action) => {
       const id = action.payload;
       if (state.selectedItems.includes(id)) {
@@ -106,9 +113,6 @@ const cartSlice = createSlice({
     clearSelectedItems: (state) => {
       state.selectedItems = [];
     },
-    setSelectedItems: (state, action) => {
-      state.selectedItems = action.payload;
-    },
   },
   extraReducers: (builder) => {
     builder
@@ -118,6 +122,9 @@ const cartSlice = createSlice({
       .addCase(getCart.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.cartItem = action.payload;
+        state.selectedItems = action.payload.map(
+          (item) => item.ingredientId._id
+        );
       })
       .addCase(getCart.rejected, (state, action) => {
         state.status = "failed";
@@ -133,8 +140,8 @@ const cartSlice = createSlice({
       })
       .addCase(editCartItem.fulfilled, (state, action) => {
         state.status = "succeeded";
-        const { _id } = action.payload.data.ingredientId;
-        const { qty } = action.payload.data;
+        const { _id } = action.payload.ingredientId;
+        const { qty } = action.payload;
         const itemIndex = state.cartItem.findIndex((item) => {
           return item.ingredientId._id === _id;
         });
@@ -145,7 +152,6 @@ const cartSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(deleteCartItem.fulfilled, (state, action) => {
-        console.log("deleteCartItem fulfilled - previous state:", state.cartItem);
         if (action.payload && action.payload.length > 0) {
           state.cartItem = action.payload;
         } else {
@@ -153,15 +159,12 @@ const cartSlice = createSlice({
             (item) => !state.selectedItems.includes(item.ingredientId._id)
           );
         }
-        console.log("deleteCartItem fulfilled - updated state:", state.cartItem);
-      })
+      });
   },
 });
 
 export const {
-  calculateSelectedTotalPrice,
   toggleSelectItem,
   clearSelectedItems,
-  setSelectedItems,
 } = cartSlice.actions;
 export default cartSlice.reducer;

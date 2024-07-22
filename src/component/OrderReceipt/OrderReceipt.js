@@ -3,10 +3,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { currencyFormat } from "../../utils/number";
 import { Box, Typography, Button } from "@mui/material";
 
-const OrderReceipt = ({ cartItem, totalPrice }) => {
+const OrderReceipt = ({ selectedCartItems, totalPrice }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  console.log(cartItem)
 
   return (
     <Box
@@ -31,8 +30,8 @@ const OrderReceipt = ({ cartItem, totalPrice }) => {
           pb: 2,
         }}
       >
-        {cartItem?.length > 0 ? (
-          cartItem.map((item, index) => (
+        {selectedCartItems?.length > 0 ? (
+          selectedCartItems.map((item, index) => (
             <Box
               key={item?.ingredientId?.name + index}
               sx={{
@@ -72,12 +71,12 @@ const OrderReceipt = ({ cartItem, totalPrice }) => {
           ₩ {currencyFormat(totalPrice)}
         </Typography>
       </Box>
-      {location.pathname.includes("/cart") && cartItem?.length > 0 && (
+      {location.pathname.includes("/cart") && selectedCartItems?.length > 0 && (
         <Button
           variant="contained"
           color="success"
           onClick={() => navigate("/payment")}
-          disabled={cartItem?.length === 0}
+          disabled={selectedCartItems?.length === 0}
           fullWidth
           sx={{ mt: 2 }}
         >

@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Container, Grid, TextField, Button, Typography, Box } from "@mui/material";
+import {
+  Container,
+  Grid,
+  TextField,
+  Button,
+  Typography,
+  Box,
+} from "@mui/material";
 import PaymentForm from "../component/PaymentForm/PaymentForm";
 import "../style/paymentPage.style.css";
 import { useSelector, useDispatch } from "react-redux";
@@ -7,11 +14,14 @@ import { useNavigate } from "react-router";
 import { cc_expires_format } from "../utils/number";
 import { createOrder } from "../redux/orderSlice";
 import OrderReceipt from "../component/OrderReceipt/OrderReceipt";
-import { clearSelectedItems, deleteSelectedCartItems } from "../redux/cartSlice";
+import {
+  deleteSelectedCartItems,
+} from "../redux/cartSlice";
 
 const PaymentPage = () => {
   const dispatch = useDispatch();
-  const { cartItem, selectedTotalPrice, selectedItems } = useSelector((state) => state.cart);
+  const { cartItem, selectedTotalPrice, selectedItems } =
+    useSelector((state) => state.cart);
   const [cardValue, setCardValue] = useState({
     cvc: "",
     expiry: "",
@@ -29,11 +39,20 @@ const PaymentPage = () => {
     zip: "",
   });
 
+  const selectedCartItems = cartItem.filter((item) =>
+    selectedItems.includes(item.ingredientId._id)
+  );
+
+  const totalPrice = selectedCartItems.reduce(
+    (total, item) => total + item.ingredientId.price * item.qty,
+    0
+  );
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const { firstName, lastName, contact, address, city, zip } = shipInfo;
     const data = {
-      totalPrice: selectedTotalPrice,
+      totalPrice: totalPrice,
       contactInfo: {
         shipTo: { address, city, zip },
         contact: { firstName, lastName, contact },
@@ -47,10 +66,11 @@ const PaymentPage = () => {
         };
       }),
     };
-
-    await dispatch(deleteSelectedCartItems());
-    await dispatch(createOrder({ payload: data, navigate }));
+    
+    await dispatch(deleteSelectedCartItems()).unwrap();  
+    dispatch(createOrder({ data, navigate }));
   };
+  
 
   const handleFormChange = (event) => {
     const { name, value } = event.target;
@@ -78,11 +98,13 @@ const PaymentPage = () => {
   }, [cartItem.length, navigate]);
 
   return (
-    <Container sx={{my: 3}}>
+    <Container sx={{ my: 3 }}>
       <Grid container spacing={2}>
         <Grid item lg={7}>
           <Box>
-            <Typography variant="h4" component="h2" className="mb-2">배송 주소</Typography>
+            <Typography variant="h4" component="h2" className="mb-2">
+              배송 주소
+            </Typography>
             <Box component="form" onSubmit={handleSubmit}>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
@@ -148,12 +170,18 @@ const PaymentPage = () => {
               </Grid>
               <Box className="mobile-receipt-area">
                 <OrderReceipt
-                  cartItem={cartItem.filter((item) => selectedItems.includes(item.ingredientId._id))}
-                  totalPrice={selectedTotalPrice}
+                  selectedCartItems={selectedCartItems}
+                  totalPrice={totalPrice}
                 />
               </Box>
-              <Box sx={{marginTop: "20px"}}>
-                <Typography variant="h4" component="h2" className="payment-title">결제 정보</Typography>
+              <Box sx={{ marginTop: "20px" }}>
+                <Typography
+                  variant="h4"
+                  component="h2"
+                  className="payment-title"
+                >
+                  결제 정보
+                </Typography>
                 <PaymentForm
                   cardValue={cardValue}
                   handleInputFocus={handleInputFocus}
@@ -172,7 +200,10 @@ const PaymentPage = () => {
           </Box>
         </Grid>
         <Grid item lg={5} className="receipt-area">
-          <OrderReceipt cartItem={cartItem.filter((item) => selectedItems.includes(item.ingredientId._id))} totalPrice={selectedTotalPrice} />
+          <OrderReceipt
+            selectedCartItems={selectedCartItems}
+            totalPrice={totalPrice}
+          />
         </Grid>
       </Grid>
     </Container>

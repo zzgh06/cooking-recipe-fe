@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { editCartItem, deleteCartItem, toggleSelectItem, calculateSelectedTotalPrice } from "../../redux/cartSlice";
+import { editCartItem, deleteCartItem } from "../../redux/cartSlice";
 import { currencyFormat } from "../../utils/number";
 import {
   Card,
@@ -16,22 +16,21 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 
 const CartItem = ({ item, qty, selectedItems, selectItem }) => {
+  console.log("item", item)
   const dispatch = useDispatch();
   const { name, price, unit, images = [], _id } = item.ingredientId;
   const isSelected = selectedItems.includes(_id);
 
+  const handleSelectChange = () => {
+    dispatch(selectItem(_id));
+  };
+
   const handleQtyChange = (event) => {
-    dispatch(editCartItem({ ingredientId: _id, qty: event.target.value }))
-      .then(() => {
-        dispatch(calculateSelectedTotalPrice());
-      });
+    dispatch(editCartItem({ ingredientId: _id, qty: event.target.value }));
   };
 
   const handleDelete = () => {
-    dispatch(deleteCartItem({ ingredientId: _id }))
-      .then(() => {
-        dispatch(calculateSelectedTotalPrice());
-      });
+    dispatch(deleteCartItem({ ingredientId: _id }));
   };
 
   return (
@@ -39,7 +38,7 @@ const CartItem = ({ item, qty, selectedItems, selectItem }) => {
       <Box sx={{ display: 'flex', alignItems: 'center', flex: '1 0 auto', gap: 2 }}>
         <Checkbox
           checked={isSelected}
-          onChange={() => selectItem(_id)}
+          onChange={handleSelectChange}
           color="success"
         />
         <CardMedia
