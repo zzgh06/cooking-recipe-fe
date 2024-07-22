@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { editCartItem, deleteCartItem, toggleSelectItem } from "../../redux/cartSlice";
+import { editCartItem, deleteCartItem, toggleSelectItem, calculateSelectedTotalPrice } from "../../redux/cartSlice";
 import { currencyFormat } from "../../utils/number";
 import {
   Card,
@@ -21,11 +21,17 @@ const CartItem = ({ item, qty, selectedItems, selectItem }) => {
   const isSelected = selectedItems.includes(_id);
 
   const handleQtyChange = (event) => {
-    dispatch(editCartItem({ ingredientId: _id, qty: event.target.value }));
+    dispatch(editCartItem({ ingredientId: _id, qty: event.target.value }))
+      .then(() => {
+        dispatch(calculateSelectedTotalPrice());
+      });
   };
 
   const handleDelete = () => {
-    dispatch(deleteCartItem({ ingredientId: _id }));
+    dispatch(deleteCartItem({ ingredientId: _id }))
+      .then(() => {
+        dispatch(calculateSelectedTotalPrice());
+      });
   };
 
   return (
