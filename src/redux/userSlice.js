@@ -32,9 +32,7 @@ export const loginWithGoogle = createAsyncThunk(
   async (token, { rejectWithValue }) => {
     try {
       const response = await api.post("/auth/google", { token });
-      //console.log(response.data.token);
       sessionStorage.setItem("token", response.data.token);
-      console.log(response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -49,7 +47,6 @@ export const loginWithKakao = createAsyncThunk(
       const response = await api.post('/auth/kakao', { token });
       if (response.status !== 200) throw new Error(response.error);
       sessionStorage.setItem("token", response.data.token);
-      console.log(response.data)
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -110,7 +107,6 @@ export const updateUser = createAsyncThunk(
     try {
       const response = await api.put(`user/me`, formData);
       if (response.status !== 200) throw new Error(response.error);
-      console.log(response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -167,7 +163,6 @@ export const verifyCurrentPassword = createAsyncThunk(
         currentPassword,
       });
       if (response.status !== 200) throw new Error(response.error);
-      console.log(response)
       return response.data;
     } catch (error) {
       return rejectWithValue(error);

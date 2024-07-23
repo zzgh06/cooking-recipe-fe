@@ -4,7 +4,12 @@ import "react-multi-carousel/lib/styles.css";
 import "../../style/BannerComponent.style.css";
 import { responsive } from "../../constants/responsive";
 
-const BannerComponent = ({images}) => {
+const optimizeImageUrl = (url) => {
+  return url?.replace(/\/upload\//, "/upload/f_webp/");
+};
+
+const BannerComponent = ({ images }) => {
+  const optimizedImageUrl = images.map((img) => optimizeImageUrl(img));
 
   const CustomLeftArrow = ({ onClick }) => (
     <button className="custom-arrow left" onClick={onClick}>
@@ -28,8 +33,13 @@ const BannerComponent = ({images}) => {
         customLeftArrow={<CustomLeftArrow />}
         customRightArrow={<CustomRightArrow />}
       >
-        {images.map((item, index) => (
-          <img key={index} className="banner" src={item} alt={`banner-${index}`} />
+        {optimizedImageUrl.map((item, index) => (
+          <img
+            key={index}
+            className="banner"
+            src={item}
+            alt={`banner-${index}`}
+          />
         ))}
       </Carousel>
     </div>

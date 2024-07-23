@@ -7,6 +7,11 @@ import { Button } from "@mui/material";
 const CLOUDNAME = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
 const UPLOADPRESET = process.env.REACT_APP_CLOUDINARY_PRESET;
 
+// WebP 포맷으로 이미지를 최적화하는 함수
+const optimizeImageUrl = (url) => {
+  return url.replace(/\/upload\//, '/upload/f_webp/');
+};
+
 class CloudinaryUploadWidget extends Component {
   componentDidMount() {
     const { type, index } = this.props;
@@ -14,9 +19,17 @@ class CloudinaryUploadWidget extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    // Ensure widget is reinitialized if props change (e.g., index)
     if (prevProps.index !== this.props.index || prevProps.type !== this.props.type) {
       this.initializeWidget(this.props.type, this.props.index);
+    }
+  }
+
+  componentWillUnmount() {
+    const { type, index } = this.props;
+    const uploadButtonId = `upload_widget_${type}${index !== null ? `_${index}` : ''}`;
+    const uploadButton = document.getElementById(uploadButtonId);
+    if (uploadButton) {
+      uploadButton.removeEventListener("click", this.handleClick);
     }
   }
 
@@ -30,7 +43,8 @@ class CloudinaryUploadWidget extends Component {
       (error, result) => {
         if (!error && result && result.event === "success") {
           console.log("Done! Here is the image info: ", result.info);
-          uploadImage(result.info.secure_url, type, index); // 이미지 업로드 후 URL과 함께 uploadImage 콜백 호출
+          const optimizedUrl = optimizeImageUrl(result.info.secure_url);
+          uploadImage(optimizedUrl, type, index); // 이미지 업로드 후 URL과 함께 uploadImage 콜백 호출
         }
       }
     );
@@ -38,9 +52,7 @@ class CloudinaryUploadWidget extends Component {
     const uploadButtonId = `upload_widget_${type}${index !== null ? `_${index}` : ''}`;
     const uploadButton = document.getElementById(uploadButtonId);
     if (uploadButton) {
-      uploadButton.addEventListener("click", function () {
-        myWidget.open();
-      });
+      uploadButton.addEventListener("click", () => myWidget.open());
     }
   }
 

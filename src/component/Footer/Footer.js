@@ -1,22 +1,66 @@
 import React from "react";
-import "../Footer/Footer.style.css";
+import { Box, Typography, IconButton, useMediaQuery, useTheme } from "@mui/material";
+import { Instagram, Facebook, Twitter, YouTube } from "@mui/icons-material";
+
 const Footer = () => {
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
+
   return (
-    <div className="footer">
-      <div className="footerInfo">
-        <img src="https://res.kurly.com/pc/ico/1810/ico_instagram.png" alt="" />
-        <img src="https://res.kurly.com/pc/ico/1810/ico_fb.png" alt="" />
-        <img src="https://res.kurly.com/pc/ico/1810/ico_blog.png" alt="" />
-        <img src="https://res.kurly.com/pc/ico/1810/ico_naverpost.png" alt="" />
-        <img src="https://res.kurly.com/pc/ico/1810/ico_youtube.png" alt="" />
-      </div>
-      <div className="company">
-        <p>주식회사 : 냉장고에 뭐 있어?</p>
-      </div>
-      <div className="footerCopyright">
-        &copy; 2024 What’s in your frige. All rights reserved.
-      </div>
-    </div>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "100%",
+        padding: "30px 0",
+        borderTop: "1px solid lightgrey",
+        backgroundColor: "white",
+      }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          marginBottom: isSmallScreen ? "15px" : "30px",
+          flexWrap: "wrap",
+          justifyContent: "center",
+        }}
+      >
+        <IconButton>
+          <Instagram />
+        </IconButton>
+        <IconButton>
+          <Facebook />
+        </IconButton>
+        <IconButton>
+          <Twitter />
+        </IconButton>
+        <IconButton>
+          <YouTube />
+        </IconButton>
+      </Box>
+      <Typography
+        variant="body2"
+        sx={{
+          margin: "0 auto",
+          width: isSmallScreen ? "100%" : "534px",
+          textAlign: "center",
+          mb: "16px",
+        }}
+      >
+        주식회사 : 냉장고에 뭐 있어?
+      </Typography>
+      <Typography
+        variant="body2"
+        sx={{
+          textAlign: "center",
+          color: "#999",
+        }}
+      >
+        &copy; 2024 What’s in your fridge. All rights reserved.
+      </Typography>
+    </Box>
   );
 };
 

@@ -46,7 +46,6 @@ export const fetchRecipes = createAsyncThunk(
       const response = await api.get(url);
       return response.data;
     } catch (err) {
-      console.log("API error:", err.response);
       return rejectWithValue(err.response?.data);
     }
   }
@@ -150,13 +149,11 @@ const recipeSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchRecipes.fulfilled, (state, action) => {
-        console.log("fetchRecipes fulfilled", action.payload);
         state.loading = false;
         state.recipes = action.payload.data;
         state.totalPages = action.payload.totalPageNum;
       })
       .addCase(fetchRecipes.rejected, (state, action) => {
-        console.log("fetchRecipes rejected", action.payload);
         state.loading = false;
         state.error = action.payload;
       })

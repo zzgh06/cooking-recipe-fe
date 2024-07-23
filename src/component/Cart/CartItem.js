@@ -16,7 +16,6 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 
 const CartItem = ({ item, qty, selectedItems, selectItem }) => {
-  console.log("item", item)
   const dispatch = useDispatch();
   const { name, price, unit, images = [], _id } = item.ingredientId;
   const isSelected = selectedItems.includes(_id);

@@ -8,7 +8,6 @@ const KakaoShareButton = ({ recipeDetail }) => {
 
   useEffect(() => {
     if (window.Kakao && !window.Kakao.isInitialized()) {
-      console.log("Initializing Kakao SDK...");
       window.Kakao.init(KAKAO_JAVASCRIPT_KEY);
     }
   }, [KAKAO_JAVASCRIPT_KEY]);

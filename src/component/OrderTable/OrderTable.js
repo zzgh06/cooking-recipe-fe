@@ -24,8 +24,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const OrderTable = ({ header, data, openEditForm, badgeBg }) => {
-
-  console.log(data)
   return (
     <StyledTableContainer>
       <Table>

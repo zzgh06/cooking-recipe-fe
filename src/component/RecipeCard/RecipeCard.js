@@ -35,8 +35,12 @@ const CardDescription = styled("div")({
 const HeadContainer = styled("div")({
   display: "flex",
   justifyContent: "center",
-  color : "gray"
+  color: "gray",
 });
+
+const optimizeImageUrl = (url) => {
+  return url.replace(/\/upload\//, '/upload/f_webp/');
+};
 
 const RecipeCard = ({ item }) => {
   const navigate = useNavigate();
@@ -45,23 +49,28 @@ const RecipeCard = ({ item }) => {
     navigate(`/recipe/${id}`);
   };
 
+  const optimizedImageUrl = optimizeImageUrl(item.images[0]);
+
   return (
     <RecipeCardContainer>
       <RecipeImage
-        src={item.images}
+        src={optimizedImageUrl}
+        srcSet={`${optimizedImageUrl}?w=200 200w, ${optimizedImageUrl}?w=400 400w`}
+        sizes="(max-width: 600px) 200px, 400px"
         alt={item.name}
+        loading="lazy"
         onClick={() => showRecipe(item._id)}
       />
       <CardDescription>
-        <Typography variant="h6" align="center" sx={{ fontSize : "20px",fontWeight: "600"}}>
+        <Typography variant="h6" align="center" sx={{ fontSize: "20px", fontWeight: "600" }}>
           {item.name}
         </Typography>
         <HeadContainer>
-          <Typography variant="subtitle1" align="center" sx={{paddingRight : "15px"}}>
+          <Typography variant="subtitle1" align="center" sx={{ paddingRight: "15px" }}>
             <FontAwesomeIcon icon={faSignal} /> {item.difficulty}
           </Typography>
           <Typography variant="subtitle1" align="center">
-          <FontAwesomeIcon icon={faClock} /> {item.time.split("이내")}
+            <FontAwesomeIcon icon={faClock} /> {item.time.split("이내")[0]}
           </Typography>
         </HeadContainer>
       </CardDescription>

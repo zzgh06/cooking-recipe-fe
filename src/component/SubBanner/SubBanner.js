@@ -1,14 +1,22 @@
 import { styled } from "@mui/material";
 import React from "react";
-const BannerImage = styled('div')({
-  display : 'flex',
-  justifyContent: "center"
-})
+const BannerImageContainer = styled("div")(({ theme }) => ({
+  display: "flex",
+  justifyContent: "center",
+  padding: "0 250px",
+  [theme.breakpoints.down("md")]: {
+    padding: "0 70px",
+  },
+}));
+
+const BannerImage = styled("img")({
+  width: "100%",
+});
 const SubBanner = ({ img }) => {
   return (
-    <BannerImage>
-      <img src={img} alt={img} />
-    </BannerImage>
+    <BannerImageContainer>
+      <BannerImage src={img} alt={img} />
+    </BannerImageContainer>
   );
 };
 

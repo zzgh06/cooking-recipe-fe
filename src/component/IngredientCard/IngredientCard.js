@@ -73,6 +73,10 @@ const DiscountPrice = styled(Typography)({
   marginLeft: "10px",
 });
 
+const optimizeImageUrl = (url) => {
+  return url?.replace(/\/upload\//, '/upload/f_webp/');
+};
+
 const IngredientCard = ({ item }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -107,7 +111,7 @@ const IngredientCard = ({ item }) => {
       <StyledCard>
         <StyledCardMedia
           component="img"
-          image={item.images[0]}
+          image={optimizeImageUrl(item.images[0])}
           alt={item.images}
           onClick={() => showIngredient(item?._id)}
         />
@@ -158,7 +162,7 @@ const IngredientCard = ({ item }) => {
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={3}>
               <img
-                src={item.images[0]}
+                src={optimizeImageUrl(item.images[0])}
                 alt={item.name}
                 style={{ width: "100%" }}
               />

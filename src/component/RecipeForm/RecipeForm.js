@@ -490,9 +490,19 @@ const RecipeForm = ({ onSubmit, initialData }) => {
       >
         요리 순서 추가
       </Button>
-      <Button type="submit" variant="contained" color="primary" sx={{ mt: 3 }}>
-        레시피 제출
-      </Button>
+
+      <Grid container spacing={2} justifyContent="center" sx={{ mt: 3 }}>
+        <Grid item>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            sx={{width : "250px"}}
+          >
+            레시피 제출
+          </Button>
+        </Grid>
+      </Grid>
 
       <Modal
         open={showSubmitModal}
