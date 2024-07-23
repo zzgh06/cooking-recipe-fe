@@ -7,16 +7,18 @@ import { useDispatch, useSelector } from "react-redux";
 import Footer from "../component/Footer/Footer";
 import { loginWithToken } from "../redux/userSlice";
 import ToastMessage from "../component/ToastMessage/ToastMessage";
+import { useLoginWithToken } from "../hooks/useLoginWithToken";
 
 const AppLayout = ({ children }) => {
   const location = useLocation();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
+  const { mutate: loginWithToken } = useLoginWithToken();
   const [recentlyViewedItems, setRecentlyViewedItems] = useState([]);
 
   useEffect(() => {
-    dispatch(loginWithToken());
-  }, []);
+    loginWithToken();
+  }, [loginWithToken]);
 
   useEffect(() => {
     console.log("Current location:", location.pathname);

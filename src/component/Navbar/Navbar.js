@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import {
   AppBar,
@@ -29,7 +29,7 @@ import {
   Search as SearchIcon,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../redux/userSlice";
+import { loginWithToken, logout } from "../../redux/userSlice";
 
 const StyledAppBar = styled(AppBar)({
   backgroundColor: "#ffffff",
@@ -95,8 +95,13 @@ const Navbar = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
+  useEffect(() => {
+    loginWithToken();
+  }, [user]);
+
   const handleLogout = async () => {
     await dispatch(logout());
+    sessionStorage.removeItem("token");
     navigate("/");
   };
 
@@ -175,7 +180,7 @@ const Navbar = () => {
             justifyContent: "space-between",
           }}
         >
-          {user && user?.user.level === "admin" && (
+          {user && user?.level === "admin" && (
             <Button
               variant="contained"
               color="success"
@@ -254,10 +259,10 @@ const Navbar = () => {
           open={Boolean(anchorEl)}
           onClose={handleMenuClose}
         >
-          {user ? (
+          {user?.name ? (
             <>
               <MenuItem onClick={() => navigate("/account/profile")}>
-                {user?.user.name}님
+                {user?.name}님
               </MenuItem>
               <MenuItem onClick={handleLogout}>로그아웃</MenuItem>
             </>
