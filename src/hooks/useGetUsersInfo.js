@@ -11,5 +11,9 @@ const getUsersInfo = async (searchQuery) => {
 };
 
 export const useGetUsersInfo = (searchQuery) => {
-  return useQuery(['usersInfo', searchQuery], () => getUsersInfo(searchQuery));
+  return useQuery({
+    queryKey: ['usersInfo', searchQuery],
+    queryFn: () => getUsersInfo(searchQuery),
+    keepPreviousData: true,
+  });
 };

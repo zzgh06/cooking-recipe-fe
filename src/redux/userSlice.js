@@ -29,25 +29,25 @@ export const loginWithToken = createAsyncThunk(
   }
 );
 
-export const getUsersInfo = createAsyncThunk(
-  "auth/getUsersInfo",
-  async (searchQuery, thunkAPI) => {
-    try {
-      const response = await api.get(
-        `/user/admin?name=${searchQuery.name}&page=${searchQuery.page}`
-      );
-      if (response.status !== 200) throw new Error(response.error);
-      return {
-        usersData: response.data.data,
-        totalPageNum: response.data.totalPageNum,
-      };
-    } catch (error) {
-      return thunkAPI.rejectWithValue(
-        error.response?.data?.message || error.message
-      );
-    }
-  }
-);
+// export const getUsersInfo = createAsyncThunk(
+//   "auth/getUsersInfo",
+//   async (searchQuery, thunkAPI) => {
+//     try {
+//       const response = await api.get(
+//         `/user/admin?name=${searchQuery.name}&page=${searchQuery.page}`
+//       );
+//       if (response.status !== 200) throw new Error(response.error);
+//       return {
+//         usersData: response.data.data,
+//         totalPageNum: response.data.totalPageNum,
+//       };
+//     } catch (error) {
+//       return thunkAPI.rejectWithValue(
+//         error.response?.data?.message || error.message
+//       );
+//     }
+//   }
+// );
 
 export const logouts = createAsyncThunk(
   "auth/logout",
@@ -73,17 +73,17 @@ export const updateUser = createAsyncThunk(
   }
 );
 
-export const deleteUser = createAsyncThunk(
-  "auth/deleteUser",
-  async (id, { rejectWithValue }) => {
-    try {
-      const response = await api.delete(`/user/${id}`);
-      if (response.status !== 200) throw new Error(response.error);
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
+// export const deleteUser = createAsyncThunk(
+//   "auth/deleteUser",
+//   async (id, { rejectWithValue }) => {
+//     try {
+//       const response = await api.delete(`/user/${id}`);
+//       if (response.status !== 200) throw new Error(response.error);
+//     } catch (error) {
+//       return rejectWithValue(error.message);
+//     }
+//   }
+// );
 
 export const forgotPassword = createAsyncThunk(
   "auth/forgotPassword",
@@ -178,6 +178,7 @@ const userSlice = createSlice({
     logout: (state) => {
       state.user = null;
       state.error = null;
+      sessionStorage.removeItem("token");
     },
   },
 });

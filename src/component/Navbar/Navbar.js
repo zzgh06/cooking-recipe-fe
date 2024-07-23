@@ -101,7 +101,6 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     await dispatch(logout());
-    sessionStorage.removeItem("token");
     navigate("/");
   };
 
@@ -147,7 +146,19 @@ const Navbar = () => {
             width: "100%",
           }}
         >
-          <IconButton
+          {user && user?.level === "admin" && (
+            <Button
+              variant="contained"
+              color="success"
+              component={Link}
+              to="/admin/recipe"
+              sx={{ marginRight: 2 }}
+            >
+              Admin page
+            </Button>
+          )}
+
+            <IconButton
             size="large"
             aria-label="account"
             onClick={handleMenuClick}
@@ -171,7 +182,7 @@ const Navbar = () => {
           >
             <ShoppingCartIcon />
           </IconButton>
-        </Box>
+          </Box>
         <Box
           sx={{
             width: "100%",
@@ -180,17 +191,6 @@ const Navbar = () => {
             justifyContent: "space-between",
           }}
         >
-          {user && user?.level === "admin" && (
-            <Button
-              variant="contained"
-              color="success"
-              component={Link}
-              to="/admin/recipe"
-              sx={{ marginRight: 2 }}
-            >
-              Admin page
-            </Button>
-          )}
           <Logo onClick={() => navigate("/")}>냉장고에 뭐 있지?</Logo>
           <SearchContainer>
             <StyledTextField
