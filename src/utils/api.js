@@ -11,9 +11,7 @@ const api = axios.create({
     authorization: `Bearer ${sessionStorage.getItem("token")}`,
   },
 });
-/**
- * console.log all requests and responses
- */
+
 api.interceptors.request.use(
   (request) => {
     console.log("Starting Request", request);

@@ -111,7 +111,7 @@ const RecipeSlider = ({ title, recipes, loading }) => {
       >
         {loading ? (
           Array.from(new Array(8)).map((_, index) => (
-            <Grid key={index} xs={12} md={6} lg={3}>
+            <Grid item key={index} xs={12} md={6} lg={3}>
               <RecipeCardSkeleton />
             </Grid>
           ))

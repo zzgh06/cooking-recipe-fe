@@ -33,7 +33,12 @@ const StyledImage = styled("img")({
   width: "100%",
   height: "100%",
   objectFit: "cover",
+  transition: "all 0.3s",
 });
+
+const optimizeImageUrl = (url) => {
+  return url?.replace(/\/upload\//, '/upload/f_webp/');
+};
 
 const RecommendRecipe = ({ recommendRecipes }) => {
   const navigate = useNavigate();
@@ -41,9 +46,10 @@ const RecommendRecipe = ({ recommendRecipes }) => {
   const showRecipe = (id) => {
     navigate(`/recipe/${id}`);
   };
+
   return (
     <Container sx={{ padding: "80px" }}>
-      <Box sx={{textAlign: "center", padding: "20px"}}>
+      <Box sx={{ textAlign: "center", padding: "20px" }}>
         <Typography variant="h2" fontWeight="500" fontSize="35px">
           RECIPES FOR YOU
         </Typography>
@@ -57,8 +63,9 @@ const RecommendRecipe = ({ recommendRecipes }) => {
             }}
           >
             <StyledImage
-              src={recommendRecipes[0]?.images[0]}
+              src={optimizeImageUrl(recommendRecipes[0]?.images[0])}
               alt={recommendRecipes[0]?.name}
+              loading="lazy"
             />
             <Overlay className="overlay">{recommendRecipes[0]?.name}</Overlay>
           </ImageContainer>
@@ -71,8 +78,9 @@ const RecommendRecipe = ({ recommendRecipes }) => {
               }}
             >
               <StyledImage
-                src={recommendRecipes[1]?.images[0]}
+                src={optimizeImageUrl(recommendRecipes[1]?.images[0])}
                 alt={recommendRecipes[1]?.name}
+                loading="lazy"
               />
               <Overlay className="overlay">{recommendRecipes[1]?.name}</Overlay>
             </ImageContainer>
@@ -84,8 +92,9 @@ const RecommendRecipe = ({ recommendRecipes }) => {
               }}
             >
               <StyledImage
-                src={recommendRecipes[2]?.images[0]}
+                src={optimizeImageUrl(recommendRecipes[2]?.images[0])}
                 alt={recommendRecipes[2]?.name}
+                loading="lazy"
               />
               <Overlay className="overlay">{recommendRecipes[2]?.name}</Overlay>
             </ImageContainer>
@@ -97,8 +106,9 @@ const RecommendRecipe = ({ recommendRecipes }) => {
               }}
             >
               <StyledImage
-                src={recommendRecipes[4]?.images[0]}
+                src={optimizeImageUrl(recommendRecipes[4]?.images[0])}
                 alt={recommendRecipes[4]?.name}
+                loading="lazy"
               />
               <Overlay className="overlay">{recommendRecipes[4]?.name}</Overlay>
             </ImageContainer>

@@ -34,7 +34,6 @@ const LoginPage = () => {
   const handleGoogleSuccess = async (response) => {
     try {
       await dispatch(loginWithGoogle(response.credential)).unwrap();
-      console.log("구글 로그인 성공");
       await dispatch(loginWithToken()).unwrap();
       navigate("/");
     } catch (err) {
@@ -62,7 +61,6 @@ const LoginPage = () => {
     const { id, password } = formData;
     try {
       await dispatch(loginUser({ id, password })).unwrap();
-      console.log("로그인 성공");
       await dispatch(loginWithToken()).unwrap();
       navigate("/");
     } catch (error) {

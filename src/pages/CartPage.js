@@ -16,9 +16,6 @@ const CartPage = () => {
   const user = useSelector((state) => state.auth.user);
   const { cartItem, selectedItems } = useSelector((state) => state.cart);
 
-  console.log("cartItem", cartItem)
-  console.log("selectedItems", selectedItems)
-
   useEffect(() => {
     if (user) {
       dispatch(getCart());
@@ -33,8 +30,6 @@ const CartPage = () => {
     (total, item) => total + item.ingredientId.price * item.qty,
     0
   );
-
-  console.log("selectedCartItems", selectedCartItems);
 
   return (
     <Container sx={{ mb: 4 }}>

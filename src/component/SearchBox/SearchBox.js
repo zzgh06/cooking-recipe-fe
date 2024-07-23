@@ -14,9 +14,6 @@ const SearchBox = ({ searchQuery, setSearchQuery, placeholder, field, page = 'st
     } else {
       setKeyword('');
     }
-    return () => {
-      console.log('컴포넌트가 화면에서 사라짐');
-    };
   }, [selectedIngredients]);
 
   // Enter 키 입력 시 검색 실행

@@ -67,7 +67,6 @@ const shoppingListSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchShoppingList.fulfilled, (state, action) => {
-        console.log("Fetched shopping list data:", action.payload);
         state.selectedShoppingList = action.payload.filter(item => !item.completed);
         state.completedShoppingList = action.payload.filter(item => item.completed);
         state.loading = false;

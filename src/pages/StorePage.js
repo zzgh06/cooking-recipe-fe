@@ -9,6 +9,11 @@ import IngredientThemeCard from "../component/IngredientThemeCard/IngredientThem
 import IngredientAll from "../component/IngredientAll/IngredientAll";
 import RecentlyViewed from "../component/RecentlyViewed/RecentlyViewed";
 import { Box, Skeleton, styled } from "@mui/material";
+import banner3 from "../assets/img/banner3.jpg";
+import banner4 from "../assets/img/banner4.jpg";
+import MainBanner1 from "../assets/img/mainBanner1.png";
+import MainBanner2 from "../assets/img/mainBanner2.png";
+import MainBanner3 from "../assets/img/mainBanner3.jpg";
 
 const SubBannerSkeleton = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -21,16 +26,8 @@ const SubBannerSkeleton = styled(Box)(({ theme }) => ({
 }));
 
 const StorePage = () => {
-  const images = [
-    "https://static.wtable.co.kr/image/production/service/banner/3669/e22ab935-5afa-45a9-8562-6e386111c0f9.png",
-    "https://static.wtable.co.kr/image/production/service/banner/3645/1af3729b-6042-4036-b9bc-1424a31c3965.png",
-    "https://static.wtable.co.kr/image/production/service/category/2915/dfa8032a-41a0-44ab-90e1-dde2bbf1f568.jpg",
-  ];
+  const images = [MainBanner1, MainBanner2, MainBanner3];
 
-  const subImages = [
-    "https://product-image.kurly.com/hdims/resize/%3E1050x%3E140/quality/85/src/banner/random-band/pc/img/e95569ee-228d-4ba0-bbb4-9d6544f7b0dc.jpg",
-    "https://product-image.kurly.com/hdims/resize/%3E1050x%3E140/quality/85/src/banner/random-band/pc/img/692d9858-1728-4f8d-8753-6262026284ac.jpg",
-  ];
   const dispatch = useDispatch();
   const [query, setQuery] = useSearchParams();
   const name = query.get("name");
@@ -72,7 +69,7 @@ const StorePage = () => {
           <Skeleton variant="rectangular" width="100%" height={130} />
         </SubBannerSkeleton>
       ) : (
-        <SubBanner img={subImages[0]} />
+        <SubBanner img={banner3} />
       )}
       <IngredientSlider
         title={"신상품"}
@@ -80,14 +77,17 @@ const StorePage = () => {
         loading={loading}
       />
       <Box>
-        <IngredientThemeCard ingredients={topDiscountedIngredients} loading={loading} />
+        <IngredientThemeCard
+          ingredients={topDiscountedIngredients}
+          loading={loading}
+        />
       </Box>
       {loading ? (
         <SubBannerSkeleton>
           <Skeleton variant="rectangular" width="100%" height={130} />
         </SubBannerSkeleton>
       ) : (
-        <SubBanner img={subImages[1]} />
+        <SubBanner img={banner4} />
       )}
       <IngredientAll />
       {recentlyViewedItems.length >= 1 ? (
