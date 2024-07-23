@@ -9,7 +9,7 @@ const RecipeAllContainer = styled(Container)({
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
-  margin: "30px auto"
+  margin: "30px auto",
 });
 
 const RecipeCardContainer = styled(Grid)({

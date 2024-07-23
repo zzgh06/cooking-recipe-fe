@@ -15,6 +15,7 @@ const Footer = () => {
         justifyContent: "center",
         width: "100%",
         padding: "30px 0",
+        marginTop: "20px",
         borderTop: "1px solid lightgrey",
         backgroundColor: "white",
       }}

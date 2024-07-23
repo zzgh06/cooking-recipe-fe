@@ -18,7 +18,7 @@ import {
   Menu,
   MenuItem,
   styled,
-  TextField
+  TextField,
 } from "@mui/material";
 import {
   Menu as MenuIcon,
@@ -26,54 +26,56 @@ import {
   Person as PersonIcon,
   Restaurant as RestaurantIcon,
   ShoppingCart as ShoppingCartIcon,
-  Search as SearchIcon
+  Search as SearchIcon,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../redux/userSlice";
 
 const StyledAppBar = styled(AppBar)({
-  backgroundColor: '#ffffff',
-  boxShadow: '0px 1px 3px 1px rgb(221, 221, 221)',
+  backgroundColor: "#ffffff",
+  boxShadow: "0px 1px 1px 1px rgb(221, 221, 221)",
+  padding: "0 15px"
 });
 
 const Logo = styled(Typography)({
-  cursor: 'pointer',
-  fontSize: '24px',
+  cursor: "pointer",
+  fontSize: "23px",
   fontWeight: 600,
-  color: 'black',
+  color: "black",
+  minWidth: "187px"
 });
 
 const NavMenu = styled(Box)({
-  display: 'flex',
-  alignItems: 'center',
-  marginLeft: 'auto',
-  '& a': {
-    textDecoration: 'none',
-    color: 'black',
+  display: "flex",
+  alignItems: "center",
+  marginLeft: "auto",
+  "& a": {
+    textDecoration: "none",
+    color: "black",
     fontWeight: 600,
-    fontSize: '16px',
-    margin: '0 15px',
+    fontSize: "18px",
+    margin: "0 10px",
   },
 });
 
 const SearchContainer = styled(Box)({
-  display: 'flex',
-  alignItems: 'center',
+  display: "flex",
+  alignItems: "center",
   flexGrow: 1,
-  justifyContent: 'center',
-  padding: '0 20px',
+  justifyContent: "center",
+  padding: "0 20px",
 });
 
 const StyledTextField = styled(TextField)({
-  borderRadius: '20px',
-  backgroundColor: '#f3f3f3',
-  width: '100%',
-  maxWidth: '450px',
-  '& .MuiInputBase-input': {
-    padding: '10px',
+  borderRadius: "20px",
+  backgroundColor: "#f3f3f3",
+  width: "100%",
+  maxWidth: "450px",
+  "& .MuiInputBase-input": {
+    padding: "10px",
   },
-  '& .MuiOutlinedInput-root': {
-    borderRadius: '20px',
+  "& .MuiOutlinedInput-root": {
+    borderRadius: "20px",
   },
 });
 
@@ -91,7 +93,7 @@ const Navbar = () => {
 
   const user = useSelector((state) => state.auth.user);
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const handleLogout = async () => {
     await dispatch(logout());
@@ -129,87 +131,103 @@ const Navbar = () => {
 
   return (
     <StyledAppBar position="fixed">
-      <Toolbar  sx={{ height: "95px", display: 'flex', alignItems: 'center' }}>
-        {user && user?.user.level === "admin" && (
-          <Button
-            variant="contained"
-            color="success"
-            component={Link}
-            to="/admin/recipe"
-            sx={{ marginRight: 2 }}
-          >
-            Admin page
-          </Button>
-        )}
-        <Logo onClick={() => navigate("/")}>
-          냉장고에 뭐 있지?
-        </Logo>
-        <SearchContainer>
-          <StyledTextField
-            variant="outlined"
-            placeholder="검색어를 입력하세요"
-            value={keyword}
-            onChange={(e) => setKeyword(e.target.value)}
-            onKeyPress={handleSearch}
-            InputProps={{
-              endAdornment: (
-                <IconButton onClick={handleSearch}>
-                  <SearchIcon />
-                </IconButton>
-              ),
-            }}
-          />
-        </SearchContainer>
-        <NavMenu>
-          {menuItems.map((item) => (
-            <Link to={`/${menuPathMapping[item]}`} key={item}>
-              {item}
-            </Link>
-          ))}
-        </NavMenu>
-        <IconButton
-          size="large"
-          aria-label="account"
-          onClick={handleMenuClick}
+      <Toolbar
+        sx={{ display: "flex", flexDirection: "column", height: "auto", maxHeight: "94px", paddingBottom: "11px" }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+            width: "100%",
+          }}
         >
-          <PersonIcon />
-        </IconButton>
-        <IconButton
-          size="large"
-          aria-label="recipes"
-          onClick={() => navigate("/account/recipe")}
-        >
-          <RestaurantIcon />
-        </IconButton>
-        <IconButton
-          size="large"
-          aria-label="cart"
-          onClick={() => navigate("/cart")}
-        >
-          <ShoppingCartIcon />
-        </IconButton>
-        {isMobile && (
           <IconButton
+            size="large"
+            aria-label="account"
+            onClick={handleMenuClick}
+            sx={{ padding: "7px 10px" }}
+          >
+            <PersonIcon />
+          </IconButton>
+          <IconButton
+            size="large"
+            aria-label="recipes"
+            onClick={() => navigate("/account/recipe")}
+            sx={{ padding: "7px 10px" }}
+          >
+            <RestaurantIcon />
+          </IconButton>
+          <IconButton
+            size="large"
+            aria-label="cart"
+            onClick={() => navigate("/cart")}
+            sx={{ padding: "7px 10px" }}
+          >
+            <ShoppingCartIcon />
+          </IconButton>
+        </Box>
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          {user && user?.user.level === "admin" && (
+            <Button
+              variant="contained"
+              color="success"
+              component={Link}
+              to="/admin/recipe"
+              sx={{ marginRight: 2 }}
+            >
+              Admin page
+            </Button>
+          )}
+          <Logo onClick={() => navigate("/")}>냉장고에 뭐 있지?</Logo>
+          <SearchContainer>
+            <StyledTextField
+              variant="outlined"
+              placeholder="검색어를 입력하세요"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+              onKeyPress={handleSearch}
+              InputProps={{
+                endAdornment: (
+                  <IconButton onClick={handleSearch}>
+                    <SearchIcon />
+                  </IconButton>
+                ),
+              }}
+            />
+          </SearchContainer>
+          {!isMobile ? <NavMenu>
+            {menuItems.map((item) => (
+              <Link to={`/${menuPathMapping[item]}`} key={item}>
+                {item}
+              </Link>
+            ))}
+          </NavMenu> : <IconButton
             size="large"
             edge="end"
             aria-label="menu"
             onClick={toggleSidebar}
           >
             <MenuIcon />
-          </IconButton>
-        )}
-        <Drawer
-          anchor="right"
-          open={sidebarOpen}
-          onClose={toggleSidebar}
-        >
+          </IconButton>}
+        </Box>
+        <Drawer anchor="right" open={sidebarOpen} onClose={toggleSidebar}>
           <Box
             sx={{ width: 250 }}
             role="presentation"
             onClick={toggleSidebar}
             onKeyDown={toggleSidebar}
           >
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 2 }}>
+            <Box
+              sx={{ display: "flex", justifyContent: "space-between", p: 2 }}
+            >
               <Typography variant="h6">Menu</Typography>
               <IconButton onClick={toggleSidebar}>
                 <CloseIcon />
@@ -218,17 +236,16 @@ const Navbar = () => {
             <Divider />
             <SidebarList>
               {menuItems.map((item) => (
-                <ListItem button component={Link} to={`/${menuPathMapping[item]}`} key={item}>
+                <ListItem
+                  button
+                  component={Link}
+                  to={`/${menuPathMapping[item]}`}
+                  key={item}
+                >
                   <ListItemText primary={item} />
                 </ListItem>
               ))}
               <Divider />
-              <ListItem button onClick={() => navigate("/register")}>
-                <ListItemText primary="회원가입" />
-              </ListItem>
-              <ListItem button onClick={() => navigate("/login")}>
-                <ListItemText primary="로그인" />
-              </ListItem>
             </SidebarList>
           </Box>
         </Drawer>
@@ -246,7 +263,9 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <MenuItem onClick={() => navigate("/register")}>회원가입</MenuItem>
+              <MenuItem onClick={() => navigate("/register")}>
+                회원가입
+              </MenuItem>
               <MenuItem onClick={() => navigate("/login")}>로그인</MenuItem>
             </>
           )}
