@@ -9,19 +9,19 @@ const RecipeCategory = () => {
   const navigate = useNavigate();
   const RecipeCategoryBar = styled(Box)(({ theme }) => ({
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignItems: "center",
     position: "fixed",
-    top: "95px",
+    top: "94px",
     width: "100%",
     height : "auto",
-    padding: "10px 120px",
-    borderTop: "3px solid green",
-    borderBottom: "3px solid green",
+    padding: "10px 100px",
+    borderTop: "2px solid green",
+    borderBottom: "2px solid green",
     backgroundColor: "white",
     zIndex: 999,
     [theme.breakpoints.down("md")]: {
-      top: "70px",
+      top: "96px",
       padding: "0 10px",
     },
   }));
@@ -71,7 +71,6 @@ const RecipeCategory = () => {
             </RecipeLink>
           ))}
         </RecipeBtn>
-        <FontAwesomeIcon icon={faBars} />
       </RecipeCategoryBar>
   )
 }
