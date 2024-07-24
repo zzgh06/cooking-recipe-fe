@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { resetPassword } from "../redux/userSlice";
 import { Container, TextField, IconButton, InputAdornment, Typography, Button, Snackbar, Alert } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useResetPassword } from "../hooks/useResetPassword";
 
 const ResetPasswordPage = () => {
   const [password, setPassword] = useState("");
@@ -13,9 +13,10 @@ const ResetPasswordPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { user } = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { token } = useParams();
+
+  const { mutate: resetPassword } = useResetPassword();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,7 +31,7 @@ const ResetPasswordPage = () => {
       return;
     }
 
-    await dispatch(resetPassword({ password, token }));
+    await resetPassword({ password, token });
     navigate('/login');
   };
 

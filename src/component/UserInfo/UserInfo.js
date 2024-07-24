@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Typography, Grid, Box } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { styled } from "@mui/system";
+import { useLoginWithToken } from "../../hooks/useLoginWithToken";
 
 const UserInfoContainer = styled("div")({
   display: "flex",
@@ -42,8 +43,7 @@ const StyledLink = styled(Typography)({
   },
 });
 
-const UserInfo = ({ onButtonClick }) => {
-  const user = useSelector((state) => state.auth.user);
+const UserInfo = ({ onButtonClick, user }) => {
 
   const handleButtonClick = (value) => {
     onButtonClick(value);
@@ -53,7 +53,7 @@ const UserInfo = ({ onButtonClick }) => {
     <>
       <UserInfoContainer>
         <Typography variant="body1">
-          반가워요! <strong>{user?.user.name}</strong>님
+          반가워요! <strong>{user?.name}</strong>님
         </Typography>
         <Box display="inline" ml={1}>
           <Typography

@@ -5,21 +5,19 @@ import {
   TextField,
   Button,
   Box,
-  Alert,
 } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { forgotPassword } from "../redux/userSlice";
+import { useForgotPassword } from '../hooks/useForgotPassword';
+
 
 const FindPasswordPage = () => {
   const [email, setEmail] = useState("");
-  const { error, loading } = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
+  const { mutate: forgotPassword, error, isLoading } = useForgotPassword();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await dispatch(forgotPassword({ email }));
+    await forgotPassword({ email });
     navigate("/");
   };
 
@@ -71,10 +69,10 @@ const FindPasswordPage = () => {
           type="submit"
           variant="contained"
           color="success"
-          disabled={loading}
+          disabled={isLoading}
           sx={{ width: "100%" }}
         >
-          {loading ? "링크 전송중..." : "비밀번호 재발급"}
+          {isLoading ? "링크 전송중..." : "비밀번호 재발급"}
         </Button>
       </Box>
     </Container>

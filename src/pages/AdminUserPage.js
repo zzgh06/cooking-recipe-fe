@@ -3,11 +3,12 @@ import { Container, Box, Typography, Button } from '@mui/material';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import UserTable from '../component/UserTable/UserTable';
-import { deleteUser, getUsersInfo } from '../redux/userSlice';
 import UserDetailDialog from '../component/UserDetailDialog/UserDetailDialog';
 import SearchBox from '../component/SearchBox/SearchBox';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import { useGetUsersInfo } from '../hooks/useGetUsersInfo';
+import { useDeleteUser } from '../hooks/useDeleteUser';
 
 const AdminUserPage = () => {
   const dispatch = useDispatch();
@@ -22,7 +23,11 @@ const AdminUserPage = () => {
   const [showDialog, setShowDialog] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
-  const { usersData, totalPageNum } = useSelector(state => state.auth);
+  const { data, isLoading, isError } = useGetUsersInfo(searchQuery);
+  const { mutateAsync: deleteUser } = useDeleteUser();
+
+  const usersData = data?.usersData || [];
+  const totalPageNum = data?.totalPageNum || 0;
 
   const tableHeader = [
     "#",
@@ -33,9 +38,6 @@ const AdminUserPage = () => {
     "Join Date",
   ];
 
-  useEffect(() => {
-    dispatch(getUsersInfo(searchQuery));
-  }, [dispatch, searchQuery]);
 
   useEffect(() => {
     const params = new URLSearchParams(searchQuery);
@@ -44,8 +46,7 @@ const AdminUserPage = () => {
   }, [searchQuery, navigate]);
 
   const handleUserDelete = async (id) => {
-    await dispatch(deleteUser(id));
-    await dispatch(getUsersInfo(searchQuery));
+    await deleteUser(id);
     handleClose();
   };
 

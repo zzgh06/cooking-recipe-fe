@@ -1,16 +1,9 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { GoogleLogin } from "@react-oauth/google";
 import { Link } from "react-router-dom";
 import KakaoLogin from "../component/KakaoLogin/KakaoLogin";
-import {
-  loginUser,
-  loginWithGoogle,
-  loginWithKakao,
-  loginWithToken,
-  setError,
-} from "../redux/userSlice";
 import {
   Container,
   Typography,
@@ -20,6 +13,11 @@ import {
   Link as MuiLink,
   Alert,
 } from "@mui/material";
+import { useLoginUser } from "../hooks/useLoginUser";
+import { useLoginWithGoogle } from "../hooks/useLoginWithGoogle";
+import { useLoginWithKakao } from "../hooks/useLoginWithKakao";
+import { useLoginWithToken } from "../hooks/useLoginWithToken";
+import { setToastMessage } from "../redux/commonUISlice";
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -29,12 +27,25 @@ const LoginPage = () => {
     password: "",
   });
 
-  const error = useSelector((state) => state.auth.error);
+  const { mutate: fetchUser } = useLoginWithToken();
+  const { mutate: loginUser } = useLoginUser();
+  
+  const {
+    mutate: loginWithGoogle,
+    isError: isLoginWithGoogleError,
+    error: loginWithGoogleError,
+  } = useLoginWithGoogle();
+
+  const {
+    mutate: loginWithKakao,
+    isError: isLoginWithKakaoError,
+    error: loginWithKakaoError,
+  } = useLoginWithKakao();
 
   const handleGoogleSuccess = async (response) => {
     try {
-      await dispatch(loginWithGoogle(response.credential)).unwrap();
-      await dispatch(loginWithToken()).unwrap();
+      await loginWithGoogle(response.credential);
+      await fetchUser();
       navigate("/");
     } catch (err) {
       console.error("구글 로그인 실패: ", err);
@@ -43,13 +54,12 @@ const LoginPage = () => {
 
   const handleGoogleFailure = (error) => {
     console.error("구글 로그인 실패: ", error);
-    dispatch(setError("구글 로그인에 실패했습니다. 다시 시도해 주세요."));
   };
 
   const handleKakaoLogin = async (kakaoData) => {
     try {
-      await dispatch(loginWithKakao(kakaoData));
-      await dispatch(loginWithToken()).unwrap();
+      await loginWithKakao(kakaoData);
+      await fetchUser();
       navigate("/");
     } catch (err) {
       console.error("카카오 로그인 실패: ", err);
@@ -59,13 +69,7 @@ const LoginPage = () => {
   const handleLogin = async (event) => {
     event.preventDefault();
     const { id, password } = formData;
-    try {
-      await dispatch(loginUser({ id, password })).unwrap();
-      await dispatch(loginWithToken()).unwrap();
-      navigate("/");
-    } catch (error) {
-      console.error("로그인 실패: ", error);
-    }
+    await loginUser({ id, password });
   };
 
   const handleChange = (event) => {
@@ -75,6 +79,10 @@ const LoginPage = () => {
       [name]: value,
     }));
   };
+
+  const error = isLoginWithGoogleError || isLoginWithKakaoError;
+  const errorMessage =
+    loginWithGoogleError?.message || loginWithKakaoError?.message;
 
   return (
     <Container
@@ -121,7 +129,7 @@ const LoginPage = () => {
         </Box>
         {error && (
           <Alert severity="error" sx={{ mb: 2 }}>
-            {error}
+            {errorMessage}
           </Alert>
         )}
         <Button

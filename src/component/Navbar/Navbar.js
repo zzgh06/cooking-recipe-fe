@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import {
   AppBar,
@@ -29,7 +29,8 @@ import {
   Search as SearchIcon,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../redux/userSlice";
+import { loginWithToken, logout } from "../../redux/userSlice";
+import { useLoginWithToken } from "../../hooks/useLoginWithToken";
 
 const StyledAppBar = styled(AppBar)({
   backgroundColor: "#ffffff",
@@ -90,10 +91,14 @@ const Navbar = () => {
   const [keyword, setKeyword] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-
+  const { mutate: fetchUser } = useLoginWithToken();
   const user = useSelector((state) => state.auth.user);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
   const handleLogout = async () => {
     await dispatch(logout());
@@ -142,7 +147,19 @@ const Navbar = () => {
             width: "100%",
           }}
         >
-          <IconButton
+          {user && user?.level === "admin" && (
+            <Button
+              variant="contained"
+              color="success"
+              component={Link}
+              to="/admin/recipe"
+              sx={{ marginRight: 2 }}
+            >
+              Admin page
+            </Button>
+          )}
+
+            <IconButton
             size="large"
             aria-label="account"
             onClick={handleMenuClick}
@@ -166,7 +183,7 @@ const Navbar = () => {
           >
             <ShoppingCartIcon />
           </IconButton>
-        </Box>
+          </Box>
         <Box
           sx={{
             width: "100%",
@@ -175,17 +192,6 @@ const Navbar = () => {
             justifyContent: "space-between",
           }}
         >
-          {user && user?.user.level === "admin" && (
-            <Button
-              variant="contained"
-              color="success"
-              component={Link}
-              to="/admin/recipe"
-              sx={{ marginRight: 2 }}
-            >
-              Admin page
-            </Button>
-          )}
           <Logo onClick={() => navigate("/")}>냉장고에 뭐 있지?</Logo>
           <SearchContainer>
             <StyledTextField
@@ -254,10 +260,10 @@ const Navbar = () => {
           open={Boolean(anchorEl)}
           onClose={handleMenuClose}
         >
-          {user ? (
+          {user?.name ? (
             <>
               <MenuItem onClick={() => navigate("/account/profile")}>
-                {user?.user.name}님
+                {user?.name}님
               </MenuItem>
               <MenuItem onClick={handleLogout}>로그아웃</MenuItem>
             </>

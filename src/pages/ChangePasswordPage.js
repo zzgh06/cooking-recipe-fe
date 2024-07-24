@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { Button, Grid, TextField, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { changePassword, logout } from "../redux/userSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import { styled } from "@mui/system";
 import "../style/ChangePasswordPage.style.css";
+import { useChangePassword } from "../hooks/useChangePassword";
+import { logout, setChangePasswordError, setChangePasswordLoading } from "../redux/userSlice";
 
 const HeadContainer = styled("div")({
   display: "flex",
@@ -27,7 +28,7 @@ const ChangePasswordContainer = styled("div")({
 const ErrorMessage = styled("div")({
   display: "flex",
   alignItems: "center",
-  marginBottom: "8px",
+  paddingTop: "15px",
 });
 
 const SubmitBtn = styled(Button)({
@@ -46,7 +47,9 @@ const ChangePasswordPage = () => {
   const [gapMessage, setGapMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSubmit = async (e) => {
+  const { mutate: changePassword } = useChangePassword();
+
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     if (newPassword.includes(" ")) {
@@ -59,10 +62,21 @@ const ChangePasswordPage = () => {
       return;
     }
 
-    await dispatch(changePassword(newPassword));
-    await dispatch(logout());
-    navigate("/login");
+    dispatch(setChangePasswordLoading(true));
+    changePassword(newPassword, {
+      onSuccess: () => {
+        dispatch(setChangePasswordLoading(false));
+        dispatch(setChangePasswordError(null));
+        dispatch(logout());
+        navigate("/login");
+      },
+      onError: (error) => {
+        dispatch(setChangePasswordLoading(false));
+        dispatch(setChangePasswordError(error.error));
+      },
+    });
   };
+
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -126,7 +140,7 @@ const ChangePasswordPage = () => {
           )}
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12}>
-              <Typography>새 비밀번호</Typography>
+              <Typography sx={{mb: 1}}>새 비밀번호</Typography>
               <TextField
                 id="newPassword"
                 label="새 비밀번호"
@@ -155,7 +169,7 @@ const ChangePasswordPage = () => {
               />
             </Grid>
             <Grid item xs={12}>
-              <Typography>새 비밀번호 재확인</Typography>
+              <Typography sx={{mb: 1}}>새 비밀번호 재확인</Typography>
               <TextField
                 id="confirmPassword"
                 label="새 비밀번호 재확인"

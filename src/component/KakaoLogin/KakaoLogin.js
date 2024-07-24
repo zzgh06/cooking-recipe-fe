@@ -1,15 +1,18 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
-import { loginWithKakao, loginWithToken } from "../../redux/userSlice";
+import { useLoginWithKakao } from "../../hooks/useLoginWithKakao";
+import { useLoginWithToken } from "../../hooks/useLoginWithToken";
 import { faComment } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "@mui/material";
+import { loginWithToken } from "../../redux/userSlice";
 
 const KakaoLogin = ({ onSuccess, onError }) => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const KAKAO_JAVASCRIPT_KEY = process.env.REACT_APP_KAKAO_JAVASCRIPT_KEY;
+
+  const { mutate: loginWithKakao } = useLoginWithKakao();
+  const { refetch: fetchUser } = useLoginWithToken();
 
   useEffect(() => {
     if (!window.Kakao.isInitialized()) {
@@ -17,13 +20,13 @@ const KakaoLogin = ({ onSuccess, onError }) => {
     }
   }, [KAKAO_JAVASCRIPT_KEY]);
 
-  const handleKakaoLogin = async () => {
+  const handleKakaoLogin = () => {
     window.Kakao.Auth.login({
       success: async function (authObj) {
         try {
           const idToken = authObj.access_token;
-          await dispatch(loginWithKakao(idToken));
-          await dispatch(loginWithToken()).unwrap();
+          await loginWithKakao(idToken);
+          await fetchUser();
           navigate("/");
           if (onSuccess) onSuccess();
         } catch (err) {

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { Button, TextField, Typography, Grid, Box, IconButton, CircularProgress } from "@mui/material";
-import { verifyCurrentPassword } from "../redux/userSlice";
-import { styled } from "@mui/system";
+import { Button, TextField, Typography, Grid, Box, CircularProgress, styled } from "@mui/material";
+import { setVerifyPasswordLoading, setVerifyPasswordError, setIsAuthenticated } from "../redux/userSlice";
+import { useVerifyCurrentPassword } from "../hooks/useVerifyCurrentPassword"; 
+
 const HeadContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
   justifyContent: 'flex-start',
@@ -14,9 +14,10 @@ const HeadContainer = styled(Box)(({ theme }) => ({
 
 const VerifyCurrentPassword = ({ onVerifySuccess }) => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { error, loading, isAuthenticated } = useSelector((state) => state.auth);
+  const { loading, error, isAuthenticated } = useSelector((state) => state.auth);
   const [currentPassword, setCurrentPassword] = useState("");
+
+  const { mutate: verifyPassword } = useVerifyCurrentPassword();
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -24,9 +25,21 @@ const VerifyCurrentPassword = ({ onVerifySuccess }) => {
     }
   }, [isAuthenticated, onVerifySuccess]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    await dispatch(verifyCurrentPassword(currentPassword));
+    dispatch(setVerifyPasswordLoading(true));
+    verifyPassword(currentPassword, {
+      onSuccess: () => {
+        dispatch(setVerifyPasswordLoading(false));
+        dispatch(setIsAuthenticated(true));
+        dispatch(setVerifyPasswordError(null))
+        onVerifySuccess();
+      },
+      onError: (error) => {
+        dispatch(setVerifyPasswordLoading(false));
+        dispatch(setVerifyPasswordError(error.error));
+      },
+    });
   };
 
   return (
@@ -86,7 +99,7 @@ const VerifyCurrentPassword = ({ onVerifySuccess }) => {
               }}
             >
               <Typography variant="body2" sx={{ ml: 1 }}>
-                {error.error}
+                {error}
               </Typography>
             </Box>
           )}

@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { loginWithToken, updateUser } from "../../redux/userSlice";
 import { Grid, Typography, TextField, Button, styled } from "@mui/material";
 import CloudinaryUploadWidget from "../../utils/CloudinaryUploadWidget";
 import { useNavigate } from "react-router-dom";
 import defaultProfile from "../../assets/img/profile_user.png";
+import { useUpdateUser } from "../../hooks/useUpdateUser";
 
 const HeadContainer = styled('div')({
   display: 'flex',
@@ -40,6 +39,7 @@ const UploadImage = styled('img')({
   width: '200px',
   height: '200px',
   objectFit: 'cover',
+  marginBottom: "10px",
   borderRadius: '50%',
   border: '2px solid lightgrey'
 });
@@ -59,8 +59,7 @@ const ProfileImage = styled('div')({
 })
 
 
-const MyProfileEditComponent = () => {
-  const dispatch = useDispatch();
+const MyProfileEditComponent = ({user}) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     image: "",
@@ -75,29 +74,27 @@ const MyProfileEditComponent = () => {
     contact: "",
     shipTo: "",
   });
-  const { user } = useSelector((state) => state.auth);
+  
+  const { mutate: updateUser, isLoading } = useUpdateUser();
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  useEffect(() => {
-    dispatch(loginWithToken());
-  }, [dispatch]);
 
   useEffect(() => {
     if (user) {
       setFormData({
-        image: user?.user.image || "",
-        email: user?.user.email || "",
-        name: user?.user.name || "",
-        contact: formatPhoneNumber(user?.user.contact) || "",
-        shipTo: user?.user.shipTo || "",
+        image: user?.image || '',
+        email: user?.email || '',
+        name: user?.name || '',
+        contact: formatPhoneNumber(user?.contact) || '',
+        shipTo: user?.shipTo || '',
       });
     }
   }, [user]);
 
   const handleChange = (event) => {
     const { id, value } = event.target;
-    const formattedValue = id === "contact" ? formatPhoneNumber(value) : value;
+    const formattedValue = id === 'contact' ? formatPhoneNumber(value) : value;
     setFormData((prevFormData) => ({
       ...prevFormData,
       [id]: formattedValue,
@@ -105,7 +102,7 @@ const MyProfileEditComponent = () => {
 
     setFormErrors((prevFormErrors) => ({
       ...prevFormErrors,
-      [id]: "",
+      [id]: '',
     }));
   };
 
@@ -122,15 +119,15 @@ const MyProfileEditComponent = () => {
 
     const errors = {};
     if (!emailRegex.test(email)) {
-      errors.email = "유효한 이메일 주소를 입력해 주세요.";
+      errors.email = '유효한 이메일 주소를 입력해 주세요.';
     }
     const nameRegex = /^[a-zA-Z가-힣]+$/;
     if (!nameRegex.test(name)) {
-      errors.name = "이름은 한글이나 영어만 입력할 수 있습니다.";
+      errors.name = '이름은 한글이나 영어만 입력할 수 있습니다.';
     }
-    const cleanedContact = contact.replace(/\D/g, "");
+    const cleanedContact = contact.replace(/\D/g, '');
     if (cleanedContact.length !== 11) {
-      errors.contact = "전화번호는 11자리 숫자여야 합니다.";
+      errors.contact = '전화번호는 11자리 숫자여야 합니다.';
     }
 
     if (Object.keys(errors).length > 0) {
@@ -138,12 +135,12 @@ const MyProfileEditComponent = () => {
       return;
     }
 
-    await dispatch(updateUser({ image, email, name, contact, shipTo }));
-    navigate("/account/profile");
+    await updateUser({ image, email, name, contact, shipTo });
+    navigate('/account/profile');
   };
 
   const formatPhoneNumber = (value) => {
-    let cleanValue = value.replace(/\D/g, "");
+    let cleanValue = value.replace(/\D/g, '');
     if (cleanValue.length > 11) {
       cleanValue = cleanValue.slice(0, 11);
     }
@@ -152,7 +149,7 @@ const MyProfileEditComponent = () => {
     if (match) {
       const formattedValue = [match[1], match[2], match[3]]
         .filter(Boolean)
-        .join("-");
+        .join('-');
       return formattedValue;
     }
 
@@ -167,17 +164,19 @@ const MyProfileEditComponent = () => {
           <Typography variant="subtitle1">회원정보 수정</Typography>
         </HeadContainer>
       </Grid>
-      <Grid item xs={12} sx={{marginTop : '50px'}}>
+      <Grid item xs={12} sx={{ marginTop: '50px' }}>
         <ProfileContainer>
           <EditUserFormContainer onSubmit={handleSubmit}>
             <Grid container spacing={2}>
               <Grid item xs={12} md={6}>
                 <ProfileImage>
-                  <Typography variant="h6" sx={{fontWeight: '600'}}>프로필 이미지</Typography>
+                  <Typography variant="h6" sx={{ fontWeight: '600' }}>
+                    프로필 이미지
+                  </Typography>
                   <UploadImgArea>
                     <UploadImage
                       id="uploadedimage"
-                      src={formData?.image === "" ? defaultProfile : formData?.image}
+                      src={formData?.image === '' ? defaultProfile : formData?.image}
                       alt="uploadedimage"
                     />
                     <CloudinaryUploadWidget uploadImage={uploadImage} />
@@ -232,6 +231,7 @@ const MyProfileEditComponent = () => {
                   variant="contained"
                   color="primary"
                   type="submit"
+                  disabled={isLoading}
                 >
                   저장하기
                 </EditSubmitBtn>
