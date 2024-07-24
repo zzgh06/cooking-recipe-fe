@@ -30,6 +30,7 @@ import {
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { loginWithToken, logout } from "../../redux/userSlice";
+import { useLoginWithToken } from "../../hooks/useLoginWithToken";
 
 const StyledAppBar = styled(AppBar)({
   backgroundColor: "#ffffff",
@@ -90,14 +91,14 @@ const Navbar = () => {
   const [keyword, setKeyword] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-
+  const { mutate: fetchUser } = useLoginWithToken();
   const user = useSelector((state) => state.auth.user);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   useEffect(() => {
-    loginWithToken();
-  }, [user]);
+    fetchUser();
+  }, []);
 
   const handleLogout = async () => {
     await dispatch(logout());

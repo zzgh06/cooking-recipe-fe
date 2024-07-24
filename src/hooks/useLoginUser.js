@@ -15,7 +15,7 @@ export const useLoginUser = () => {
     mutationFn: loginUser,
     onSuccess: (data) => {
       dispatch(setUser(data.user));
-      dispatch(setLoginData(data));
+      dispatch(setLoginData(data.user));
     },
     onError: (error) => {
       console.error('로그인 실패', error);

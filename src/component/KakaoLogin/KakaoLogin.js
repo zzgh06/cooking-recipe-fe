@@ -26,7 +26,7 @@ const KakaoLogin = ({ onSuccess, onError }) => {
         try {
           const idToken = authObj.access_token;
           await loginWithKakao(idToken);
-          await loginWithToken();
+          await fetchUser();
           navigate("/");
           if (onSuccess) onSuccess();
         } catch (err) {

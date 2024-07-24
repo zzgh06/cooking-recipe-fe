@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import { registerUser } from "../redux/userSlice";
 import {
   Container,
   Typography,
@@ -10,9 +8,9 @@ import {
   Box,
   Alert,
 } from "@mui/material";
+import { useRegisterUser } from "../hooks/useRegisterUser";
 
 const RegisterPage = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     id: "",
@@ -25,28 +23,25 @@ const RegisterPage = () => {
   });
 
   const [passwordError, setPasswordError] = useState("");
-  const error = useSelector((state) => state.auth.error);
+  const { mutateAsync: registerUser, error } = useRegisterUser();
 
   const handleRegister = async (event) => {
     event.preventDefault();
-    const { id, password, confirmPassword, name, email, contact, shipTo } =
-      formData;
+    const { id, password, confirmPassword, name, email, contact, shipTo } = formData;
 
     if (password !== confirmPassword) {
-      setPasswordError("Passwords do not match");
+      setPasswordError('Passwords do not match');
       return;
     } else {
-      setPasswordError("");
+      setPasswordError('');
     }
 
-    dispatch(registerUser({ id, password, name, email, contact, shipTo }))
-      .unwrap()
-      .then(() => {
-        navigate("/login");
-      })
-      .catch((err) => {
-        console.error("Registration failed: ", err);
-      });
+    try {
+      await registerUser({ id, password, name, email, contact, shipTo });
+      navigate('/login');
+    } catch (err) {
+      console.error('Registration failed:', err);
+    }
   };
 
   const handleChange = (event) => {

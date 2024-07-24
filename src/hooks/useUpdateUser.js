@@ -1,5 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import api from '../utils/api';
+import { useDispatch } from 'react-redux';
+import { setUpdateUser, setError } from '../redux/userSlice';
 
 const updateUser = async (formData) => {
   const response = await api.put('/user/me', formData);
@@ -7,5 +9,15 @@ const updateUser = async (formData) => {
 };
 
 export const useUpdateUser = () => {
-  return useMutation(updateUser);
+  const dispatch = useDispatch();
+
+  return useMutation({
+    mutationFn: updateUser,
+    onSuccess: (data) => {
+      dispatch(setUpdateUser(data.user));
+    },
+    onError: (error) => {
+      dispatch(setError(error.response?.data?.message || 'Update failed'));
+    },
+  });
 };

@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import api from '../utils/api';
 import { useDispatch } from 'react-redux';
-import { setUser, setIsAuthenticated } from '../redux/userSlice';
+import { setUser } from '../redux/userSlice';
 
 const fetchUser = async () => {
   const response = await api.get('/user/me');
@@ -14,7 +14,7 @@ export const useLoginWithToken = () => {
   return useMutation({
     mutationFn: fetchUser,
     onSuccess: (data) => {
-      dispatch(setUser(data));
+      dispatch(setUser(data.user));
     },
     onError: () => {
       sessionStorage.removeItem('token');

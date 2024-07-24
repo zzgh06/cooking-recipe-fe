@@ -1,102 +1,18 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../utils/api";
 
-export const registerUser = createAsyncThunk(
-  "auth/registerUser",
-  async (userData, { rejectWithValue }) => {
-    try {
-      const response = await api.post("/user", userData);
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
-
-export const loginWithToken = createAsyncThunk(
-  "auth/loginWithToken",
-  async (_, thunkAPI) => {
-    try {
-      const response = await api.get("/user/me");
-      if (response.status !== 200) throw new Error(response.error);
-      return response.data;
-    } catch (error) {
-      thunkAPI.dispatch(logout());
-      return thunkAPI.rejectWithValue(
-        error.response?.data?.message || error.message
-      );
-    }
-  }
-);
-
-// export const getUsersInfo = createAsyncThunk(
-//   "auth/getUsersInfo",
-//   async (searchQuery, thunkAPI) => {
+// export const forgotPassword = createAsyncThunk(
+//   "auth/forgotPassword",
+//   async ({ email }, { rejectWithValue }) => {
 //     try {
-//       const response = await api.get(
-//         `/user/admin?name=${searchQuery.name}&page=${searchQuery.page}`
-//       );
+//       const response = await api.post("/password/forgot-password", { email });
 //       if (response.status !== 200) throw new Error(response.error);
-//       return {
-//         usersData: response.data.data,
-//         totalPageNum: response.data.totalPageNum,
-//       };
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue(
-//         error.response?.data?.message || error.message
-//       );
-//     }
-//   }
-// );
-
-export const logouts = createAsyncThunk(
-  "auth/logout",
-  async (_, { rejectWithValue }) => {
-    try {
-      sessionStorage.removeItem("token");
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
-
-export const updateUser = createAsyncThunk(
-  "auth/updateUser",
-  async (formData, { rejectWithValue }) => {
-    try {
-      const response = await api.put(`user/me`, formData);
-      if (response.status !== 200) throw new Error(response.error);
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
-
-// export const deleteUser = createAsyncThunk(
-//   "auth/deleteUser",
-//   async (id, { rejectWithValue }) => {
-//     try {
-//       const response = await api.delete(`/user/${id}`);
-//       if (response.status !== 200) throw new Error(response.error);
+//       alert("비밀번호 재설정 이메일이 발송되었습니다 !");
 //     } catch (error) {
 //       return rejectWithValue(error.message);
 //     }
 //   }
 // );
-
-export const forgotPassword = createAsyncThunk(
-  "auth/forgotPassword",
-  async ({ email }, { rejectWithValue }) => {
-    try {
-      const response = await api.post("/password/forgot-password", { email });
-      if (response.status !== 200) throw new Error(response.error);
-      alert("비밀번호 재설정 이메일이 발송되었습니다 !");
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
 
 export const resetPassword = createAsyncThunk(
   "auth/resetPassword",
@@ -172,8 +88,14 @@ const userSlice = createSlice({
       state.usersData = action.payload.usersData;
       state.totalPageNum = action.payload.totalPageNum;
     },
+    setUpdateUser: (state, action) => {
+      state.user = { user: action.payload.data };
+    },
     setLoading: (state, action) => {
       state.loading = action.payload;
+    },
+    setRegistrationData: (state, action) => {
+      state.registrationData = action.payload;
     },
     logout: (state) => {
       state.user = null;
@@ -188,7 +110,9 @@ export const {
   setUser,
   setUsersData,
   setLoginData,
+  setUpdateUser,
+  setRegistrationData,
   setLoading,
-  logout
+  logout,
 } = userSlice.actions;
 export default userSlice.reducer;

@@ -8,9 +8,9 @@ import MyProfileEditComponent from "../component/MyProfileEditComponent/MyProfil
 import MyRecipeComponent from "../component/MyRecipeComponent/MyRecipeComponent";
 import VerifyCurrentPassword from "./VerifyCurrentPassword";
 import ChangePasswordPage from "./ChangePasswordPage";
-import { loginWithToken } from "../redux/userSlice";
 import { styled } from "@mui/system";
 import MyGroceryNote from "../component/MyGroceryNote/MyGroceryNote";
+import { useLoginWithToken } from "../hooks/useLoginWithToken";
 
 const CustomContainer = styled(Container)({
   width: "100%",
@@ -30,15 +30,16 @@ const UserInfoCol = styled(Grid)({
 });
 
 const MyProfile = () => {
-  const dispatch = useDispatch();
+
   const user = useSelector((state) => state.auth.user);
   const navigate = useNavigate();
   const [currentView, setCurrentView] = useState("내 주문");
   const [isVerified, setIsVerified] = useState(false);
+  const { mutate: fetchUser } = useLoginWithToken();
 
   useEffect(() => {
-    dispatch(loginWithToken());
-  }, [dispatch]);
+    fetchUser();
+  }, [fetchUser]);
 
   useEffect(() => {
     if (!user) {
@@ -64,7 +65,7 @@ const MyProfile = () => {
       case "장보기 메모":
         return <MyGroceryNote />;
       case "회원정보 수정":
-        return <MyProfileEditComponent />;
+        return <MyProfileEditComponent user={user} />;
       case "비밀번호 수정":
         return isVerified ? (
           <ChangePasswordPage />
@@ -80,7 +81,7 @@ const MyProfile = () => {
     <CustomContainer>
       <Grid container spacing={3}>
         <UserInfoCol item xs={12} lg={3}>
-          <UserInfo onButtonClick={handleButtonClick} />
+          <UserInfo onButtonClick={handleButtonClick} user={user}/>
         </UserInfoCol>
         <Grid item xs={12} lg={9}>
           {renderComponent()}

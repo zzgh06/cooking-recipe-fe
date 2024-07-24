@@ -16,7 +16,7 @@ import {
 import { useLoginUser } from '../hooks/useLoginUser';
 import { useLoginWithGoogle } from '../hooks/useLoginWithGoogle';
 import { useLoginWithKakao } from '../hooks/useLoginWithKakao';
-import { loginWithToken } from '../redux/userSlice';
+import { useLoginWithToken } from '../hooks/useLoginWithToken';
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -27,13 +27,13 @@ const LoginPage = () => {
   });
 
   const { mutate: loginUser } = useLoginUser();
+  const { mutate: fetchUser } = useLoginWithToken();
   const { mutate: loginWithGoogle, isError: isLoginWithGoogleError, error: loginWithGoogleError } = useLoginWithGoogle();
   const { mutate: loginWithKakao, isError: isLoginWithKakaoError, error: loginWithKakaoError } = useLoginWithKakao();
-
   const handleGoogleSuccess = async (response) => {
     try {
       await loginWithGoogle(response.credential);
-      await loginWithToken();
+      await fetchUser();
       navigate('/');
     } catch (err) {
       console.error('구글 로그인 실패: ', err);
@@ -47,7 +47,7 @@ const LoginPage = () => {
   const handleKakaoLogin = async (kakaoData) => {
     try {
       await loginWithKakao(kakaoData);
-      await loginWithToken();
+      await fetchUser();
       navigate('/');
     } catch (err) {
       console.error('카카오 로그인 실패: ', err);
