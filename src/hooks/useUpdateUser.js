@@ -17,7 +17,7 @@ export const useUpdateUser = () => {
       dispatch(setUpdateUser(data.user));
     },
     onError: (error) => {
-      dispatch(setError(error.response?.data?.message || 'Update failed'));
+      dispatch(setError(error.error || '회원정보 수정에 실패하였습니다'));
     },
   });
 };

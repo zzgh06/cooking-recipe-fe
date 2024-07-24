@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Grid, Typography, TextField, Button, styled } from "@mui/material";
 import CloudinaryUploadWidget from "../../utils/CloudinaryUploadWidget";
 import { useNavigate } from "react-router-dom";
 import defaultProfile from "../../assets/img/profile_user.png";
-import { useLoginWithToken } from "../../hooks/useLoginWithToken";
 import { useUpdateUser } from "../../hooks/useUpdateUser";
 
 const HeadContainer = styled('div')({

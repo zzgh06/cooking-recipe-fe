@@ -2,6 +2,8 @@ import { useMutation } from '@tanstack/react-query';
 import api from '../utils/api';
 import { useDispatch } from 'react-redux';
 import { setLoginData, setUser } from '../redux/userSlice';
+import { useNavigate } from 'react-router-dom';
+import { setToastMessage } from '../redux/commonUISlice';
 
 const loginUser = async (userData) => {
   const response = await api.post('/auth/login', userData);
@@ -11,14 +13,21 @@ const loginUser = async (userData) => {
 
 export const useLoginUser = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   return useMutation({
     mutationFn: loginUser,
     onSuccess: (data) => {
       dispatch(setUser(data.user));
       dispatch(setLoginData(data.user));
+      navigate("/")
     },
     onError: (error) => {
-      console.error('로그인 실패', error);
+      dispatch(
+        setToastMessage({
+          message: error.error || "로그인 실패",
+          status: 'error',
+        })
+      );
     },
   });
 };

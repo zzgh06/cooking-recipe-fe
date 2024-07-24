@@ -7,5 +7,14 @@ const changePassword = async (newPassword) => {
 };
 
 export const useChangePassword = () => {
-  return useMutation(changePassword);
+  return useMutation({
+    mutationFn: changePassword,
+    onSuccess: (data) => {
+      alert(`${data.message}`);
+    },
+    onError: (error) => {
+      console.error('Error:', error.message);
+      return error.response?.data?.message || 'Request failed';
+    },
+  });
 };

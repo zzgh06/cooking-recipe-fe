@@ -1,64 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import api from "../utils/api";
-
-// export const forgotPassword = createAsyncThunk(
-//   "auth/forgotPassword",
-//   async ({ email }, { rejectWithValue }) => {
-//     try {
-//       const response = await api.post("/password/forgot-password", { email });
-//       if (response.status !== 200) throw new Error(response.error);
-//       alert("비밀번호 재설정 이메일이 발송되었습니다 !");
-//     } catch (error) {
-//       return rejectWithValue(error.message);
-//     }
-//   }
-// );
-
-export const resetPassword = createAsyncThunk(
-  "auth/resetPassword",
-  async ({ password, token }, { rejectWithValue }) => {
-    try {
-      const response = await api.post(`/password/reset-password/${token}`, {
-        password,
-      });
-      if (response.status !== 200) throw new Error(response.error);
-      alert("새 비밀번호가 설정되었습니다!\n로그인 후 이용해 주세요.");
-    } catch (error) {
-      alert("만료된 토큰입니다.\n비밀번호 재설정 링크를 다시 받아주세요.");
-      return rejectWithValue(error.message);
-    }
-  }
-);
-
-export const verifyCurrentPassword = createAsyncThunk(
-  "auth/verifyCurrentPassword",
-  async (currentPassword, { rejectWithValue }) => {
-    try {
-      const response = await api.post("/password/verify-password", {
-        currentPassword,
-      });
-      if (response.status !== 200) throw new Error(response.error);
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error);
-    }
-  }
-);
-
-export const changePassword = createAsyncThunk(
-  "auth/changePassword",
-  async (newPassword, { rejectWithValue }) => {
-    try {
-      const response = await api.put("/password/change-password", {
-        newPassword,
-      });
-      if (response.status !== 200) throw new Error(response.error);
-      alert(`${response.data.message}`);
-    } catch (error) {
-      return rejectWithValue(error);
-    }
-  }
-);
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   registrationData: null,
@@ -78,6 +18,21 @@ const userSlice = createSlice({
     setError: (state, action) => {
       state.error = action.payload;
     },
+    setLoading: (state, action) => {
+      state.loading = action.payload;
+    },
+    setVerifyPasswordLoading: (state, action) => {
+      state.loading = action.payload;
+    },
+    setVerifyPasswordError: (state, action) => {
+      state.error = action.payload;
+    },
+    setChangePasswordLoading: (state, action) => {
+      state.loading = action.payload;
+    },
+    setChangePasswordError: (state, action) => {
+      state.error = action.payload;
+    },
     setUser: (state, action) => {
       state.user = action.payload;
     },
@@ -91,11 +46,11 @@ const userSlice = createSlice({
     setUpdateUser: (state, action) => {
       state.user = { user: action.payload.data };
     },
-    setLoading: (state, action) => {
-      state.loading = action.payload;
-    },
     setRegistrationData: (state, action) => {
       state.registrationData = action.payload;
+    },
+    setIsAuthenticated: (state, action) => {
+      state.isAuthenticated = action.payload;
     },
     logout: (state) => {
       state.user = null;
@@ -112,7 +67,12 @@ export const {
   setLoginData,
   setUpdateUser,
   setRegistrationData,
+  setIsAuthenticated,
   setLoading,
   logout,
+  setVerifyPasswordLoading,
+  setVerifyPasswordError,
+  setChangePasswordLoading,
+  setChangePasswordError,
 } = userSlice.actions;
 export default userSlice.reducer;

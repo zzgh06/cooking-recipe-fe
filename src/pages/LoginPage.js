@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router';
-import { GoogleLogin } from '@react-oauth/google';
-import { Link } from 'react-router-dom';
-import KakaoLogin from '../component/KakaoLogin/KakaoLogin';
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
+import { GoogleLogin } from "@react-oauth/google";
+import { Link } from "react-router-dom";
+import KakaoLogin from "../component/KakaoLogin/KakaoLogin";
 import {
   Container,
   Typography,
@@ -12,57 +12,64 @@ import {
   Box,
   Link as MuiLink,
   Alert,
-} from '@mui/material';
-import { useLoginUser } from '../hooks/useLoginUser';
-import { useLoginWithGoogle } from '../hooks/useLoginWithGoogle';
-import { useLoginWithKakao } from '../hooks/useLoginWithKakao';
-import { useLoginWithToken } from '../hooks/useLoginWithToken';
+} from "@mui/material";
+import { useLoginUser } from "../hooks/useLoginUser";
+import { useLoginWithGoogle } from "../hooks/useLoginWithGoogle";
+import { useLoginWithKakao } from "../hooks/useLoginWithKakao";
+import { useLoginWithToken } from "../hooks/useLoginWithToken";
+import { setToastMessage } from "../redux/commonUISlice";
 
 const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    id: '',
-    password: '',
+    id: "",
+    password: "",
   });
 
-  const { mutate: loginUser } = useLoginUser();
   const { mutate: fetchUser } = useLoginWithToken();
-  const { mutate: loginWithGoogle, isError: isLoginWithGoogleError, error: loginWithGoogleError } = useLoginWithGoogle();
-  const { mutate: loginWithKakao, isError: isLoginWithKakaoError, error: loginWithKakaoError } = useLoginWithKakao();
+  const { mutate: loginUser } = useLoginUser();
+  
+  const {
+    mutate: loginWithGoogle,
+    isError: isLoginWithGoogleError,
+    error: loginWithGoogleError,
+  } = useLoginWithGoogle();
+
+  const {
+    mutate: loginWithKakao,
+    isError: isLoginWithKakaoError,
+    error: loginWithKakaoError,
+  } = useLoginWithKakao();
+
   const handleGoogleSuccess = async (response) => {
     try {
       await loginWithGoogle(response.credential);
       await fetchUser();
-      navigate('/');
+      navigate("/");
     } catch (err) {
-      console.error('구글 로그인 실패: ', err);
+      console.error("구글 로그인 실패: ", err);
     }
   };
 
   const handleGoogleFailure = (error) => {
-    console.error('구글 로그인 실패: ', error);
+    console.error("구글 로그인 실패: ", error);
   };
 
   const handleKakaoLogin = async (kakaoData) => {
     try {
       await loginWithKakao(kakaoData);
       await fetchUser();
-      navigate('/');
+      navigate("/");
     } catch (err) {
-      console.error('카카오 로그인 실패: ', err);
+      console.error("카카오 로그인 실패: ", err);
     }
   };
 
   const handleLogin = async (event) => {
     event.preventDefault();
     const { id, password } = formData;
-    try {
-      await loginUser({ id, password });
-      navigate('/');
-    } catch (error) {
-      console.error('로그인 실패: ', error);
-    }
+    await loginUser({ id, password });
   };
 
   const handleChange = (event) => {
@@ -74,19 +81,20 @@ const LoginPage = () => {
   };
 
   const error = isLoginWithGoogleError || isLoginWithKakaoError;
-  const errorMessage = loginWithGoogleError?.message || loginWithKakaoError?.message;
+  const errorMessage =
+    loginWithGoogleError?.message || loginWithKakaoError?.message;
 
   return (
     <Container
       maxWidth="xs"
-      sx={{ mt: 4, p: 3, borderRadius: 1, backgroundColor: '#fff' }}
+      sx={{ mt: 4, p: 3, borderRadius: 1, backgroundColor: "#fff" }}
     >
       <Box
         sx={{
-          textAlign: 'center',
+          textAlign: "center",
           mb: 3,
           borderBottom: 3,
-          borderColor: 'black',
+          borderColor: "black",
         }}
       >
         <Typography variant="h4" component="h2" sx={{ p: 1 }}>
@@ -136,8 +144,8 @@ const LoginPage = () => {
       </form>
       <Box
         sx={{
-          display: 'flex',
-          justifyContent: 'flex-end',
+          display: "flex",
+          justifyContent: "flex-end",
           mb: 2,
         }}
       >
@@ -147,9 +155,9 @@ const LoginPage = () => {
           sx={{
             pr: 2,
             borderRight: 2,
-            borderColor: 'black',
-            textDecoration: 'none',
-            color: 'black',
+            borderColor: "black",
+            textDecoration: "none",
+            color: "black",
           }}
         >
           아이디 찾기
@@ -157,16 +165,16 @@ const LoginPage = () => {
         <MuiLink
           component={Link}
           to="/find-password"
-          sx={{ pl: 2, textDecoration: 'none', color: 'black' }}
+          sx={{ pl: 2, textDecoration: "none", color: "black" }}
         >
           비밀번호 찾기
         </MuiLink>
       </Box>
       <Box
         sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
           gap: 2,
         }}
       >
@@ -189,7 +197,7 @@ const LoginPage = () => {
           <KakaoLogin
             onSuccess={handleKakaoLogin}
             onError={() => {
-              console.log('카카오 로그인 실패');
+              console.log("카카오 로그인 실패");
             }}
           />
         </Box>
