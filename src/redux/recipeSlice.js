@@ -1,38 +1,9 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import api from "../utils/api";
-import { setToastMessage } from "./commonUISlice";
-
-// export const deleteRecipe = createAsyncThunk(
-//   "recipe/deleteRecipe",
-//   async (id, { dispatch, rejectWithValue }) => {
-//     try {
-//       const response = await api.delete(`/recipe/${id}`);
-//       dispatch(
-//         setToastMessage({
-//           message: "레시피가 삭제되었습니다",
-//           status: "success",
-//         })
-//       );
-//       return id;
-//     } catch (err) {
-//       dispatch(
-//         setToastMessage({
-//           message: err.error,
-//           status: "error",
-//         })
-//       );
-//       return rejectWithValue(err.response.data);
-//     }
-//   }
-// );
+import { createSlice } from "@reduxjs/toolkit";
 
 const recipeSlice = createSlice({
   name: "recipe",
   initialState: {
     recipes: [],
-    totalPages: 0,
-    loading: false,
-    error: null,
   },
   reducers: {
     addRecipeToState: (state, action) => {
