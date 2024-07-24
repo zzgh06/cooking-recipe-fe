@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import { styled } from "@mui/system";
 import "../style/ChangePasswordPage.style.css";
-import { useChangePassword } from "../hooks/useChangePassword";
+import { useChangePassword } from "../hooks/User/useChangePassword";
 import { logout, setChangePasswordError, setChangePasswordLoading } from "../redux/userSlice";
 
 const HeadContainer = styled("div")({

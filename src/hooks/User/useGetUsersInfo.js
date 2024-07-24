@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import api from '../utils/api';
+import api from '../../utils/api';
 
 const getUsersInfo = async (searchQuery) => {
   const { name, page } = searchQuery;

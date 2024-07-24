@@ -3,7 +3,7 @@ import { Grid, Typography, TextField, Button, styled } from "@mui/material";
 import CloudinaryUploadWidget from "../../utils/CloudinaryUploadWidget";
 import { useNavigate } from "react-router-dom";
 import defaultProfile from "../../assets/img/profile_user.png";
-import { useUpdateUser } from "../../hooks/useUpdateUser";
+import { useUpdateUser } from "../../hooks/User/useUpdateUser";
 
 const HeadContainer = styled('div')({
   display: 'flex',

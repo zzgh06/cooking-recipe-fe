@@ -1,8 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
-import api from '../utils/api';
+import api from '../../utils/api';
 import { useDispatch } from 'react-redux';
-import { setLoginData, setUser } from '../redux/userSlice';
-import { setToastMessage } from '../redux/commonUISlice';
+import { setLoginData, setUser } from '../../redux/userSlice';
+import { setToastMessage } from '../../redux/commonUISlice';
 
 const loginWithKakao = async (token) => {
   const response = await api.post('/auth/kakao', { token });

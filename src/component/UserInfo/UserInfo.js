@@ -1,8 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Typography, Grid, Box } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
 import { styled } from "@mui/system";
-import { useLoginWithToken } from "../../hooks/useLoginWithToken";
 
 const UserInfoContainer = styled("div")({
   display: "flex",

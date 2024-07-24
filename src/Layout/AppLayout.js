@@ -5,9 +5,8 @@ import Sidebar from "../component/SideBar/SideBar";
 import Navbar from "../component/Navbar/Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import Footer from "../component/Footer/Footer";
-import { loginWithToken } from "../redux/userSlice";
 import ToastMessage from "../component/ToastMessage/ToastMessage";
-import { useLoginWithToken } from "../hooks/useLoginWithToken";
+import { useLoginWithToken } from "../hooks/User/useLoginWithToken";
 
 const AppLayout = ({ children }) => {
   const location = useLocation();

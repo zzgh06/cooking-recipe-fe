@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchRecipesByCategory } from "../../redux/recipeSlice";
+import { useFetchRecipesByCategory } from "../../hooks/Recipe/useFetchRecipesByCategory";
 import RecipeCard from "../../component/RecipeCard/RecipeCard";
 import RecipeCardSkeleton from "../../component/Skeleton/RecipeCardSkeleton";
 import { Container, Grid, Box, Typography, styled } from "@mui/material";
@@ -14,16 +14,13 @@ const RecipeCardContainer = styled(Grid)({
 });
 
 const RecipeCondition = ({ category, path }) => {
-  const dispatch = useDispatch();
-  const { recipes, loading } = useSelector((state) => state.recipe);
+  const queryParams = { etc: category };
+  const { data, isLoading, isError } = useFetchRecipesByCategory(queryParams);
 
-  useEffect(() => {
-    dispatch(fetchRecipesByCategory({ etc: category }));
-  }, [dispatch, category]);
-
+  console.log("recipes", data)
   // 정렬된 레시피 목록
-  const bestRecipes = [...recipes].sort((a, b) => b.viewCnt - a.viewCnt);
-  const newRecipes = [...recipes].sort(
+  const bestRecipes = [...data.recipeList].sort((a, b) => b.viewCnt - a.viewCnt);
+  const newRecipes = [...data.recipeList].sort(
     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
   );
 
@@ -36,7 +33,7 @@ const RecipeCondition = ({ category, path }) => {
   return (
     <RecipeContainer>
       <RecipeCardContainer container spacing={3}>
-        {loading
+        {isLoading
           ? Array.from(new Array(8)).map((_, index) => (
               <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
                 <RecipeCardSkeleton />

@@ -1,47 +1,127 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "./sidebar.style.css";
+import {
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  Divider,
+  Typography,
+  IconButton,
+  useTheme,
+  useMediaQuery,
+  Box,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import { styled } from "@mui/material/styles";
+
+const DrawerHeader = styled("div")(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  padding: theme.spacing(2),
+  ...theme.mixins.toolbar,
+}));
+
+const SidebarListItem = styled(ListItem)(({ theme }) => ({
+  "&:hover": {
+    backgroundColor: theme.palette.grey[200],
+  },
+}));
 
 const Sidebar = () => {
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const handleSelectMenu = (url) => {
     navigate(url);
   };
 
+  const menuItems = [
+    { text: "Recipe", url: "/admin/recipe?page=1" },
+    { text: "Ingredients", url: "/admin/ingredients?page=1" },
+    { text: "Order", url: "/admin/order?page=1" },
+    { text: "User", url: "/admin/user?page=1" },
+  ];
+
   return (
-    <div className="admin-sidebar">
-      <Link to="/">
-        <div>What’s in your fridge</div>
-      </Link>
-      <div className="admin-sidebar-title">Admin Account</div>
-      <ul className="admin-sidebar-area">
-        <li
-          className="admin-sidebar-item"
-          onClick={() => handleSelectMenu("/admin/recipe?page=1")}
+    <Box sx={{ display: "flex" }}>
+      {isMobile ? (
+        <Drawer
+          variant="temporary"
+          open
+          onClose={() => {}}
+          ModalProps={{
+            keepMounted: true,
+          }}
+          sx={{
+            display: { xs: "block", md: "none" },
+            "& .MuiDrawer-paper": {
+              width: 240,
+            },
+          }}
         >
-          Recipe
-        </li>
-        <li
-          className="admin-sidebar-item"
-          onClick={() => handleSelectMenu("/admin/ingredients?page=1")}
+          <DrawerHeader>
+            <Typography
+              variant="h6"
+              onClick={() => navigate("/")}
+              sx={{ cursor: "pointer" }}
+            >
+              What’s in your fridge
+            </Typography>
+          </DrawerHeader>
+          <Divider />
+          <List>
+            {menuItems.map((item) => (
+              <SidebarListItem
+                button
+                key={item.text}
+                onClick={() => handleSelectMenu(item.url)}
+              >
+                <ListItemText primary={item.text} />
+              </SidebarListItem>
+            ))}
+          </List>
+        </Drawer>
+      ) : (
+        <Drawer
+          variant="permanent"
+          sx={{
+            width: 240,
+            flexShrink: 0,
+            "& .MuiDrawer-paper": {
+              width: 240,
+              boxSizing: "border-box",
+              backgroundColor: "green",
+              color: "#fff",
+            },
+          }}
         >
-          Ingredients
-        </li>
-        <li
-          className="admin-sidebar-item"
-          onClick={() => handleSelectMenu("/admin/order?page=1")}
-        >
-          Order
-        </li>
-        <li
-          className="admin-sidebar-item"
-          onClick={() => handleSelectMenu("/admin/user?page=1")}
-        >
-          User
-        </li>
-      </ul>
-    </div>
+          <DrawerHeader>
+            <Typography
+              variant="h6"
+              onClick={() => navigate("/")}
+              sx={{ cursor: "pointer" }}
+            >
+              What’s in your fridge
+            </Typography>
+          </DrawerHeader>
+          <Divider />
+          <List>
+            {menuItems.map((item) => (
+              <SidebarListItem
+                button
+                key={item.text}
+                onClick={() => handleSelectMenu(item.url)}
+              >
+                <ListItemText primary={item.text} />
+              </SidebarListItem>
+            ))}
+          </List>
+        </Drawer>
+      )}
+    </Box>
   );
 };
 

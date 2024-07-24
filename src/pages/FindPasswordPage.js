@@ -7,7 +7,7 @@ import {
   Box,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useForgotPassword } from '../hooks/useForgotPassword';
+import { useForgotPassword } from '../hooks/User/useForgotPassword';
 
 
 const FindPasswordPage = () => {

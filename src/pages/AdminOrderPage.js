@@ -1,5 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Container, Grid, Typography, Box, Select, MenuItem, TextField, Button } from "@mui/material";
+import {
+  Container,
+  Grid,
+  Typography,
+  Box,
+  Select,
+  MenuItem,
+  TextField,
+  Button,
+  Stack,
+  Pagination,
+} from "@mui/material";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import OrderTable from "../component/OrderTable/OrderTable";
@@ -14,8 +25,8 @@ import DateFilterCondition from "../component/DateFilterCondition/DateFilterCond
 
 const PaginationWrapper = styled(Box)(({ theme }) => ({
   marginTop: theme.spacing(2),
-  display: 'flex',
-  justifyContent: 'center',
+  display: "flex",
+  justifyContent: "center",
 }));
 
 const badgeBg = {
@@ -53,23 +64,21 @@ const AdminOrderPage = () => {
   ];
 
   useEffect(() => {
-    // Update URL parameters only
     const params = new URLSearchParams(searchQuery);
     navigate("?" + params.toString());
   }, [searchQuery, navigate]);
 
   useEffect(() => {
-    // Fetch orders whenever searchQuery or page changes
-    dispatch(getOrderList({ ...searchQuery, page }));
-  }, [searchQuery, page, dispatch]);
+    dispatch(getOrderList({ ...searchQuery }));
+  }, [searchQuery, dispatch]);
 
   const openEditForm = (order) => {
     setOpen(true);
     dispatch(setSelectedOrder(order));
   };
 
-  const handlePageClick = ({ selected }) => {
-    setPage(selected + 1);
+  const handlePageChange = (event, value) => {
+    setSearchQuery({ ...searchQuery, page: value });
   };
 
   const handleClose = () => {
@@ -202,28 +211,17 @@ const AdminOrderPage = () => {
         badgeBg={badgeBg}
       />
 
-      <PaginationWrapper>
-        <ReactPaginate
-          nextLabel="next >"
-          onPageChange={handlePageClick}
-          pageRangeDisplayed={5}
-          pageCount={totalPageNum}
-          forcePage={searchQuery.page - 1}
-          previousLabel="< previous"
-          renderOnZeroPageCount={null}
-          pageClassName="page-item"
-          pageLinkClassName="page-link"
-          previousClassName="page-item"
-          previousLinkClassName="page-link"
-          nextClassName="page-item"
-          nextLinkClassName="page-link"
-          breakLabel="..."
-          breakClassName="page-item"
-          breakLinkClassName="page-link"
-          containerClassName="pagination"
-          activeClassName="active"
-        />
-      </PaginationWrapper>
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+        <Stack spacing={2}>
+          <Pagination
+            count={totalPageNum}
+            page={searchQuery.page}
+            onChange={handlePageChange}
+            color="primary"
+            shape="rounded"
+          />
+        </Stack>
+      </Box>
 
       {open && <OrderDetailDialog open={open} handleClose={handleClose} />}
     </Container>

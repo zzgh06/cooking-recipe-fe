@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { Container, TextField, IconButton, InputAdornment, Typography, Button, Snackbar, Alert } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { useResetPassword } from "../hooks/useResetPassword";
+import { useResetPassword } from "../hooks/User/useResetPassword";
 
 const ResetPasswordPage = () => {
   const [password, setPassword] = useState("");

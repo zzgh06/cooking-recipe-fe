@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchRecipes } from "../redux/recipeSlice";
 import RecipeSlider from "../component/RecipeSlider/RecipeSlider";
 import SubBanner from "../component/SubBanner/SubBanner";
 import { Box, Skeleton, styled } from "@mui/material";
 import RecommendRecipe from "../component/RecommendRecipe/RecommendRecipe";
 import banner1 from "../assets/img/banner1.jpg";
 import banner2 from "../assets/img/banner2.jpg";
+import { useFetchRecipes } from "../hooks/Recipe/useFetchRecipes";
 
 const SubBannerSkeleton = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -25,15 +25,15 @@ const preloadImage = (url) => {
 
 const MainPage = () => {
   const dispatch = useDispatch();
-  const { recipes, loading } = useSelector((state) => state.recipe);
+  const searchQuery = { name: "" };
+  const { data, isLoading } = useFetchRecipes(searchQuery);
 
   useEffect(() => {
-    const searchQuery = { name: "" };
-    dispatch(fetchRecipes(searchQuery));
     preloadImage(banner1);
     preloadImage(banner2);
   }, [dispatch]);
 
+  const recipes = data?.recipes || [];
   const bestRecipes = [...recipes]
     .sort((a, b) => b.viewCnt - a.viewCnt)
     .slice(0, 8);
@@ -49,9 +49,9 @@ const MainPage = () => {
       <RecipeSlider
         title={"베스트 레시피"}
         recipes={bestRecipes}
-        loading={loading}
+        loading={isLoading }
       />
-      {loading ? (
+      {isLoading  ? (
         <SubBannerSkeleton>
           <Skeleton variant="rectangular" width="100%" height={130} />
         </SubBannerSkeleton>
@@ -61,9 +61,9 @@ const MainPage = () => {
       <RecipeSlider
         title={"최신 레시피"}
         recipes={newRecipes}
-        loading={loading}
+        loading={isLoading }
       />
-      {loading ? (
+      {isLoading  ? (
         <SubBannerSkeleton>
           <Skeleton variant="rectangular" width="100%" height={130} />
         </SubBannerSkeleton>

@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Container, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Pagination,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import SearchBox from "../component/SearchBox/SearchBox";
 import IngredientTable from "../component/IngredientTable/IngredientTable";
@@ -64,8 +71,8 @@ const AdminIngredientsPage = () => {
     setShowDialog(true);
   };
 
-  const handlePageClick = (event) => {
-    setSearchQuery({ ...searchQuery, page: event.selected + 1 });
+  const handlePageChange = (event, value) => {
+    setSearchQuery((prev) => ({ ...prev, page: value }));
   };
 
   const deleteItem = (id) => {
@@ -82,7 +89,12 @@ const AdminIngredientsPage = () => {
             placeholder="재료 이름으로 검색"
             field="name"
           />
-          <Button variant="contained" color="primary" onClick={handleShowAll} sx={{width: "300px"}}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleShowAll}
+            sx={{ width: "300px" }}
+          >
             Show All
           </Button>
         </Box>
@@ -104,27 +116,16 @@ const AdminIngredientsPage = () => {
         openEditForm={openEditForm}
       />
 
-      <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
-        <ReactPaginate
-          nextLabel="next >"
-          onPageChange={handlePageClick}
-          pageRangeDisplayed={5}
-          pageCount={totalPageNumber}
-          forcePage={searchQuery.page - 1}
-          previousLabel="< previous"
-          renderOnZeroPageCount={null}
-          pageClassName="page-item"
-          pageLinkClassName="page-link"
-          previousClassName="page-item"
-          previousLinkClassName="page-link"
-          nextClassName="page-item"
-          nextLinkClassName="page-link"
-          breakLabel="..."
-          breakClassName="page-item"
-          breakLinkClassName="page-link"
-          containerClassName="pagination"
-          activeClassName="active"
-        />
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+        <Stack spacing={2}>
+          <Pagination
+            count={totalPageNumber}
+            page={searchQuery.page}
+            onChange={handlePageChange}
+            color="primary"
+            shape="rounded"
+          />
+        </Stack>
       </Box>
 
       <NewItemDialog

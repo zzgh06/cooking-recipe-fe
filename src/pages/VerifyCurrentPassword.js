@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, TextField, Typography, Grid, Box, CircularProgress, styled } from "@mui/material";
 import { setVerifyPasswordLoading, setVerifyPasswordError, setIsAuthenticated } from "../redux/userSlice";
-import { useVerifyCurrentPassword } from "../hooks/useVerifyCurrentPassword"; 
+import { useVerifyCurrentPassword } from "../hooks/User/useVerifyCurrentPassword"; 
 
 const HeadContainer = styled(Box)(({ theme }) => ({
   display: 'flex',

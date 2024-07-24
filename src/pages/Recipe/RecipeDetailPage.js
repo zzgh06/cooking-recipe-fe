@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchRecipeById } from "../../redux/recipeSlice";
 import {
   addRecipeFavorite,
   deleteRecipeFavorite,
@@ -15,7 +14,6 @@ import {
   faBookmark as solidBookmark,
 } from "@fortawesome/free-solid-svg-icons";
 import {
-  faShareFromSquare,
   faBookmark as regularBookmark,
 } from "@fortawesome/free-regular-svg-icons";
 import RecipeCategory from "../../component/RecipeCategory/RecipeCategory";
@@ -39,6 +37,7 @@ import CopyClipButton from "../../component/CopyClipButton/CopyClipButton";
 import IngredientDialog from "../../component/IngredientDialog/IngredientDialog";
 import RecipeDetailSkeleton from "../../component/Skeleton/RecipeDetailSkeleton";
 import ShoppingListDialog from "../../component/ShoppingListDialog/ShoppingListDialog";
+import { useFetchRecipeById } from "../../hooks/Recipe/useFetchRecipeById";
 
 const RecipeImage = styled("img")({
   width: "100%",
@@ -93,20 +92,19 @@ const RecipeDetail = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { recipeDetail, loading, error } = useSelector((state) => state.recipe);
   const { recipeFavorite } = useSelector((state) => state.favorite);
   const user = useSelector((state) => state.auth.user)
+  const { data: recipeDetail, isLoading, isError } = useFetchRecipeById(id);
   const [isFavorite, setIsFavorite] = useState(false);
   const [openIngredientDialog, setOpenIngredientDialog] = useState(false);
   const [openShoppingListDialog, setOpenShoppingListDialog] = useState(false);
 
 
   useEffect(() => {
-    dispatch(fetchRecipeById(id));
     if (user) {
       dispatch(getRecipeFavorite());
     }
-  }, [dispatch, id, user]);
+  }, [dispatch, user]);
 
   useEffect(() => {
     if (recipeDetail && recipeFavorite) {
@@ -163,7 +161,7 @@ const RecipeDetail = () => {
     }
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <RecipeDetailSkeleton />
     );
