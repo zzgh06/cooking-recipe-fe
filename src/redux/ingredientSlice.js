@@ -5,8 +5,6 @@ const ingredientSlice = createSlice({
   initialState: {
     ingredients: [],
     selectedIngredients: null,
-    selectedShoppingList: [],
-    completedShoppingList: [],
   },
   reducers: {
     setSelectedIngredients: (state, action) => {
