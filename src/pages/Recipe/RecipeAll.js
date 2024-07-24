@@ -23,7 +23,6 @@ const NoRecipesMessage = styled(Typography)({
 });
 
 const RecipeAll = ({ category, path }) => {
-  const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [prevCategory, setPrevCategory] = useState(category);
 

@@ -1,28 +1,24 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Button, Container, Modal, Typography, Box } from "@mui/material";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import {
+  Button,
+  Container,
+  Modal,
+  Typography,
+  Box,
+  Stack,
+  Pagination,
+} from "@mui/material";
 import SearchBox from "../component/SearchBox/SearchBox";
 import RecipeTable from "../component/RecipeTable/RecipeTable";
-import ReactPaginate from "react-paginate";
-import {
-  createRecipe,
-  editRecipe,
-  deleteRecipe,
-} from "../redux/recipeSlice";
 import RecipeForm from "../component/RecipeForm/RecipeForm";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { styled } from "@mui/material/styles";
+import { useSearchParams } from "react-router-dom";
 import { useFetchRecipes } from "../hooks/Recipe/useFetchRecipes";
-
-
-const PaginationContainer = styled('div')(({ theme }) => ({
-  display: 'flex',
-  justifyContent: 'center',
-  marginTop: theme.spacing(2),
-}));
+import { useCreateRecipe } from "../hooks/Recipe/useCreateRecipe";
+import { useEditRecipe } from "../hooks/Recipe/useEditRecipe";
+import { useDeleteRecipe } from "../hooks/Recipe/useDeleteRecipe";
 
 const AdminRecipePage = () => {
-  const dispatch = useDispatch();
   const [query, setQuery] = useSearchParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState({
@@ -32,9 +28,10 @@ const AdminRecipePage = () => {
   const [showForm, setShowForm] = useState(false);
   const [mode, setMode] = useState("new");
   const [selectedRecipe, setSelectedRecipe] = useState(null);
-  const totalPageNumber = useSelector((state) => state.recipe.totalPages || 0);
-  const { data: recipesData, isLoading, isError, error } = useFetchRecipes(searchQuery);
-
+  const { data: recipesData, refetch } = useFetchRecipes(searchQuery);
+  const { mutate: createRecipe } = useCreateRecipe();
+  const { mutate: editRecipe } = useEditRecipe();
+  const { mutate: deleteRecipe } = useDeleteRecipe();
 
   const tableHeader = [
     "#",
@@ -64,19 +61,21 @@ const AdminRecipePage = () => {
     setShowForm(true);
   };
 
-  const handlePageClick = (event) => {
-    setSearchQuery({ ...searchQuery, page: event.selected + 1 });
+  const handlePageChange = (event, value) => {
+    setSearchQuery((prev) => ({ ...prev, page: value }));
   };
 
   const deleteItem = (id) => {
-    dispatch(deleteRecipe(id));
+    deleteRecipe(id);
+    refetch();
   };
 
   const handleFormSubmit = (recipeData) => {
     if (mode === "new") {
-      dispatch(createRecipe(recipeData));
+      createRecipe(recipeData);
     } else {
-      dispatch(editRecipe({ id: selectedRecipe._id, updatedData: recipeData }));
+      editRecipe({ id: selectedRecipe._id, updatedData: recipeData });
+      refetch();
     }
     setShowForm(false);
   };
@@ -84,19 +83,36 @@ const AdminRecipePage = () => {
   return (
     <Container maxWidth="lg">
       <Box sx={{ mt: 2 }}>
-        <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Box
+          sx={{
+            mb: 2,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
           <SearchBox
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
             placeholder="Search by recipe name"
             field="name"
           />
-          <Button variant="contained" color="primary" onClick={handleShowAll} sx={{ width : "300px"}}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleShowAll}
+            sx={{ width: "300px" }}
+          >
             Show All
           </Button>
         </Box>
         <Box sx={{ mb: 2 }}>
-          <Button variant="contained" color="success" onClick={handleClickNewItem} sx={{ width : "300px"}}>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={handleClickNewItem}
+            sx={{ width: "300px" }}
+          >
             Add New Recipe +
           </Button>
         </Box>
@@ -104,18 +120,23 @@ const AdminRecipePage = () => {
         <Modal
           open={showForm}
           onClose={() => setShowForm(false)}
-          sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'scroll' }}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            overflow: "scroll",
+          }}
         >
           <Box
             sx={{
               p: 3,
-              width: '80%',
+              width: "80%",
               maxWidth: 800,
-              maxHeight: '80vh',
-              overflowY: 'auto',
-              bgcolor: 'background.paper',
+              maxHeight: "80vh",
+              overflowY: "auto",
+              bgcolor: "background.paper",
               borderRadius: 2,
-              boxShadow: 24,          
+              boxShadow: 24,
             }}
           >
             <Typography variant="h6" gutterBottom>
@@ -135,28 +156,17 @@ const AdminRecipePage = () => {
           openEditForm={openEditForm}
         />
 
-        <PaginationContainer>
-          <ReactPaginate
-            nextLabel="next >"
-            onPageChange={handlePageClick}
-            pageRangeDisplayed={5}
-            pageCount={recipesData?.totalPages}
-            forcePage={searchQuery.page - 1}
-            previousLabel="< previous"
-            renderOnZeroPageCount={null}
-            pageClassName="page-item"
-            pageLinkClassName="page-link"
-            previousClassName="page-item"
-            previousLinkClassName="page-link"
-            nextClassName="page-item"
-            nextLinkClassName="page-link"
-            breakLabel="..."
-            breakClassName="page-item"
-            breakLinkClassName="page-link"
-            containerClassName="pagination"
-            activeClassName="active"
-          />
-        </PaginationContainer>
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+          <Stack spacing={2}>
+            <Pagination
+              count={recipesData?.totalPages}
+              page={searchQuery.page}
+              onChange={handlePageChange}
+              color="primary"
+              shape="rounded"
+            />
+          </Stack>
+        </Box>
       </Box>
     </Container>
   );
