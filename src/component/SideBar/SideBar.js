@@ -7,12 +7,10 @@ import {
   ListItemText,
   Divider,
   Typography,
-  IconButton,
   useTheme,
   useMediaQuery,
   Box,
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
 import { styled } from "@mui/material/styles";
 
 const DrawerHeader = styled("div")(({ theme }) => ({

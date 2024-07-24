@@ -11,14 +11,11 @@ import { useDispatch, useSelector } from "react-redux";
 import SearchBox from "../component/SearchBox/SearchBox";
 import IngredientTable from "../component/IngredientTable/IngredientTable";
 import NewItemDialog from "../component/NewItemDialog/NewItemDialog";
-import ReactPaginate from "react-paginate";
 import {
-  fetchIngredients,
-  createIngredient,
-  editIngredient,
   deleteIngredient,
 } from "../redux/ingredientSlice";
 import { useSearchParams } from "react-router-dom";
+import { useFetchIngredients } from "../hooks/Ingredient/useFetchIngredients";
 
 const AdminIngredientsPage = () => {
   const dispatch = useDispatch();
@@ -30,12 +27,7 @@ const AdminIngredientsPage = () => {
   const [showDialog, setShowDialog] = useState(false);
   const [mode, setMode] = useState("new");
   const [selectedIngredient, setSelectedIngredient] = useState(null);
-  const ingredientList = useSelector(
-    (state) => state.ingredients.ingredients || []
-  );
-  const totalPageNumber = useSelector(
-    (state) => state.ingredients.totalPages || 0
-  );
+  const { data } = useFetchIngredients(searchQuery);
 
   const tableHeader = [
     "#",
@@ -50,10 +42,6 @@ const AdminIngredientsPage = () => {
     "Image",
     "Actions",
   ];
-
-  useEffect(() => {
-    dispatch(fetchIngredients(searchQuery));
-  }, [dispatch, searchQuery]);
 
   const handleShowAll = () => {
     setSearchQuery({ page: 1, name: "" });
@@ -111,7 +99,7 @@ const AdminIngredientsPage = () => {
 
       <IngredientTable
         header={tableHeader}
-        data={ingredientList}
+        data={data?.ingredients}
         deleteItem={deleteItem}
         openEditForm={openEditForm}
       />
@@ -119,7 +107,7 @@ const AdminIngredientsPage = () => {
       <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
         <Stack spacing={2}>
           <Pagination
-            count={totalPageNumber}
+            count={data?.totalPages}
             page={searchQuery.page}
             onChange={handlePageChange}
             color="primary"

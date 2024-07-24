@@ -2,33 +2,6 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../utils/api";
 import { setToastMessage } from "./commonUISlice";
 
-export const fetchIngredients = createAsyncThunk(
-  "ingredients/fetchIngredients",
-  async (searchQuery) => {
-    const response = await api.get("/ingredient", {
-      params: { ...searchQuery },
-    });
-    return response.data;
-  }
-);
-
-export const getIngredient = createAsyncThunk(
-  "ingredients/getIngredient",
-  async (id) => {
-    const response = await api.get(`/ingredient/${id}`);
-    return response.data;
-  }
-);
-
-// 이름으로 ingredient 정보 불러오기
-export const getIngredientByName = createAsyncThunk(
-  "ingredients/getIngredientByName",
-  async (name) => {
-    const response = await api.get(`/ingredient?name=${name}`);
-    return response.data.data.ingredients[0];
-  }
-);
-
 export const createIngredient = createAsyncThunk(
   "ingredients/createIngredient",
   async (ingredient, { dispatch, rejectWithValue }) => {
@@ -122,18 +95,6 @@ const ingredientSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchIngredients.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(fetchIngredients.fulfilled, (state, action) => {
-        state.loading = false;
-        state.ingredients = action.payload.data.ingredients;
-        state.totalPages = action.payload.data.totalPageNum;
-      })
-      .addCase(fetchIngredients.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
       .addCase(createIngredient.fulfilled, (state, action) => {
         state.ingredients.push(action.payload.data);
       })
@@ -150,28 +111,6 @@ const ingredientSlice = createSlice({
           (ingredient) => ingredient._id !== action.payload.ingredient._id
         );
       })
-      .addCase(getIngredient.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(getIngredient.fulfilled, (state, action) => {
-        state.loading = false;
-        state.selectedIngredient = action.payload.ingredient;
-      })
-      .addCase(getIngredient.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
-      .addCase(getIngredientByName.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(getIngredientByName.fulfilled, (state, action) => {
-        state.loading = false;
-        state.selectedIngredient = action.payload;
-      })
-      .addCase(getIngredientByName.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      });
   },
 });
 
