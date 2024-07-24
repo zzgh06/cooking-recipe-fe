@@ -27,6 +27,7 @@ import {
   DialogContent,
   DialogActions,
 } from "@mui/material";
+import { useFetchIngredients } from "../hooks/Ingredient/useFetchIngredients";
 
 const FridgeContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -60,13 +61,9 @@ const GridContainer = styled(Box)(({ theme }) => ({
 const MyFridge = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const ingredient = useSelector(
-    (state) => state.ingredients.ingredients || []
-  );
   const { fridgeItems, recipeList, loading, recipeLoading } = useSelector(
     (state) => state.fridge || []
   );
-
   const selectedIngredients = useSelector(
     (state) => state.ingredients.selectedIngredients
   );
@@ -75,6 +72,7 @@ const MyFridge = () => {
     page: query.get("page") || 1,
     name: query.get("name") || "",
   });
+  const { data } = useFetchIngredients(searchQuery);
   const [hasSearched, setHasSearched] = useState(false);
   const [checkedItems, setCheckedItems] = useState(new Set());
   const [recentlyViewedItems, setRecentlyViewedItems] = useState([]);
@@ -89,7 +87,6 @@ const MyFridge = () => {
 
   useEffect(() => {
     if (searchQuery.name) {
-      dispatch(fetchIngredients(searchQuery));
       dispatch(fridgeIngredientRecipeResult(searchQuery));
       setHasSearched(true);
       setRecommendClicked(false);
@@ -247,10 +244,10 @@ const MyFridge = () => {
             >
               {loading ? (
                 <CircularProgress />
-              ) : ingredient.length === 0 ? (
+              ) : data?.ingredient.length === 0 ? (
                 <Typography>일치하는 재료가 없습니다.</Typography>
               ) : (
-                ingredient.map((item) => (
+                data?.ingredients.map((item) => (
                   <SearchResultCard key={item._id} item={item} />
                 ))
               )}
