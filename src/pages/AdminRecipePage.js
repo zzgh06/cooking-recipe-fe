@@ -5,7 +5,6 @@ import SearchBox from "../component/SearchBox/SearchBox";
 import RecipeTable from "../component/RecipeTable/RecipeTable";
 import ReactPaginate from "react-paginate";
 import {
-  fetchRecipes,
   createRecipe,
   editRecipe,
   deleteRecipe,
@@ -13,6 +12,7 @@ import {
 import RecipeForm from "../component/RecipeForm/RecipeForm";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { styled } from "@mui/material/styles";
+import { useFetchRecipes } from "../hooks/Recipe/useFetchRecipes";
 
 
 const PaginationContainer = styled('div')(({ theme }) => ({
@@ -23,7 +23,6 @@ const PaginationContainer = styled('div')(({ theme }) => ({
 
 const AdminRecipePage = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [query, setQuery] = useSearchParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState({
@@ -33,8 +32,9 @@ const AdminRecipePage = () => {
   const [showForm, setShowForm] = useState(false);
   const [mode, setMode] = useState("new");
   const [selectedRecipe, setSelectedRecipe] = useState(null);
-  const recipeList = useSelector((state) => state.recipe.recipes || []);
   const totalPageNumber = useSelector((state) => state.recipe.totalPages || 0);
+  const { data: recipesData, isLoading, isError, error } = useFetchRecipes(searchQuery);
+
 
   const tableHeader = [
     "#",
@@ -47,10 +47,6 @@ const AdminRecipePage = () => {
     "Images",
     "Actions",
   ];
-
-  useEffect(() => {
-    dispatch(fetchRecipes(searchQuery));
-  }, [dispatch, searchQuery]);
 
   const handleShowAll = () => {
     setSearchQuery({ page: 1, name: "" });
@@ -134,7 +130,7 @@ const AdminRecipePage = () => {
 
         <RecipeTable
           header={tableHeader}
-          data={recipeList}
+          data={recipesData?.recipes}
           deleteItem={deleteItem}
           openEditForm={openEditForm}
         />
@@ -144,7 +140,7 @@ const AdminRecipePage = () => {
             nextLabel="next >"
             onPageChange={handlePageClick}
             pageRangeDisplayed={5}
-            pageCount={totalPageNumber}
+            pageCount={recipesData?.totalPages}
             forcePage={searchQuery.page - 1}
             previousLabel="< previous"
             renderOnZeroPageCount={null}

@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Box, Typography, Button } from '@mui/material';
+import { Container, Box } from '@mui/material';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import UserTable from '../component/UserTable/UserTable';
 import UserDetailDialog from '../component/UserDetailDialog/UserDetailDialog';
 import SearchBox from '../component/SearchBox/SearchBox';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
-import { useGetUsersInfo } from '../hooks/useGetUsersInfo';
-import { useDeleteUser } from '../hooks/useDeleteUser';
+import { useGetUsersInfo } from '../hooks/User/useGetUsersInfo';
+import { useDeleteUser } from '../hooks/User/useDeleteUser';
 
 const AdminUserPage = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [query, setQuery] = useSearchParams();
 

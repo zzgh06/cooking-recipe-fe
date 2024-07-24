@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { GoogleLogin } from "@react-oauth/google";
 import { Link } from "react-router-dom";
@@ -13,14 +12,12 @@ import {
   Link as MuiLink,
   Alert,
 } from "@mui/material";
-import { useLoginUser } from "../hooks/useLoginUser";
-import { useLoginWithGoogle } from "../hooks/useLoginWithGoogle";
-import { useLoginWithKakao } from "../hooks/useLoginWithKakao";
-import { useLoginWithToken } from "../hooks/useLoginWithToken";
-import { setToastMessage } from "../redux/commonUISlice";
+import { useLoginUser } from "../hooks/User/useLoginUser";
+import { useLoginWithGoogle } from "../hooks/User/useLoginWithGoogle";
+import { useLoginWithKakao } from "../hooks/User/useLoginWithKakao";
+import { useLoginWithToken } from "../hooks/User/useLoginWithToken";
 
 const LoginPage = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     id: "",

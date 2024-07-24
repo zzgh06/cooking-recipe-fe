@@ -10,7 +10,7 @@ import VerifyCurrentPassword from "./VerifyCurrentPassword";
 import ChangePasswordPage from "./ChangePasswordPage";
 import { styled } from "@mui/system";
 import MyGroceryNote from "../component/MyGroceryNote/MyGroceryNote";
-import { useLoginWithToken } from "../hooks/useLoginWithToken";
+import { useLoginWithToken } from "../hooks/User/useLoginWithToken";
 
 const CustomContainer = styled(Container)({
   width: "100%",

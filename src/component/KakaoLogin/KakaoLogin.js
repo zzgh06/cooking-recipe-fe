@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router";
-import { useLoginWithKakao } from "../../hooks/useLoginWithKakao";
-import { useLoginWithToken } from "../../hooks/useLoginWithToken";
+import { useLoginWithKakao } from "../../hooks/User/useLoginWithKakao";
+import { useLoginWithToken } from "../../hooks/User/useLoginWithToken";
 import { faComment } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "@mui/material";
-import { loginWithToken } from "../../redux/userSlice";
 
 const KakaoLogin = ({ onSuccess, onError }) => {
   const navigate = useNavigate();

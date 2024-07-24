@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchRecipesByCategory } from "../../redux/recipeSlice";
+import { useFetchRecipesByCategory } from "../../hooks/Recipe/useFetchRecipesByCategory";
 import RecipeCard from "../../component/RecipeCard/RecipeCard";
 import RecipeCardSkeleton from "../../component/Skeleton/RecipeCardSkeleton";
 import { Container, Grid, Typography, Pagination, Box, styled } from "@mui/material";
@@ -24,26 +24,29 @@ const NoRecipesMessage = styled(Typography)({
 
 const RecipeAll = ({ category, path }) => {
   const dispatch = useDispatch();
-  const { recipes, loading, totalPages } = useSelector((state) => state.recipe);
   const [page, setPage] = useState(1);
   const [prevCategory, setPrevCategory] = useState(category);
 
+  const { data, isLoading, isError, refetch } = useFetchRecipesByCategory({
+    etc: category,
+    page,
+  });
+
   useEffect(() => {
-    if (prevCategory !== category) {
-      setPage(1);
-      setPrevCategory(category);
-    }
-    dispatch(fetchRecipesByCategory({ etc: category, page }));
-  }, [dispatch, category, page, prevCategory]);
+    refetch();
+  }, [category, page, refetch]);
 
   const handlePageChange = (event, value) => {
     setPage(value);
   };
 
+  const recipes = data?.recipeList || [];
+  const totalPages = data?.totalPages || 1;
+
   return (
     <RecipeAllContainer>
       <RecipeCardContainer container spacing={1}>
-        {loading
+        {isLoading
           ? Array.from(new Array(8)).map((_, index) => (
               <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
                 <RecipeCardSkeleton />

@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
-import api from '../utils/api';
+import api from '../../utils/api';
 import { useDispatch } from 'react-redux';
-import { setUpdateUser, setError } from '../redux/userSlice';
+import { setUpdateUser, setError } from '../../redux/userSlice';
 
 const updateUser = async (formData) => {
   const response = await api.put('/user/me', formData);

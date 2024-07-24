@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import api from '../utils/api';
+import api from '../../utils/api';
 
 const changePassword = async (newPassword) => {
   const response = await api.put('/password/change-password', { newPassword });

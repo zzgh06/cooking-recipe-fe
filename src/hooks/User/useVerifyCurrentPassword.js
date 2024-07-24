@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
-import api from '../utils/api';
+import api from '../../utils/api';
 import { useDispatch } from 'react-redux';
-import { setError, setIsAuthenticated } from '../redux/userSlice';
+import { setError, setIsAuthenticated } from '../../redux/userSlice';
 
 const verifyCurrentPassword = async (currentPassword) => {
   const response = await api.post('/password/verify-password', { currentPassword });

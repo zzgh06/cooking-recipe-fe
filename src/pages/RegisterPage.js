@@ -8,7 +8,7 @@ import {
   Box,
   Alert,
 } from "@mui/material";
-import { useRegisterUser } from "../hooks/useRegisterUser";
+import { useRegisterUser } from "../hooks/User/useRegisterUser";
 
 const RegisterPage = () => {
   const navigate = useNavigate();

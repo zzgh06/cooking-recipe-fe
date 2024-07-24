@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
-import api from '../utils/api';
+import api from '../../utils/api';
 import { useDispatch } from 'react-redux';
-import { setError } from '../redux/userSlice';
+import { setError } from '../../redux/userSlice';
 
 const forgotPassword = async ({ email }) => {
   await api.post('/password/forgot-password', { email });
