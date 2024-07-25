@@ -20,18 +20,14 @@ import {
   styled,
   Pagination,
 } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  getOrder,
-  getOrderList,
-  setSelectedOrder,
-} from "../../redux/orderSlice";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { format, isValid, startOfDay, endOfDay } from "date-fns";
-import { useNavigate } from "react-router";
-import { useSearchParams } from "react-router-dom";
 import DateFilterCondition from "../DateFilterCondition/DateFilterCondition";
 import { currencyFormat } from "../../utils/number";
 import MyPageOrderDialog from "../MyPageOrderDialog/MyPageOrderDialog";
+import { setSelectedOrder } from "../../redux/orderSlice";
+import { useFetchOrder } from "../../hooks/Order/useFetchOrder";
 
 // 테이블 셀 스타일
 const cellStyle1 = {
@@ -60,50 +56,36 @@ const HeadContainer = styled("div")({
 const MyOrderComponent = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector((state) => state.auth.user);
-  const { orderList, totalPageNum } = useSelector((state) => state.order);
+  const [searchQuery, setSearchQuery] = useState({});
   const [recentChecked, setRecentChecked] = useState(false);
   const [oldChecked, setOldChecked] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [selectedOption, setSelectedOption] = useState("orderNum");
-  const [searchQuery, setSearchQuery] = useState({});
-  const [sortedOrderList, setSortedOrderList] = useState([]);
   const [page, setPage] = useState(1);
+  const { data, isLoading } = useFetchOrder({ ...searchQuery, page });
 
-  useEffect(() => {
-    dispatch(getOrder());
-  }, [user, dispatch]);
+  const orderList = data?.orderList || [];
+  const totalPageNum = data?.totalPages || 1;
+
+  const [sortedOrderList, setSortedOrderList] = useState([]);
 
   useEffect(() => {
     if (searchQuery.orderNum === "") delete searchQuery.orderNum;
     const params = new URLSearchParams(searchQuery);
     navigate("?" + params.toString());
-    dispatch(getOrder({ ...searchQuery, page }));
-  }, [searchQuery, page]);
+  }, [searchQuery, page, navigate]);
 
   useEffect(() => {
-    setSortedOrderList(orderList);
-  }, [orderList]);
-
-  useEffect(() => {
+    let sortedList = [...orderList];
     if (recentChecked) {
-      setSortedOrderList(
-        [...orderList].sort(
-          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-        )
-      );
+      sortedList.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     } else if (oldChecked) {
-      setSortedOrderList(
-        [...orderList].sort(
-          (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
-        )
-      );
-    } else {
-      setSortedOrderList(orderList);
+      sortedList.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
     }
-  }, [recentChecked, oldChecked, orderList]);
+    setSortedOrderList(sortedList);
+  }, [orderList, recentChecked, oldChecked]);
 
   const handleRecentChange = (event) => {
     setRecentChecked(event.target.checked);
@@ -136,31 +118,31 @@ const MyOrderComponent = () => {
     }
   };
 
-  // 주문 상세 다이얼로그 열기
   const handleOpenDialog = (order) => {
     setDialogOpen(true);
     dispatch(setSelectedOrder(order));
   };
 
-  // 주문 상세 다이얼로그 닫기
   const handleCloseDialog = () => {
     setDialogOpen(false);
   };
 
   const handlePageChange = (event, value) => {
     setPage(value);
+    setSortedOrderList(orderList);
   };
 
   const handleReset = () => {
-    // 필터 초기화
     setRecentChecked(false);
     setOldChecked(false);
     setStartDate(null);
     setEndDate(null);
     setSelectedOption("orderNum");
     setSearchQuery({});
-    setPage(1); // 페이지를 1로 초기화
+    setPage(1);
   };
+
+  if (isLoading) return <Typography>Loading...</Typography>;
 
   return (
     <Grid container>
@@ -288,8 +270,8 @@ const MyOrderComponent = () => {
               </TableHead>
               {/* 테이블 바디 */}
               <TableBody>
-                {sortedOrderList?.length > 0 &&
-                  sortedOrderList?.map((item) => (
+                {sortedOrderList?.length > 0 ? (
+                  sortedOrderList.map((item) => (
                     <TableRow
                       key={item._id}
                       onClick={() => handleOpenDialog(item)}
@@ -316,7 +298,14 @@ const MyOrderComponent = () => {
                       </TableCell>
                       <TableCell style={cellStyle2}>{item.status}</TableCell>
                     </TableRow>
-                  ))}
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={5} align="center">
+                      <Typography>No Data to show</Typography>
+                    </TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           </TableContainer>

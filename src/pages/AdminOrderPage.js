@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   Container,
   Grid,
-  Typography,
   Box,
   Select,
   MenuItem,
@@ -16,18 +15,10 @@ import { useDispatch, useSelector } from "react-redux";
 import OrderTable from "../component/OrderTable/OrderTable";
 import DashBoardCard from "../component/DashBoardCard/DashboardCard";
 import OrderDetailDialog from "../component/OrderDetailDialog/OrderDetailDialog";
-import { getOrderList, setSelectedOrder } from "../redux/orderSlice";
-import SearchBox from "../component/SearchBox/SearchBox";
-import ReactPaginate from "react-paginate";
-import { styled } from "@mui/material/styles";
+import { setSelectedOrder } from "../redux/orderSlice";
 import { endOfDay, format, isValid, startOfDay } from "date-fns";
 import DateFilterCondition from "../component/DateFilterCondition/DateFilterCondition";
-
-const PaginationWrapper = styled(Box)(({ theme }) => ({
-  marginTop: theme.spacing(2),
-  display: "flex",
-  justifyContent: "center",
-}));
+import { useFetchOrderList } from "../hooks/Order/useFetchOrderList";
 
 const badgeBg = {
   preparing: "primary",
@@ -43,14 +34,17 @@ const AdminOrderPage = () => {
   const [searchQuery, setSearchQuery] = useState({
     page: query.get("page") || 1,
     orderNum: query.get("orderNum") || "",
+    startDate: query.get("startDate") || null,
+    endDate: query.get("endDate") || null,
   });
   const [open, setOpen] = useState(false);
-  const totalPageNum = useSelector((state) => state.order.totalPageNum);
-  const { orderList } = useSelector((state) => state.order);
   const [selectedOption, setSelectedOption] = useState("orderNum");
-  const [page, setPage] = useState(1);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+
+  const { data, isLoading, isError } = useFetchOrderList(searchQuery);
+
+  console.log("data", data)
 
   const tableHeader = [
     "#",
@@ -68,10 +62,6 @@ const AdminOrderPage = () => {
     navigate("?" + params.toString());
   }, [searchQuery, navigate]);
 
-  useEffect(() => {
-    dispatch(getOrderList({ ...searchQuery }));
-  }, [searchQuery, dispatch]);
-
   const openEditForm = (order) => {
     setOpen(true);
     dispatch(setSelectedOrder(order));
@@ -86,27 +76,22 @@ const AdminOrderPage = () => {
   };
 
   const getOrderCountByStatus = (status) => {
-    return orderList?.filter((order) => order.status === status).length || 0;
+    return data?.data?.filter((order) => order.status === status).length || 0;
   };
 
   const handleSearch = (event) => {
     event.preventDefault();
-    if (
-      startDate &&
-      endDate &&
-      isValid(new Date(startDate)) &&
-      isValid(new Date(endDate))
-    ) {
-      const formattedStartDate = startOfDay(new Date(startDate));
-      const formattedEndDate = endOfDay(new Date(endDate));
+    if (startDate && endDate && isValid(startDate) && isValid(endDate)) {
+      const formattedStartDate = startOfDay(startDate);
+      const formattedEndDate = endOfDay(endDate);
 
-      setSearchQuery({
-        ...searchQuery,
+      setSearchQuery((prev) => ({
+        ...prev,
         startDate: format(formattedStartDate, "yyyy-MM-dd HH:mm:ss"),
         endDate: format(formattedEndDate, "yyyy-MM-dd HH:mm:ss"),
-      });
+      }));
     } else {
-      setSearchQuery({ ...searchQuery, startDate: null, endDate: null });
+      setSearchQuery((prev) => ({ ...prev, startDate: null, endDate: null }));
     }
   };
 
@@ -117,6 +102,8 @@ const AdminOrderPage = () => {
     setSearchQuery({
       page: 1,
       orderNum: "",
+      startDate: null,
+      endDate: null,
     });
   };
 
@@ -206,7 +193,7 @@ const AdminOrderPage = () => {
 
       <OrderTable
         header={tableHeader}
-        data={orderList}
+        data={data?.data}
         openEditForm={openEditForm}
         badgeBg={badgeBg}
       />
@@ -214,7 +201,7 @@ const AdminOrderPage = () => {
       <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
         <Stack spacing={2}>
           <Pagination
-            count={totalPageNum}
+            count={data?.totalPageNum}
             page={searchQuery.page}
             onChange={handlePageChange}
             color="primary"

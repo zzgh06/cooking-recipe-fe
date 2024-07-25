@@ -217,12 +217,12 @@ const IngredientCard = ({ item }) => {
               <Typography variant="h6">{calculateDiscountedPrice(item?.price, item?.discountPrice) * qty}원</Typography>
             </Grid>
             <Grid item xs={6}>
-              <Button variant="outlined" color="error" onClick={handleClose}>
+              <Button variant="outlined" color="error" onClick={handleClose} sx={{width: "100%"}}>
                 취소
               </Button>
             </Grid>
             <Grid item xs={6}>
-              <Button variant="contained" color="success" onClick={addCart}>
+              <Button variant="contained" color="success" onClick={addCart} sx={{width: "100%"}}>
                 담기
               </Button>
             </Grid>

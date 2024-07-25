@@ -1,14 +1,37 @@
 import React, { useEffect, useState } from "react";
-import { Form, Modal, Button, Col, Table } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { currencyFormat } from "../../utils/number";
 import { ORDER_STATUS } from "../../constants/order.constants";
-import { updateOrder, getOrderList } from "../../redux/orderSlice";
-const OrderDetailDialog = ({ open, handleClose }) => {
-  const dispatch = useDispatch();
+import { useEditOrder } from "../../hooks/Order/useEditOrder";
+import { useQueryClient } from "@tanstack/react-query";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  MenuItem,
+  Button,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  Typography
+} from "@mui/material";
 
+const OrderDetailDialog = ({ open, handleClose }) => {
+  const queryClient = useQueryClient();
   const { selectedOrder } = useSelector((state) => state.order);
   const [orderStatus, setOrderStatus] = useState(selectedOrder.status);
+
+  const { mutate: editOrder, isLoading } = useEditOrder();
+
+  useEffect(() => {
+    if (selectedOrder) {
+      setOrderStatus(selectedOrder.status);
+    }
+  }, [selectedOrder]);
 
   const handleStatusChange = (event) => {
     setOrderStatus(event.target.value);
@@ -16,87 +39,100 @@ const OrderDetailDialog = ({ open, handleClose }) => {
 
   const submitStatus = async (event) => {
     event.preventDefault();
-    dispatch(updateOrder({ id: selectedOrder._id, status: orderStatus }));
-    await dispatch(getOrderList());
-    handleClose();
+    try {
+      // Update order status
+      await editOrder({ id: selectedOrder._id, status: orderStatus });
+      await queryClient.invalidateQueries(['orderList']);
+      handleClose();
+    } catch (error) {
+      console.error("Failed to update order:", error);
+    }
   };
 
   if (!selectedOrder) {
-    return <></>;
+    return null;
   }
+
   return (
-    <Modal show={open} onHide={handleClose}>
-      <Modal.Header closeButton>
-        <Modal.Title>Order Detail</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <p>예약번호: {selectedOrder.orderNum}</p>
-        <p>주문날짜: {selectedOrder.createdAt.slice(0, 10)}</p>
-        <p>이메일: {selectedOrder.userId.email}</p>
-        <p>
-          주소:
-          {selectedOrder.contactInfo.shipTo.address +
-            " " +
-            selectedOrder.contactInfo.shipTo.city}
-        </p>
-        <p>
-          연락처:
-          {selectedOrder.contactInfo.contact.contact}
-        </p>
-        <p>주문내역</p>
-        <div className="overflow-x">
-          <Table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Unit Price</th>
-                <th>Qty</th>
-                <th>Price</th>
-              </tr>
-            </thead>
-            <tbody>
-              {selectedOrder.items.length > 0 &&
-                selectedOrder.items.map((item) => (
-                  <tr key={item._id}>
-                    <td>{item._id}</td>
-                    <td>{item.ingredientId.name}</td>
-                    <td>{currencyFormat(item.price)}</td>
-                    <td>{item.qty}</td>
-                    <td>{currencyFormat(item.price * item.qty)}</td>
-                  </tr>
-                ))}
-              <tr>
-                <td colSpan={4}>총계:</td>
-                <td>{currencyFormat(selectedOrder.totalPrice)}</td>
-              </tr>
-            </tbody>
-          </Table>
-        </div>
-        <Form onSubmit={submitStatus}>
-          <Form.Group as={Col} controlId="status">
-            <Form.Label>Status</Form.Label>
-            <Form.Select value={orderStatus} onChange={handleStatusChange}>
-              {ORDER_STATUS.map((item, idx) => (
-                <option key={idx} value={item.toLowerCase()}>
-                  {item}
-                </option>
+    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
+      <DialogTitle>Order Detail</DialogTitle>
+      <DialogContent>
+        <Typography variant="body1" gutterBottom>
+          예약번호: {selectedOrder.orderNum}
+        </Typography>
+        <Typography variant="body1" gutterBottom>
+          주문날짜: {selectedOrder.createdAt.slice(0, 10)}
+        </Typography>
+        <Typography variant="body1" gutterBottom>
+          이메일: {selectedOrder.userId.email}
+        </Typography>
+        <Typography variant="body1" gutterBottom>
+          주소: {selectedOrder.contactInfo.shipTo.address} {selectedOrder.contactInfo.shipTo.city}
+        </Typography>
+        <Typography variant="body1" gutterBottom>
+          연락처: {selectedOrder.contactInfo.contact.contact}
+        </Typography>
+        <Typography variant="body1" gutterBottom>
+          주문내역
+        </Typography>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>ID</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Unit Price</TableCell>
+              <TableCell>Qty</TableCell>
+              <TableCell>Price</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {selectedOrder.items.length > 0 &&
+              selectedOrder.items.map((item) => (
+                <TableRow key={item._id}>
+                  <TableCell>{item._id}</TableCell>
+                  <TableCell>{item.ingredientId.name}</TableCell>
+                  <TableCell>{currencyFormat(item.price)}</TableCell>
+                  <TableCell>{item.qty}</TableCell>
+                  <TableCell>{currencyFormat(item.price * item.qty)}</TableCell>
+                </TableRow>
               ))}
-            </Form.Select>
-          </Form.Group>
-          <div className="order-button-area">
-            <Button
-              variant="light"
-              onClick={handleClose}
-              className="order-button"
-            >
-              닫기
-            </Button>
-            <Button type="submit">저장</Button>
-          </div>
-        </Form>
-      </Modal.Body>
-    </Modal>
+            <TableRow>
+              <TableCell colSpan={4}>총계:</TableCell>
+              <TableCell>{currencyFormat(selectedOrder.totalPrice)}</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+        <form onSubmit={submitStatus}>
+          <TextField
+            select
+            label="Status"
+            value={orderStatus}
+            onChange={handleStatusChange}
+            fullWidth
+            margin="normal"
+          >
+            {ORDER_STATUS.map((status, idx) => (
+              <MenuItem key={idx} value={status.toLowerCase()}>
+                {status}
+              </MenuItem>
+            ))}
+          </TextField>
+        </form>
+      </DialogContent>
+      <DialogActions>
+        <Button variant="outlined" color="secondary" onClick={handleClose}>
+          닫기
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={submitStatus}
+          disabled={isLoading} 
+        >
+          저장
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 };
 

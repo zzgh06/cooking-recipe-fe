@@ -63,7 +63,7 @@ const CartPage = () => {
             <Button
               variant="contained"
               color="primary"
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/store")}
               sx={{ width: "90%" }}
             >
               쇼핑하러 가기
