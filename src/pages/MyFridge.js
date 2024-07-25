@@ -244,7 +244,7 @@ const MyFridge = () => {
             >
               {loading ? (
                 <CircularProgress />
-              ) : data?.ingredient.length === 0 ? (
+              ) : data?.ingredient?.length === 0 ? (
                 <Typography>일치하는 재료가 없습니다.</Typography>
               ) : (
                 data?.ingredients.map((item) => (

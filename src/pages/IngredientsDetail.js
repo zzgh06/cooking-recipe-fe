@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import {
   Container,
@@ -15,10 +14,11 @@ import { currencyFormat } from "../utils/number";
 import AddressInput from "../component/AddressInput/AddressInput";
 import DeliveryEstimate from "../component/DeliveryEstimate/DeliveryEstimate";
 import Review from "../component/Review/Review";
-import { addItemToCart } from "../redux/cartSlice";
 import IngredientsDetailSkeleton from "../component/Skeleton/IngredientsDetailSkeleton";
 import { useGetIngredient } from "../hooks/Ingredient/useGetIngredient";
 import { useIngredientByName } from "../hooks/Ingredient/useIngredientByName";
+import { useAddToCart } from "../hooks/Cart/useAddToCart";
+import { useSelector } from "react-redux";
 
 const ShoppingTabs = styled(Tabs)({
   width: "100%",
@@ -47,6 +47,7 @@ const MoreButton = styled(Button)({
 
 const IngredientsDetail = () => {
   const { id } = useParams();
+  const { user } = useSelector((state) => state.auth);
   const location = useLocation();
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
@@ -60,8 +61,7 @@ const IngredientsDetail = () => {
   const data = ingredientName ? ingredientDataByName : ingredientDataById;
   const isLoading = ingredientName ? isLoadingByName : isLoadingById;
 
-  const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.auth);
+  const { mutate: addToCart, isLoading: isAdding } = useAddToCart();
 
   const [address, setAddress] = useState("지역을 선택해주세요");
   const [value, setValue] = useState(0);
@@ -104,8 +104,11 @@ const IngredientsDetail = () => {
   }, [data]);
 
   const addCart = () => {
-    if (!user) navigate("/login");
-    dispatch(addItemToCart({ ingredientId: id }));
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+    addToCart({ ingredientId: id, qty: 1 }); // 기본 수량 1로 설정
   };
 
   const goHome = () => {
@@ -173,8 +176,9 @@ const IngredientsDetail = () => {
               <Button
                 variant="contained"
                 color="success"
-                sx={{ mt: 2 }}
+                sx={{ mt: 1, width: "100%" }}
                 onClick={addCart}
+                disabled={isAdding}
               >
                 카트에 담기
               </Button>

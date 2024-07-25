@@ -9,16 +9,15 @@ import {
 } from "@mui/material";
 import PaymentForm from "../component/PaymentForm/PaymentForm";
 import "../style/paymentPage.style.css";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { cc_expires_format } from "../utils/number";
 import OrderReceipt from "../component/OrderReceipt/OrderReceipt";
-import { deleteSelectedCartItems } from "../redux/cartSlice";
-import { useCreateOrder } from "../hooks/Order/useCreateOrder"; // useCreateOrder 훅 임포트
+import { useDeleteSelectedCartItems } from "../hooks/Cart/useDeleteSelectedCartItems"; 
+import { useCreateOrder } from "../hooks/Order/useCreateOrder";
 
 const PaymentPage = () => {
-  const dispatch = useDispatch();
-  const { cartItem, selectedTotalPrice, selectedItems } = useSelector((state) => state.cart);
+  const { cartItem, selectedItems } = useSelector((state) => state.cart);
   const navigate = useNavigate();
   const [cardValue, setCardValue] = useState({
     cvc: "",
@@ -36,7 +35,8 @@ const PaymentPage = () => {
     zip: "",
   });
 
-  const { mutate: createOrder, isLoading, isError, isSuccess } = useCreateOrder();
+  const { mutate: deleteSelectedItems, isLoading: isDeleting } = useDeleteSelectedCartItems();
+  const { mutate: createOrder, isLoading: isOrdering, isError, isSuccess } = useCreateOrder();
 
   const selectedCartItems = cartItem.filter((item) =>
     selectedItems.includes(item.ingredientId._id)
@@ -65,12 +65,10 @@ const PaymentPage = () => {
         };
       }),
     };
-
     try {
-      await dispatch(deleteSelectedCartItems()).unwrap();
-      createOrder(data); // 주문 생성 요청
+      await deleteSelectedItems(); 
+      createOrder(data);
     } catch (error) {
-      // 실패 처리
       console.error("Failed to delete cart items:", error);
     }
   };
@@ -202,8 +200,8 @@ const PaymentPage = () => {
                 color="primary"
                 className="payment-button pay-button"
                 type="submit"
-                disabled={isLoading}
-                sx={{width: "100%"}}
+                disabled={isDeleting || isOrdering} // 버튼 비활성화
+                sx={{ width: "100%" }}
               >
                 결제하기
               </Button>

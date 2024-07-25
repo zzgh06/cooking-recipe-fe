@@ -23,7 +23,7 @@ const SearchResultCard = ({ item }) => {
         <CardContent sx={{ p: 0 }}>
           <Typography variant="h6" sx={{ mb: 1, color: 'text.primary' }}>{item.name}</Typography>
         </CardContent>
-        <Button variant="contained" color="success" onClick={handleAddClick} sx={{ mt: 1 }}>추가</Button>
+        <Button variant="contained" color="success" onClick={handleAddClick} sx={{ mt: 1, width: "100%" }}>추가</Button>
       </Box>
     </Card>
   );

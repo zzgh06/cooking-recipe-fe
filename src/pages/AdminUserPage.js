@@ -8,6 +8,7 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import { useGetUsersInfo } from '../hooks/User/useGetUsersInfo';
 import { useDeleteUser } from '../hooks/User/useDeleteUser';
+import { Oval } from 'react-loader-spinner';
 
 const AdminUserPage = () => {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ const AdminUserPage = () => {
   const [showDialog, setShowDialog] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
-  const { data, isLoading, isError } = useGetUsersInfo(searchQuery);
+  const { data, isLoading } = useGetUsersInfo(searchQuery);
   const { mutateAsync: deleteUser } = useDeleteUser();
 
   const usersData = data?.usersData || [];
@@ -61,6 +62,19 @@ const AdminUserPage = () => {
     setShowDialog(false);
     setSelectedUser(null);
   };
+
+  if (isLoading) {
+    return (
+      <Container maxWidth="lg" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+        <Oval 
+          height="80" 
+          width="80" 
+          color="green" 
+          ariaLabel="loading"
+        />
+      </Container>
+    );
+  }
 
   return (
     <Container sx={{ mt: 2 }}>

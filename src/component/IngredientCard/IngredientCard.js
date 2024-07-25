@@ -18,7 +18,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { addItemToCart, editCartItem } from "../../redux/cartSlice";
+import { useAddToCart } from "../../hooks/Cart/useAddToCart";
 import { currencyFormat } from "../../utils/number";
 
 const StyledCard = styled(Card)({
@@ -79,12 +79,13 @@ const optimizeImageUrl = (url) => {
 
 const IngredientCard = ({ item }) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [qty, setQty] = useState(1);
+  const { mutate: addToCart, isLoading: isAdding } = useAddToCart();
+  const { user } = useSelector((state) => state.auth);
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const { user } = useSelector((state) => state.auth);
 
   const showIngredient = (id) => {
     navigate(`/ingredients/${id}`);
@@ -95,14 +96,17 @@ const IngredientCard = ({ item }) => {
     return Math.floor(discountedPrice);
   };
 
-  const handleQtyChange = (event, id) => {
+  const handleQtyChange = (event) => {
     setQty(event.target.value);
-    dispatch(editCartItem({ ingredientId: id, qty: event.target.value }));
   };
 
   const addCart = () => {
-    if (!user) navigate("/login");
-    dispatch(addItemToCart({ ingredientId: item._id, qty }));
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+
+    addToCart({ ingredientId: item._id, qty });
     handleClose();
   };
 
@@ -112,7 +116,7 @@ const IngredientCard = ({ item }) => {
         <StyledCardMedia
           component="img"
           image={optimizeImageUrl(item.images[0])}
-          alt={item.images}
+          alt={item.name}
           onClick={() => showIngredient(item?._id)}
         />
         <Button
@@ -198,7 +202,7 @@ const IngredientCard = ({ item }) => {
                 <Select
                   value={qty}
                   label="수량"
-                  onChange={(event) => handleQtyChange(event, item._id)}
+                  onChange={handleQtyChange}
                 >
                   <MenuItem value={1}>1</MenuItem>
                   <MenuItem value={2}>2</MenuItem>
@@ -214,7 +218,9 @@ const IngredientCard = ({ item }) => {
               sx={{ display: "flex", justifyContent: "space-between" }}
             >
               <Typography variant="h6">합계</Typography>
-              <Typography variant="h6">{calculateDiscountedPrice(item?.price, item?.discountPrice) * qty}원</Typography>
+              <Typography variant="h6">
+                {calculateDiscountedPrice(item?.price, item?.discountPrice) * qty}원
+              </Typography>
             </Grid>
             <Grid item xs={6}>
               <Button variant="outlined" color="error" onClick={handleClose} sx={{width: "100%"}}>
@@ -222,7 +228,13 @@ const IngredientCard = ({ item }) => {
               </Button>
             </Grid>
             <Grid item xs={6}>
-              <Button variant="contained" color="success" onClick={addCart} sx={{width: "100%"}}>
+              <Button 
+                variant="contained" 
+                color="success" 
+                onClick={addCart} 
+                sx={{width: "100%"}}
+                disabled={isAdding}
+              >
                 담기
               </Button>
             </Grid>

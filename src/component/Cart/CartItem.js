@@ -1,11 +1,9 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { editCartItem, deleteCartItem } from "../../redux/cartSlice";
 import { currencyFormat } from "../../utils/number";
 import {
   Card,
   CardMedia,
-  CardContent,
   Typography,
   Select,
   MenuItem,
@@ -14,22 +12,26 @@ import {
   Box
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useDeleteCartItem } from "../../hooks/Cart/useDeleteCartItem";
+import { useEditCartItem } from "../../hooks/Cart/useEditCartItem";
 
 const CartItem = ({ item, qty, selectedItems, selectItem }) => {
   const dispatch = useDispatch();
-  const { name, price, unit, images = [], _id } = item.ingredientId;
+  const { name, price, unit, images = [], _id } = item?.ingredientId;
   const isSelected = selectedItems.includes(_id);
+  const { mutate: deleteItem, isLoading: isDeleting } = useDeleteCartItem();
+  const { mutate: editCartItem } = useEditCartItem();
 
   const handleSelectChange = () => {
     dispatch(selectItem(_id));
   };
 
   const handleQtyChange = (event) => {
-    dispatch(editCartItem({ ingredientId: _id, qty: event.target.value }));
+    editCartItem({ ingredientId: _id, qty: event.target.value });
   };
 
   const handleDelete = () => {
-    dispatch(deleteCartItem({ ingredientId: _id }));
+    deleteItem({ ingredientId: _id }); 
   };
 
   return (
@@ -79,6 +81,7 @@ const CartItem = ({ item, qty, selectedItems, selectItem }) => {
         color="error"
         onClick={handleDelete}
         sx={{ ml: 2, width: "20px" }}
+        disabled={isDeleting}
       >
         <DeleteIcon />
       </IconButton>
