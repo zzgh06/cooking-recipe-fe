@@ -7,9 +7,8 @@ import { Button } from "@mui/material";
 const CLOUDNAME = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
 const UPLOADPRESET = process.env.REACT_APP_CLOUDINARY_PRESET;
 
-// WebP 포맷으로 이미지를 최적화하는 함수
 const optimizeImageUrl = (url) => {
-  return url.replace(/\/upload\//, '/upload/f_webp/');
+  return url.replace(/\/upload\//, '/upload/f_webp/f_auto,q_auto/');
 };
 
 class CloudinaryUploadWidget extends Component {
@@ -44,7 +43,7 @@ class CloudinaryUploadWidget extends Component {
         if (!error && result && result.event === "success") {
           console.log("Done! Here is the image info: ", result.info);
           const optimizedUrl = optimizeImageUrl(result.info.secure_url);
-          uploadImage(optimizedUrl, type, index); // 이미지 업로드 후 URL과 함께 uploadImage 콜백 호출
+          uploadImage(optimizedUrl, type, index); 
         }
       }
     );

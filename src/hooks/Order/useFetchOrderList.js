@@ -10,5 +10,7 @@ export const useFetchOrderList = (query) => {
   return useQuery({
     queryKey: ["orderList", query],
     queryFn: () => fetchOrderList(query),
+    staleTime: 60000,
+    cacheTime: 300000,
   });
 };

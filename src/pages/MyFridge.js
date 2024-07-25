@@ -1,17 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchIngredients,
-  setSelectedIngredients,
-} from "../redux/ingredientSlice";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { setSelectedIngredients } from "../redux/ingredientSlice";
 import MyFridgeSearchResults from "../component/MyFridgeSearchResults/MyFridgeSearchResults";
 import SearchResultCard from "../component/SearchResultCard/SearchResultCard";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import {
-  fetchFridgeItems,
-  fetchRecommendedRecipes,
-  fridgeIngredientRecipeResult,
-} from "../redux/fridgeSlice";
 import FridgeItemCard from "../component/FridgeItemCard/FridgeItemCard";
 import SearchBox from "../component/SearchBox/SearchBox";
 import RecentlyViewed from "../component/RecentlyViewed/RecentlyViewed";
@@ -28,6 +20,9 @@ import {
   DialogActions,
 } from "@mui/material";
 import { useFetchIngredients } from "../hooks/Ingredient/useFetchIngredients";
+import { useFetchFridgeItems } from "../hooks/Fridge/useFetchFridgeItems";
+import { useFetchRecommendedRecipes } from "../hooks/Fridge/useFetchRecommendedRecipes";
+import { setToastMessage } from "../redux/commonUISlice";
 
 const FridgeContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -61,9 +56,7 @@ const GridContainer = styled(Box)(({ theme }) => ({
 const MyFridge = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { fridgeItems, recipeList, loading, recipeLoading } = useSelector(
-    (state) => state.fridge || []
-  );
+  const user = useSelector((state) => state.auth.user)
   const selectedIngredients = useSelector(
     (state) => state.ingredients.selectedIngredients
   );
@@ -72,12 +65,19 @@ const MyFridge = () => {
     page: query.get("page") || 1,
     name: query.get("name") || "",
   });
-  const { data } = useFetchIngredients(searchQuery);
+  const { data: ingredientData, isLoading } = useFetchIngredients(searchQuery);
+  const { data: fridgeData } = useFetchFridgeItems();
   const [hasSearched, setHasSearched] = useState(false);
   const [checkedItems, setCheckedItems] = useState(new Set());
   const [recentlyViewedItems, setRecentlyViewedItems] = useState([]);
   const [recommendClicked, setRecommendClicked] = useState(false);
   const [open, setOpen] = useState(false);
+
+  const {
+    data: recipeList,
+    isLoading: recipeLoading,
+    refetch: refetchRecipes,
+  } = useFetchRecommendedRecipes(Array.from(checkedItems));
 
   useEffect(() => {
     const viewedItems =
@@ -87,23 +87,28 @@ const MyFridge = () => {
 
   useEffect(() => {
     if (searchQuery.name) {
-      dispatch(fridgeIngredientRecipeResult(searchQuery));
       setHasSearched(true);
       setRecommendClicked(false);
     } else {
       setHasSearched(false);
     }
-  }, [dispatch, searchQuery]);
-
-  useEffect(() => {
-    dispatch(fetchFridgeItems());
-  }, [dispatch]);
+  }, [searchQuery]);
 
   useEffect(() => {
     return () => {
       dispatch(setSelectedIngredients([]));
     };
   }, [dispatch]);
+
+  useEffect(()=>{
+    if (!user) {
+      dispatch(setToastMessage({
+        message: "로그인이 필요한 서비스 입니다.",
+        status: "error"
+      }))
+      navigate("/login")
+    }
+  }, [])
 
   const handleSearchChange = (e) => {
     const newSearchQuery = { ...searchQuery, name: e.target.value };
@@ -130,10 +135,9 @@ const MyFridge = () => {
 
   const handleRecommendRecipes = () => {
     if (checkedItems.size > 0) {
-      const selectedIngredients = Array.from(checkedItems);
-      dispatch(fetchRecommendedRecipes(selectedIngredients));
       setRecommendClicked(true);
       setHasSearched(false);
+      refetchRecipes();
       setOpen(true);
     }
   };
@@ -156,7 +160,7 @@ const MyFridge = () => {
 
       <GridContainer>
         <FridgeContainer>
-          {fridgeItems.length === 0 ? (
+          {fridgeData?.length === 0 ? (
             <Typography variant="h6">
               냉장고가 텅 비워져 있습니다 😅 <br />
               My 냉장고를 가득 채워주세요.
@@ -172,7 +176,7 @@ const MyFridge = () => {
                   marginBottom: "20px",
                 }}
               >
-                {fridgeItems.map((item) => (
+                {fridgeData?.map((item) => (
                   <Grid item key={item.ingredientId._id}>
                     <FridgeItemCard
                       item={item.ingredientId}
@@ -242,12 +246,12 @@ const MyFridge = () => {
                 marginBottom: "40px",
               }}
             >
-              {loading ? (
+              {isLoading ? (
                 <CircularProgress />
-              ) : data?.ingredient?.length === 0 ? (
+              ) : ingredientData?.length === 0 ? (
                 <Typography>일치하는 재료가 없습니다.</Typography>
               ) : (
-                data?.ingredients.map((item) => (
+                ingredientData?.ingredients.map((item) => (
                   <SearchResultCard key={item._id} item={item} />
                 ))
               )}

@@ -56,7 +56,7 @@ const RecipeCard = ({ item }) => {
       <RecipeImage
         src={optimizedImageUrl}
         srcSet={`${optimizedImageUrl}?w=200 200w, ${optimizedImageUrl}?w=400 400w`}
-        sizes="(max-width: 600px) 200px, 400px"
+        sizes="(max-width: 200px) 200px, 400px"
         alt={item.name}
         loading="lazy"
         onClick={() => showRecipe(item._id)}
