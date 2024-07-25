@@ -7,7 +7,6 @@ import cartReducer from "./cartSlice";
 import orderReducer from "./orderSlice";
 import reviewReducer from "./reviewSlice";
 import commonUiReducer from "./commonUISlice";
-import favoriteReducer from "./favoriteSlice";
 import shoppingListReducer from "./shoppingListSlice";
 export const store = configureStore({
   reducer: {
@@ -18,7 +17,6 @@ export const store = configureStore({
     fridge: fridgeReducer,
     cart: cartReducer,
     review: reviewReducer,
-    favorite: favoriteReducer,
     shoppingList: shoppingListReducer,
     ui: commonUiReducer,
   },

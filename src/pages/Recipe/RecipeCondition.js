@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
 import { useFetchRecipesByCategory } from "../../hooks/Recipe/useFetchRecipesByCategory";
 import RecipeCard from "../../component/RecipeCard/RecipeCard";
 import RecipeCardSkeleton from "../../component/Skeleton/RecipeCardSkeleton";
@@ -15,19 +14,16 @@ const RecipeCardContainer = styled(Grid)({
 
 const RecipeCondition = ({ category, path }) => {
   const queryParams = { etc: category };
-  const { data, isLoading, isError } = useFetchRecipesByCategory(queryParams);
-
-  console.log("recipes", data)
-  // 정렬된 레시피 목록
-  const bestRecipes = [...data.recipeList].sort((a, b) => b.viewCnt - a.viewCnt);
-  const newRecipes = [...data.recipeList].sort(
+  const { data, isLoading } = useFetchRecipesByCategory(queryParams);
+  const bestRecipes = data?.recipeList.sort((a, b) => b.viewCnt - a.viewCnt);
+  const newRecipes = data?.recipeList.sort(
     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
   );
 
   const filteredRecipes = path === "best"
-    ? bestRecipes.slice(0, 16)
+    ? bestRecipes?.slice(0, 16)
     : path === "new"
-    ? newRecipes.slice(0, 16)
+    ? newRecipes?.slice(0, 16)
     : [];
 
   return (

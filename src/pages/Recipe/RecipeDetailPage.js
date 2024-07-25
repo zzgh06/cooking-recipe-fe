@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  addRecipeFavorite,
-  deleteRecipeFavorite,
-  getRecipeFavorite,
-} from "../../redux/favoriteSlice";
 import Review from "../../component/Review/Review";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -38,6 +33,9 @@ import IngredientDialog from "../../component/IngredientDialog/IngredientDialog"
 import RecipeDetailSkeleton from "../../component/Skeleton/RecipeDetailSkeleton";
 import ShoppingListDialog from "../../component/ShoppingListDialog/ShoppingListDialog";
 import { useFetchRecipeById } from "../../hooks/Recipe/useFetchRecipeById";
+import { useRecipeFavorite } from "../../hooks/Favorite/useRecipeFavorite";
+import { useAddRecipeFavorite } from "../../hooks/Favorite/useAddRecipeFavorite";
+import { useDeleteRecipeFavorite } from "../../hooks/Favorite/useDeleteRecipeFavorite";
 
 const RecipeImage = styled("img")({
   width: "100%",
@@ -92,19 +90,14 @@ const RecipeDetail = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { recipeFavorite } = useSelector((state) => state.favorite);
   const user = useSelector((state) => state.auth.user)
   const { data: recipeDetail, isLoading, isError } = useFetchRecipeById(id);
   const [isFavorite, setIsFavorite] = useState(false);
   const [openIngredientDialog, setOpenIngredientDialog] = useState(false);
   const [openShoppingListDialog, setOpenShoppingListDialog] = useState(false);
-
-
-  useEffect(() => {
-    if (user) {
-      dispatch(getRecipeFavorite());
-    }
-  }, [dispatch, user]);
+  const { data: recipeFavorite } = useRecipeFavorite();
+  const { mutate: addRecipeFavorite } = useAddRecipeFavorite();
+  const { mutate: deleteRecipeFavorite } = useDeleteRecipeFavorite();
 
   useEffect(() => {
     if (recipeDetail && recipeFavorite) {
@@ -117,9 +110,9 @@ const RecipeDetail = () => {
       navigate("/login")
     }
     if (isFavorite) {
-      dispatch(deleteRecipeFavorite(recipeDetail._id));
+      deleteRecipeFavorite(recipeDetail._id);
     } else {
-      dispatch(addRecipeFavorite(recipeDetail._id));
+      addRecipeFavorite(recipeDetail._id);
     }
     setIsFavorite(!isFavorite);
   };
