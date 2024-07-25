@@ -16,7 +16,7 @@ export const useForgotPassword = () => {
       alert("비밀번호 재설정 이메일이 발송되었습니다 !");
     },
     onError: (error) => {
-      dispatch(setError(error.response?.data?.message || 'Request failed'));
+      dispatch(setError(error.error || 'Request failed'));
     },
   });
 };

@@ -14,7 +14,7 @@ export const useDeleteUser = () => {
       queryClient.invalidateQueries(['usersInfo']);
     },
     onError: (error) => {
-      console.error('Error deleting user:', error);
+      console.error('Error deleting user:', error.error);
     },
   });
 };

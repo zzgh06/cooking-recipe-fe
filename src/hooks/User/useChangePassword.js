@@ -13,8 +13,7 @@ export const useChangePassword = () => {
       alert(`${data.message}`);
     },
     onError: (error) => {
-      console.error('Error:', error.message);
-      return error.response?.data?.message || 'Request failed';
+      return error.error || 'Request failed';
     },
   });
 };

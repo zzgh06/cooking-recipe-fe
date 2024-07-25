@@ -13,6 +13,8 @@ export const useFetchRecipes = (searchQuery) => {
   return useQuery({
     queryKey: ['recipes', searchQuery],
     queryFn: () => fetchRecipes(searchQuery),
+    staleTime: 60000,
+    cacheTime: 300000,
     keepPreviousData: true
   });
 };

@@ -13,5 +13,7 @@ export const useFetchOrder = (query) => {
   return useQuery({
     queryKey: ["order", query],
     queryFn: () => fetchOrderMe(query),
+    staleTime: 60000,
+    cacheTime: 300000,
   });
 };

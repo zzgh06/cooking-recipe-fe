@@ -1,17 +1,17 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { deleteFridgeItem, fetchFridgeItems } from "../../redux/fridgeSlice";
 import { Box, Card, CardActions, CardContent, CardMedia, Grid, IconButton, Typography } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircle as faCircleRegular, faTrashAlt } from "@fortawesome/free-regular-svg-icons";
 import { faCheckCircle as faCheckCircleSolid } from "@fortawesome/free-solid-svg-icons";
+import { useDeleteFridgeItem } from "../../hooks/Fridge/useDeleteFridgeItem";
 
 const FridgeItemCard = ({ item, id, isChecked, onCheckboxChange }) => {
   const dispatch = useDispatch();
+  const {mutate: deleteFridgeItem} = useDeleteFridgeItem();
 
   const handleDelete = async () => {
-    await dispatch(deleteFridgeItem(id));
-    dispatch(fetchFridgeItems());
+    deleteFridgeItem(id);
   };
 
   return (

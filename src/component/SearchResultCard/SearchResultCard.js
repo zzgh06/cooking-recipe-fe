@@ -1,18 +1,27 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useAddIngredientToFridge } from '../../hooks/Fridge/useAddIngredientToFridge'; 
 import { Card, CardMedia, CardContent, Typography, Button, Box } from '@mui/material';
-import { addIngredientToFridge, fetchFridgeItems } from '../../redux/fridgeSlice';
 
 const SearchResultCard = ({ item }) => {
-  const dispatch = useDispatch();
+  const { mutate: addIngredientToFridge, isLoading } = useAddIngredientToFridge();
 
   const handleAddClick = () => {
-    dispatch(addIngredientToFridge(item._id));
-    dispatch(fetchFridgeItems());
+    addIngredientToFridge(item._id); 
   };
 
   return (
-    <Card sx={{ display: 'flex', alignItems: 'center', width: 350, p: 2, m: 2, boxShadow: 3, '&:hover': { transform: 'translateY(-5px)', boxShadow: 6 }, transition: 'transform 0.2s, box-shadow 0.2s' }}>
+    <Card
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        width: 350,
+        p: 2,
+        m: 2,
+        boxShadow: 3,
+        '&:hover': { transform: 'translateY(-5px)', boxShadow: 6 },
+        transition: 'transform 0.2s, box-shadow 0.2s',
+      }}
+    >
       <CardMedia
         component="img"
         sx={{ width: 100, height: 100, mr: 2, borderRadius: 1 }}
@@ -21,9 +30,19 @@ const SearchResultCard = ({ item }) => {
       />
       <Box sx={{ flexGrow: 1 }}>
         <CardContent sx={{ p: 0 }}>
-          <Typography variant="h6" sx={{ mb: 1, color: 'text.primary' }}>{item.name}</Typography>
+          <Typography variant="h6" sx={{ mb: 1, color: 'text.primary' }}>
+            {item.name}
+          </Typography>
         </CardContent>
-        <Button variant="contained" color="success" onClick={handleAddClick} sx={{ mt: 1, width: "100%" }}>추가</Button>
+        <Button
+          variant="contained"
+          color="success"
+          onClick={handleAddClick}
+          sx={{ mt: 1, width: '100%' }}
+          disabled={isLoading}
+        >
+          {isLoading ? '추가 중...' : '추가'}
+        </Button>
       </Box>
     </Card>
   );

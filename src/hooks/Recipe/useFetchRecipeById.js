@@ -10,5 +10,7 @@ export const useFetchRecipeById = (id) => {
   return useQuery({
     queryKey: ['recipe', id],
     queryFn: () => fetchRecipeById(id),
+    staleTime: 60000,
+    cacheTime: 300000,
   });
 };
