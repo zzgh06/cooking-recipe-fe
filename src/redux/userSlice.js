@@ -44,7 +44,7 @@ const userSlice = createSlice({
       state.totalPageNum = action.payload.totalPageNum;
     },
     setUpdateUser: (state, action) => {
-      state.user = { user: action.payload.data };
+      state.user = action.payload;
     },
     setRegistrationData: (state, action) => {
       state.registrationData = action.payload;

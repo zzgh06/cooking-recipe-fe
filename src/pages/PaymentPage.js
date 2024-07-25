@@ -12,16 +12,14 @@ import "../style/paymentPage.style.css";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { cc_expires_format } from "../utils/number";
-import { createOrder } from "../redux/orderSlice";
 import OrderReceipt from "../component/OrderReceipt/OrderReceipt";
-import {
-  deleteSelectedCartItems,
-} from "../redux/cartSlice";
+import { deleteSelectedCartItems } from "../redux/cartSlice";
+import { useCreateOrder } from "../hooks/Order/useCreateOrder"; // useCreateOrder 훅 임포트
 
 const PaymentPage = () => {
   const dispatch = useDispatch();
-  const { cartItem, selectedTotalPrice, selectedItems } =
-    useSelector((state) => state.cart);
+  const { cartItem, selectedTotalPrice, selectedItems } = useSelector((state) => state.cart);
+  const navigate = useNavigate();
   const [cardValue, setCardValue] = useState({
     cvc: "",
     expiry: "",
@@ -29,7 +27,6 @@ const PaymentPage = () => {
     name: "",
     number: "",
   });
-  const navigate = useNavigate();
   const [shipInfo, setShipInfo] = useState({
     firstName: "",
     lastName: "",
@@ -38,6 +35,8 @@ const PaymentPage = () => {
     city: "",
     zip: "",
   });
+
+  const { mutate: createOrder, isLoading, isError, isSuccess } = useCreateOrder();
 
   const selectedCartItems = cartItem.filter((item) =>
     selectedItems.includes(item.ingredientId._id)
@@ -66,11 +65,15 @@ const PaymentPage = () => {
         };
       }),
     };
-    
-    await dispatch(deleteSelectedCartItems()).unwrap();  
-    dispatch(createOrder({ data, navigate }));
+
+    try {
+      await dispatch(deleteSelectedCartItems()).unwrap();
+      createOrder(data); // 주문 생성 요청
+    } catch (error) {
+      // 실패 처리
+      console.error("Failed to delete cart items:", error);
+    }
   };
-  
 
   const handleFormChange = (event) => {
     const { name, value } = event.target;
@@ -96,6 +99,12 @@ const PaymentPage = () => {
       navigate("/cart");
     }
   }, [cartItem.length, navigate]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      navigate("/payment/success");
+    }
+  }, [isSuccess, navigate]);
 
   return (
     <Container sx={{ my: 3 }}>
@@ -193,6 +202,8 @@ const PaymentPage = () => {
                 color="primary"
                 className="payment-button pay-button"
                 type="submit"
+                disabled={isLoading}
+                sx={{width: "100%"}}
               >
                 결제하기
               </Button>

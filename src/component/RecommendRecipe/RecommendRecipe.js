@@ -6,6 +6,7 @@ const ImageContainer = styled(Box)({
   position: "relative",
   width: "100%",
   height: "100%",
+  maxHeight: "600px",
   "&:hover .overlay": {
     opacity: 1,
   },
@@ -76,6 +77,7 @@ const RecommendRecipe = ({ recommendRecipes }) => {
               onClick={() => {
                 showRecipe(recommendRecipes[1]._id);
               }}
+              sx={{maxHeight: "300px"}}
             >
               <StyledImage
                 src={optimizeImageUrl(recommendRecipes[1]?.images[0])}
@@ -90,6 +92,7 @@ const RecommendRecipe = ({ recommendRecipes }) => {
               onClick={() => {
                 showRecipe(recommendRecipes[2]._id);
               }}
+              sx={{maxHeight: "300px"}}
             >
               <StyledImage
                 src={optimizeImageUrl(recommendRecipes[2]?.images[0])}
@@ -104,6 +107,7 @@ const RecommendRecipe = ({ recommendRecipes }) => {
               onClick={() => {
                 showRecipe(recommendRecipes[4]._id);
               }}
+              sx={{maxHeight: "300px"}}
             >
               <StyledImage
                 src={optimizeImageUrl(recommendRecipes[4]?.images[0])}

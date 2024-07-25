@@ -12,10 +12,12 @@ const editIngredient = async ({ id, ingredient }) => {
 
 export const useEditIngredient = () => {
   const dispatch = useDispatch();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: editIngredient,
     onSuccess: (data) => {
+      queryClient.invalidateQueries(['ingredients']);
       dispatch(updateIngredientInState(data))
       dispatch(
         setToastMessage({
