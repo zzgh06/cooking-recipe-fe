@@ -17,6 +17,7 @@ import { useFetchRecipes } from "../hooks/Recipe/useFetchRecipes";
 import { useCreateRecipe } from "../hooks/Recipe/useCreateRecipe";
 import { useEditRecipe } from "../hooks/Recipe/useEditRecipe";
 import { useDeleteRecipe } from "../hooks/Recipe/useDeleteRecipe";
+import { Oval } from "react-loader-spinner";
 
 const AdminRecipePage = () => {
   const [query, setQuery] = useSearchParams();
@@ -28,7 +29,7 @@ const AdminRecipePage = () => {
   const [showForm, setShowForm] = useState(false);
   const [mode, setMode] = useState("new");
   const [selectedRecipe, setSelectedRecipe] = useState(null);
-  const { data: recipesData, refetch } = useFetchRecipes(searchQuery);
+  const { data: recipesData, refetch, isLoading } = useFetchRecipes(searchQuery);
   const { mutate: createRecipe } = useCreateRecipe();
   const { mutate: editRecipe } = useEditRecipe();
   const { mutate: deleteRecipe } = useDeleteRecipe();
@@ -79,6 +80,19 @@ const AdminRecipePage = () => {
     }
     setShowForm(false);
   };
+
+  if (isLoading) {
+    return (
+      <Container maxWidth="lg" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+        <Oval 
+          height="80" 
+          width="80" 
+          color="green" 
+          ariaLabel="loading"
+        />
+      </Container>
+    );
+  }
 
   return (
     <Container maxWidth="lg">

@@ -1,35 +1,52 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Container, Grid, Typography, Box, Button } from "@mui/material";
+import { Container, Grid, Typography, Box, Button, Skeleton } from "@mui/material";
 import CartItem from "../component/Cart/CartItem";
 import OrderReceipt from "../component/OrderReceipt/OrderReceipt";
-import {
-  getCart,
-  toggleSelectItem,
-} from "../redux/cartSlice";
 import { useNavigate } from "react-router-dom";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { useFetchCart } from "../hooks/Cart/useFetchCart";
+import { useDispatch, useSelector } from "react-redux";
+import { setCartItems, toggleSelectItem } from "../redux/cartSlice";
+import { Oval } from "react-loader-spinner";
 
 const CartPage = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector((state) => state.auth.user);
-  const { cartItem, selectedItems } = useSelector((state) => state.cart);
+const dispatch = useDispatch();
+  const { data: cartItems, isLoading } = useFetchCart();
+  const { cartItem, selectedItems} = useSelector((state) => state.cart);
 
   useEffect(() => {
-    if (user) {
-      dispatch(getCart());
+    if (cartItems) {
+      dispatch(setCartItems(cartItems));
     }
-  }, [user, dispatch]);
+  }, [cartItems, dispatch]);
 
-  const selectedCartItems = cartItem.filter((item) =>
-    selectedItems.includes(item.ingredientId?._id)
+  const selectedCartItems = cartItem?.filter((item) =>
+    selectedItems.includes(item?.ingredientId._id)
   );
 
-  const totalPrice = selectedCartItems.reduce(
+  const totalPrice = selectedCartItems?.reduce(
     (total, item) => total + item.ingredientId.price * item.qty,
     0
   );
+
+  if (isLoading) {
+    return (
+      <Container sx={{ mb: 4 }} align="center">
+        <Typography variant="h4" component="h2" align="center" sx={{ my: 5 }}>
+          장바구니
+        </Typography>
+        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "300px" }}>
+          <Oval  
+            height="80" 
+            width="80" 
+            color="green" 
+            ariaLabel="loading"
+          />
+        </Box>
+      </Container>
+    );
+  }
 
   return (
     <Container sx={{ mb: 4 }}>
@@ -37,7 +54,7 @@ const CartPage = () => {
         장바구니
       </Typography>
       <Box sx={{ display: "flex", justifyContent: "center", flexWrap: "wrap" }}>
-        {!user || cartItem.length === 0 ? (
+        {!cartItem || cartItem.length === 0 ? (
           <Box
             sx={{
               textAlign: "center",
@@ -74,9 +91,9 @@ const CartPage = () => {
             <Grid item xs={12} md={7}>
               {cartItem.map((item) => (
                 <CartItem
-                  key={item.ingredientId?._id}
+                  key={item?.ingredientId._id}
                   item={item}
-                  qty={item.qty}
+                  qty={item?.qty}
                   selectItem={toggleSelectItem}
                   selectedItems={selectedItems}
                 />

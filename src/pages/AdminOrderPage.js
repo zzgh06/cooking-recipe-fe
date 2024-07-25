@@ -19,6 +19,7 @@ import { setSelectedOrder } from "../redux/orderSlice";
 import { endOfDay, format, isValid, startOfDay } from "date-fns";
 import DateFilterCondition from "../component/DateFilterCondition/DateFilterCondition";
 import { useFetchOrderList } from "../hooks/Order/useFetchOrderList";
+import { Oval } from "react-loader-spinner";
 
 const badgeBg = {
   preparing: "primary",
@@ -42,7 +43,7 @@ const AdminOrderPage = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
-  const { data, isLoading, isError } = useFetchOrderList(searchQuery);
+  const { data, isLoading } = useFetchOrderList(searchQuery);
 
   console.log("data", data)
 
@@ -106,6 +107,19 @@ const AdminOrderPage = () => {
       endDate: null,
     });
   };
+
+  if (isLoading) {
+    return (
+      <Container maxWidth="lg" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+        <Oval 
+          height="80" 
+          width="80" 
+          color="green" 
+          ariaLabel="loading"
+        />
+      </Container>
+    );
+  }
 
   return (
     <Container sx={{ mt: 2 }}>

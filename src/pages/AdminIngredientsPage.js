@@ -6,6 +6,7 @@ import NewItemDialog from "../component/NewItemDialog/NewItemDialog";
 import { useSearchParams } from "react-router-dom";
 import { useFetchIngredients } from "../hooks/Ingredient/useFetchIngredients";
 import { useDeleteIngredient } from "../hooks/Ingredient/useDeleteIngredient";
+import { Oval } from "react-loader-spinner";
 
 const AdminIngredientsPage = () => {
   const [query, setQuery] = useSearchParams();
@@ -16,7 +17,7 @@ const AdminIngredientsPage = () => {
   const [showDialog, setShowDialog] = useState(false);
   const [mode, setMode] = useState("new");
   const [selectedIngredient, setSelectedIngredient] = useState(null);
-  const { data, refetch } = useFetchIngredients(searchQuery);
+  const { data, refetch, isLoading } = useFetchIngredients(searchQuery);
   const { mutate: deleteIngredient } = useDeleteIngredient();
 
   const tableHeader = [
@@ -57,6 +58,19 @@ const AdminIngredientsPage = () => {
     deleteIngredient(id);
     refetch();
   };
+
+  if (isLoading) {
+    return (
+      <Container maxWidth="lg" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+        <Oval 
+          height="80" 
+          width="80" 
+          color="green" 
+          ariaLabel="loading"
+        />
+      </Container>
+    );
+  }
 
   return (
     <Container maxWidth="lg">
