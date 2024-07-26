@@ -1,5 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
+import PropTypes from 'prop-types';
 import { currencyFormat } from "../../utils/number";
 import {
   Card,
@@ -15,9 +16,11 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useDeleteCartItem } from "../../hooks/Cart/useDeleteCartItem";
 import { useEditCartItem } from "../../hooks/Cart/useEditCartItem";
 
-const CartItem = ({ item, qty, selectedItems, selectItem }) => {
+const CartItem = ({ item = {}, qty, selectedItems, selectItem }) => {
   const dispatch = useDispatch();
-  const { name, price, unit, images = [], _id } = item?.ingredientId;
+
+  // 기본 값을 사용하여 비구조화 할당 오류 방지
+  const { name = "알 수 없음", price = 0, unit = "단위", images = [], _id = "" } = item;
   const isSelected = selectedItems.includes(_id);
   const { mutate: deleteItem, isLoading: isDeleting } = useDeleteCartItem();
   const { mutate: editCartItem } = useEditCartItem();
@@ -87,6 +90,20 @@ const CartItem = ({ item, qty, selectedItems, selectItem }) => {
       </IconButton>
     </Card>
   );
+};
+
+// PropTypes로 props 검증 추가
+CartItem.propTypes = {
+  item: PropTypes.shape({
+    name: PropTypes.string,
+    price: PropTypes.number,
+    unit: PropTypes.string,
+    images: PropTypes.arrayOf(PropTypes.string),
+    _id: PropTypes.string,
+  }),
+  qty: PropTypes.number.isRequired,
+  selectedItems: PropTypes.arrayOf(PropTypes.string).isRequired,
+  selectItem: PropTypes.func.isRequired,
 };
 
 export default CartItem;

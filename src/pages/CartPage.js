@@ -1,5 +1,12 @@
 import React, { useEffect } from "react";
-import { Container, Grid, Typography, Box, Button, Skeleton } from "@mui/material";
+import {
+  Container,
+  Grid,
+  Typography,
+  Box,
+  Button,
+  Skeleton,
+} from "@mui/material";
 import CartItem from "../component/Cart/CartItem";
 import OrderReceipt from "../component/OrderReceipt/OrderReceipt";
 import { useNavigate } from "react-router-dom";
@@ -11,9 +18,9 @@ import { Oval } from "react-loader-spinner";
 
 const CartPage = () => {
   const navigate = useNavigate();
-const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const { data: cartItems, isLoading } = useFetchCart();
-  const { cartItem, selectedItems} = useSelector((state) => state.cart);
+  const { cartItem, selectedItems } = useSelector((state) => state.cart);
 
   useEffect(() => {
     if (cartItems) {
@@ -36,13 +43,15 @@ const dispatch = useDispatch();
         <Typography variant="h4" component="h2" align="center" sx={{ my: 5 }}>
           장바구니
         </Typography>
-        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "300px" }}>
-          <Oval  
-            height="80" 
-            width="80" 
-            color="green" 
-            ariaLabel="loading"
-          />
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            minHeight: "300px",
+          }}
+        >
+          <Oval height="80" width="80" color="green" ariaLabel="loading" />
         </Box>
       </Container>
     );
@@ -89,10 +98,10 @@ const dispatch = useDispatch();
         ) : (
           <Grid container spacing={2} justifyContent="center">
             <Grid item xs={12} md={7}>
-              {cartItem.map((item) => (
+              {cartItem?.map((item) => (
                 <CartItem
                   key={item?.ingredientId._id}
-                  item={item}
+                  item={item?.ingredientId}
                   qty={item?.qty}
                   selectItem={toggleSelectItem}
                   selectedItems={selectedItems}

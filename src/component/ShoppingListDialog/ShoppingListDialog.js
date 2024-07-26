@@ -11,10 +11,9 @@ import {
   Box,
   styled,
 } from "@mui/material";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { addToShoppingList } from "../../redux/shoppingListSlice";
-import { setToastMessage } from "../../redux/commonUISlice";
+import { useAddToShoppingList } from "../../hooks/ShoppingList/useAddToShoppingList";
+import { useQueryClient } from "@tanstack/react-query";
 
 const HeadContainer = styled(Box)({
   display: "flex",
@@ -41,8 +40,9 @@ const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
 const ShoppingListDialog = ({ open, handleClose, ingredients }) => {
   const [checkedItems, setCheckedItems] = useState({});
   const [allChecked, setAllChecked] = useState(true); 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const addToShoppingListMutation = useAddToShoppingList();
 
   useEffect(() => {
     if (open) {
@@ -61,19 +61,21 @@ const ShoppingListDialog = ({ open, handleClose, ingredients }) => {
     }));
   };
 
-  const handleSaveList = () => {
+  const handleSaveList = async () => {
     const selectedIngredients = ingredients?.filter(
       (ingredient) => checkedItems[ingredient._id]
     );
-  
-    dispatch(addToShoppingList(selectedIngredients)); 
-    dispatch(setToastMessage({
-      message : "장보기 메모에 추가하였습니다.",
-      status : "success"
-    })); 
-    navigate("/account/profile");
-    handleClose();
+    
+    try {
+      await addToShoppingListMutation.mutateAsync(selectedIngredients);
+      queryClient.invalidateQueries(["shoppingList"]);
+      navigate("/account/profile");
+      handleClose();
+    } catch (error) {
+      console.error("Error adding to shopping list:", error);
+    }
   };
+
   const handleToggleAll = () => {
     const newCheckedState = !allChecked;
     const updatedCheckedItems = ingredients?.reduce((acc, ingredient) => {
