@@ -29,7 +29,7 @@ import {
   Search as SearchIcon,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import { loginWithToken, logout } from "../../redux/userSlice";
+import { logout } from "../../redux/userSlice";
 import { useLoginWithToken } from "../../hooks/User/useLoginWithToken";
 
 const StyledAppBar = styled(AppBar)({
@@ -159,7 +159,7 @@ const Navbar = () => {
             </Button>
           )}
 
-            <IconButton
+          <IconButton
             size="large"
             aria-label="account"
             onClick={handleMenuClick}
@@ -183,7 +183,7 @@ const Navbar = () => {
           >
             <ShoppingCartIcon />
           </IconButton>
-          </Box>
+        </Box>
         <Box
           sx={{
             width: "100%",
@@ -260,21 +260,17 @@ const Navbar = () => {
           open={Boolean(anchorEl)}
           onClose={handleMenuClose}
         >
-          {user?.name ? (
-            <>
-              <MenuItem onClick={() => navigate("/account/profile")}>
-                {user?.name}님
-              </MenuItem>
-              <MenuItem onClick={handleLogout}>로그아웃</MenuItem>
-            </>
-          ) : (
-            <>
-              <MenuItem onClick={() => navigate("/register")}>
-                회원가입
-              </MenuItem>
-              <MenuItem onClick={() => navigate("/login")}>로그인</MenuItem>
-            </>
-          )}
+          {user?.name ? [
+            <MenuItem key="profile" onClick={() => navigate("/account/profile")}>
+              {user?.name}님
+            </MenuItem>,
+            <MenuItem key="logout" onClick={handleLogout}>로그아웃</MenuItem>
+          ] : [
+            <MenuItem key="register" onClick={() => navigate("/register")}>
+              회원가입
+            </MenuItem>,
+            <MenuItem key="login" onClick={() => navigate("/login")}>로그인</MenuItem>
+          ]}
         </Menu>
       </Toolbar>
     </StyledAppBar>

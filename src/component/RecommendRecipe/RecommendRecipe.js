@@ -102,7 +102,7 @@ const RecommendRecipe = ({ recommendRecipes }) => {
               <Overlay className="overlay">{recommendRecipes[2]?.name}</Overlay>
             </ImageContainer>
           </Grid>
-          <Grid item lg={12}>
+          <Grid item lg={12} md={12} sm={12}>
             <ImageContainer
               onClick={() => {
                 showRecipe(recommendRecipes[4]._id);

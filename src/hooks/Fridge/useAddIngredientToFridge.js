@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '../../utils/api';
 import { useDispatch } from 'react-redux';
 import { setAddIngredientToFridge } from '../../redux/fridgeSlice';
+import { setToastMessage } from '../../redux/commonUISlice';
 
 const addIngredientToFridge = async (ingredientId) => {
   const response = await api.post("/frige", { items: [{ ingredientId }] });
@@ -19,7 +20,10 @@ export const useAddIngredientToFridge = () => {
       dispatch(setAddIngredientToFridge(data))
     },
     onError: (error) => {
-      console.error('Error adding ingredient to fridge:', error);
+      dispatch(setToastMessage({
+        message: error.error,
+        status: "error"
+      }))
     }
   });
 };

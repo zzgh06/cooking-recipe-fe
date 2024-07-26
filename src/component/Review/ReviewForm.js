@@ -143,7 +143,7 @@ const ReviewForm = ({
         />
       </TextBox>
 
-      <Button variant="contained" color="primary" type="submit">
+      <Button variant="contained" color="primary" type="submit" sx={{width : "100%"}}>
         등록
       </Button>
     </ReviewContainer>

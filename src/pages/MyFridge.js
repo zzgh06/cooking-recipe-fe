@@ -66,7 +66,7 @@ const MyFridge = () => {
     name: query.get("name") || "",
   });
   const { data: ingredientData, isLoading } = useFetchIngredients(searchQuery);
-  const { data: fridgeData } = useFetchFridgeItems();
+  const { data: fridgeData, refetch } = useFetchFridgeItems(query);
   const [hasSearched, setHasSearched] = useState(false);
   const [checkedItems, setCheckedItems] = useState(new Set());
   const [recentlyViewedItems, setRecentlyViewedItems] = useState([]);
@@ -78,6 +78,10 @@ const MyFridge = () => {
     isLoading: recipeLoading,
     refetch: refetchRecipes,
   } = useFetchRecommendedRecipes(Array.from(checkedItems));
+
+  useEffect(() => {
+    refetch();
+  }, [query, refetch]);
 
   useEffect(() => {
     const viewedItems =
@@ -148,7 +152,7 @@ const MyFridge = () => {
   };
 
   return (
-    <Box sx={{ padding: { xs: "20px", md: "30px 150px" } }}>
+    <Box sx={{ padding: { xs: "50px", md: "50px 150px" } }}>
       <Box sx={{ textAlign: "center", marginBottom: "40px" }}>
         <Typography variant="h4" gutterBottom>
           My 냉장고

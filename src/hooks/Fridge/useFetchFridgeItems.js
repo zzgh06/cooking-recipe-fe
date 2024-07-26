@@ -6,9 +6,10 @@ const fetchFridgeItems = async (query) => {
   return response.data.data.userFrige;
 };
 
-export const useFetchFridgeItems = (query) => {
+export const useFetchFridgeItems = (query = {}) => {
   return useQuery({
     queryKey: ['fridgeItems', query],
     queryFn: () => fetchFridgeItems(query),
+    keepPreviousData: true,
   });
 };

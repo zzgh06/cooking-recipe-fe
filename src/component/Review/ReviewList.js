@@ -59,8 +59,8 @@ const ReviewList = ({ type, reviews, userId, onEdit, onDelete }) => {
             <Box sx={{ mt: 1, display: "flex", alignItems: "center" }}>
               <Typography variant="body1">{review.comment}</Typography>
               {userId &&
-                userId.user &&
-                userId.user._id === review.userId._id && (
+                userId &&
+                userId === review.userId._id && (
                   <Box sx={{ ml: "auto", display: "flex", gap: 1 }}>
                     <Button
                       variant="outlined"
