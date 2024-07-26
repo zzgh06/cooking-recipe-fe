@@ -19,7 +19,8 @@ const RecipeCardContainer = styled("div")({
 
 const RecipeImage = styled("img")({
   width: "100%",
-  height: "200px",
+  height: "auto",
+  aspectRatio: "3 / 2", 
   objectFit: "cover",
   borderRadius: "8px",
   transition: "all 0.3s",
@@ -39,7 +40,7 @@ const HeadContainer = styled("div")({
 });
 
 const optimizeImageUrl = (url) => {
-  return url.replace(/\/upload\//, '/upload/f_webp/');
+  return url.replace(/\/upload\//, '/upload/c_fill,h_200,w_241,f_webp/');
 };
 
 const RecipeCard = ({ item }) => {
@@ -53,10 +54,10 @@ const RecipeCard = ({ item }) => {
 
   return (
     <RecipeCardContainer>
-      <RecipeImage
+       <RecipeImage
         src={optimizedImageUrl}
         srcSet={`${optimizedImageUrl}?w=200 200w, ${optimizedImageUrl}?w=400 400w`}
-        sizes="(max-width: 200px) 200px, 400px"
+        sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 33vw"
         alt={item.name}
         loading="lazy"
         onClick={() => showRecipe(item._id)}

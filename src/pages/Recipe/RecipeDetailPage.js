@@ -154,6 +154,16 @@ const RecipeDetail = () => {
     }
   };
 
+  const optimizeMainImageUrl = (url) => {
+    return url?.replace(/\/upload\//, '/upload/c_fill,h_650,w_650,f_webp/');
+  };
+  const optimizeSubImageUrl = (url) => {
+    return url?.replace(/\/upload\//, '/upload/c_fill,h_200,w_200,f_webp/');
+  };
+
+  const optimizedMainImageUrl = optimizeMainImageUrl(recipeDetail?.images[0]);
+
+
   if (isLoading) {
     return (
       <RecipeDetailSkeleton />
@@ -167,7 +177,7 @@ const RecipeDetail = () => {
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <RecipeImage
-              src={recipeDetail?.images[0]}
+              src={optimizedMainImageUrl}
               alt={recipeDetail?.name}
             />
           </Grid>
@@ -285,7 +295,7 @@ const RecipeDetail = () => {
                 </Steps>
                 {step?.image && (
                   <RecipeImage
-                    src={step?.image}
+                    src={optimizeSubImageUrl(step?.image)}
                     alt={step?._id}
                     sx={{ ml: 2, width: "200px", height: "auto" }}
                   />

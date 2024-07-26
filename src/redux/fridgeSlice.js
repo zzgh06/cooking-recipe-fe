@@ -9,19 +9,19 @@ const fridgeSlice = createSlice({
   name: "fridge",
   initialState,
   reducers: {
-    setError: (state, action) => {
-      state.error = action.payload;
+    setFridgeItems: (state, action) => {
+      state.fridgeItems = action.payload;
     },
     setAddIngredientToFridge: (state, action) => {
       state.fridgeItems.push(action.payload);
     },
     removeIngredientToFridge: (state, action) => {
       state.fridgeItems = state.fridgeItems.filter(
-        (item) => item._id !== action.payload.userFrige._id
+        (item) => item._id !== action.payload._id
       );
     },
   },
 });
 
-export const { setError, setAddIngredientToFridge, removeIngredientToFridge } = fridgeSlice.actions;
+export const { setFridgeItems, setAddIngredientToFridge, removeIngredientToFridge } = fridgeSlice.actions;
 export default fridgeSlice.reducer;

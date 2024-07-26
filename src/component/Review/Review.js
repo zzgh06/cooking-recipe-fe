@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchReviews,
-  createReview,
-  updateReview,
-  deleteReview,
-} from "../../redux/reviewSlice";
+import { Box, Button, Pagination, styled, Typography } from "@mui/material";
 import ReviewForm from "./ReviewForm";
 import ReviewList from "./ReviewList";
-import { Box, Button, Pagination, styled, Typography } from "@mui/material";
 import { setToastMessage } from "../../redux/commonUISlice";
+import { useCreateReview } from "../../hooks/Review/useCreateReview";
+import { useUpdateReview } from "../../hooks/Review/useUpdateReview";
+import { useDeleteReview } from "../../hooks/Review/useDeleteReview";
+import { useFetchReviews } from "../../hooks/Review/useFetchReviews";
+import { setReviews } from "../../redux/reviewSlice";
+
 
 const HeadContainer = styled("div")({
   display: "flex",
@@ -22,19 +22,29 @@ const HeadContainer = styled("div")({
 
 const Review = ({ type, itemId }) => {
   const dispatch = useDispatch();
-  const reviews = useSelector((state) => state.review.reviews || []);
-  const averageRating = useSelector((state) => state.review.averageRating);
-  const totalReviews = useSelector((state) => state.review.totalReviews);
   const user = useSelector((state) => state.auth.user || null);
+  const {averageRating, totalReviews} = useSelector((state) => state.review || []);
   const [showForm, setShowForm] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [page, setPage] = useState(1);
   const [currentReview, setCurrentReview] = useState(null);
+  const [page, setPage] = useState(1);
   const reviewsPerPage = 5;
 
+  // 리액트 쿼리 훅으로 리뷰 데이터를 가져옵니다
+  const { data, isLoading, isError, refetch } = useFetchReviews({
+    type,
+    id: itemId,
+    page,
+    limit: reviewsPerPage,
+  });
+  const { mutate: createReview } = useCreateReview();
+  const { mutate: updateReview } = useUpdateReview();
+  const { mutate: deleteReview } = useDeleteReview();
+
   useEffect(() => {
-    dispatch(fetchReviews({ type, id: itemId, page, limit: reviewsPerPage }));
-  }, [dispatch, type, itemId, page]);
+    dispatch(setReviews(data)); 
+    refetch();
+  }, [data])
 
   const handleShowForm = () => {
     if (user) {
@@ -59,44 +69,39 @@ const Review = ({ type, itemId }) => {
 
   const handleFormSubmit = (comment, rating) => {
     if (editMode && currentReview) {
-      dispatch(updateReview({ id: currentReview._id, type, comment, rating }));
+      updateReview({ id: currentReview._id, type, comment, rating });
     } else {
-      dispatch(
-        createReview({
-          type,
-          userId: user._id,
-          recipeId: itemId,
-          comment,
-          rating,
-        })
-      );
+      createReview({
+        type,
+        userId: user._id,
+        recipeId: itemId,
+        comment,
+        rating,
+      });
     }
 
     setShowForm(false);
     setEditMode(false);
     setCurrentReview(null);
-
-    setTimeout(() => {
-      dispatch(fetchReviews({ type, id: itemId, page, limit: reviewsPerPage }));
-    }, 500);
+    refetch();
   };
 
   const handleEdit = (review) => {
     setShowForm(true);
     setEditMode(true);
     setCurrentReview(review);
+    refetch();
   };
 
   const handleDelete = (reviewId, type) => {
-    dispatch(deleteReview({ id: reviewId, type }));
-    dispatch(fetchReviews({ type, id: itemId }));
+    deleteReview({ id: reviewId, type });
   };
 
   const handlePageChange = (event, value) => {
     setPage(value);
   };
 
-  const pageCount = Math.ceil(totalReviews / reviewsPerPage);
+  const pageCount = Math.ceil((totalReviews || 0) / reviewsPerPage);
 
   return (
     <div>
@@ -104,7 +109,7 @@ const Review = ({ type, itemId }) => {
         <Typography variant="h4" fontWeight="600">
           리뷰
         </Typography>
-        <Typography variant="h6">⭐{averageRating}</Typography>
+        <Typography variant="h6">⭐{averageRating || 0}</Typography>
       </HeadContainer>
       {!showForm && (
         <Button
@@ -125,16 +130,17 @@ const Review = ({ type, itemId }) => {
           onClose={handleCloseForm}
         />
       )}
-
+      {isLoading && <Typography>Loading...</Typography>}
+      {isError && <Typography>Error loading reviews.</Typography>}
       <ReviewList
         type={type}
-        reviews={reviews}
-        userId={user ? user : null}
+        reviews={data?.reviews || []}
+        userId={user ? user._id : null}
         onEdit={handleEdit}
         onDelete={handleDelete}
       />
       <Box sx={{ display: "flex", justifyContent: "center" }}>
-        {pageCount > 0 ? (
+        {pageCount > 0 && (
           <Pagination
             count={pageCount}
             size="large"
@@ -142,8 +148,6 @@ const Review = ({ type, itemId }) => {
             page={page}
             onChange={handlePageChange}
           />
-        ) : (
-          null
         )}
       </Box>
     </div>
