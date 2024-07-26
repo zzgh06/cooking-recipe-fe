@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import {
   Box,
   Grid,
@@ -9,13 +8,15 @@ import {
   ListItem,
   Checkbox,
   IconButton,
+  LinearProgress,
+  CircularProgress,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import {
-  fetchShoppingList,
-  removeFromShoppingList,
-  moveToCompletedList,
-} from "../../redux/shoppingListSlice";
+import { useFetchShoppingList } from "../../hooks/ShoppingList/useFetchShoppingList";
+import { useRemoveFromShoppingList } from "../../hooks/ShoppingList/useRemoveFromShoppingList";
+import { useMoveToCompletedList } from "../../hooks/ShoppingList/useMoveToCompletedList";
+import { useDispatch, useSelector } from "react-redux";
+import { setShoppingList } from "../../redux/shoppingListSlice";
 
 const HeadContainer = styled(Box)({
   display: "flex",
@@ -24,12 +25,14 @@ const HeadContainer = styled(Box)({
   borderBottom: "4px solid #333",
   paddingLeft: "10px",
 });
+
 const ListSection = styled(Box)({
   marginBottom: "24px",
   padding: "16px",
   backgroundColor: "#fff",
   borderRadius: "4px",
   boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
+  position: "relative",
 });
 
 const ListItems = styled(ListItem)({
@@ -63,22 +66,37 @@ const NoItemsMessage = styled(Typography)({
   fontStyle: "italic",
 });
 
+const LoadingOverlay = styled(Box)({
+  position: "absolute",
+  top: 0,
+  left: 0,
+  width: "100%",
+  height: "100%",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  backgroundColor: "rgba(255, 255, 255, 0.7)",
+  zIndex: 1,
+});
+
 const MyGroceryNote = () => {
   const dispatch = useDispatch();
-  const selectedShoppingList = useSelector(
-    (state) => state.shoppingList.selectedShoppingList
+  const { selectedShoppingList, completedShoppingList } = useSelector(
+    (state) => state.shoppingList
   );
-  const completedShoppingList = useSelector(
-    (state) => state.shoppingList.completedShoppingList
-  );
+  const { data, isLoading, isError, error } = useFetchShoppingList();
+  const removeFromShoppingListMutation = useRemoveFromShoppingList();
+  const moveToCompletedListMutation = useMoveToCompletedList();
 
   useEffect(() => {
-    dispatch(fetchShoppingList());
-  }, [dispatch]);
+    if (data) {
+      dispatch(setShoppingList(data));
+    }
+  }, [data]);
 
   const handleAddFromSelectedList = async (item) => {
     try {
-      await dispatch(moveToCompletedList(item));
+      await moveToCompletedListMutation.mutateAsync(item);
     } catch (error) {
       console.error("Failed to move item:", error);
     }
@@ -86,7 +104,7 @@ const MyGroceryNote = () => {
 
   const handleRemoveFromShoppingList = async (itemId) => {
     try {
-      await dispatch(removeFromShoppingList(itemId));
+      await removeFromShoppingListMutation.mutateAsync(itemId);
     } catch (error) {
       console.error("Failed to remove item:", error);
     }
@@ -99,21 +117,34 @@ const MyGroceryNote = () => {
           <Typography variant="h5">나의 정보</Typography>
           <Typography variant="subtitle1">장보기 메모</Typography>
         </HeadContainer>
+        {isError && (
+          <Typography
+            variant="body1"
+            sx={{ color: "red", textAlign: "center", marginTop: "16px" }}
+          >
+            {error.message || "데이터를 가져오는 데 실패했습니다."}
+          </Typography>
+        )}
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
             <ListSection>
               <Typography variant="h6" sx={{ marginBottom: "8px" }}>
                 장보기 목록
               </Typography>
+              {isLoading && (
+                <LoadingOverlay>
+                  <CircularProgress />
+                </LoadingOverlay>
+              )}
               <List>
-                {selectedShoppingList && selectedShoppingList.length > 0 ? (
-                  selectedShoppingList.map((item, index) => (
+                {selectedShoppingList?.length > 0 ? (
+                  selectedShoppingList.map((item) => (
                     <ListItems
-                      key={index}
+                      key={item._id}
                       sx={{ display: "flex", alignItems: "center" }}
                     >
                       <StyledCheckbox
-                        checked={completedShoppingList?.some(
+                        checked={completedShoppingList.some(
                           (i) => i._id === item._id
                         )}
                         onChange={() => handleAddFromSelectedList(item)}
@@ -140,11 +171,16 @@ const MyGroceryNote = () => {
               <Typography variant="h6" sx={{ marginBottom: "8px" }}>
                 구매 완료 목록
               </Typography>
+              {isLoading && (
+                <LoadingOverlay>
+                  <CircularProgress />
+                </LoadingOverlay>
+              )}
               <List>
-                {completedShoppingList && completedShoppingList.length > 0 ? (
-                  completedShoppingList.map((item, index) => (
+                {completedShoppingList?.length > 0 ? (
+                  completedShoppingList.map((item) => (
                     <ListItems
-                      key={index}
+                      key={item._id}
                       sx={{ display: "flex", alignItems: "center" }}
                     >
                       <Typography

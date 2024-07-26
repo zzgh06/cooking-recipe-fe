@@ -108,7 +108,7 @@ const IngredientsDetail = () => {
       navigate("/login");
       return;
     }
-    addToCart({ ingredientId: id, qty: 1 }); // 기본 수량 1로 설정
+    addToCart({ ingredientId: id, qty: 1 });
   };
 
   const goHome = () => {
