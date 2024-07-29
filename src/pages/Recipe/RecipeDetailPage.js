@@ -155,7 +155,7 @@ const RecipeDetail = () => {
   };
 
   const optimizeMainImageUrl = (url) => {
-    return url?.replace(/\/upload\//, '/upload/c_fill,h_650,w_650,f_webp/');
+    return url?.replace(/\/upload\//, '/upload/c_fill,h_1704,w_1704,f_webp/');
   };
   const optimizeSubImageUrl = (url) => {
     return url?.replace(/\/upload\//, '/upload/c_fill,h_200,w_200,f_webp/');

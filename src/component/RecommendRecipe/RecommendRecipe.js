@@ -34,11 +34,12 @@ const StyledImage = styled("img")({
   width: "100%",
   height: "100%",
   objectFit: "cover",
+  borderRadius: "8px",
   transition: "all 0.3s",
 });
 
 const optimizeImageUrl = (url) => {
-  return url?.replace(/\/upload\//, '/upload/f_webp/');
+  return url?.replace(/\/upload\//, '/upload/c_fill,h_1082,w_1082,f_webp/');
 };
 
 const RecommendRecipe = ({ recommendRecipes }) => {

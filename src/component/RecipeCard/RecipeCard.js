@@ -40,7 +40,7 @@ const HeadContainer = styled("div")({
 });
 
 const optimizeImageUrl = (url) => {
-  return url.replace(/\/upload\//, '/upload/c_fill,h_200,w_241,f_webp/');
+  return url.replace(/\/upload\//, '/upload/c_fill,h_504,w_504,f_webp/');
 };
 
 const RecipeCard = ({ item }) => {
@@ -59,7 +59,6 @@ const RecipeCard = ({ item }) => {
         srcSet={`${optimizedImageUrl}?w=200 200w, ${optimizedImageUrl}?w=400 400w`}
         sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 33vw"
         alt={item.name}
-        loading="lazy"
         onClick={() => showRecipe(item._id)}
       />
       <CardDescription>
