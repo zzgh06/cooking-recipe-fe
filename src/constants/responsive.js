@@ -19,12 +19,12 @@ export const recipeResponsive = {
     items: 4,
   },
   tablet: {
-    breakpoint: { max: 1400, min: 464 },
-    items: 2,
+    breakpoint: { max: 1400, min: 700 },
+    items: 3,
   },
   mobile: {
-    breakpoint: { max: 464, min: 0 },
-    items: 1,
+    breakpoint: { max: 699, min: 0 },
+    items: 2,
   },
 };
 

@@ -1,12 +1,13 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { Suspense, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import RecipeSlider from "../component/RecipeSlider/RecipeSlider";
-import SubBanner from "../component/SubBanner/SubBanner";
-import { Box, Skeleton, styled } from "@mui/material";
 import RecommendRecipe from "../component/RecommendRecipe/RecommendRecipe";
-import banner1 from "../assets/img/banner1.jpg";
-import banner2 from "../assets/img/banner2.jpg";
+import { Box, Skeleton, styled } from "@mui/material";
+import banner1 from "../assets/img/banner1.webp";
+import banner2 from "../assets/img/banner2.webp";
 import { useFetchRecipes } from "../hooks/Recipe/useFetchRecipes";
+
+const SubBanner = React.lazy(() => import("../component/SubBanner/SubBanner"));
 
 const SubBannerSkeleton = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -14,7 +15,7 @@ const SubBannerSkeleton = styled(Box)(({ theme }) => ({
   width: "100%",
   padding: "0 200px",
   [theme.breakpoints.down("md")]: {
-    padding: "0 50px",
+    padding: "0 100px",
   },
 }));
 
@@ -49,27 +50,24 @@ const MainPage = () => {
       <RecipeSlider
         title={"베스트 레시피"}
         recipes={bestRecipes}
-        loading={isLoading }
+        loading={isLoading}
       />
-      {isLoading  ? (
-        <SubBannerSkeleton>
-          <Skeleton variant="rectangular" width="100%" height={130} />
-        </SubBannerSkeleton>
-      ) : (
-        <SubBanner img={banner1} />
-      )}
+
       <RecipeSlider
         title={"최신 레시피"}
         recipes={newRecipes}
-        loading={isLoading }
+        loading={isLoading}
       />
-      {isLoading  ? (
-        <SubBannerSkeleton>
-          <Skeleton variant="rectangular" width="100%" height={130} />
-        </SubBannerSkeleton>
-      ) : (
+      <Suspense
+        fallback={
+          <SubBannerSkeleton>
+            <Skeleton variant="rectangular" width="100%" height={130} />
+          </SubBannerSkeleton>
+        }
+      >
         <SubBanner img={banner2} />
-      )}
+      </Suspense>
+
       <RecommendRecipe recommendRecipes={recommendRecipes} />
     </>
   );

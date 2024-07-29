@@ -10,10 +10,10 @@ import RecipeCardSkeleton from "../Skeleton/RecipeCardSkeleton";
 
 const RecipeCarouselWrapper = styled(Box)(({ theme }) => ({
   position: "relative",
-  padding: "50px 200px 10px 200px",
+  padding: "50px 130px 10px 130px",
   width: "100vw",
   [theme.breakpoints.down("md")]: {
-    padding: "30px 50px 10px 50px",
+    padding: "30px 100px 10px 100px",
   },
 }));
 

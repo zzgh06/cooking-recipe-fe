@@ -1,29 +1,33 @@
-import React from "react";
+import React, { useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/system";
 import { Typography } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClock } from "@fortawesome/free-regular-svg-icons";
-import { faSignal } from "@fortawesome/free-solid-svg-icons";
+import { faClock, faSignal } from "@fortawesome/free-solid-svg-icons";
 
-const RecipeCardContainer = styled("div")({
+const RecipeCardContainer = styled("div")(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
   position: "relative",
   border: "none",
   borderRadius: "8px",
   marginBottom: "10px",
   width: "100%",
-  padding: "10px 15px",
+  padding: "10px",
   overflow: "hidden",
-  transition: "all 1s ease-in-out",
-});
+  transition: "all 0.3s ease-in-out",
+}));
 
 const RecipeImage = styled("img")({
   width: "100%",
   height: "auto",
-  aspectRatio: "3 / 2", 
+  maxWidth: "400px",
+  maxHeight: "220px",
+  aspectRatio: "3 / 2",
   objectFit: "cover",
   borderRadius: "8px",
-  transition: "all 0.3s",
+  transition: "transform 0.3s",
   "&:hover": {
     transform: "scale(1.05)",
   },
@@ -40,25 +44,24 @@ const HeadContainer = styled("div")({
 });
 
 const optimizeImageUrl = (url) => {
-  return url.replace(/\/upload\//, '/upload/c_fill,h_504,w_504,f_webp/');
+  return url.replace(/\/upload\//, '/upload/c_fill,h_504,w_504,f_auto,q_auto,f_webp/');
 };
 
-const RecipeCard = ({ item }) => {
+const RecipeCard = React.memo(({ item }) => {
   const navigate = useNavigate();
+  const optimizedImageUrl = useMemo(() => optimizeImageUrl(item.images[0]), [item.images]);
 
-  const showRecipe = (id) => {
+  const showRecipe = useCallback((id) => {
     navigate(`/recipe/${id}`);
-  };
-
-  const optimizedImageUrl = optimizeImageUrl(item.images[0]);
+  }, [navigate]);
 
   return (
     <RecipeCardContainer>
-       <RecipeImage
+      <RecipeImage
         src={optimizedImageUrl}
-        srcSet={`${optimizedImageUrl}?w=200 200w, ${optimizedImageUrl}?w=400 400w`}
-        sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 33vw"
         alt={item.name}
+        loading="eager"
+        fetchPriority="high"
         onClick={() => showRecipe(item._id)}
       />
       <CardDescription>
@@ -76,6 +79,6 @@ const RecipeCard = ({ item }) => {
       </CardDescription>
     </RecipeCardContainer>
   );
-};
+});
 
 export default RecipeCard;

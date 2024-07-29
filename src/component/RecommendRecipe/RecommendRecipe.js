@@ -1,3 +1,4 @@
+import React, { useCallback, useMemo } from "react";
 import { Container, Grid, Box, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import { useNavigate } from "react-router-dom";
@@ -34,7 +35,6 @@ const StyledImage = styled("img")({
   width: "100%",
   height: "100%",
   objectFit: "cover",
-  borderRadius: "8px",
   transition: "all 0.3s",
 });
 
@@ -42,12 +42,16 @@ const optimizeImageUrl = (url) => {
   return url?.replace(/\/upload\//, '/upload/c_fill,h_1082,w_1082,f_webp/');
 };
 
-const RecommendRecipe = ({ recommendRecipes }) => {
+const RecommendRecipe = React.memo(({ recommendRecipes }) => {
   const navigate = useNavigate();
 
-  const showRecipe = (id) => {
+  const showRecipe = useCallback((id) => {
     navigate(`/recipe/${id}`);
-  };
+  }, [navigate]);
+
+  const optimizedImages = useMemo(() => {
+    return recommendRecipes.map(recipe => optimizeImageUrl(recipe?.images[0]));
+  }, [recommendRecipes]);
 
   return (
     <Container sx={{ padding: "80px" }}>
@@ -60,14 +64,11 @@ const RecommendRecipe = ({ recommendRecipes }) => {
       <Grid container spacing={2}>
         <Grid item lg={6} md={12} sm={12}>
           <ImageContainer
-            onClick={() => {
-              showRecipe(recommendRecipes[0]?._id);
-            }}
+            onClick={() => showRecipe(recommendRecipes[0]?._id)}
           >
             <StyledImage
-              src={optimizeImageUrl(recommendRecipes[0]?.images[0])}
+              src={optimizedImages[0]}
               alt={recommendRecipes[0]?.name}
-              loading="lazy"
             />
             <Overlay className="overlay">{recommendRecipes[0]?.name}</Overlay>
           </ImageContainer>
@@ -75,45 +76,36 @@ const RecommendRecipe = ({ recommendRecipes }) => {
         <Grid item lg={6} container spacing={2}>
           <Grid item lg={6} md={6} sm={12}>
             <ImageContainer
-              onClick={() => {
-                showRecipe(recommendRecipes[1]._id);
-              }}
-              sx={{maxHeight: "300px"}}
+              onClick={() => showRecipe(recommendRecipes[1]?._id)}
+              sx={{ maxHeight: "300px" }}
             >
               <StyledImage
-                src={optimizeImageUrl(recommendRecipes[1]?.images[0])}
+                src={optimizedImages[1]}
                 alt={recommendRecipes[1]?.name}
-                loading="lazy"
               />
               <Overlay className="overlay">{recommendRecipes[1]?.name}</Overlay>
             </ImageContainer>
           </Grid>
           <Grid item lg={6} md={6} sm={12}>
             <ImageContainer
-              onClick={() => {
-                showRecipe(recommendRecipes[2]._id);
-              }}
-              sx={{maxHeight: "300px"}}
+              onClick={() => showRecipe(recommendRecipes[2]?._id)}
+              sx={{ maxHeight: "300px" }}
             >
               <StyledImage
-                src={optimizeImageUrl(recommendRecipes[2]?.images[0])}
+                src={optimizedImages[2]}
                 alt={recommendRecipes[2]?.name}
-                loading="lazy"
               />
               <Overlay className="overlay">{recommendRecipes[2]?.name}</Overlay>
             </ImageContainer>
           </Grid>
           <Grid item lg={12} md={12} sm={12}>
             <ImageContainer
-              onClick={() => {
-                showRecipe(recommendRecipes[4]._id);
-              }}
-              sx={{maxHeight: "300px"}}
+              onClick={() => showRecipe(recommendRecipes[4]?._id)}
+              sx={{ maxHeight: "300px" }}
             >
               <StyledImage
-                src={optimizeImageUrl(recommendRecipes[4]?.images[0])}
+                src={optimizedImages[4]}
                 alt={recommendRecipes[4]?.name}
-                loading="lazy"
               />
               <Overlay className="overlay">{recommendRecipes[4]?.name}</Overlay>
             </ImageContainer>
@@ -122,6 +114,6 @@ const RecommendRecipe = ({ recommendRecipes }) => {
       </Grid>
     </Container>
   );
-};
+});
 
 export default RecommendRecipe;
