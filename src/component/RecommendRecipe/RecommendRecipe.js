@@ -54,7 +54,7 @@ const RecommendRecipe = React.memo(({ recommendRecipes }) => {
   }, [recommendRecipes]);
 
   return (
-    <Container sx={{ padding: "80px" }}>
+    <Container sx={{ padding: "50px" }}>
       <Box sx={{ textAlign: "center", padding: "20px" }}>
         <Typography variant="h2" fontWeight="500" fontSize="35px">
           RECIPES FOR YOU

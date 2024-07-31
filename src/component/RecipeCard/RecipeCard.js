@@ -5,7 +5,7 @@ import { Typography } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock, faSignal } from "@fortawesome/free-solid-svg-icons";
 
-const RecipeCardContainer = styled("div")(({ theme }) => ({
+const RecipeCardContainer = styled("div")({
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
@@ -17,7 +17,7 @@ const RecipeCardContainer = styled("div")(({ theme }) => ({
   padding: "10px",
   overflow: "hidden",
   transition: "all 0.3s ease-in-out",
-}));
+});
 
 const RecipeImage = styled("img")({
   width: "100%",
@@ -43,6 +43,23 @@ const HeadContainer = styled("div")({
   color: "gray",
 });
 
+const RecipeName = styled(Typography)(({ theme }) => ({
+  fontSize: '20px',
+  fontWeight: '600',
+  minWidth: '100px',
+  maxWidth: '250px',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+  [theme.breakpoints.down('md')]: {
+    maxWidth: '200px',
+  },
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '16px',
+    maxWidth: '150px',
+  },
+}));
+
 const optimizeImageUrl = (url) => {
   return url.replace(/\/upload\//, '/upload/c_fill,h_504,w_504,f_auto,q_auto,f_webp/');
 };
@@ -65,9 +82,9 @@ const RecipeCard = React.memo(({ item }) => {
         onClick={() => showRecipe(item._id)}
       />
       <CardDescription>
-        <Typography variant="h6" align="center" sx={{ fontSize: "20px", fontWeight: "600" }}>
+        <RecipeName variant="h6" align="center">
           {item.name}
-        </Typography>
+        </RecipeName>
         <HeadContainer>
           <Typography variant="subtitle1" align="center" sx={{ paddingRight: "15px" }}>
             <FontAwesomeIcon icon={faSignal} /> {item.difficulty}
