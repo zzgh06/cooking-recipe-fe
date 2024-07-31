@@ -54,7 +54,7 @@ const RecommendRecipe = React.memo(({ recommendRecipes }) => {
   }, [recommendRecipes]);
 
   return (
-    <Container sx={{ padding: "50px" }}>
+    <Container sx={{ padding: "100px" }}>
       <Box sx={{ textAlign: "center", padding: "20px" }}>
         <Typography variant="h2" fontWeight="500" fontSize="35px">
           RECIPES FOR YOU
@@ -62,7 +62,7 @@ const RecommendRecipe = React.memo(({ recommendRecipes }) => {
         <Typography variant="body1">맞춤추천 레시피를 둘러보세요.</Typography>
       </Box>
       <Grid container spacing={2}>
-        <Grid item lg={6} md={12} sm={12}>
+        <Grid item lg={6} >
           <ImageContainer
             onClick={() => showRecipe(recommendRecipes[0]?._id)}
           >
@@ -74,7 +74,7 @@ const RecommendRecipe = React.memo(({ recommendRecipes }) => {
           </ImageContainer>
         </Grid>
         <Grid item lg={6} container spacing={2}>
-          <Grid item lg={6} md={6} sm={12}>
+          <Grid item lg={6} md={6} sm={6}>
             <ImageContainer
               onClick={() => showRecipe(recommendRecipes[1]?._id)}
               sx={{ maxHeight: "300px" }}
@@ -86,7 +86,7 @@ const RecommendRecipe = React.memo(({ recommendRecipes }) => {
               <Overlay className="overlay">{recommendRecipes[1]?.name}</Overlay>
             </ImageContainer>
           </Grid>
-          <Grid item lg={6} md={6} sm={12}>
+          <Grid item lg={6} md={6} sm={6}>
             <ImageContainer
               onClick={() => showRecipe(recommendRecipes[2]?._id)}
               sx={{ maxHeight: "300px" }}
@@ -98,7 +98,7 @@ const RecommendRecipe = React.memo(({ recommendRecipes }) => {
               <Overlay className="overlay">{recommendRecipes[2]?.name}</Overlay>
             </ImageContainer>
           </Grid>
-          <Grid item lg={12} md={12} sm={12}>
+          <Grid item lg={12}>
             <ImageContainer
               onClick={() => showRecipe(recommendRecipes[4]?._id)}
               sx={{ maxHeight: "300px" }}
