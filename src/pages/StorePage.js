@@ -5,6 +5,7 @@ import { Box, Skeleton, styled } from "@mui/material";
 import { CircleRounded } from "@mui/icons-material";
 import BannerComponent from "../component/Banner/BannerComponent";
 import IngredientSlider from "../component/IngredientSlider/IngredientSlider";
+import RecentlyViewed from "../component/RecentlyViewed/RecentlyViewed";
 
 const SubBanner = lazy(() => import("../component/SubBanner/SubBanner"));
 const IngredientThemeCard = lazy(() =>
@@ -12,9 +13,6 @@ const IngredientThemeCard = lazy(() =>
 );
 const IngredientAll = lazy(() =>
   import("../component/IngredientAll/IngredientAll")
-);
-const RecentlyViewed = lazy(() =>
-  import("../component/RecentlyViewed/RecentlyViewed")
 );
 
 const SubBannerSkeleton = styled(Box)(({ theme }) => ({
@@ -93,9 +91,7 @@ const StorePage = () => {
       </Suspense>
       <IngredientAll />
       {recentlyViewedItems.length >= 1 && (
-        <Suspense fallback={<CircleRounded />}>
-          <RecentlyViewed recentlyViewedItems={recentlyViewedItems} />
-        </Suspense>
+        <RecentlyViewed recentlyViewedItems={recentlyViewedItems} />
       )}
     </div>
   );
