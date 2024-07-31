@@ -3,19 +3,23 @@ import React from "react";
 const BannerImageContainer = styled("div")(({ theme }) => ({
   display: "flex",
   justifyContent: "center",
-  padding: "0 250px",
+  padding: "0 130px",
   [theme.breakpoints.down("md")]: {
-    padding: "0 70px",
+    padding: "0 100px",
   },
 }));
 
 const BannerImage = styled("img")({
   width: "100%",
+  height: "auto",
+  minHeight: "100px"
 });
+
+
 const SubBanner = ({ img }) => {
   return (
     <BannerImageContainer>
-      <BannerImage src={img} alt={img} />
+      <BannerImage src={img} alt={img}/>
     </BannerImageContainer>
   );
 };

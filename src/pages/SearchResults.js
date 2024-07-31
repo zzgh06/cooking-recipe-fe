@@ -1,68 +1,74 @@
-import React, { useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
-import RecipeCard from "../component/RecipeCard/RecipeCard";
-import IngredientCard from "../component/IngredientCard/IngredientCard";
-import { Col, Row, Spinner } from "react-bootstrap";
-import { useFetchRecipes } from "../hooks/Recipe/useFetchRecipes";
-import { useFetchIngredients } from "../hooks/Recipe/useFetchIngredients";
+import React from 'react';
+import { useSearchParams } from 'react-router-dom';
+import RecipeCard from '../component/RecipeCard/RecipeCard';
+import IngredientCard from '../component/IngredientCard/IngredientCard';
+import { Grid, Box, CircularProgress, Typography, Alert } from '@mui/material';
+import { useFetchRecipes } from '../hooks/Recipe/useFetchRecipes';
+import { useFetchIngredients } from '../hooks/Recipe/useFetchIngredients';
 
 const SearchResults = () => {
   const [query] = useSearchParams();
-  const keyword = query.get("name");
+  const keyword = query.get('name');
 
   const {
     data: recipes,
     isLoading: recipesLoading,
     isError: recipesError,
-    // error: recipesErrorDetail
   } = useFetchRecipes({ name: keyword });
 
   const {
     data: ingredients,
     isLoading: ingredientsLoading,
     isError: ingredientsError,
-    // error: ingredientsErrorDetail
   } = useFetchIngredients({ name: keyword });
 
   const isLoading = recipesLoading || ingredientsLoading;
   const isError = recipesError || ingredientsError;
 
   return (
-    <div className="search-results">
-      <h2>Search Results for "{keyword}"</h2>
+    <Box sx={{ p: 5 }}>
+      <Typography variant="h4" gutterBottom>
+        검색결과 "{keyword}"
+      </Typography>
 
       {isLoading ? (
-        <div className="text-center my-5">
-          <Spinner animation="border" />
-        </div>
+        <Box sx={{ display: 'flex', justifyContent: 'center', my: 5 }}>
+          <CircularProgress />
+        </Box>
       ) : isError ? (
-        <div className="text-center my-5">
-          <p>Error fetching data. Please try again later.</p>
-          {recipesError && <p>Recipe error: {recipesError}</p>}
-          {ingredientsError && <p>Ingredient error: {ingredientsError}</p>}
-        </div>
+        <Box sx={{ textAlign: 'center', my: 5 }}>
+          <Typography variant="body1" fontWeight="600" paragraph>
+            검색된 결과가 없습니다. 😅
+          </Typography>
+          {recipesError && <Alert severity="error">Recipe error: {recipesError}</Alert>}
+          {ingredientsError && <Alert severity="error">Ingredient error: {ingredientsError}</Alert>}
+        </Box>
       ) : (
         <>
-          <h3>Recipes</h3>
-          <Row>
+          <Typography variant="h5" fontWeight="600" gutterBottom>
+            레시피 검색 결과
+          </Typography>
+          <Grid container spacing={3}>
             {recipes.recipes.map((recipe) => (
-              <Col key={recipe._id} xs={12} md={6} lg={3}>
+              <Grid item xs={12} sm={6} md={4} lg={3} key={recipe._id}>
                 <RecipeCard item={recipe} />
-              </Col>
+              </Grid>
             ))}
-          </Row>
+          </Grid>
 
-          <h3>Ingredients</h3>
-          <Row>
+          <Typography variant="h5" fontWeight="600" gutterBottom sx={{ mt: 5 }}>
+            재료 검색 결과
+          </Typography>
+          <Grid container spacing={3}>
             {ingredients.ingredients.map((ing) => (
-              <Col lg={3} key={ing._id}>
+              <Grid item xs={12} sm={6} md={4} lg={3} key={ing._id}>
                 <IngredientCard item={ing} />
-              </Col>
+              </Grid>
             ))}
-          </Row>
+          </Grid>
         </>
       )}
-    </div>
+    </Box>
   );
 };
 

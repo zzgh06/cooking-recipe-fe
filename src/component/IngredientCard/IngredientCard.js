@@ -73,9 +73,6 @@ const DiscountPrice = styled(Typography)({
   marginLeft: "10px",
 });
 
-const optimizeImageUrl = (url) => {
-  return url?.replace(/\/upload\//, '/upload/f_webp/');
-};
 
 const IngredientCard = ({ item }) => {
   const navigate = useNavigate();
@@ -108,6 +105,10 @@ const IngredientCard = ({ item }) => {
 
     addToCart({ ingredientId: item._id, qty });
     handleClose();
+  };
+
+  const optimizeImageUrl = (url) => {
+    return url.replace(/\/upload\//, '/upload/c_fill,h_538,w_538,f_auto,q_auto,f_webp/');
   };
 
   return (

@@ -20,9 +20,7 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-    "@tosspayments/payment-widget-sdk": "^0.10.2",
     "axios": "^1.7.2",
-    "bootstrap": "^5.3.3",
     "cloudinary-core": "^2.13.1",
     "cloudinary-react": "^1.8.1",
     "crypto-browserify": "^3.12.0",
@@ -31,14 +29,13 @@
     "os-browserify": "^0.3.0",
     "path-browserify": "^1.0.1",
     "react": "^18.3.1",
-    "react-bootstrap": "^2.10.2",
     "react-credit-cards-2": "^1.0.2",
     "react-daum-postcode": "^3.1.3",
     "react-dom": "^18.3.1",
     "react-kakao-login": "^2.1.1",
+    "react-lazy-load-image-component": "^1.6.2",
     "react-loader-spinner": "^6.1.6",
     "react-multi-carousel": "^2.8.5",
-    "react-paginate": "^8.2.0",
     "react-rating-stars-component": "^2.2.0",
     "react-redux": "^9.1.2",
     "react-router-dom": "^6.23.1",
@@ -69,5 +66,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "cra-bundle-analyzer": "^0.1.1",
+    "source-map-explorer": "^2.5.3"
   }
 }

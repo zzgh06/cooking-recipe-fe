@@ -37,7 +37,7 @@ const IngredientAll = () => {
     category: searchParams.get("category") || "",
   };
 
-  const { data, isLoading, isFetching, isError, error } =
+  const { data, isLoading, isError, error } =
     useFetchIngredients(searchQuery);
 
   useEffect(() => {

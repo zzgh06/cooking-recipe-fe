@@ -19,6 +19,7 @@ import {
   Paper,
   styled,
   Pagination,
+  Container,
 } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -28,6 +29,7 @@ import { currencyFormat } from "../../utils/number";
 import MyPageOrderDialog from "../MyPageOrderDialog/MyPageOrderDialog";
 import { setSelectedOrder } from "../../redux/orderSlice";
 import { useFetchOrder } from "../../hooks/Order/useFetchOrder";
+import { Oval } from "react-loader-spinner";
 
 // 테이블 셀 스타일
 const cellStyle1 = {
@@ -142,7 +144,20 @@ const MyOrderComponent = () => {
     setPage(1);
   };
 
-  if (isLoading) return <Typography>Loading...</Typography>;
+  if (isLoading)
+    return (
+      <Container
+        maxWidth="lg"
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "100vh",
+        }}
+      >
+        <Oval height="80" width="80" color="green" ariaLabel="loading" />
+      </Container>
+    );
 
   return (
     <Grid container>

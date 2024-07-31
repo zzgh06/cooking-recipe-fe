@@ -8,9 +8,9 @@ const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   overflow: 'hidden',
 }));
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
+const StyledTableCell = styled(TableCell)({
   minWidth: 100,
-}));
+});
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
