@@ -1,19 +1,21 @@
-import React, { useEffect, useState } from "react";
-import BannerComponent from "../component/Banner/BannerComponent";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState, Suspense, lazy } from "react";
 import { useSearchParams } from "react-router-dom";
-import IngredientSlider from "../component/IngredientSlider/IngredientSlider";
-import SubBanner from "../component/SubBanner/SubBanner";
-import IngredientThemeCard from "../component/IngredientThemeCard/IngredientThemeCard";
-import IngredientAll from "../component/IngredientAll/IngredientAll";
-import RecentlyViewed from "../component/RecentlyViewed/RecentlyViewed";
-import { Box, Skeleton, styled } from "@mui/material";
-import banner3 from "../assets/img/banner3.jpg";
-import banner4 from "../assets/img/banner4.jpg";
-import MainBanner1 from "../assets/img/mainBanner1.png";
-import MainBanner2 from "../assets/img/mainBanner2.png";
-import MainBanner3 from "../assets/img/mainBanner3.jpg";
 import { useFetchIngredients } from "../hooks/Ingredient/useFetchIngredients";
+import { Box, Skeleton, styled } from "@mui/material";
+import { CircleRounded } from "@mui/icons-material";
+import BannerComponent from "../component/Banner/BannerComponent";
+import IngredientSlider from "../component/IngredientSlider/IngredientSlider";
+
+const SubBanner = lazy(() => import("../component/SubBanner/SubBanner"));
+const IngredientThemeCard = lazy(() =>
+  import("../component/IngredientThemeCard/IngredientThemeCard")
+);
+const IngredientAll = lazy(() =>
+  import("../component/IngredientAll/IngredientAll")
+);
+const RecentlyViewed = lazy(() =>
+  import("../component/RecentlyViewed/RecentlyViewed")
+);
 
 const SubBannerSkeleton = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -26,12 +28,14 @@ const SubBannerSkeleton = styled(Box)(({ theme }) => ({
 }));
 
 const StorePage = () => {
-  const images = [MainBanner1, MainBanner2, MainBanner3];
-
-  const dispatch = useDispatch();
-  const [query, setQuery] = useSearchParams();
+  const images = [
+    require("../assets/img/mainBanner1.png"),
+    require("../assets/img/mainBanner2.png"),
+    require("../assets/img/mainBanner3.jpg"),
+  ];
+  const [query] = useSearchParams();
   const name = query.get("name");
-  const { data, isLoading, isError } = useFetchIngredients({ name });
+  const { data, isLoading } = useFetchIngredients({ name });
   const [recentlyViewedItems, setRecentlyViewedItems] = useState([]);
 
   useEffect(() => {
@@ -58,36 +62,40 @@ const StorePage = () => {
         ingredients={bestIngredients?.slice(0, 8)}
         loading={isLoading}
       />
-      {isLoading ? (
-        <SubBannerSkeleton>
-          <Skeleton variant="rectangular" width="100%" height={130} />
-        </SubBannerSkeleton>
-      ) : (
-        <SubBanner img={banner3} />
-      )}
+      <Suspense
+        fallback={
+          <SubBannerSkeleton>
+            <Skeleton variant="rectangular" width="100%" height={130} />
+          </SubBannerSkeleton>
+        }
+      >
+        <SubBanner img={require("../assets/img/banner3.jpg")} />
+      </Suspense>
       <IngredientSlider
         title={"신상품"}
         ingredients={newIngredients?.slice(0, 8)}
         loading={isLoading}
       />
-      <Box>
+      <Suspense fallback={<CircleRounded />}>
         <IngredientThemeCard
           ingredients={topDiscountedIngredients}
           loading={isLoading}
         />
-      </Box>
-      {isLoading ? (
-        <SubBannerSkeleton>
-          <Skeleton variant="rectangular" width="100%" height={130} />
-        </SubBannerSkeleton>
-      ) : (
-        <SubBanner img={banner4} />
-      )}
+      </Suspense>
+      <Suspense
+        fallback={
+          <SubBannerSkeleton>
+            <Skeleton variant="rectangular" width="100%" height={130} />
+          </SubBannerSkeleton>
+        }
+      >
+        <SubBanner img={require("../assets/img/banner4.jpg")} />
+      </Suspense>
       <IngredientAll />
-      {recentlyViewedItems.length >= 1 ? (
-        <RecentlyViewed recentlyViewedItems={recentlyViewedItems} />
-      ) : (
-        ""
+      {recentlyViewedItems.length >= 1 && (
+        <Suspense fallback={<CircleRounded />}>
+          <RecentlyViewed recentlyViewedItems={recentlyViewedItems} />
+        </Suspense>
       )}
     </div>
   );
