@@ -137,7 +137,7 @@ const Navbar = () => {
   return (
     <StyledAppBar position="fixed">
       <Toolbar
-        sx={{ display: "flex", flexDirection: "column", height: "auto", maxHeight: "94px", paddingBottom: "11px" }}
+        sx={{ display: "flex", flexDirection: "column", height: "auto", maxHeight: "95px", paddingBottom: "11px" }}
       >
         <Box
           sx={{

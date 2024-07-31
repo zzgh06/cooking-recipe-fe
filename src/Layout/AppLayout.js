@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router";
-import { Col, Row } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { Box, Grid, Container, CssBaseline } from "@mui/material";
 import Sidebar from "../component/SideBar/SideBar";
 import Navbar from "../component/Navbar/Navbar";
-import { useDispatch, useSelector } from "react-redux";
 import Footer from "../component/Footer/Footer";
 import ToastMessage from "../component/ToastMessage/ToastMessage";
 import { useLoginWithToken } from "../hooks/User/useLoginWithToken";
@@ -29,26 +29,31 @@ const AppLayout = ({ children }) => {
     setRecentlyViewedItems(viewedItems);
   }, [location]);
 
+  const isAdminPage = location.pathname.includes("admin");
+
   return (
-    <div>
+    <Box>
+      <CssBaseline />
       <ToastMessage />
-      {location.pathname.includes("admin") ? (
-        <Row className="vh-100">
-          <Col xs={12} md={3}>
+      {isAdminPage ? (
+        <Grid container spacing={2} sx={{ minHeight: "100vh" }}>
+          <Grid item xs={12} md={3}>
             <Sidebar />
-          </Col>
-          <Col xs={12} md={9}>
-            {children}
-          </Col>
-        </Row>
+          </Grid>
+          <Grid item xs={12} md={9}>
+            <Container>{children}</Container>
+          </Grid>
+        </Grid>
       ) : (
         <>
           <Navbar user={user} />
-          <div className="layout">{children}</div>
+          <Box component="main" sx={{ paddingTop: "80px" }}>
+            {children}
+          </Box>
           <Footer />
         </>
       )}
-    </div>
+    </Box>
   );
 };
 
