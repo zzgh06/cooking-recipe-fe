@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { Box, Button, Container, Pagination, Stack } from "@mui/material";
+import { Box, Button, CircularProgress, Container, Pagination, Stack } from "@mui/material";
 import SearchBox from "../component/SearchBox/SearchBox";
 import IngredientTable from "../component/IngredientTable/IngredientTable";
 import NewItemDialog from "../component/NewItemDialog/NewItemDialog";
 import { useSearchParams } from "react-router-dom";
 import { useFetchIngredients } from "../hooks/Ingredient/useFetchIngredients";
 import { useDeleteIngredient } from "../hooks/Ingredient/useDeleteIngredient";
-import { Oval } from "react-loader-spinner";
 
 const AdminIngredientsPage = () => {
   const [query, setQuery] = useSearchParams();
@@ -62,12 +61,7 @@ const AdminIngredientsPage = () => {
   if (isLoading) {
     return (
       <Container maxWidth="lg" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
-        <Oval 
-          height="80" 
-          width="80" 
-          color="green" 
-          ariaLabel="loading"
-        />
+        <CircularProgress size="100px" sx={{color: "green"}} />
       </Container>
     );
   }

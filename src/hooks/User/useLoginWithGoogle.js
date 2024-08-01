@@ -2,7 +2,6 @@ import { useMutation } from '@tanstack/react-query';
 import api from '../../utils/api';
 import { useDispatch } from 'react-redux';
 import { setLoginData, setUser } from '../../redux/userSlice';
-import { useNavigate } from 'react-router-dom';
 import { setToastMessage } from '../../redux/commonUISlice';
 
 const loginWithGoogle = async (token) => {

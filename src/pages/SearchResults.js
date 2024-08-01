@@ -33,7 +33,7 @@ const SearchResults = () => {
 
       {isLoading ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', my: 5 }}>
-          <CircularProgress />
+          <CircularProgress size="100px" sx={{color: "green"}} />
         </Box>
       ) : isError ? (
         <Box sx={{ textAlign: 'center', my: 5 }}>

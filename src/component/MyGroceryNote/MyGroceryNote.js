@@ -133,7 +133,7 @@ const MyGroceryNote = () => {
               </Typography>
               {isLoading && (
                 <LoadingOverlay>
-                  <CircularProgress />
+                  <CircularProgress sx={{color: "green"}} />
                 </LoadingOverlay>
               )}
               <List>
@@ -173,7 +173,7 @@ const MyGroceryNote = () => {
               </Typography>
               {isLoading && (
                 <LoadingOverlay>
-                  <CircularProgress />
+                  <CircularProgress sx={{color: "green"}} />
                 </LoadingOverlay>
               )}
               <List>

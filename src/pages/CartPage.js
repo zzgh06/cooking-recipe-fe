@@ -6,6 +6,7 @@ import {
   Box,
   Button,
   Skeleton,
+  CircularProgress,
 } from "@mui/material";
 import CartItem from "../component/Cart/CartItem";
 import OrderReceipt from "../component/OrderReceipt/OrderReceipt";
@@ -14,7 +15,6 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useFetchCart } from "../hooks/Cart/useFetchCart";
 import { useDispatch, useSelector } from "react-redux";
 import { setCartItems, toggleSelectItem } from "../redux/cartSlice";
-import { Oval } from "react-loader-spinner";
 
 const CartPage = () => {
   const navigate = useNavigate();
@@ -51,7 +51,7 @@ const CartPage = () => {
             minHeight: "300px",
           }}
         >
-          <Oval height="80" width="80" color="green" ariaLabel="loading" />
+          <CircularProgress size="100px" sx={{color: "green"}} />
         </Box>
       </Container>
     );

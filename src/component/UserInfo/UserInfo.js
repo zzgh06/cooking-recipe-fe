@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, Grid, Box } from "@mui/material";
+import { Typography, Box } from "@mui/material";
 import { styled } from "@mui/system";
 
 const UserInfoContainer = styled("div")({
@@ -42,7 +42,6 @@ const StyledLink = styled(Typography)({
 });
 
 const UserInfo = ({ onButtonClick, user }) => {
-
   const handleButtonClick = (value) => {
     onButtonClick(value);
   };
@@ -59,11 +58,11 @@ const UserInfo = ({ onButtonClick, user }) => {
             border={1}
             borderRadius={2}
             borderColor="primary.light"
-            bgcolor="primary.light"
+            bgcolor={user?.level === "customer" ? "primary.light" : "success.light"}
             color="white"
             px="10px"
           >
-            customer
+            {user?.level}
           </Typography>
         </Box>
       </UserInfoContainer>

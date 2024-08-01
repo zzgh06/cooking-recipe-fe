@@ -7,7 +7,6 @@ const initialState = {
   usersData: [],
   totalPageNum: 0,
   error: null,
-  loading: false,
   isAuthenticated: false,
 };
 
@@ -17,9 +16,6 @@ const userSlice = createSlice({
   reducers: {
     setError: (state, action) => {
       state.error = action.payload;
-    },
-    setLoading: (state, action) => {
-      state.loading = action.payload;
     },
     setVerifyPasswordLoading: (state, action) => {
       state.loading = action.payload;
@@ -68,7 +64,6 @@ export const {
   setUpdateUser,
   setRegistrationData,
   setIsAuthenticated,
-  setLoading,
   logout,
   setVerifyPasswordLoading,
   setVerifyPasswordError,

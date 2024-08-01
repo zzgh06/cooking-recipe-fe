@@ -39,41 +39,51 @@ const StyledImage = styled("img")({
 });
 
 const optimizeImageUrl = (url) => {
-  return url?.replace(/\/upload\//, '/upload/c_fill,h_1082,w_1082,f_webp/');
+  return url?.replace(/\/upload\//, "/upload/c_fill,h_1082,w_1082,f_webp/");
 };
 
 const RecommendRecipe = React.memo(({ recommendRecipes }) => {
   const navigate = useNavigate();
 
-  const showRecipe = useCallback((id) => {
-    navigate(`/recipe/${id}`);
-  }, [navigate]);
+  const showRecipe = useCallback(
+    (id) => {
+      navigate(`/recipe/${id}`);
+    },
+    [navigate]
+  );
 
   const optimizedImages = useMemo(() => {
-    return recommendRecipes.map(recipe => optimizeImageUrl(recipe?.images[0]));
+    return recommendRecipes.map((recipe) =>
+      optimizeImageUrl(recipe?.images[0])
+    );
   }, [recommendRecipes]);
 
   return (
-    <Container sx={{ padding: "100px" }}>
+    <Container sx={{ padding: { xs: "30px", sm: "50px", md: "50px 100px" } }}>
       <Box sx={{ textAlign: "center", padding: "20px" }}>
-        <Typography variant="h2" fontWeight="500" fontSize="35px">
+        <Typography
+          variant="h2"
+          fontWeight="500"
+          sx={{
+            fontSize: { xs: "24px", sm: "30px", md: "35px" },
+          }}
+        >
           RECIPES FOR YOU
         </Typography>
         <Typography variant="body1">맞춤추천 레시피를 둘러보세요.</Typography>
       </Box>
       <Grid container spacing={2}>
-        <Grid item lg={6} >
-          <ImageContainer
-            onClick={() => showRecipe(recommendRecipes[0]?._id)}
-          >
+        <Grid item lg={6} md={6}>
+          <ImageContainer onClick={() => showRecipe(recommendRecipes[0]?._id)}>
             <StyledImage
               src={optimizedImages[0]}
               alt={recommendRecipes[0]?.name}
+              loading="lazy"
             />
             <Overlay className="overlay">{recommendRecipes[0]?.name}</Overlay>
           </ImageContainer>
         </Grid>
-        <Grid item lg={6} container spacing={2}>
+        <Grid item lg={6} md={6} container spacing={2}>
           <Grid item lg={6} md={6} sm={6}>
             <ImageContainer
               onClick={() => showRecipe(recommendRecipes[1]?._id)}
@@ -82,6 +92,7 @@ const RecommendRecipe = React.memo(({ recommendRecipes }) => {
               <StyledImage
                 src={optimizedImages[1]}
                 alt={recommendRecipes[1]?.name}
+                loading="lazy"
               />
               <Overlay className="overlay">{recommendRecipes[1]?.name}</Overlay>
             </ImageContainer>
@@ -94,6 +105,7 @@ const RecommendRecipe = React.memo(({ recommendRecipes }) => {
               <StyledImage
                 src={optimizedImages[2]}
                 alt={recommendRecipes[2]?.name}
+                loading="lazy"
               />
               <Overlay className="overlay">{recommendRecipes[2]?.name}</Overlay>
             </ImageContainer>
@@ -101,11 +113,12 @@ const RecommendRecipe = React.memo(({ recommendRecipes }) => {
           <Grid item lg={12}>
             <ImageContainer
               onClick={() => showRecipe(recommendRecipes[4]?._id)}
-              sx={{ maxHeight: "300px" }}
+              sx={{ maxHeight: { xs: "300px", sm: "300px", md: "200px", lg: "300px" } }}
             >
               <StyledImage
                 src={optimizedImages[4]}
                 alt={recommendRecipes[4]?.name}
+                loading="lazy"
               />
               <Overlay className="overlay">{recommendRecipes[4]?.name}</Overlay>
             </ImageContainer>

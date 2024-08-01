@@ -9,6 +9,7 @@ import {
   Button,
   Stack,
   Pagination,
+  CircularProgress,
 } from "@mui/material";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,7 +20,6 @@ import { setSelectedOrder } from "../redux/orderSlice";
 import { endOfDay, format, isValid, startOfDay } from "date-fns";
 import DateFilterCondition from "../component/DateFilterCondition/DateFilterCondition";
 import { useFetchOrderList } from "../hooks/Order/useFetchOrderList";
-import { Oval } from "react-loader-spinner";
 
 const badgeBg = {
   preparing: "primary",
@@ -44,8 +44,6 @@ const AdminOrderPage = () => {
   const [endDate, setEndDate] = useState(null);
 
   const { data, isLoading } = useFetchOrderList(searchQuery);
-
-  console.log("data", data)
 
   const tableHeader = [
     "#",
@@ -111,12 +109,7 @@ const AdminOrderPage = () => {
   if (isLoading) {
     return (
       <Container maxWidth="lg" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
-        <Oval 
-          height="80" 
-          width="80" 
-          color="green" 
-          ariaLabel="loading"
-        />
+        <CircularProgress size="100px" sx={{color: "green"}} />
       </Container>
     );
   }
