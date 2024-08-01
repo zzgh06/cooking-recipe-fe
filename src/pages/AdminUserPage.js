@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Box } from '@mui/material';
+import { Container, Box, CircularProgress } from '@mui/material';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import UserTable from '../component/UserTable/UserTable';
 import UserDetailDialog from '../component/UserDetailDialog/UserDetailDialog';
@@ -8,7 +8,6 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import { useGetUsersInfo } from '../hooks/User/useGetUsersInfo';
 import { useDeleteUser } from '../hooks/User/useDeleteUser';
-import { Oval } from 'react-loader-spinner';
 
 const AdminUserPage = () => {
   const navigate = useNavigate();
@@ -66,12 +65,7 @@ const AdminUserPage = () => {
   if (isLoading) {
     return (
       <Container maxWidth="lg" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
-        <Oval 
-          height="80" 
-          width="80" 
-          color="green" 
-          ariaLabel="loading"
-        />
+        <CircularProgress size="100px" sx={{color: "green"}} />
       </Container>
     );
   }

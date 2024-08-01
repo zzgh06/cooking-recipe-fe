@@ -1,5 +1,6 @@
 import { styled } from "@mui/material";
 import React from "react";
+
 const BannerImageContainer = styled("div")(({ theme }) => ({
   display: "flex",
   justifyContent: "center",
@@ -11,8 +12,7 @@ const BannerImageContainer = styled("div")(({ theme }) => ({
 
 const BannerImage = styled("img")({
   width: "100%",
-  height: "auto",
-  minHeight: "100px"
+  height: "100px",
 });
 
 

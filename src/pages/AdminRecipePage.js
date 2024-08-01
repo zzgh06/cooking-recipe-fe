@@ -8,6 +8,7 @@ import {
   Box,
   Stack,
   Pagination,
+  CircularProgress,
 } from "@mui/material";
 import SearchBox from "../component/SearchBox/SearchBox";
 import RecipeTable from "../component/RecipeTable/RecipeTable";
@@ -17,7 +18,6 @@ import { useFetchRecipes } from "../hooks/Recipe/useFetchRecipes";
 import { useCreateRecipe } from "../hooks/Recipe/useCreateRecipe";
 import { useEditRecipe } from "../hooks/Recipe/useEditRecipe";
 import { useDeleteRecipe } from "../hooks/Recipe/useDeleteRecipe";
-import { Oval } from "react-loader-spinner";
 
 const AdminRecipePage = () => {
   const [query, setQuery] = useSearchParams();
@@ -84,12 +84,7 @@ const AdminRecipePage = () => {
   if (isLoading) {
     return (
       <Container maxWidth="lg" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
-        <Oval 
-          height="80" 
-          width="80" 
-          color="green" 
-          ariaLabel="loading"
-        />
+        <CircularProgress size="100px" sx={{color: "green"}} />
       </Container>
     );
   }

@@ -6,8 +6,6 @@ const orderSlice = createSlice({
     orderList: [],
     selectedOrder: {},
     totalPageNum: 1,
-    loading: false,
-    error: "",
     orderNum: "",
   },
   reducers: {

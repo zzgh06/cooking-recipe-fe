@@ -1,28 +1,104 @@
 import React from "react";
-import "../../style/RecentlyViewed.style.css";
 import { Link } from "react-router-dom";
+import { Box, Typography } from "@mui/material";
 
 const RecentlyViewed = ({ recentlyViewedItems }) => {
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth', 
+    });
+  };
+
   return (
-    <div className="recently-viewed">
-      <div className="title">최근 본 상품</div>
-      <div className="body">
+    <Box
+      sx={{
+        position: "fixed",
+        bottom: "50px",
+        right: "15px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        width: "100px",
+        minHeight: "200px",
+        maxHeight: "400px",
+        color: "black",
+        border: "1px solid rgb(198, 198, 198)",
+        borderRadius: "5px",
+        zIndex: 99,
+        backgroundColor: "white",
+        boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
+        overflowY: "auto",
+      }}
+    >
+      <Typography
+        variant="h6"
+        sx={{
+          width: "100%",
+          padding: "15px 7px 0 7px",
+          marginBottom: "5px",
+          fontSize: "14px",
+          textAlign: "center",
+          color: "black",
+        }}
+      >
+        최근 본 상품
+      </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-evenly",
+          alignItems: "center",
+          width: "100%",
+          flexGrow: 1,
+        }}
+      >
         {recentlyViewedItems.length > 0 &&
           recentlyViewedItems.map((item) => (
-            <div className="content">
-              <Link to={`/ingredients/${item.id}`}>
-              <img
-                src={item.images}
-                alt={item.name}
-              />
+            <Box
+              key={item.id}
+              sx={{
+                width: "75px",
+                height: "75px",
+                border: "1px solid rgb(180, 180, 180)",
+                borderRadius: "5px",
+                marginBottom: "10px",
+                overflow: "hidden",
+              }}
+            >
+              <Link to={`/ingredients/${item.id}`} style={{ display: 'block', width: '100%', height: '100%' }}>
+                <img
+                  src={item.images}
+                  alt={item.name}
+                  style={{ width: '100%', height: '100%', borderRadius: '5px' }}
+                />
               </Link>
-            </div>
+            </Box>
           ))}
-      </div>
-      <div className="footer">
-        <a href="#">TOP ▲</a>
-      </div>
-    </div>
+      </Box>
+      <Box
+        sx={{
+          width: "100%",
+          padding: "10px",
+          textAlign: "center",
+        }}
+      >
+        <Typography
+          component="a"
+          onClick={scrollToTop} 
+          sx={{
+            color: "black",
+            textDecoration: "none",
+            fontSize: "14px",
+            cursor: "pointer",
+            display: "inline-block",
+          }}
+        >
+          TOP ▲
+        </Typography>
+      </Box>
+    </Box>
   );
 };
 

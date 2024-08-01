@@ -98,7 +98,7 @@ const Navbar = () => {
 
   useEffect(() => {
     fetchUser();
-  }, []);
+  }, [fetchUser]);
 
   const handleLogout = async () => {
     await dispatch(logout());

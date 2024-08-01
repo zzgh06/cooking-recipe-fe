@@ -35,17 +35,31 @@ const MyProfile = () => {
   const navigate = useNavigate();
   const [currentView, setCurrentView] = useState("내 주문");
   const [isVerified, setIsVerified] = useState(false);
+  const [loading, setLoading] = useState(true);
   const { mutate: fetchUser } = useLoginWithToken();
 
   useEffect(() => {
-    fetchUser();
+    const fetchUserData = async () => {
+      try {
+        await fetchUser(); 
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
+      } finally {
+        setLoading(false); 
+      }
+    };
+    fetchUserData();
   }, [fetchUser]);
 
   useEffect(() => {
-    if (!user) {
-      navigate("/login");
+    if (loading) {
+      return;
     }
-  }, [user, navigate]);
+
+    if (!user) {
+      navigate("/login"); 
+    }
+  }, []);
 
   const handleButtonClick = (value) => {
     setCurrentView(value);

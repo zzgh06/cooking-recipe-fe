@@ -56,7 +56,6 @@ const GridContainer = styled(Box)(({ theme }) => ({
 const MyFridge = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector((state) => state.auth.user)
   const selectedIngredients = useSelector(
     (state) => state.ingredients.selectedIngredients
   );
@@ -65,6 +64,7 @@ const MyFridge = () => {
     page: query.get("page") || 1,
     name: query.get("name") || "",
   });
+  const user = useSelector((state) => state.auth.user)
   const { data: ingredientData, isLoading } = useFetchIngredients(searchQuery);
   const { data: fridgeData, refetch } = useFetchFridgeItems(query);
   const [hasSearched, setHasSearched] = useState(false);
@@ -104,15 +104,19 @@ const MyFridge = () => {
     };
   }, [dispatch]);
 
-  useEffect(()=>{
+  useEffect(() => {
+    if (isLoading) {
+      return;
+    }
+    
     if (!user) {
       dispatch(setToastMessage({
         message: "로그인이 필요한 서비스 입니다.",
         status: "error"
-      }))
-      navigate("/login")
+      }));
+      navigate("/login");
     }
-  }, [])
+  }, []);
 
   const handleSearchChange = (e) => {
     const newSearchQuery = { ...searchQuery, name: e.target.value };
@@ -251,7 +255,7 @@ const MyFridge = () => {
               }}
             >
               {isLoading ? (
-                <CircularProgress />
+                <CircularProgress size="80px" sx={{color: "green"}} />
               ) : ingredientData?.length === 0 ? (
                 <Typography>일치하는 재료가 없습니다.</Typography>
               ) : (
@@ -268,7 +272,7 @@ const MyFridge = () => {
             </DialogTitle>
             <DialogContent>
               {recipeLoading ? (
-                <CircularProgress />
+                <CircularProgress size="80px" sx={{color: "green"}} />
               ) : (
                 <MyFridgeSearchResults recipeList={recipeList} />
               )}
