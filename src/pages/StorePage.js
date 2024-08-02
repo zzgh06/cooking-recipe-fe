@@ -1,11 +1,13 @@
-import React, { useEffect, useState, Suspense, lazy } from "react";
+import React, { useEffect, useState, Suspense, lazy, startTransition } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useFetchIngredients } from "../hooks/Ingredient/useFetchIngredients";
-import { Box, Skeleton, styled } from "@mui/material";
+import { Box, CircularProgress, Skeleton, styled } from "@mui/material";
 import { CircleRounded } from "@mui/icons-material";
 import BannerComponent from "../component/Banner/BannerComponent";
 import IngredientSlider from "../component/IngredientSlider/IngredientSlider";
 import RecentlyViewed from "../component/RecentlyViewed/RecentlyViewed";
+import mainBanner1 from "../assets/img/mainBanner1.png";
+import mainBanner2 from "../assets/img/mainBanner2.png";
 
 const SubBanner = lazy(() => import("../component/SubBanner/SubBanner"));
 const IngredientThemeCard = lazy(() =>
@@ -26,20 +28,21 @@ const SubBannerSkeleton = styled(Box)(({ theme }) => ({
 }));
 
 const StorePage = () => {
-  const images = [
-    require("../assets/img/mainBanner1.png"),
-    require("../assets/img/mainBanner2.png"),
-    require("../assets/img/mainBanner3.jpg"),
-  ];
   const [query] = useSearchParams();
   const name = query.get("name");
   const { data, isLoading } = useFetchIngredients({ name });
   const [recentlyViewedItems, setRecentlyViewedItems] = useState([]);
+  const images = [
+    mainBanner1,
+    mainBanner2,
+  ];
 
   useEffect(() => {
-    const viewedItems =
-      JSON.parse(localStorage.getItem("viewedIngredients")) || [];
-    setRecentlyViewedItems(viewedItems);
+    startTransition(() => {
+      const viewedItems =
+        JSON.parse(localStorage.getItem("viewedIngredients")) || [];
+      setRecentlyViewedItems(viewedItems);
+    });
   }, []);
 
   const newIngredients = data?.ingredients.filter((ing) =>
@@ -89,7 +92,9 @@ const StorePage = () => {
       >
         <SubBanner img={require("../assets/img/banner4.jpg")} />
       </Suspense>
-      <IngredientAll />
+      <Suspense fallback={<CircularProgress />}>
+        <IngredientAll />
+      </Suspense>
       {recentlyViewedItems.length >= 1 && (
         <RecentlyViewed recentlyViewedItems={recentlyViewedItems} />
       )}

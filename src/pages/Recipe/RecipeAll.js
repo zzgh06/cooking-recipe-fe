@@ -24,9 +24,8 @@ const NoRecipesMessage = styled(Typography)({
 
 const RecipeAll = ({ category, path }) => {
   const [page, setPage] = useState(1);
-  const [prevCategory, setPrevCategory] = useState(category);
 
-  const { data, isLoading, isError, refetch } = useFetchRecipesByCategory({
+  const { data, isLoading, refetch } = useFetchRecipesByCategory({
     etc: category,
     page,
   });

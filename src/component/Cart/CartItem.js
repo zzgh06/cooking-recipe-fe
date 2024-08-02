@@ -37,6 +37,9 @@ const CartItem = ({ item = {}, qty, selectedItems, selectItem }) => {
     deleteItem({ ingredientId: _id }); 
   };
 
+  const optimizedImageUrl = (url) =>
+    url?.replace(/\/upload\//, "/upload/c_fill,h_200,w_200,f_webp/");
+
   return (
     <Card sx={{ display: 'flex', mb: 2, p: 2, alignItems: 'center', border: "1px solid lightgrey", boxShadow: "none" }}>
       <Box sx={{ display: 'flex', alignItems: 'center', flex: '1 0 auto', gap: 2 }}>
@@ -48,7 +51,7 @@ const CartItem = ({ item = {}, qty, selectedItems, selectItem }) => {
         <CardMedia
           component="img"
           sx={{ width: 100, height: 100, objectFit: 'cover', borderRadius: 1 }}
-          image={images.length > 0 ? images[0] : "path/to/default/image.jpg"}
+          image={images.length > 0 ? optimizedImageUrl(images[0]): "path/to/default/image.jpg"}
           alt={name}
         />
         <Box sx={{ flex: '1 0 auto' }}>

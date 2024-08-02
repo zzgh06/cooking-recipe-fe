@@ -45,6 +45,9 @@ const DescriptionCell = styled(StyledTableCell)(({ theme }) => ({
   whiteSpace: 'nowrap',
 }));
 
+const optimizedImageUrl = (url) =>
+  url?.replace(/\/upload\//, "/upload/c_fill,h_200,w_200,f_webp/");
+
 const IngredientTable = ({
   header = [],
   data = [],
@@ -84,9 +87,9 @@ const IngredientTable = ({
                 <StyledTableCell>{item?.reviewCnt || "N/A"}</StyledTableCell>
                 <ImageCell>
                   <img
-                    src={item.images[0] || "default_image_url"}
+                    src={optimizedImageUrl(item.images[0]) || "default_image_url"}
                     alt={item.name || "default"}
-                    style={{ width: "100px", height: "auto" }}
+                    style={{ width: "100px", height: "auto", aspectRatio: "16 / 9" }}
                   />
                 </ImageCell>
                 <StyledTableCell>

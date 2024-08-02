@@ -10,6 +10,10 @@ const RecentlyViewed = ({ recentlyViewedItems }) => {
     });
   };
 
+  const optimizeImageUrl = (url) => {
+    return url.replace(/\/upload\//, '/upload/c_fill,h_140,w_140,f_auto,q_auto,f_webp/');
+  };
+
   return (
     <Box
       sx={{
@@ -69,7 +73,7 @@ const RecentlyViewed = ({ recentlyViewedItems }) => {
             >
               <Link to={`/ingredients/${item.id}`} style={{ display: 'block', width: '100%', height: '100%' }}>
                 <img
-                  src={item.images}
+                  src={optimizeImageUrl(item.images)}
                   alt={item.name}
                   style={{ width: '100%', height: '100%', borderRadius: '5px' }}
                 />

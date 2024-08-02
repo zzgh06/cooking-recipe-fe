@@ -21,7 +21,6 @@ import { useDeleteRecipe } from "../hooks/Recipe/useDeleteRecipe";
 
 const AdminRecipePage = () => {
   const [query, setQuery] = useSearchParams();
-  const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState({
     page: query.get("page") || 1,
     name: query.get("name") || "",
@@ -110,7 +109,7 @@ const AdminRecipePage = () => {
             variant="contained"
             color="primary"
             onClick={handleShowAll}
-            sx={{ width: "300px" }}
+            sx={{ width: "300px", marginLeft: "10px" }}
           >
             Show All
           </Button>

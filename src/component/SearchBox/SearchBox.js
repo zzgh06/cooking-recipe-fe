@@ -1,7 +1,7 @@
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { TextField, IconButton, InputAdornment } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 
 const SearchBox = ({ searchQuery, setSearchQuery, placeholder, field, page = 'store', selectedIngredients }) => {
   const [query] = useSearchParams();
@@ -40,14 +40,24 @@ const SearchBox = ({ searchQuery, setSearchQuery, placeholder, field, page = 'st
   };
 
   return (
-    <div className="search-box">
-      <FontAwesomeIcon icon={faSearch} onClick={() => handleSearch(keyword)}/>
-      <input
-        type="text"
+    <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+      <TextField
+        variant="outlined"
         placeholder={placeholder}
-        onKeyPress={onCheckEnter}
-        onChange={handleInputChange}
         value={keyword}
+        onChange={handleInputChange}
+        onKeyPress={onCheckEnter}
+        fullWidth
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton onClick={() => handleSearch(keyword)} edge="end">
+                <SearchIcon />
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+        sx={{ borderRadius: 1 }}
       />
     </div>
   );

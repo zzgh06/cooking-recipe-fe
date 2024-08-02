@@ -17,20 +17,23 @@ import {
 } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useAddToCart } from "../../hooks/Cart/useAddToCart";
 import { currencyFormat } from "../../utils/number";
 
-const StyledCard = styled(Card)({
+const StyledCard = styled(Card)(({ theme }) => ({
   position: "relative",
   marginBottom: "10px",
   width: "100%",
   padding: "10px 20px",
   transition: "all 0.5s",
   boxShadow: "none",
-});
+  [theme.breakpoints.down('sm')]: {
+    padding: "5px 10px",
+  },
+}));
 
-const StyledCardMedia = styled(CardMedia)({
+const StyledCardMedia = styled(CardMedia)(({ theme }) => ({
   width: "100%",
   height: "315px",
   marginBottom: "15px",
@@ -40,39 +43,57 @@ const StyledCardMedia = styled(CardMedia)({
   "&:hover": {
     transform: "scale(1.01)",
   },
-});
+  [theme.breakpoints.down('sm')]: {
+    height: "200px",
+  },
+}));
 
-const Title = styled(Typography)({
+const Title = styled(Typography)(({ theme }) => ({
   fontSize: "17px",
   fontWeight: 600,
-});
+  [theme.breakpoints.down('sm')]: {
+    fontSize: "15px",
+  },
+}));
 
-const Price = styled(Typography)({
+const Price = styled(Typography)(({ theme }) => ({
   marginTop: "8px",
   fontSize: "19px",
   fontWeight: 600,
   color: "black",
-});
+  [theme.breakpoints.down('sm')]: {
+    fontSize: "16px",
+  },
+}));
 
-const OriginPrice = styled(Typography)({
+const OriginPrice = styled(Typography)(({ theme }) => ({
   fontSize: "15px",
   color: "rgb(164, 164, 164)",
   textDecoration: "line-through",
-});
+  [theme.breakpoints.down('sm')]: {
+    fontSize: "13px",
+  },
+}));
 
-const DiscountRate = styled(Typography)({
+const DiscountRate = styled(Typography)(({ theme }) => ({
   fontSize: "19px",
   fontWeight: 600,
   color: "orangered",
-});
+  [theme.breakpoints.down('sm')]: {
+    fontSize: "16px",
+  },
+}));
 
-const DiscountPrice = styled(Typography)({
+const DiscountPrice = styled(Typography)(({ theme }) => ({
   fontSize: "19px",
   fontWeight: 600,
   color: "black",
   marginLeft: "10px",
-});
-
+  [theme.breakpoints.down('sm')]: {
+    fontSize: "16px",
+    marginLeft: "5px",
+  },
+}));
 
 const IngredientCard = ({ item }) => {
   const navigate = useNavigate();
@@ -157,7 +178,7 @@ const IngredientCard = ({ item }) => {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: 350,
+            width: { xs: '90%', sm: 350 },
             bgcolor: "background.paper",
             borderRadius: "15px",
             boxShadow: 24,
@@ -165,14 +186,15 @@ const IngredientCard = ({ item }) => {
           }}
         >
           <Grid container spacing={2} alignItems="center">
-            <Grid item xs={3}>
+            <Grid item xs={4}>
               <img
                 src={optimizeImageUrl(item.images[0])}
                 alt={item.name}
                 style={{ width: "100%" }}
+                loading="lazy"
               />
             </Grid>
-            <Grid item xs={9}>
+            <Grid item xs={8}>
               <Typography variant="h6" sx={{ mt: 1 }}>
                 {item.name}
               </Typography>

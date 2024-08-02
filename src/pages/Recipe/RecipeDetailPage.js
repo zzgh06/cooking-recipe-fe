@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState, useCallback } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import Review from "../../component/Review/Review";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -39,6 +39,7 @@ import { useDeleteRecipeFavorite } from "../../hooks/Favorite/useDeleteRecipeFav
 
 const RecipeImage = styled("img")({
   width: "100%",
+  aspectRatio: "16 / 9",
   borderRadius: "8px",
   marginBottom: "20px",
 });
@@ -88,10 +89,9 @@ const Steps = styled("div")({
 
 const RecipeDetail = () => {
   const { id } = useParams();
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector((state) => state.auth.user)
-  const { data: recipeDetail, isLoading, isError } = useFetchRecipeById(id);
+  const user = useSelector((state) => state.auth.user);
+  const { data: recipeDetail, isLoading } = useFetchRecipeById(id);
   const [isFavorite, setIsFavorite] = useState(false);
   const [openIngredientDialog, setOpenIngredientDialog] = useState(false);
   const [openShoppingListDialog, setOpenShoppingListDialog] = useState(false);
@@ -101,73 +101,51 @@ const RecipeDetail = () => {
 
   useEffect(() => {
     if (recipeDetail && recipeFavorite) {
-      setIsFavorite(recipeFavorite?.recipes?.includes(recipeDetail._id));
+      setIsFavorite(recipeFavorite.recipes.includes(recipeDetail?._id));
     }
   }, [recipeDetail, recipeFavorite]);
 
-  const handleFavoriteClick = () => {
+  const handleFavoriteClick = useCallback(() => {
     if (!user) {
-      navigate("/login")
+      navigate("/login");
+      return;
     }
     if (isFavorite) {
-      deleteRecipeFavorite(recipeDetail._id);
+      deleteRecipeFavorite(recipeDetail?._id);
     } else {
-      addRecipeFavorite(recipeDetail._id);
+      addRecipeFavorite(recipeDetail?._id);
     }
     setIsFavorite(!isFavorite);
-  };
+  }, [isFavorite, user, navigate, recipeDetail?._id, addRecipeFavorite, deleteRecipeFavorite]);
 
-  const handleClickOpenIngredientDialog = () => {
-    setOpenIngredientDialog(true);
-  };
+  const handleClickOpenIngredientDialog = () => setOpenIngredientDialog(true);
+  const handleCloseIngredientDialog = () => setOpenIngredientDialog(false);
 
-  const handleCloseIngredientDialog = () => {
-    setOpenIngredientDialog(false);
-  };
+  const handleClickOpenShoppingListDialog = () => setOpenShoppingListDialog(true);
+  const handleCloseShoppingListDialog = () => setOpenShoppingListDialog(false);
 
-  const handleClickOpenShoppingListDialog = () => {
-    setOpenShoppingListDialog(true);
-  };
-
-  const handleCloseShoppingListDialog = () => {
-    setOpenShoppingListDialog(false);
-  };
-
-  const handlePurchaseClick = (ingredientName) => {
+  const handlePurchaseClick = useCallback((ingredientName) => {
     navigate(`/ingredients?name=${encodeURIComponent(ingredientName)}`);
-  };
+  }, [navigate]);
 
   const getDifficultyStars = (difficulty) => {
-    switch (difficulty) {
-      case "아무나":
-        return "⭐";
-      case "초급":
-        return "⭐⭐";
-      case "중급":
-        return "⭐⭐⭐";
-      case "고급":
-        return "⭐⭐⭐⭐";
-      case "신의경지":
-        return "⭐⭐⭐⭐⭐";
-      default:
-        return "";
-    }
+    const stars = {
+      "아무나": "⭐",
+      "초급": "⭐⭐",
+      "중급": "⭐⭐⭐",
+      "고급": "⭐⭐⭐⭐",
+      "신의경지": "⭐⭐⭐⭐⭐"
+    };
+    return stars[difficulty] || "";
   };
 
-  const optimizeMainImageUrl = (url) => {
-    return url?.replace(/\/upload\//, '/upload/c_fill,h_1704,w_1704,f_webp/');
-  };
-  const optimizeSubImageUrl = (url) => {
-    return url?.replace(/\/upload\//, '/upload/c_fill,h_200,w_200,f_webp/');
-  };
+  const optimizeMainImageUrl = (url) => url?.replace(/\/upload\//, '/upload/c_fill,h_1704,w_1704,f_webp/');
+  const optimizeSubImageUrl = (url) => url?.replace(/\/upload\//, '/upload/c_fill,h_200,w_200,f_webp/');
 
-  const optimizedMainImageUrl = optimizeMainImageUrl(recipeDetail?.images[0]);
-
+  const optimizedMainImageUrl = recipeDetail?.images[0] ? optimizeMainImageUrl(recipeDetail.images[0]) : "";
 
   if (isLoading) {
-    return (
-      <RecipeDetailSkeleton />
-    );
+    return <RecipeDetailSkeleton />;
   }
 
   return (
@@ -176,10 +154,7 @@ const RecipeDetail = () => {
       <Container maxWidth="md" sx={{ marginTop: "80px" }}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <RecipeImage
-              src={optimizedMainImageUrl}
-              alt={recipeDetail?.name}
-            />
+            <RecipeImage src={optimizedMainImageUrl} alt={recipeDetail?.name} />
           </Grid>
           <Grid item xs={12}>
             <RecipeInfoContainer>
@@ -187,15 +162,8 @@ const RecipeDetail = () => {
                 {recipeDetail?.name}
               </Typography>
               <Box sx={{ display: "flex" }}>
-                <Box
-                  onClick={handleFavoriteClick}
-                  sx={{ cursor: "pointer", marginRight: "25px" }}
-                >
-                  {isFavorite && user ? (
-                    <FontAwesomeIcon icon={solidBookmark} size="lg" />
-                  ) : (
-                    <FontAwesomeIcon icon={regularBookmark} size="lg" />
-                  )}
+                <Box onClick={handleFavoriteClick} sx={{ cursor: "pointer", marginRight: "25px" }}>
+                  <FontAwesomeIcon icon={isFavorite && user ? solidBookmark : regularBookmark} size="lg" />
                 </Box>
                 <Box sx={{ cursor: "pointer", marginRight: "20px" }}>
                   <KakaoShareButton recipeDetail={recipeDetail} />
@@ -205,11 +173,7 @@ const RecipeDetail = () => {
                 </Box>
               </Box>
             </RecipeInfoContainer>
-            <Typography
-              variant="body1"
-              component="p"
-              sx={{ marginBottom: "20px" }}
-            >
+            <Typography variant="body1" component="p" sx={{ marginBottom: "20px" }}>
               {recipeDetail?.description}
             </Typography>
             <DifficultyBox>
@@ -223,25 +187,19 @@ const RecipeDetail = () => {
           </Grid>
           <Grid item xs={12}>
             <HeadContainer>
-              <Typography variant="h5" component="p">
-                재료
-              </Typography>
+              <Typography variant="h5" component="p">재료</Typography>
             </HeadContainer>
             <RecipeIngredientButton>
               <StyledButton variant="outlined" onClick={handleClickOpenIngredientDialog}>
                 <FontAwesomeIcon icon={faSearch} />
-                <Box component="span" sx={{ ml: 1 }}>
-                  재료검색
-                </Box>
+                <Box component="span" sx={{ ml: 1 }}>재료검색</Box>
               </StyledButton>
               <StyledButton variant="outlined" onClick={handleClickOpenShoppingListDialog}>
                 <FontAwesomeIcon icon={faCartShopping} />
-                <Box component="span" sx={{ ml: 1 }}>
-                  장보기
-                </Box>
+                <Box component="span" sx={{ ml: 1 }}>장보기</Box>
               </StyledButton>
             </RecipeIngredientButton>
-            <TableContainer component={Paper} sx={{ boxShadow: "none" }}>
+            <TableContainer component={Paper} sx={{ boxShadow: "none", height: "auto", maxHeight: "800px" }}>
               <Table>
                 <TableHead>
                   <TableRow>
@@ -253,13 +211,8 @@ const RecipeDetail = () => {
                 <TableBody>
                   {recipeDetail?.ingredients.map((ingredient, index) => (
                     <TableRow key={index}>
-                      <TableCell component="th" scope="row">
-                        {ingredient.name}
-                      </TableCell>
-                      <TableCell align="right">
-                        {ingredient.qty}
-                        {ingredient.unit}
-                      </TableCell>
+                      <TableCell component="th" scope="row">{ingredient.name}</TableCell>
+                      <TableCell align="right">{ingredient.qty}{ingredient.unit}</TableCell>
                       <TableCell align="right">
                         <Button
                           variant="outlined"
@@ -277,27 +230,23 @@ const RecipeDetail = () => {
           </Grid>
           <Grid item xs={12}>
             <HeadContainer>
-              <Typography variant="h5" component="p" fontWeight="600">
-                조리순서
-              </Typography>
+              <Typography variant="h5" component="p" fontWeight="600">조리순서</Typography>
             </HeadContainer>
           </Grid>
           <Grid item xs={12}>
             {recipeDetail?.steps.map((step, index) => (
               <RecipeStepContainer key={index}>
                 <Steps>
-                  <Typography variant="h3" component="h3">
-                    {index + 1}.
-                  </Typography>
+                  <Typography variant="h3" component="h3">{index + 1}.</Typography>
                   <Typography variant="h6" component="span" ml={2} fontWeight="600">
                     {step?.description}
                   </Typography>
                 </Steps>
                 {step?.image && (
                   <RecipeImage
-                    src={optimizeSubImageUrl(step?.image)}
+                    src={optimizeSubImageUrl(step.image)}
                     alt={step?._id}
-                    sx={{ ml: 2, width: "200px", height: "auto" }}
+                    sx={{ ml: 2, width: "200px", height: "auto", maxHeight: "200px" }}
                   />
                 )}
               </RecipeStepContainer>

@@ -10,6 +10,9 @@ const IngredientCarouselWrapper = styled(Box)(({ theme }) => ({
   position: "relative",
   padding: "50px 200px 10px 200px",
   width: "100vw",
+  height: "auto",
+  maxHeight: "1000px",
+  minHeight: "500px",
   [theme.breakpoints.down("md")]: {
     padding: "30px 50px 10px 50px",
   },

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   Container,
   Grid,
@@ -16,7 +16,6 @@ import DeliveryEstimate from "../component/DeliveryEstimate/DeliveryEstimate";
 import Review from "../component/Review/Review";
 import IngredientsDetailSkeleton from "../component/Skeleton/IngredientsDetailSkeleton";
 import { useGetIngredient } from "../hooks/Ingredient/useGetIngredient";
-import { useIngredientByName } from "../hooks/Ingredient/useIngredientByName";
 import { useAddToCart } from "../hooks/Cart/useAddToCart";
 import { useSelector } from "react-redux";
 
@@ -45,22 +44,18 @@ const MoreButton = styled(Button)({
   height: "50px",
 });
 
+const preloadImage = (url) => {
+  const img = new Image();
+  img.src = url;
+};
+
 const IngredientsDetail = () => {
   const { id } = useParams();
   const { user } = useSelector((state) => state.auth);
-  const location = useLocation();
   const navigate = useNavigate();
-  const queryParams = new URLSearchParams(location.search);
-  const ingredientName = queryParams.get("name");
-
-  // 훅을 조건에 따라 결과를 사용
   const { data: ingredientDataById, isLoading: isLoadingById } = useGetIngredient(id);
-  const { data: ingredientDataByName, isLoading: isLoadingByName } = useIngredientByName(ingredientName);
-
-  // ingredientName이 있을 경우 useIngredientByName의 데이터 사용
-  const data = ingredientName ? ingredientDataByName : ingredientDataById;
-  const isLoading = ingredientName ? isLoadingByName : isLoadingById;
-
+  const data = ingredientDataById;
+  const isLoading = isLoadingById;
   const { mutate: addToCart, isLoading: isAdding } = useAddToCart();
 
   const [address, setAddress] = useState("지역을 선택해주세요");
@@ -70,17 +65,11 @@ const IngredientsDetail = () => {
   const detailsRef = useRef(null);
   const reviewsRef = useRef(null);
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-    if (newValue === 0) {
-      detailsRef.current.scrollIntoView({ behavior: "smooth" });
-    } else if (newValue === 1) {
-      reviewsRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
   useEffect(() => {
     if (data?._id) {
+      preloadImage(data.images[0]);
+      if (data.images[1]) preloadImage(data.images[1]);
+
       const recentlyIngredient = {
         id: data._id,
         name: data.name,
@@ -103,6 +92,15 @@ const IngredientsDetail = () => {
     }
   }, [data]);
 
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+    if (newValue === 0) {
+      detailsRef.current.scrollIntoView({ behavior: "smooth" });
+    } else if (newValue === 1) {
+      reviewsRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   const addCart = () => {
     if (!user) {
       navigate("/login");
@@ -124,6 +122,9 @@ const IngredientsDetail = () => {
     setIsExpanded(!isExpanded);
   };
 
+  const optimizedImageUrl = (url) =>
+    url?.replace(/\/upload\//, "/upload/c_fill,h_1100,w_1100,f_webp/");
+
   if (isLoading) {
     return <IngredientsDetailSkeleton />;
   }
@@ -133,14 +134,15 @@ const IngredientsDetail = () => {
       {data?._id ? (
         <Container maxWidth="lg" sx={{ padding: "50px 0" }}>
           <Grid container spacing={4}>
-            <Grid item lg={6} xs={12} sx={{ textAlign: "center" }}>
+            <Grid item lg={6} md={6} xs={12} sx={{ textAlign: "center" }}>
               <img
-                src={data.images[0]}
+                src={optimizedImageUrl(data.images[0])}
                 alt={data.name}
-                style={{ maxWidth: "100%", height: "auto" }}
+                style={{ maxWidth: "100%", height: "auto", display: "block" }}
+                fetchPriority="high"
               />
             </Grid>
-            <Grid item lg={6} xs={12}>
+            <Grid item lg={6} md={6} xs={12}>
               <Typography variant="h4" component="div" gutterBottom>
                 {data.name}
               </Typography>
@@ -155,10 +157,7 @@ const IngredientsDetail = () => {
                   </Typography>
                 )}
                 {currencyFormat(
-                  calculateDiscountedPrice(
-                    data.price,
-                    data.discountPrice
-                  )
+                  calculateDiscountedPrice(data.price, data.discountPrice)
                 )}
                 원
               </Typography>
@@ -193,9 +192,14 @@ const IngredientsDetail = () => {
                   <ImageContainer isExpanded={isExpanded}>
                     {data.images[1] ? (
                       <img
-                        src={data.images[1]}
+                        src={optimizedImageUrl(data.images[1])}
                         alt={data.name}
-                        style={{ maxWidth: "100%", height: "auto" }}
+                        style={{
+                          maxWidth: "100%",
+                          height: "auto",
+                          display: "block",
+                        }}
+                        loading="lazy"
                       />
                     ) : (
                       <Box

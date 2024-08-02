@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Box, Button, Pagination, styled, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Container, Pagination, styled, Typography } from "@mui/material";
 import ReviewForm from "./ReviewForm";
 import ReviewList from "./ReviewList";
 import { setToastMessage } from "../../redux/commonUISlice";
@@ -31,7 +31,7 @@ const Review = ({ type, itemId }) => {
   const reviewsPerPage = 5;
 
   // 리액트 쿼리 훅으로 리뷰 데이터를 가져옵니다
-  const { data, isLoading, isError, refetch } = useFetchReviews({
+  const { data, isLoading, refetch } = useFetchReviews({
     type,
     id: itemId,
     page,
@@ -102,6 +102,14 @@ const Review = ({ type, itemId }) => {
   };
 
   const pageCount = Math.ceil((totalReviews || 0) / reviewsPerPage);
+
+  if (isLoading) {
+    return (
+      <Container maxWidth="lg" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+        <CircularProgress size="50px" sx={{color: "green"}} />
+      </Container>
+    );
+  }
 
   return (
     <div>

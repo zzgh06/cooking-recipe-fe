@@ -29,27 +29,26 @@ const FridgeContainer = styled(Box)(({ theme }) => ({
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "center",
-  padding: "20px",
-  marginBottom: "20px",
+  padding: "10px",
+  marginBottom: "10px",
   borderRadius: "10px",
   boxShadow: "0 3px 5px rgba(0,0,0,0.2)",
-  minWidth: "500px",
-  minHeight: "400px",
   border: "2px solid lightgrey",
-  [theme.breakpoints.down("sm")]: {
-    minWidth: "100%",
-    padding: "10px",
-    marginBottom: "10px",
+  [theme.breakpoints.up("md")]: {
+    minWidth: "500px",
+    minHeight: "400px",
+    padding: "20px",
+    marginBottom: "20px",
   },
 }));
 
 const GridContainer = styled(Box)(({ theme }) => ({
   display: "grid",
-  gridTemplateColumns: "1fr 1fr",
-  gap: "20px",
-  alignItems: "start",
-  [theme.breakpoints.down("sm")]: {
-    gridTemplateColumns: "1fr",
+  gridTemplateColumns: "1fr",
+  gap: "10px",
+  [theme.breakpoints.up("md")]: {
+    gridTemplateColumns: "1fr 1fr",
+    gap: "20px",
   },
 }));
 
@@ -64,7 +63,7 @@ const MyFridge = () => {
     page: query.get("page") || 1,
     name: query.get("name") || "",
   });
-  const user = useSelector((state) => state.auth.user)
+  const user = useSelector((state) => state.auth.user);
   const { data: ingredientData, isLoading } = useFetchIngredients(searchQuery);
   const { data: fridgeData, refetch } = useFetchFridgeItems(query);
   const [hasSearched, setHasSearched] = useState(false);
@@ -108,12 +107,14 @@ const MyFridge = () => {
     if (isLoading) {
       return;
     }
-    
+
     if (!user) {
-      dispatch(setToastMessage({
-        message: "로그인이 필요한 서비스 입니다.",
-        status: "error"
-      }));
+      dispatch(
+        setToastMessage({
+          message: "로그인이 필요한 서비스 입니다.",
+          status: "error",
+        })
+      );
       navigate("/login");
     }
   }, []);
@@ -156,8 +157,8 @@ const MyFridge = () => {
   };
 
   return (
-    <Box sx={{ padding: { xs: "50px", md: "50px 150px" } }}>
-      <Box sx={{ textAlign: "center", marginBottom: "40px" }}>
+    <Box sx={{ padding: { xs: "20px", sm: "30px", md: "50px 150px" } }}>
+      <Box sx={{ textAlign: "center", marginBottom: "20px" }}>
         <Typography variant="h4" gutterBottom>
           My 냉장고
         </Typography>
@@ -181,7 +182,7 @@ const MyFridge = () => {
                 sx={{
                   alignContent: "flex-start",
                   justifyContent: "center",
-                  marginBottom: "20px",
+                  marginBottom: "10px",
                 }}
               >
                 {fridgeData?.map((item) => (
@@ -207,7 +208,7 @@ const MyFridge = () => {
                 <Button
                   variant="contained"
                   onClick={handleRecommendRecipes}
-                  sx={{ width: { xs: "100%", sm: "350px" } }}
+                  sx={{ width: { xs: "100%", sm: "300px" } }}
                 >
                   레시피 추천
                 </Button>
@@ -223,13 +224,17 @@ const MyFridge = () => {
               justifyContent: "center",
               flexDirection: "column",
               alignItems: "center",
-              padding: { xs: "0 20px", sm: "0 50px" },
-              marginBottom: "40px",
+              padding: { xs: "0 10px", sm: "0 20px", md: "0 50px" },
+              marginBottom: "20px",
             }}
           >
             <Typography
               variant="h5"
-              sx={{ fontWeight: "600", marginBottom: "20px" }}
+              sx={{
+                fontWeight: "600",
+                marginBottom: "10px",
+                minWidth: "350px",
+              }}
             >
               원하시는 식재료를 검색해주세요
             </Typography>
@@ -248,14 +253,14 @@ const MyFridge = () => {
             <Box
               sx={{
                 textAlign: "center",
-                padding: "20px 0",
+                padding: "10px 0",
                 borderTop: "1px solid lightgrey",
                 borderBottom: "1px solid lightgrey",
-                marginBottom: "40px",
+                marginBottom: "20px",
               }}
             >
               {isLoading ? (
-                <CircularProgress size="80px" sx={{color: "green"}} />
+                <CircularProgress size="60px" sx={{ color: "green" }} />
               ) : ingredientData?.length === 0 ? (
                 <Typography>일치하는 재료가 없습니다.</Typography>
               ) : (
@@ -272,7 +277,7 @@ const MyFridge = () => {
             </DialogTitle>
             <DialogContent>
               {recipeLoading ? (
-                <CircularProgress size="80px" sx={{color: "green"}} />
+                <CircularProgress size="60px" sx={{ color: "green" }} />
               ) : (
                 <MyFridgeSearchResults recipeList={recipeList} />
               )}
@@ -282,7 +287,7 @@ const MyFridge = () => {
                 variant="contained"
                 onClick={handleClose}
                 color="primary"
-                sx={{ width: "400px" }}
+                sx={{ width: { xs: "100%", sm: "300px" } }}
               >
                 닫기
               </Button>

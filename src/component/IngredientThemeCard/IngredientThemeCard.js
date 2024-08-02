@@ -8,7 +8,7 @@ const IngredientThemeCard = ({ ingredients, loading }) => {
     <Container >
       <Grid container spacing={3} sx={{ display: "flex", justifyContent: "space-between" }}>
         <Grid item lg={3}>
-          <Typography variant="h4" fontSize="30px" fontWeight="600">📣 빅세일 추천특가</Typography>
+          <Typography variant="h4" fontSize="28px" fontWeight="600">📣 빅세일 추천특가</Typography>
           <Typography variant="subtitle1" component="p">
             상반기 인기 상품 득템 찬스
           </Typography>

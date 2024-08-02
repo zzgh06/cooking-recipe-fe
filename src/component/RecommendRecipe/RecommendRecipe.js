@@ -79,6 +79,7 @@ const RecommendRecipe = React.memo(({ recommendRecipes }) => {
               src={optimizedImages[0]}
               alt={recommendRecipes[0]?.name}
               loading="lazy"
+              decoding="async"
             />
             <Overlay className="overlay">{recommendRecipes[0]?.name}</Overlay>
           </ImageContainer>
@@ -93,6 +94,7 @@ const RecommendRecipe = React.memo(({ recommendRecipes }) => {
                 src={optimizedImages[1]}
                 alt={recommendRecipes[1]?.name}
                 loading="lazy"
+                decoding="async"
               />
               <Overlay className="overlay">{recommendRecipes[1]?.name}</Overlay>
             </ImageContainer>
@@ -106,6 +108,7 @@ const RecommendRecipe = React.memo(({ recommendRecipes }) => {
                 src={optimizedImages[2]}
                 alt={recommendRecipes[2]?.name}
                 loading="lazy"
+                decoding="async"
               />
               <Overlay className="overlay">{recommendRecipes[2]?.name}</Overlay>
             </ImageContainer>
@@ -119,6 +122,7 @@ const RecommendRecipe = React.memo(({ recommendRecipes }) => {
                 src={optimizedImages[4]}
                 alt={recommendRecipes[4]?.name}
                 loading="lazy"
+                decoding="async"
               />
               <Overlay className="overlay">{recommendRecipes[4]?.name}</Overlay>
             </ImageContainer>

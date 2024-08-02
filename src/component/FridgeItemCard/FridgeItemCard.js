@@ -7,11 +7,14 @@ import { faCheckCircle as faCheckCircleSolid } from "@fortawesome/free-solid-svg
 import { useDeleteFridgeItem } from "../../hooks/Fridge/useDeleteFridgeItem";
 
 const FridgeItemCard = ({ item, id, isChecked, onCheckboxChange }) => {
-  const dispatch = useDispatch();
   const {mutate: deleteFridgeItem} = useDeleteFridgeItem();
 
   const handleDelete = async () => {
     deleteFridgeItem(id);
+  };
+
+  const optimizeImageUrl = (url) => {
+    return url.replace(/\/upload\//, '/upload/c_fill,h_160,w_160,f_auto,q_auto,f_webp/');
   };
 
   return (
@@ -28,7 +31,7 @@ const FridgeItemCard = ({ item, id, isChecked, onCheckboxChange }) => {
       </Box>
       <CardMedia
         component="img"
-        image={item.images[0]}
+        image={optimizeImageUrl(item.images[0])}
         alt={item.name}
         sx={{ width: 80, height: 80, objectFit: 'cover', borderRadius: '50%', margin: 'auto', marginTop: 3 }}
       />
