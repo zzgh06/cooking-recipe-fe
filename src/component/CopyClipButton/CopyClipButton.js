@@ -16,7 +16,8 @@ const CopyClipButton = ({ recipeDetail }) => {
   return (
     <div
       onClick={() =>
-        copyURLToClipboard(`http://localhost:3000/recipe/${recipeDetail?._id}`)
+        // copyURLToClipboard(`http://localhost:3000/recipe/${recipeDetail?._id}`)
+        copyURLToClipboard(`https://what-is-your-fridge.netlify.app/recipe/${recipeDetail?._id}`)
       }
     >
       {" "}

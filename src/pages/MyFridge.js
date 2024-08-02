@@ -261,8 +261,10 @@ const MyFridge = () => {
             >
               {isLoading ? (
                 <CircularProgress size="60px" sx={{ color: "green" }} />
-              ) : ingredientData?.length === 0 ? (
-                <Typography>일치하는 재료가 없습니다.</Typography>
+              ) : ingredientData?.ingredients.length === 0 ? (
+                <Box sx={{padding: "50px 90px", boxShadow: 1, borderRadius: 2}}>
+                  <Typography variant="h5" fontSize="20px">일치하는 재료가 없습니다. 😅</Typography>
+                </Box>
               ) : (
                 ingredientData?.ingredients.map((item) => (
                   <SearchResultCard key={item._id} item={item} />

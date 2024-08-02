@@ -2,7 +2,7 @@ import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import RecipeCard from '../component/RecipeCard/RecipeCard';
 import IngredientCard from '../component/IngredientCard/IngredientCard';
-import { Grid, Box, CircularProgress, Typography, Alert } from '@mui/material';
+import { Grid, Box, CircularProgress, Typography, Alert, Divider } from '@mui/material';
 import { useFetchRecipes } from '../hooks/Recipe/useFetchRecipes';
 import { useFetchIngredients } from '../hooks/Recipe/useFetchIngredients';
 
@@ -26,14 +26,14 @@ const SearchResults = () => {
   const isError = recipesError || ingredientsError;
 
   return (
-    <Box sx={{ padding: "50px 150px" }}>
-      <Typography variant="h4" gutterBottom>
+    <Box sx={{ padding: { xs: "20px", md: "50px 150px" }, minHeight: "500px" }}>
+      <Typography variant="h4" sx={{ marginBottom: "30px", textAlign: "center" }}>
         검색결과 "{keyword}"
       </Typography>
 
       {isLoading ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', my: 5 }}>
-          <CircularProgress size="100px" sx={{ color: 'green' }} />
+          <CircularProgress size="80px" sx={{ color: 'green' }} />
         </Box>
       ) : isError ? (
         <Box sx={{ textAlign: 'center', my: 5 }}>
@@ -45,11 +45,11 @@ const SearchResults = () => {
         </Box>
       ) : (
         <>
-          <Typography variant="h5" fontWeight="600" gutterBottom>
+          <Typography variant="h5" fontWeight="600" gutterBottom sx={{ mb: 3 }}>
             레시피 검색 결과
           </Typography>
           {recipes.recipes.length === 0 ? (
-            <Typography variant="body1" fontSize="25px" >
+            <Typography variant="body1" fontSize="20px">
               레시피 검색 결과가 없습니다. 😅
             </Typography>
           ) : (
@@ -62,11 +62,13 @@ const SearchResults = () => {
             </Grid>
           )}
 
-          <Typography variant="h5" fontWeight="600" gutterBottom sx={{ mt: 5 }}>
+          <Divider sx={{ my: 5 }} />
+
+          <Typography variant="h5" fontWeight="600" gutterBottom sx={{ mb: 3 }}>
             재료 검색 결과
           </Typography>
           {ingredients.ingredients.length === 0 ? (
-            <Typography variant="body1" fontSize="25px" >
+            <Typography variant="body1" fontSize="20px">
               재료 검색 결과가 없습니다. 😅
             </Typography>
           ) : (

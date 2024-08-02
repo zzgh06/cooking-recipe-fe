@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, Suspense } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -91,7 +91,7 @@ const HeadContainer = styled("div")({
   marginTop: "20px",
 });
 
-const RecipeIngredientButton = styled("div")({
+const RecipeIngredientButton = styled(Box)({
   display: "flex",
   padding: "10px 15px",
 });
@@ -111,7 +111,7 @@ const RecipeStepContainer = styled(Box)({
   width: "100%",
 });
 
-const Steps = styled("div")(({ theme }) => ({
+const Steps = styled(Box)(({ theme }) => ({
   display: "flex",
   alignItems: "baseline",
   height: "187px",
@@ -129,7 +129,6 @@ const RecipeDetail = () => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [openIngredientDialog, setOpenIngredientDialog] = useState(false);
   const [openShoppingListDialog, setOpenShoppingListDialog] = useState(false);
-  const [imageLoading, setImageLoading] = useState(true);
   const { data: recipeFavorite } = useRecipeFavorite();
   const { mutate: addRecipeFavorite } = useAddRecipeFavorite();
   const { mutate: deleteRecipeFavorite } = useDeleteRecipeFavorite();
@@ -150,7 +149,7 @@ const RecipeDetail = () => {
     } else {
       addRecipeFavorite(recipeDetail?._id);
     }
-    setIsFavorite(!isFavorite);
+    setIsFavorite((prev) => !prev);
   }, [isFavorite, user, navigate, recipeDetail?._id, addRecipeFavorite, deleteRecipeFavorite]);
 
   const handleClickOpenIngredientDialog = () => setOpenIngredientDialog(true);
@@ -164,19 +163,21 @@ const RecipeDetail = () => {
   }, [navigate]);
 
   const getDifficultyStars = (difficulty) => {
-  const stars = {
+    const stars = {
       "아무나": "⭐",
       "초급": "⭐⭐",
       "중급": "⭐⭐⭐",
       "고급": "⭐⭐⭐⭐",
-      "신의경지": "⭐⭐⭐⭐⭐"
+      "신의경지": "⭐⭐⭐⭐⭐",
     };
     return stars[difficulty] || "";
+  };
 
   const optimizeMainImageUrl = (url) => url?.replace(/\/upload\//, '/upload/c_fill,h_1704,w_1704,f_webp/');
   const optimizeSubImageUrl = (url) => url?.replace(/\/upload\//, '/upload/c_fill,h_200,w_200,f_webp/');
 
   const optimizedMainImageUrl = recipeDetail?.images[0] ? optimizeMainImageUrl(recipeDetail.images[0]) : "";
+
   if (isLoading) {
     return <RecipeDetailSkeleton />;
   }
@@ -187,16 +188,13 @@ const RecipeDetail = () => {
       <Container maxWidth="md" sx={{ marginTop: "80px" }}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <RecipeImage src={optimizedMainImageUrl} alt={recipeDetail?.name} />
+            <ImageContainer>
+              <RecipeImage src={optimizedMainImageUrl} alt={recipeDetail?.name} />
+            </ImageContainer>
           </Grid>
           <Grid item xs={12}>
             <RecipeInfoContainer>
-              <Typography
-                variant="h4"
-                component="h2"
-                fontWeight="600"
-                fontSize="27px"
-              >
+              <Typography variant="h4" component="h2" fontWeight="600" fontSize="27px">
                 {recipeDetail?.name}
               </Typography>
               <Box sx={{ display: "flex" }}>

@@ -4,7 +4,6 @@ import {
   AppBar,
   Toolbar,
   Typography,
-  InputBase,
   IconButton,
   Box,
   Button,
@@ -35,7 +34,7 @@ import { useLoginWithToken } from "../../hooks/User/useLoginWithToken";
 const StyledAppBar = styled(AppBar)({
   backgroundColor: "#ffffff",
   boxShadow: "0px 1px 1px 1px rgb(221, 221, 221)",
-  padding: "0 15px"
+  padding: "0 15px",
 });
 
 const Logo = styled(Typography)({
@@ -43,7 +42,7 @@ const Logo = styled(Typography)({
   fontSize: "23px",
   fontWeight: 600,
   color: "black",
-  minWidth: "187px"
+  minWidth: "195px",
 });
 
 const NavMenu = styled(Box)({
@@ -81,7 +80,7 @@ const StyledTextField = styled(TextField)({
 });
 
 const SidebarList = styled(List)({
-  width: 250,
+  width: 350,
 });
 
 const Navbar = () => {
@@ -127,6 +126,9 @@ const Navbar = () => {
     }
   };
 
+  const handleSearchClick = () => {
+  };
+
   const menuItems = ["레시피", "스토어", "My 냉장고"];
   const menuPathMapping = {
     레시피: "recipes/all",
@@ -137,7 +139,13 @@ const Navbar = () => {
   return (
     <StyledAppBar position="fixed">
       <Toolbar
-        sx={{ display: "flex", flexDirection: "column", height: "auto", maxHeight: "95px", paddingBottom: "11px" }}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          height: "auto",
+          maxHeight: "95px",
+          paddingBottom: "11px",
+        }}
       >
         <Box
           sx={{
@@ -193,51 +201,83 @@ const Navbar = () => {
           }}
         >
           <Logo onClick={() => navigate("/")}>냉장고에 뭐 있지?</Logo>
-          <SearchContainer>
-            <StyledTextField
-              variant="outlined"
-              placeholder="검색어를 입력하세요"
-              value={keyword}
-              onChange={(e) => setKeyword(e.target.value)}
-              onKeyPress={handleSearch}
-              InputProps={{
-                endAdornment: (
-                  <IconButton onClick={handleSearch}>
-                    <SearchIcon />
-                  </IconButton>
-                ),
-              }}
-            />
-          </SearchContainer>
-          {!isMobile ? <NavMenu>
-            {menuItems.map((item) => (
-              <Link to={`/${menuPathMapping[item]}`} key={item}>
-                {item}
-              </Link>
-            ))}
-          </NavMenu> : <IconButton
-            size="large"
-            edge="end"
-            aria-label="menu"
-            onClick={toggleSidebar}
-          >
-            <MenuIcon />
-          </IconButton>}
+          {!isMobile && (
+            <SearchContainer>
+              <StyledTextField
+                variant="outlined"
+                placeholder="검색어를 입력하세요"
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)}
+                onKeyPress={handleSearch}
+                InputProps={{
+                  endAdornment: (
+                    <IconButton onClick={handleSearch}>
+                      <SearchIcon />
+                    </IconButton>
+                  ),
+                }}
+              />
+            </SearchContainer>
+          )}
+          {!isMobile ? (
+            <NavMenu>
+              {menuItems.map((item) => (
+                <Link to={`/${menuPathMapping[item]}`} key={item}>
+                  {item}
+                </Link>
+              ))}
+            </NavMenu>
+          ) : (
+            <IconButton
+              size="large"
+              edge="end"
+              aria-label="menu"
+              onClick={toggleSidebar}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
         </Box>
-        <Drawer anchor="right" open={sidebarOpen} onClose={toggleSidebar}>
+        <Drawer
+          anchor="right"
+          open={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
+        >
           <Box
-            sx={{ width: 250 }}
+            sx={{ width: 300 }}
             role="presentation"
-            onClick={toggleSidebar}
-            onKeyDown={toggleSidebar}
+            onClick={(e) => e.stopPropagation()}
           >
             <Box
-              sx={{ display: "flex", justifyContent: "space-between", p: 2 }}
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                p: 2,
+              }}
             >
               <Typography variant="h6">Menu</Typography>
               <IconButton onClick={toggleSidebar}>
                 <CloseIcon />
               </IconButton>
+            </Box>
+            <Box
+              sx={{ padding: "0 16px 16px 16px" }}
+              onClick={handleSearchClick} 
+            >
+              <StyledTextField
+                variant="outlined"
+                placeholder="검색어를 입력하세요"
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)}
+                onKeyPress={handleSearch}
+                InputProps={{
+                  endAdornment: (
+                    <IconButton onClick={handleSearch}>
+                      <SearchIcon />
+                    </IconButton>
+                  ),
+                }}
+              />
             </Box>
             <Divider />
             <SidebarList>
@@ -260,17 +300,26 @@ const Navbar = () => {
           open={Boolean(anchorEl)}
           onClose={handleMenuClose}
         >
-          {user?.name ? [
-            <MenuItem key="profile" onClick={() => navigate("/account/profile")}>
-              {user?.name}님
-            </MenuItem>,
-            <MenuItem key="logout" onClick={handleLogout}>로그아웃</MenuItem>
-          ] : [
-            <MenuItem key="register" onClick={() => navigate("/register")}>
-              회원가입
-            </MenuItem>,
-            <MenuItem key="login" onClick={() => navigate("/login")}>로그인</MenuItem>
-          ]}
+          {user?.name
+            ? [
+                <MenuItem
+                  key="profile"
+                  onClick={() => navigate("/account/profile")}
+                >
+                  {user?.name}님
+                </MenuItem>,
+                <MenuItem key="logout" onClick={handleLogout}>
+                  로그아웃
+                </MenuItem>,
+              ]
+            : [
+                <MenuItem key="register" onClick={() => navigate("/register")}>
+                  회원가입
+                </MenuItem>,
+                <MenuItem key="login" onClick={() => navigate("/login")}>
+                  로그인
+                </MenuItem>,
+              ]}
         </Menu>
       </Toolbar>
     </StyledAppBar>
