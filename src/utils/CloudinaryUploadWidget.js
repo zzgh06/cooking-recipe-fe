@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import "../style/common.style.css";
+// import "../style/common.style.css";
 import { Button } from "@mui/material";
 
 const CLOUDNAME = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;

@@ -1,7 +1,7 @@
 import React from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import { Box, IconButton, SvgIcon } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import { responsive } from "../../constants/responsive";
 
@@ -73,6 +73,7 @@ const BannerComponent = ({ images }) => {
               src={item}
               alt={`banner-${index}`}
               style={{ width: '100%', height: 'auto' }}
+              fetchPriority="high"
             />
           </Box>
         ))}

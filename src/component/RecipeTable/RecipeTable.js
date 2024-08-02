@@ -19,6 +19,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const RecipeTable = ({ header = [], data = [], deleteItem, openEditForm }) => {
+  const optimizedImageUrl = (url) =>
+    url?.replace(/\/upload\//, "/upload/c_fill,h_200,w_200,f_webp/");
+
   return (
     <StyledTableContainer>
       <Table>
@@ -43,9 +46,9 @@ const RecipeTable = ({ header = [], data = [], deleteItem, openEditForm }) => {
                 <StyledTableCell>
                   {item?.images && item.images.length > 0 ? (
                     <img
-                      src={item.images[0]}
+                      src={optimizedImageUrl(item.images[0])}
                       alt="Recipe"
-                      style={{ width: "100px" }}
+                      style={{ width: "100px", aspectRatio: "16 / 9" }}
                     />
                   ) : (
                     "N/A"
