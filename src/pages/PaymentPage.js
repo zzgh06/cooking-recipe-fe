@@ -8,11 +8,10 @@ import {
   Box,
 } from "@mui/material";
 import PaymentForm from "../component/PaymentForm/PaymentForm";
-import "../style/paymentPage.style.css";
+import OrderReceipt from "../component/OrderReceipt/OrderReceipt";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { cc_expires_format } from "../utils/number";
-import OrderReceipt from "../component/OrderReceipt/OrderReceipt";
 import { useDeleteSelectedCartItems } from "../hooks/Cart/useDeleteSelectedCartItems"; 
 import { useCreateOrder } from "../hooks/Order/useCreateOrder";
 
@@ -109,7 +108,7 @@ const PaymentPage = () => {
       <Grid container spacing={2}>
         <Grid item lg={7}>
           <Box>
-            <Typography variant="h4" component="h2" className="mb-2">
+            <Typography variant="h4" component="h2" sx={{ mb: 2 }}>
               배송 주소
             </Typography>
             <Box component="form" onSubmit={handleSubmit}>
@@ -175,18 +174,14 @@ const PaymentPage = () => {
                   />
                 </Grid>
               </Grid>
-              <Box className="mobile-receipt-area">
+              <Box sx={{ display: { xs: 'none' }, mt: 2 }}>
                 <OrderReceipt
                   selectedCartItems={selectedCartItems}
                   totalPrice={totalPrice}
                 />
               </Box>
-              <Box sx={{ marginTop: "20px" }}>
-                <Typography
-                  variant="h4"
-                  component="h2"
-                  className="payment-title"
-                >
+              <Box sx={{ mt: 2 }}>
+                <Typography variant="h4" component="h2" sx={{ mb: 2 }}>
                   결제 정보
                 </Typography>
                 <PaymentForm
@@ -198,17 +193,16 @@ const PaymentPage = () => {
               <Button
                 variant="contained"
                 color="primary"
-                className="payment-button pay-button"
                 type="submit"
-                disabled={isDeleting || isOrdering} // 버튼 비활성화
-                sx={{ width: "100%" }}
+                disabled={isDeleting || isOrdering}
+                sx={{ width: "100%", mt: 3 }}
               >
                 결제하기
               </Button>
             </Box>
           </Box>
         </Grid>
-        <Grid item lg={5} className="receipt-area">
+        <Grid item lg={5} sx={{ display: { xs: 'block' } }}>
           <OrderReceipt
             selectedCartItems={selectedCartItems}
             totalPrice={totalPrice}

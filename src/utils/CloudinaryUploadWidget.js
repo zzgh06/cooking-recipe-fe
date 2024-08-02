@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import "../App.css";
 import "../style/common.style.css";
 import { Button } from "@mui/material";
 

@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
-  IconButton,
   styled,
   TextField,
   Typography,
 } from "@mui/material";
 import ReactStars from "react-rating-stars-component";
-import { setToastMessage } from "../../redux/commonUISlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 
@@ -56,8 +52,6 @@ const CustomTextField = styled(TextField)({
 });
 
 const ReviewForm = ({
-  type,
-  itemId,
   initialComment = "",
   initialRating = 0,
   onFormSubmit,
@@ -66,9 +60,6 @@ const ReviewForm = ({
   const [comment, setComment] = useState(initialComment);
   const [rating, setRating] = useState(initialRating);
   const [starError, setStarError] = useState(false);
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.auth.user);
-  const navigate = useNavigate();
 
   // [ 별점 수 확인 및 에러 처리 ]
   const checkStarLength = (value) => {

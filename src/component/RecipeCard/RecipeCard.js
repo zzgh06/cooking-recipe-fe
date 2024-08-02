@@ -24,7 +24,7 @@ const RecipeImage = styled("img")({
   height: "auto",
   maxWidth: "400px",
   maxHeight: "220px",
-  aspectRatio: "3 / 2",
+  aspectRatio: "16 / 9",
   objectFit: "cover",
   borderRadius: "8px",
   transition: "transform 0.3s",
