@@ -130,8 +130,6 @@ const Review = ({ type, itemId }) => {
           onClose={handleCloseForm}
         />
       )}
-      {isLoading && <Typography>Loading...</Typography>}
-      {isError && <Typography>Error loading reviews.</Typography>}
       <ReviewList
         type={type}
         reviews={data?.reviews || []}

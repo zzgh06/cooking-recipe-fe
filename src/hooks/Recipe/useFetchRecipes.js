@@ -14,7 +14,7 @@ export const useFetchRecipes = (searchQuery) => {
     queryKey: ['recipes', JSON.stringify(searchQuery)],
     queryFn: () => fetchRecipes(searchQuery),
     staleTime: 60000,
-    cacheTime: 300000,
+    cacheTime: 600000,
     keepPreviousData: true,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
