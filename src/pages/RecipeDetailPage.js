@@ -8,7 +8,7 @@ import {
   faBookmark as solidBookmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark as regularBookmark } from "@fortawesome/free-regular-svg-icons";
-import RecipeCategory from "../../component/RecipeCategory/RecipeCategory";
+import RecipeCategory from "../component/RecipeCategory/RecipeCategory";
 import {
   Box,
   Button,
@@ -25,20 +25,20 @@ import {
   Paper,
   CircularProgress,
 } from "@mui/material";
-import KakaoShareButton from "../../component/KakaoShareButton/KakaoShareButton";
-import CopyClipButton from "../../component/CopyClipButton/CopyClipButton";
-import RecipeDetailSkeleton from "../../component/Skeleton/RecipeDetailSkeleton";
-import { useFetchRecipeById } from "../../hooks/Recipe/useFetchRecipeById";
-import { useRecipeFavorite } from "../../hooks/Favorite/useRecipeFavorite";
-import { useAddRecipeFavorite } from "../../hooks/Favorite/useAddRecipeFavorite";
-import { useDeleteRecipeFavorite } from "../../hooks/Favorite/useDeleteRecipeFavorite";
+import KakaoShareButton from "../component/KakaoShareButton/KakaoShareButton";
+import CopyClipButton from "../component/CopyClipButton/CopyClipButton";
+import RecipeDetailSkeleton from "../component/Skeleton/RecipeDetailSkeleton";
+import { useFetchRecipeById } from "../hooks/Recipe/useFetchRecipeById";
+import { useRecipeFavorite } from "../hooks/Favorite/useRecipeFavorite";
+import { useAddRecipeFavorite } from "../hooks/Favorite/useAddRecipeFavorite";
+import { useDeleteRecipeFavorite } from "../hooks/Favorite/useDeleteRecipeFavorite";
 
-const Review = React.lazy(() => import("../../component/Review/Review"));
+const Review = React.lazy(() => import("../component/Review/Review"));
 const IngredientDialog = React.lazy(() =>
-  import("../../component/IngredientDialog/IngredientDialog")
+  import("../component/IngredientDialog/IngredientDialog")
 );
 const ShoppingListDialog = React.lazy(() =>
-  import("../../component/ShoppingListDialog/ShoppingListDialog")
+  import("../component/ShoppingListDialog/ShoppingListDialog")
 );
 
 const ImageContainer = styled(Box)({
@@ -53,23 +53,10 @@ const ImageContainer = styled(Box)({
 });
 
 const RecipeImage = styled("img")({
+  display: "block",
   width: "100%",
   height: "auto",
-  display: "block",
-});
-
-const PlaceholderImage = styled("div")({
-  width: "100%",
-  minWidth: "852px",
-  height: "100%",
-  minHeight: "600px",
-  borderRadius: "8px",
-  backgroundColor: "#f0f0f0",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  fontSize: "20px",
-  color: "#ccc",
+  aspectRatio: "16/9"
 });
 
 const RecipeInfoContainer = styled(Box)({

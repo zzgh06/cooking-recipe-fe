@@ -23,8 +23,8 @@ const MyRecipePage = lazy(() => import("../pages/MyRecipePage"));
 const SearchResults = lazy(() => import("../pages/SearchResults"));
 
 const IngredientsDetail = lazy(() => import("../pages/IngredientsDetail"));
-const RecipePage = lazy(() => import("../pages/Recipe/RecipePage"));
-const RecipeDetail = lazy(() => import("../pages/Recipe/RecipeDetailPage"));
+const RecipePage = lazy(() => import("../pages/RecipePage"));
+const RecipeDetail = lazy(() => import("../pages/RecipeDetailPage"));
 
 const AdminOrderPage = lazy(() => import("../pages/AdminOrderPage"));
 const AdminIngredientsPage = lazy(() => import("../pages/AdminIngredientsPage"));

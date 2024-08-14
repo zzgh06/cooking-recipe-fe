@@ -1,10 +1,10 @@
 import React from "react";
 import { Box } from "@mui/material";
-import RecipeAll from "./RecipeAll";
+import RecipeAll from "../component/RecipeAll/RecipeAll";
 import { useLocation, useParams } from "react-router-dom";
-import RecipeTitle from "../../component/RecipeTitle/RecipeTitle";
-import RecipeCategory from "../../component/RecipeCategory/RecipeCategory";
-import RecipeCondition from "./RecipeCondition";
+import RecipeTitle from "../component/RecipeTitle/RecipeTitle";
+import RecipeCategory from "../component/RecipeCategory/RecipeCategory";
+import RecipeCondition from "../component/RecipeCondition/RecipeCondition";
 
 const RecipePage = () => {
   const location = useLocation();

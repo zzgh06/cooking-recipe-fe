@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useFetchRecipesByCategory } from "../../hooks/Recipe/useFetchRecipesByCategory";
-import RecipeCard from "../../component/RecipeCard/RecipeCard";
-import RecipeCardSkeleton from "../../component/Skeleton/RecipeCardSkeleton";
+import RecipeCard from "../RecipeCard/RecipeCard";
+import RecipeCardSkeleton from "../Skeleton/RecipeCardSkeleton";
 import { Container, Grid, Typography, Pagination, Box, styled } from "@mui/material";
 
 const RecipeAllContainer = styled(Container)({

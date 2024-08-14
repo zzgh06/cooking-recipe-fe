@@ -1,7 +1,7 @@
 import React from "react";
 import { useFetchRecipesByCategory } from "../../hooks/Recipe/useFetchRecipesByCategory";
-import RecipeCard from "../../component/RecipeCard/RecipeCard";
-import RecipeCardSkeleton from "../../component/Skeleton/RecipeCardSkeleton";
+import RecipeCard from "../RecipeCard/RecipeCard";
+import RecipeCardSkeleton from "../Skeleton/RecipeCardSkeleton";
 import { Container, Grid, Box, Typography, styled } from "@mui/material";
 
 const RecipeContainer = styled(Container)(({ theme }) => ({
