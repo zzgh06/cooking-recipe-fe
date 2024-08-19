@@ -12,6 +12,6 @@ export const useFetchCart = () => {
     queryKey: ["cart"],
     queryFn: () => fetchCart(),
     staleTime: 60000,
-    cacheTime: 300000,
+    gcTime: 300000,
   });
 };
