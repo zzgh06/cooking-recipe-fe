@@ -11,7 +11,7 @@ export const useFetchShoppingList = () => {
     queryKey: ["shoppingList"],
     queryFn: fetchShoppingList,
     staleTime: 60000,
-    cacheTime: 300000, 
+    gcTime: 300000, 
     refetchOnWindowFocus: true, 
     refetchOnReconnect: true,
   });

@@ -12,7 +12,8 @@ export const useFetchRecommendedRecipes = (checkedItems) => {
   return useQuery({
     queryKey: ['recommendedRecipes', checkedItems],
     queryFn: () => fetchRecommendedRecipes(checkedItems),
-    retry: 0,
+    staleTime:30000,
+    gcTime:60000,
     retryDelay: 60000
   });
 };

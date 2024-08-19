@@ -11,10 +11,10 @@ const fetchRecipes = async (searchQuery) => {
 
 export const useFetchRecipes = (searchQuery) => {
   return useQuery({
-    queryKey: ['recipes', JSON.stringify(searchQuery)],
+    queryKey: ['recipes', searchQuery],
     queryFn: () => fetchRecipes(searchQuery),
-    staleTime: 60000,
-    cacheTime: 300000,
+    staleTime: 30000,
+    gcTime: 60000,
     keepPreviousData: true,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
