@@ -80,6 +80,13 @@ const RecommendRecipe = React.memo(({ recommendRecipes }) => {
               alt={recommendRecipes[0]?.name}
               loading="lazy"
               decoding="async"
+              width="600"
+              height="600"
+              srcSet={`${optimizedImages[0]} 600w, ${optimizedImages[0]?.replace(
+                'h_1082,w_1082',
+                'h_1200,w_1200'
+              )} 1200w`}
+              sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 600px"
             />
             <Overlay className="overlay">{recommendRecipes[0]?.name}</Overlay>
           </ImageContainer>
@@ -95,6 +102,13 @@ const RecommendRecipe = React.memo(({ recommendRecipes }) => {
                 alt={recommendRecipes[1]?.name}
                 loading="lazy"
                 decoding="async"
+                width="300"
+                height="300"
+                srcSet={`${optimizedImages[1]} 300w, ${optimizedImages[1]?.replace(
+                  'h_1082,w_1082',
+                  'h_600,w_600'
+                )} 600w`}
+                sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 300px"
               />
               <Overlay className="overlay">{recommendRecipes[1]?.name}</Overlay>
             </ImageContainer>
@@ -109,6 +123,13 @@ const RecommendRecipe = React.memo(({ recommendRecipes }) => {
                 alt={recommendRecipes[2]?.name}
                 loading="lazy"
                 decoding="async"
+                width="300"
+                height="300"
+                srcSet={`${optimizedImages[2]} 300w, ${optimizedImages[2]?.replace(
+                  'h_1082,w_1082',
+                  'h_600,w_600'
+                )} 600w`}
+                sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 300px"
               />
               <Overlay className="overlay">{recommendRecipes[2]?.name}</Overlay>
             </ImageContainer>
@@ -116,13 +137,27 @@ const RecommendRecipe = React.memo(({ recommendRecipes }) => {
           <Grid item lg={12}>
             <ImageContainer
               onClick={() => showRecipe(recommendRecipes[4]?._id)}
-              sx={{ maxHeight: { xs: "300px", sm: "300px", md: "200px", lg: "300px" } }}
+              sx={{
+                maxHeight: {
+                  xs: "300px",
+                  sm: "300px",
+                  md: "200px",
+                  lg: "300px",
+                },
+              }}
             >
               <StyledImage
                 src={optimizedImages[4]}
                 alt={recommendRecipes[4]?.name}
                 loading="lazy"
                 decoding="async"
+                width="600"
+                height="300"
+                srcSet={`${optimizedImages[4]} 600w, ${optimizedImages[4]?.replace(
+                  'h_1082,w_1082',
+                  'h_1200,w_600'
+                )} 1200w`}
+                sizes="(max-width: 600px) 100vw, (max-width: 1200px) 100vw, 600px"
               />
               <Overlay className="overlay">{recommendRecipes[4]?.name}</Overlay>
             </ImageContainer>

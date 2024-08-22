@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import {
   Button,
@@ -79,6 +79,14 @@ const AdminRecipePage = () => {
     }
     setShowForm(false);
   };
+
+  // useEffect(() => {
+  //   const intervalId = setInterval(() => {
+  //     refetch();
+  //   }, 5000); // 5초마다 요청
+
+  //   return () => clearInterval(intervalId); // 컴포넌트가 언마운트될 때 타이머를 정리
+  // }, [refetch]);
 
   if (isLoading) {
     return (

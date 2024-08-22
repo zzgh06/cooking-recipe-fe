@@ -1,7 +1,7 @@
+import CircularProgress from '@mui/material/CircularProgress';
 import React, { Suspense, lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
-import CircularProgress from '@mui/material/CircularProgress'; 
 
 const MainPage = lazy(() => import("../pages/MainPage"));
 const StorePage = lazy(() => import("../pages/StorePage"));
