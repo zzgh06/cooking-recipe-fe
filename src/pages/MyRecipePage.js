@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 import RecipeForm from "../component/RecipeForm/RecipeForm";
 import { useNavigate } from "react-router-dom";
 import { Container } from "@mui/material";
@@ -8,7 +8,7 @@ import { useCreateRecipe } from "../hooks/Recipe/useCreateRecipe";
 const MyRecipePage = () => {
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.user);
-  const { mutate: createRecipe, isLoading } = useCreateRecipe();
+  const { mutate: createRecipe } = useCreateRecipe();
 
   useEffect(() => {
     if (!user) {
