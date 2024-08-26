@@ -77,6 +77,14 @@ const AdminRecipePage = () => {
     setShowForm(false);
   };
 
+  // useEffect(() => {
+  //   const intervalId = setInterval(() => {
+  //     refetch();
+  //   }, 5000); // 5초마다 요청
+
+  //   return () => clearInterval(intervalId); // 컴포넌트가 언마운트될 때 타이머를 정리
+  // }, [refetch]);
+
   if (isLoading) {
     return (
       <Container maxWidth="lg" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
