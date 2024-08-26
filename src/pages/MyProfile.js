@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Container, Grid, Typography } from "@mui/material";
-import { useSelector, useDispatch } from "react-redux";
+import { Container, Grid } from "@mui/material";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import UserInfo from "../component/UserInfo/UserInfo";
 import MyOrderComponent from "../component/MyOrderComponent/MyOrderComponent";

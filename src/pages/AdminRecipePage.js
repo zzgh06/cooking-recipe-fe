@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
 import {
   Button,
   Container,
@@ -28,7 +27,7 @@ const AdminRecipePage = () => {
   const [showForm, setShowForm] = useState(false);
   const [mode, setMode] = useState("new");
   const [selectedRecipe, setSelectedRecipe] = useState(null);
-  const { data: recipesData, refetch, isLoading } = useFetchRecipes(searchQuery);
+  const { data: recipesData, isLoading } = useFetchRecipes(searchQuery);
   const { mutate: createRecipe } = useCreateRecipe();
   const { mutate: editRecipe } = useEditRecipe();
   const { mutate: deleteRecipe } = useDeleteRecipe();
@@ -67,7 +66,6 @@ const AdminRecipePage = () => {
 
   const deleteItem = (id) => {
     deleteRecipe(id);
-    refetch();
   };
 
   const handleFormSubmit = (recipeData) => {
@@ -75,7 +73,6 @@ const AdminRecipePage = () => {
       createRecipe(recipeData);
     } else {
       editRecipe({ id: selectedRecipe._id, updatedData: recipeData });
-      refetch();
     }
     setShowForm(false);
   };

@@ -1,11 +1,9 @@
 import React from "react";
 import {
-  Box,
   Card,
   CardContent,
   Skeleton,
   styled,
-  Typography,
 } from "@mui/material";
 
 const StyledCard = styled(Card)({

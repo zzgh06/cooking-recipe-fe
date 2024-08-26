@@ -35,7 +35,7 @@ const PaymentPage = () => {
   });
 
   const { mutate: deleteSelectedItems, isLoading: isDeleting } = useDeleteSelectedCartItems();
-  const { mutate: createOrder, isLoading: isOrdering, isError, isSuccess } = useCreateOrder();
+  const { mutate: createOrder, isLoading: isOrdering, isSuccess } = useCreateOrder();
 
   const selectedCartItems = cartItem.filter((item) =>
     selectedItems.includes(item.ingredientId._id)

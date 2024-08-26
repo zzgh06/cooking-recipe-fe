@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Grid, Typography, Skeleton, Box } from "@mui/material";
+import { Container, Grid, Skeleton, Box } from "@mui/material";
 
 const IngredientsDetailSkeleton = () => {
   return (
