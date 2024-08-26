@@ -4,7 +4,7 @@ import { Typography, Button, Container } from "@mui/material";
 import { Link } from "react-router-dom";
 
 const OrderCompletePage = () => {
-  const { orderNum, loading } = useSelector((state) => state.order);
+  const { orderNum } = useSelector((state) => state.order);
 
   return (
     <Container
