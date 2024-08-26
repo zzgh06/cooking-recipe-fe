@@ -16,6 +16,19 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useDeleteCartItem } from "../../hooks/Cart/useDeleteCartItem";
 import { useEditCartItem } from "../../hooks/Cart/useEditCartItem";
 
+// interface CartItemProps {
+//   item: {
+//     name?: string;
+//     price?: number;
+//     unit?: string;
+//     images?: string[];
+//     _id?: string;
+//   };
+//   qty: number;
+//   selectedItems: string[];
+//   selectItem: (id: string) => void;
+// }
+
 const CartItem = ({ item = {}, qty, selectedItems, selectItem }) => {
   const dispatch = useDispatch();
 

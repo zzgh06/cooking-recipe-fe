@@ -1,19 +1,28 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-import { Box, Card, CardActions, CardContent, CardMedia, Grid, IconButton, Typography } from "@mui/material";
+import { Box, Card, CardActions, CardContent, CardMedia, IconButton, Typography } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircle as faCircleRegular, faTrashAlt } from "@fortawesome/free-regular-svg-icons";
 import { faCheckCircle as faCheckCircleSolid } from "@fortawesome/free-solid-svg-icons";
 import { useDeleteFridgeItem } from "../../hooks/Fridge/useDeleteFridgeItem";
 
-const FridgeItemCard = ({ item, id, isChecked, onCheckboxChange }) => {
+interface FridgeItemCardProps {
+  id : string;
+  isChecked: boolean;
+  onCheckboxChange: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  item : {
+    images: string[];
+    name: string;
+  }
+}
+
+const FridgeItemCard = ({ item, id, isChecked, onCheckboxChange }: FridgeItemCardProps) => {
   const {mutate: deleteFridgeItem} = useDeleteFridgeItem();
 
   const handleDelete = async () => {
     deleteFridgeItem(id);
   };
 
-  const optimizeImageUrl = (url) => {
+  const optimizeImageUrl = (url: string): string => {
     return url.replace(/\/upload\//, '/upload/c_fill,h_160,w_160,f_auto,q_auto,f_webp/');
   };
 
