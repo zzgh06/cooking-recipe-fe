@@ -1,6 +1,10 @@
 import React from "react";
 
-const DeliveryEstimate = ({ address }) => {
+interface DeliveryEstimateProps {
+  address: string[];
+}
+
+const DeliveryEstimate = ({ address }: DeliveryEstimateProps) => {
   const regionsFast = ["서울", "경기", "인천"];
   const regionsRegular = [
     "강원",

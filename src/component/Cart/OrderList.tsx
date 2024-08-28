@@ -2,7 +2,10 @@ import React from "react";
 import { currencyFormat } from "../../utils/number";
 import { useNavigate } from "react-router";
 
-const OrderList = ({ totalPrice }) => {
+interface OrderListProps {
+  totalPrice: number;
+}
+const OrderList = ({ totalPrice }: OrderListProps) => {
   const navigate = useNavigate();
 
   return (

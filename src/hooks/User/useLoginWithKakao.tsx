@@ -1,18 +1,31 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, UseMutationResult } from '@tanstack/react-query';
 import api from '../../utils/api';
 import { useDispatch } from 'react-redux';
 import { setLoginData, setUser } from '../../redux/userSlice';
 import { setToastMessage } from '../../redux/commonUISlice';
 
-const loginWithKakao = async (token) => {
+interface KakaoLoginResponse {
+  token: string;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+  };
+}
+
+interface KakaoLoginError {
+  error: string;
+}
+
+const loginWithKakao = async (token: string): Promise<KakaoLoginResponse> => {
   const response = await api.post('/auth/kakao', { token });
   sessionStorage.setItem('token', response.data.token);
   return response.data;
 };
 
-export const useLoginWithKakao = () => {
+export const useLoginWithKakao = (): UseMutationResult<KakaoLoginResponse, KakaoLoginError, string> => {
   const dispatch = useDispatch();
-  return useMutation({
+  return useMutation<KakaoLoginResponse, KakaoLoginError, string>({
     mutationFn: loginWithKakao,
     onSuccess: (data) => {
       dispatch(setUser(data.user));
@@ -21,7 +34,7 @@ export const useLoginWithKakao = () => {
     onError: (error) => {
       dispatch(
         setToastMessage({
-          message: error.error || "로그인 실패",
+          message: error.error,
           status: 'error',
         })
       );

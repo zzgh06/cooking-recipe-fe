@@ -3,7 +3,17 @@ import IngredientCard from "../IngredientCard/IngredientCard";
 import { Box, Container, Grid, Typography } from "@mui/material";
 import IngredientCardSkeleton from "../Skeleton/IngredientCardSkeleton";
 
-const IngredientThemeCard = ({ ingredients, loading }) => {
+interface Ingredient {
+  _id: string;
+  name: string;
+}
+
+interface IngredientThemeCardProps {
+  ingredients: Ingredient[];
+  loading: boolean;
+}
+
+const IngredientThemeCard = ({ ingredients, loading }: IngredientThemeCardProps) => {
   return (
     <Container >
       <Grid container spacing={3} sx={{ display: "flex", justifyContent: "space-between" }}>

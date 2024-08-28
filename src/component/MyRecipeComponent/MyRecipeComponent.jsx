@@ -15,7 +15,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { AddCircleOutline } from "@mui/icons-material";
 import { useFetchRecipes } from "../../hooks/Recipe/useFetchRecipes";
-import RecipeForm from "../../component/RecipeForm/RecipeForm";
+import RecipeForm from "../RecipeForm/RecipeForm";
 import { useEditRecipe } from "../../hooks/Recipe/useEditRecipe";
 
 const HeadContainer = styled("div")({

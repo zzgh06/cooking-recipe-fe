@@ -3,7 +3,23 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShareFromSquare } from "@fortawesome/free-regular-svg-icons";
 import { Box } from "@mui/material";
 
-const KakaoShareButton = ({ recipeDetail }) => {
+interface RecipeDetail {
+  _id?: string;
+  name?: string;
+  description?: string;
+}
+
+interface KakaoShareButtonProps {
+  recipeDetail: RecipeDetail;
+}
+
+declare global {
+  interface Window {
+    Kakao: any;
+  }
+}
+
+const KakaoShareButton = ({ recipeDetail }: KakaoShareButtonProps) => {
   const KAKAO_JAVASCRIPT_KEY = process.env.REACT_APP_KAKAO_JAVASCRIPT_KEY;
 
   useEffect(() => {

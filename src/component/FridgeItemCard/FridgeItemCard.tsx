@@ -5,14 +5,24 @@ import { faCircle as faCircleRegular, faTrashAlt } from "@fortawesome/free-regul
 import { faCheckCircle as faCheckCircleSolid } from "@fortawesome/free-solid-svg-icons";
 import { useDeleteFridgeItem } from "../../hooks/Fridge/useDeleteFridgeItem";
 
-const FridgeItemCard = ({ item, id, isChecked, onCheckboxChange }) => {
+interface FridgeItemCardProps {
+  id : string;
+  isChecked: boolean;
+  onCheckboxChange: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  item : {
+    images: string[];
+    name: string;
+  }
+}
+
+const FridgeItemCard = ({ item, id, isChecked, onCheckboxChange }: FridgeItemCardProps) => {
   const {mutate: deleteFridgeItem} = useDeleteFridgeItem();
 
   const handleDelete = async () => {
     deleteFridgeItem(id);
   };
 
-  const optimizeImageUrl = (url) => {
+  const optimizeImageUrl = (url: string): string => {
     return url.replace(/\/upload\//, '/upload/c_fill,h_160,w_160,f_auto,q_auto,f_webp/');
   };
 

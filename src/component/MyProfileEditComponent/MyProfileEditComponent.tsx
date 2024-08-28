@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { Grid, Typography, TextField, Button, styled } from "@mui/material";
 import CloudinaryUploadWidget from "../../utils/CloudinaryUploadWidget";
 import { useNavigate } from "react-router-dom";
@@ -58,8 +58,30 @@ const ProfileImage = styled('div')({
   textAlign: 'center'
 })
 
+interface ContactInfo {
+  address: string;
+}
 
-const MyProfileEditComponent = ({user}) => {
+interface User {
+  image: string;
+  email: string;
+  name: string;
+  contact: string;
+  shipTo: ContactInfo;
+}
+
+interface FormErrors {
+  email: string;
+  name: string;
+  contact: string;
+  shipTo: string;
+}
+
+interface MyProfileEditComponentProps {
+  user: User;
+}
+
+const MyProfileEditComponent = ({user}: MyProfileEditComponentProps ) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     image: "",
@@ -68,7 +90,7 @@ const MyProfileEditComponent = ({user}) => {
     contact: "",
     shipTo: "",
   });
-  const [formErrors, setFormErrors] = useState({
+  const [formErrors, setFormErrors] = useState<FormErrors>({
     email: "",
     name: "",
     contact: "",
@@ -83,16 +105,16 @@ const MyProfileEditComponent = ({user}) => {
   useEffect(() => {
     if (user) {
       setFormData({
-        image: user?.image || '',
-        email: user?.email || '',
-        name: user?.name || '',
-        contact: formatPhoneNumber(user?.contact) || '',
-        shipTo: user?.shipTo || '',
+        image: user.image || '',
+        email: user.email || '',
+        name: user.name || '',
+        contact: formatPhoneNumber(user.contact) || '',
+        shipTo: user.shipTo.address || '',
       });
     }
   }, [user]);
 
-  const handleChange = (event) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
     const formattedValue = id === 'contact' ? formatPhoneNumber(value) : value;
     setFormData((prevFormData) => ({
@@ -106,18 +128,18 @@ const MyProfileEditComponent = ({user}) => {
     }));
   };
 
-  const uploadImage = (url) => {
+  const uploadImage = (url: string) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
       image: url,
     }));
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const { image, email, name, contact, shipTo } = formData;
 
-    const errors = {};
+    const errors: Partial<FormErrors> = {};
     if (!emailRegex.test(email)) {
       errors.email = '유효한 이메일 주소를 입력해 주세요.';
     }
@@ -131,7 +153,7 @@ const MyProfileEditComponent = ({user}) => {
     }
 
     if (Object.keys(errors).length > 0) {
-      setFormErrors(errors);
+      setFormErrors(errors as FormErrors);;
       return;
     }
 
@@ -139,7 +161,7 @@ const MyProfileEditComponent = ({user}) => {
     navigate('/account/profile');
   };
 
-  const formatPhoneNumber = (value) => {
+  const formatPhoneNumber = (value: string) => {
     let cleanValue = value.replace(/\D/g, '');
     if (cleanValue.length > 11) {
       cleanValue = cleanValue.slice(0, 11);

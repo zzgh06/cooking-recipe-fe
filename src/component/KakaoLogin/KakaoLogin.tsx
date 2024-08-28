@@ -6,12 +6,23 @@ import { faComment } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "@mui/material";
 
-const KakaoLogin = ({ onSuccess, onError }) => {
+interface KakaoLoginProps {
+  onSuccess : () => void;
+  onError : (error: unknown) => void;
+}
+
+declare global {
+  interface Window {
+    Kakao: any;
+  }
+}
+
+const KakaoLogin = ({ onSuccess, onError }: KakaoLoginProps) => {
   const navigate = useNavigate();
   const KAKAO_JAVASCRIPT_KEY = process.env.REACT_APP_KAKAO_JAVASCRIPT_KEY;
 
   const { mutate: loginWithKakao } = useLoginWithKakao();
-  const { refetch: fetchUser } = useLoginWithToken();
+  const { mutate: fetchUser } = useLoginWithToken();
 
   useEffect(() => {
     if (!window.Kakao.isInitialized()) {
@@ -21,21 +32,21 @@ const KakaoLogin = ({ onSuccess, onError }) => {
 
   const handleKakaoLogin = () => {
     window.Kakao.Auth.login({
-      success: async function (authObj) {
+      success: async (authObj: { access_token: string }) => {
         try {
           const idToken = authObj.access_token;
           await loginWithKakao(idToken);
-          await fetchUser();
+          fetchUser();
           navigate("/");
-          if (onSuccess) onSuccess();
+          onSuccess();
         } catch (err) {
           console.error(err);
-          if (onError) onError(err);
+          onError(err);
         }
       },
-      fail: function (err) {
+      fail: function (err: unknown) {
         console.error(err);
-        if (onError) onError(err);
+        onError(err);
       },
     });
   };

@@ -1,21 +1,17 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ShoppingListItem, ShoppingListState } from "../types"; 
+
+const initialState: ShoppingListState = {
+  selectedShoppingList: [],
+  completedShoppingList: [],
+};
 
 const shoppingListSlice = createSlice({
   name: "shoppingList",
-  initialState: {
-    selectedShoppingList: [],
-    completedShoppingList: [],
-  },
+  initialState,
   reducers: {
-    setShoppingList: (state, action) => {
-      state.selectedShoppingList = action.payload?.filter(
-        (item) => !item.completed
-      );
-      state.completedShoppingList = action.payload?.filter(
-        (item) => item.completed
-      );
-    },
-    addToShoppingListToState: (state, action) => {
+    // PayloadAction : 액션 타입
+    setShoppingList: (state, action: PayloadAction<ShoppingListItem[]>) => {
       state.selectedShoppingList = action.payload.filter(
         (item) => !item.completed
       );
@@ -23,7 +19,15 @@ const shoppingListSlice = createSlice({
         (item) => item.completed
       );
     },
-    removeShoppingListItem: (state, action) => {
+    addToShoppingListToState: (state, action: PayloadAction<ShoppingListItem[]>) => {
+      state.selectedShoppingList = action.payload.filter(
+        (item) => !item.completed
+      );
+      state.completedShoppingList = action.payload.filter(
+        (item) => item.completed
+      );
+    },
+    removeShoppingListItem: (state, action: PayloadAction<ShoppingListItem[]>) => {
       state.selectedShoppingList = state.selectedShoppingList.filter(
         (item) => !action.payload.some((p) => p._id === item._id)
       );
@@ -31,7 +35,7 @@ const shoppingListSlice = createSlice({
         (item) => !action.payload.some((p) => p._id === item._id)
       );
     },
-    moveToCompletedListState: (state, action) => {
+    moveToCompletedListState: (state, action: PayloadAction<ShoppingListItem[]>) => {
       state.selectedShoppingList = state.selectedShoppingList.filter(
         (item) => !action.payload.some((p) => p._id === item._id)
       );
@@ -48,4 +52,5 @@ export const {
   removeShoppingListItem,
   moveToCompletedListState,
 } = shoppingListSlice.actions;
+
 export default shoppingListSlice.reducer;

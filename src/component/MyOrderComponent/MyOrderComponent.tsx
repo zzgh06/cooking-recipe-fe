@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -55,10 +55,28 @@ const HeadContainer = styled("div")({
   paddingLeft: "10px",
 });
 
+interface OrderItem {
+  _id: string;
+  orderNum: string;
+  createdAt: string;
+  items: Array<{
+    ingredientId: {
+      name: string;
+    };
+  }>;
+  totalPrice: number;
+  status: string;
+}
+
+interface FetchOrderResponse {
+  orderList: OrderItem[];
+  totalPages: number;
+}
+
 const MyOrderComponent = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState({});
+  const [searchQuery, setSearchQuery] = useState<{ [key: string]: string | null }>({});
   const [recentChecked, setRecentChecked] = useState(false);
   const [oldChecked, setOldChecked] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -68,38 +86,37 @@ const MyOrderComponent = () => {
   const [page, setPage] = useState(1);
   const { data, isLoading } = useFetchOrder({ ...searchQuery, page });
 
-  const orderList = data?.orderList || [];
+  const orderList: OrderItem[] = data?.orderList || [];
   const totalPageNum = data?.totalPages || 1;
-
-  const [sortedOrderList, setSortedOrderList] = useState([]);
+  const [sortedOrderList, setSortedOrderList] = useState<OrderItem[]>([]);
 
   useEffect(() => {
     if (searchQuery.orderNum === "") delete searchQuery.orderNum;
-    const params = new URLSearchParams(searchQuery);
+    const params = new URLSearchParams(searchQuery as Record<string, string>);
     navigate("?" + params.toString());
   }, [searchQuery, page, navigate]);
 
   useEffect(() => {
     let sortedList = [...orderList];
     if (recentChecked) {
-      sortedList.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      sortedList.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
     } else if (oldChecked) {
-      sortedList.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+      sortedList.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
     }
     setSortedOrderList(sortedList);
-  }, [orderList, recentChecked, oldChecked]);
+  }, [recentChecked, oldChecked]);
 
-  const handleRecentChange = (event) => {
+  const handleRecentChange = (event: ChangeEvent<HTMLInputElement>) => {
     setRecentChecked(event.target.checked);
     setOldChecked(!event.target.checked);
   };
 
-  const handleOldChange = (event) => {
+  const handleOldChange = (event: ChangeEvent<HTMLInputElement>) => {
     setOldChecked(event.target.checked);
     setRecentChecked(!event.target.checked);
   };
 
-  const handleSearch = (event) => {
+  const handleSearch = (event: FormEvent) => {
     event.preventDefault();
     if (
       startDate &&
@@ -120,7 +137,7 @@ const MyOrderComponent = () => {
     }
   };
 
-  const handleOpenDialog = (order) => {
+  const handleOpenDialog = (order: OrderItem) => {
     setDialogOpen(true);
     dispatch(setSelectedOrder(order));
   };
@@ -129,7 +146,7 @@ const MyOrderComponent = () => {
     setDialogOpen(false);
   };
 
-  const handlePageChange = (event, value) => {
+  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
     setSortedOrderList(orderList);
   };
@@ -169,7 +186,7 @@ const MyOrderComponent = () => {
       </Grid>
       <Grid item xs={12} md={12}>
         <Box mt={2}>
-          <Typography variant="subtitle" ml={1} mb={1}>
+          <Typography variant="subtitle1" ml={1} mb={1}>
             최대 지난 3년간의 주문내역까지 확인할 수 있어요
           </Typography>
           <Grid
@@ -219,7 +236,7 @@ const MyOrderComponent = () => {
                   }
                 />
               </Grid>
-              <Grid item xs={12} md={8} align="right">
+              <Grid item xs={12} md={8} sx={{ textAlign: 'right' }}>
                 <Button
                   variant="contained"
                   color="success"

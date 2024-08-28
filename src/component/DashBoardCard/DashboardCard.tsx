@@ -20,7 +20,12 @@ const StyledCardContent = styled(CardContent)(({ theme }) => ({
   textAlign: 'center',
 }));
 
-const DashBoardCard = ({ status, count }) => {
+interface DashBoardCardProps {
+  status: string;
+  count: number;
+}
+
+const DashBoardCard = ({ status, count }: DashBoardCardProps) => {
 
 
   return (

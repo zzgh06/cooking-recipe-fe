@@ -11,13 +11,13 @@ import {
   TableRow,
   Button,
   TableContainer,
-  Paper,
-  useMediaQuery,
+  Paper
 } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { styled } from '@mui/material/styles';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { currencyFormat } from '../../utils/number';
+import { RootState } from '../../redux/store';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -36,8 +36,40 @@ const cellStyle = {
   maxWidth: '150px',
 };
 
-const MyPageOrderDialog = ({ open, handleClose }) => {
-  const { selectedOrder } = useSelector((state) => state.order);
+interface ContactInfo {
+  shipTo: {
+    address: string;
+  };
+  contact: {
+    contact: string;
+  };
+}
+
+interface Item {
+  ingredientId: {
+    name: string;
+    price: number;
+  };
+  qty: number;
+  price: number;
+}
+
+interface SelectedOrder {
+  _id: string;
+  orderNum: string;
+  createdAt: string;
+  contactInfo: ContactInfo;
+  items: Item[];
+  totalPrice: number;
+}
+
+interface MyPageOrderDialogProps {
+  open: boolean;
+  handleClose: () => void;
+}
+
+const MyPageOrderDialog = ({ open, handleClose }: MyPageOrderDialogProps) => {
+  const selectedOrder = useSelector((state: RootState) => state.order.selectedOrder) as SelectedOrder | null;
 
   return (
     <Dialog open={open} onClose={handleClose}>
@@ -77,16 +109,30 @@ const MyPageOrderDialog = ({ open, handleClose }) => {
             </TableHead>
 
             <TableBody>
-              {selectedOrder?.items?.length > 0 &&
-                selectedOrder?.items?.map((item) => (
-                  <TableRow key={selectedOrder._id}>
-                    <TableCell style={cellStyle}>{item?.ingredientId?.name}</TableCell>
-                    <TableCell style={cellStyle}>{currencyFormat(item?.ingredientId?.price)}</TableCell>
-                    <TableCell style={cellStyle}>{item?.qty}</TableCell>
-                    <TableCell style={cellStyle}>{currencyFormat(item?.price * item?.qty)}</TableCell>
+              {selectedOrder?.items && selectedOrder.items.length > 0 ? (
+                selectedOrder.items.map((item, index) => (
+                  <TableRow key={index}>
+                    <TableCell style={cellStyle}>{item.ingredientId.name}</TableCell>
+                    <TableCell style={cellStyle}>{currencyFormat(item.ingredientId.price)}</TableCell>
+                    <TableCell style={cellStyle}>{item.qty}</TableCell>
+                    <TableCell style={cellStyle}>{currencyFormat(item.price * item.qty)}</TableCell>
                   </TableRow>
-                ))}
-              <TableCell style={cellStyle}>총 주문액: {currencyFormat(selectedOrder?.totalPrice)}원</TableCell>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={4} style={cellStyle} align="center">
+                    주문 내역이 없습니다.
+                  </TableCell>
+                </TableRow>
+              )}
+              <TableRow>
+                <TableCell colSpan={3} style={cellStyle}>
+                  총 주문액
+                </TableCell>
+                <TableCell style={cellStyle}>
+                  {selectedOrder ? currencyFormat(selectedOrder.totalPrice) + '원' : '0원'}
+                </TableCell>
+              </TableRow>
             </TableBody>
           </Table>
         </TableContainer>

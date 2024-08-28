@@ -5,14 +5,22 @@ import { Box, IconButton } from "@mui/material";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import { responsive } from "../../constants/responsive";
 
-const optimizeImageUrl = (url) => {
+const optimizeImageUrl = (url : string): string => {
   return url?.replace(/\/upload\//, "/upload/f_webp/");
 };
 
-const BannerComponent = ({ images }) => {
+interface BannerComponentProps {
+  images: string[];
+}
+
+const BannerComponent = ({ images }: BannerComponentProps) => {
   const optimizedImageUrl = images.map((img) => optimizeImageUrl(img));
 
-  const CustomLeftArrow = ({ onClick }) => (
+  interface ArrowProps {
+    onClick?: () => void;
+  }
+
+  const CustomLeftArrow = ({ onClick }: ArrowProps) => (
     <IconButton
       onClick={onClick}
       sx={{
@@ -33,7 +41,7 @@ const BannerComponent = ({ images }) => {
     </IconButton>
   );
 
-  const CustomRightArrow = ({ onClick }) => (
+  const CustomRightArrow = ({ onClick }:ArrowProps) => (
     <IconButton
       onClick={onClick}
       sx={{

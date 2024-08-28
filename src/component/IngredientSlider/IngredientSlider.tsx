@@ -60,8 +60,19 @@ const RightArrow = styled(CustomArrowIngredient)({
   right: 0,
 });
 
-const IngredientSlider = ({ title, ingredients, loading }) => {
-  const [carouselItems, setCarouselItems] = useState([]);
+interface Ingredient {
+  _id: string;
+  name: string;
+}
+
+interface IngredientSliderProps {
+  title: string;
+  loading: boolean;
+  ingredients: Ingredient[];
+}
+
+const IngredientSlider = ({ title, ingredients, loading }: IngredientSliderProps) => {
+  const [carouselItems, setCarouselItems] = useState<Ingredient[]>([]);
 
   useEffect(() => {
     if (ingredients && ingredients.length > 0) {
@@ -74,13 +85,13 @@ const IngredientSlider = ({ title, ingredients, loading }) => {
       onMouseEnter={(e) => {
         const buttons = e.currentTarget.querySelectorAll(".custom-arrow-recipe");
         buttons.forEach((button) => {
-          button.style.display = "block";
+          (button as HTMLElement).style.display = "block";
         });
       }}
       onMouseLeave={(e) => {
         const buttons = e.currentTarget.querySelectorAll(".custom-arrow-recipe");
         buttons.forEach((button) => {
-          button.style.display = "none";
+          (button as HTMLElement).style.display = "none";
         });
       }}
     >

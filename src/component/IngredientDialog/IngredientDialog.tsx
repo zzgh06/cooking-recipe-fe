@@ -12,21 +12,34 @@ import {
 } from "@mui/material";
 import { setSelectedIngredients } from "../../redux/ingredientSlice";
 import { useNavigate } from "react-router-dom";
+import { RootState } from "../../redux/store";
 
-const IngredientDialog = ({ open, handleClose, ingredients }) => {
+interface Ingredient {
+  _id: string;
+  name: string;
+}
+
+interface IngredientDialogProps {
+  open: boolean;
+  handleClose: () => void; 
+  ingredients: Ingredient[];
+}
+
+const IngredientDialog = ({ open, handleClose, ingredients }:IngredientDialogProps) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const selectedIngredients = useSelector(
-    (state) => state.ingredients.selectedIngredients
-  );
 
-  const [checkedIngredients, setCheckedIngredients] = useState(
-    ingredients?.map((ingredient) =>
-      selectedIngredients?.includes(ingredient._id)
+  const selectedIngredients = useSelector(
+    (state: RootState) => state.ingredients?.selectedIngredients ?? [] as string[]
+  );
+  
+  const [checkedIngredients, setCheckedIngredients] = useState<boolean[]>(
+    ingredients.map((ingredient) =>
+      selectedIngredients.includes(ingredient._id as string) 
     )
   );
 
-  const handleCheckboxChange = (index) => {
+  const handleCheckboxChange = (index: number) => {
     const newCheckedIngredients = [...checkedIngredients];
     newCheckedIngredients[index] = !newCheckedIngredients[index];
     setCheckedIngredients(newCheckedIngredients);

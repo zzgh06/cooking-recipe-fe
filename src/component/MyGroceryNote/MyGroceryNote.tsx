@@ -8,7 +8,6 @@ import {
   ListItem,
   Checkbox,
   IconButton,
-  LinearProgress,
   CircularProgress,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -17,6 +16,7 @@ import { useRemoveFromShoppingList } from "../../hooks/ShoppingList/useRemoveFro
 import { useMoveToCompletedList } from "../../hooks/ShoppingList/useMoveToCompletedList";
 import { useDispatch, useSelector } from "react-redux";
 import { setShoppingList } from "../../redux/shoppingListSlice";
+import { RootState } from "../../redux/store";
 
 const HeadContainer = styled(Box)({
   display: "flex",
@@ -79,10 +79,15 @@ const LoadingOverlay = styled(Box)({
   zIndex: 1,
 });
 
+interface ShoppingListItem {
+  _id: string;
+  name: string;
+}
+
 const MyGroceryNote = () => {
   const dispatch = useDispatch();
   const { selectedShoppingList, completedShoppingList } = useSelector(
-    (state) => state.shoppingList
+    (state: RootState) => state.shoppingList
   );
   const { data, isLoading, isError, error } = useFetchShoppingList();
   const removeFromShoppingListMutation = useRemoveFromShoppingList();
@@ -94,7 +99,7 @@ const MyGroceryNote = () => {
     }
   }, [data]);
 
-  const handleAddFromSelectedList = async (item) => {
+  const handleAddFromSelectedList = async (item: ShoppingListItem) => {
     try {
       await moveToCompletedListMutation.mutateAsync(item);
     } catch (error) {
@@ -102,7 +107,7 @@ const MyGroceryNote = () => {
     }
   };
 
-  const handleRemoveFromShoppingList = async (itemId) => {
+  const handleRemoveFromShoppingList = async (itemId: string) => {
     try {
       await removeFromShoppingListMutation.mutateAsync(itemId);
     } catch (error) {

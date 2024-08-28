@@ -45,15 +45,35 @@ const DescriptionCell = styled(StyledTableCell)(({ theme }) => ({
   whiteSpace: 'nowrap',
 }));
 
-const optimizedImageUrl = (url) =>
-  url?.replace(/\/upload\//, "/upload/c_fill,h_200,w_200,f_webp/");
+interface Item {
+  _id: string;
+  name: string;
+  description?: string;
+  price?: number;
+  discountPrice?: number;
+  category?: string[];
+  stock?: number;
+  status?: string;
+  reviewCnt?: number;
+  images: string[];
+}
+
+interface IngredientTableProps {
+  header: string[];
+  data: Item[];
+  deleteItem: (id: string) => void;
+  openEditForm: (item: Item) => void;
+}
+
+const optimizedImageUrl = (url?: string): string =>
+  url ? url.replace(/\/upload\//, "/upload/c_fill,h_200,w_200,f_webp/") : "default_image_url";
 
 const IngredientTable = ({
   header = [],
   data = [],
   deleteItem,
   openEditForm,
-}) => {
+}: IngredientTableProps) => {
   return (
     <StyledTableContainer>
       <Table>

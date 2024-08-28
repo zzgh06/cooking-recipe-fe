@@ -2,7 +2,16 @@ import React from "react";
 import { Grid, Typography, Box } from "@mui/material";
 import SearchRecipeCard from "../SearchRecipeCard/SearchRecipeCard";
 
-const MyFridgeSearchResults = ({ recipeList }) => {
+interface RecipeItem {
+  _id: string;
+  [key: string]: any;
+}
+
+interface MyFridgeSearchResultsProps {
+  recipeList: RecipeItem[];
+}
+
+const MyFridgeSearchResults = ({ recipeList }: MyFridgeSearchResultsProps) => {
   return (
     <Box sx={{ padding: 2 }}>
       <Grid container spacing={2} justifyContent="center">

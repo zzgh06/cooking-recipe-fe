@@ -1,16 +1,20 @@
 import React, { useState } from "react";
 import { Box, Button, Typography, Paper } from "@mui/material";
 import { ArrowDropDown } from "@mui/icons-material";
-import DaumPostcodeEmbed from "react-daum-postcode";
+import DaumPostcodeEmbed, { Address } from "react-daum-postcode";
 
-const AddressInput = ({ setAddress }) => {
-  const [isPostcodeOpen, setIsPostcodeOpen] = useState(false);
+interface AddressInputProps {
+  setAddress: (address: string) => void;
+}
+
+const AddressInput = ({ setAddress }: AddressInputProps) => {
+  const [isPostcodeOpen, setIsPostcodeOpen] = useState<boolean>(false);
 
   const togglePostcode = () => {
     setIsPostcodeOpen(!isPostcodeOpen);
   };
 
-  const handleAddressSelect = (data) => {
+  const handleAddressSelect = (data: Address) => {
     const fullAddress = data.address;
     const extraAddress =
       data.addressType === "R"

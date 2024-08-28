@@ -22,10 +22,4 @@ export const store = configureStore({
   },
 });
 
-// store.subscribe(() => {
-//   console.log("Current ui state", store.getState().ui);
-//   //console.log("Current auth state:", store.getState().auth);
-//   //console.log("Current recipe state:", store.getState().recipe);
-//   //console.log("Current review state:", store.getState().review);
-//   //console.log("Current order state:", store.getState().order);
-// });
+export type RootState = ReturnType<typeof store.getState>;

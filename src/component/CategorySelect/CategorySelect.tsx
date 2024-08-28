@@ -1,7 +1,14 @@
 import React from 'react';
 import { TextField, MenuItem } from '@mui/material';
 
-const CategorySelect = ({ label, options, value, onChange }) => {
+interface CategorySelectProps {
+  label: string;
+  options: string[];
+  value: Number;
+  onChange: (e:React.ChangeEvent<HTMLInputElement>) => void
+}
+
+const CategorySelect = ({ label, options, value, onChange }: CategorySelectProps) => {
   return (
     <TextField
       select
