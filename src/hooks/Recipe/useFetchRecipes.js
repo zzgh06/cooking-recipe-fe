@@ -15,15 +15,19 @@ const fetchRecipes = async (searchQuery) => {
   };
 };
 
+const isCacheEnabled = process.env.REACT_APP_ENABLE_CACHE === 'true';
+
+console.log(isCacheEnabled)
+
 export const useFetchRecipes = (searchQuery) => {
   const queryResult = useQuery({
     queryKey: ['recipes', searchQuery],
     queryFn: () => fetchRecipes(searchQuery),
-    staleTime: 0,
-    gcTime: 0,
+    staleTime: isCacheEnabled ? 5 * 60 * 1000 : 0,
+    cacheTime: isCacheEnabled ? 10 * 60 * 1000 : 0, 
     keepPreviousData: true,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
+    refetchOnWindowFocus: isCacheEnabled,
+    refetchOnReconnect: isCacheEnabled,
   });
 
   const { status, data, error } = queryResult;
