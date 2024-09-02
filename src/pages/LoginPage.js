@@ -14,8 +14,6 @@ import {
 } from "@mui/material";
 import { useLoginUser } from "../hooks/User/useLoginUser";
 import { useLoginWithGoogle } from "../hooks/User/useLoginWithGoogle";
-import { useLoginWithKakao } from "../hooks/User/useLoginWithKakao";
-import { useLoginWithToken } from "../hooks/User/useLoginWithToken";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -24,7 +22,6 @@ const LoginPage = () => {
     password: "",
   });
 
-  const { mutate: fetchUser } = useLoginWithToken();
   const { mutate: loginUser } = useLoginUser();
   
   const {
@@ -33,16 +30,9 @@ const LoginPage = () => {
     error: loginWithGoogleError,
   } = useLoginWithGoogle();
 
-  const {
-    mutate: loginWithKakao,
-    isError: isLoginWithKakaoError,
-    error: loginWithKakaoError,
-  } = useLoginWithKakao();
-
   const handleGoogleSuccess = async (response) => {
     try {
       await loginWithGoogle(response.credential);
-      await fetchUser();
       navigate("/");
     } catch (err) {
       console.error("구글 로그인 실패: ", err);
@@ -51,16 +41,6 @@ const LoginPage = () => {
 
   const handleGoogleFailure = (error) => {
     console.error("구글 로그인 실패: ", error);
-  };
-
-  const handleKakaoLogin = async (kakaoData) => {
-    try {
-      await loginWithKakao(kakaoData);
-      await fetchUser();
-      navigate("/");
-    } catch (err) {
-      console.error("카카오 로그인 실패: ", err);
-    }
   };
 
   const handleLogin = async (event) => {
@@ -77,9 +57,8 @@ const LoginPage = () => {
     }));
   };
 
-  const error = isLoginWithGoogleError || isLoginWithKakaoError;
-  const errorMessage =
-    loginWithGoogleError?.message || loginWithKakaoError?.message;
+  const error = isLoginWithGoogleError 
+  const errorMessage = loginWithGoogleError?.message
 
   return (
     <Container
@@ -191,12 +170,7 @@ const LoginPage = () => {
           />
         </Box>
         <Box>
-          <KakaoLogin
-            onSuccess={handleKakaoLogin}
-            onError={() => {
-              console.log("카카오 로그인 실패");
-            }}
-          />
+          <KakaoLogin/>
         </Box>
       </Box>
     </Container>
