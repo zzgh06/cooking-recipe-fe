@@ -1,27 +1,32 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import api from '../../utils/api';
 import { useEffect } from 'react';
+import { Recipe, SearchQuery } from '../../types';
 
+interface FetchRecipesResponse  {
+  recipes: Recipe[];
+  totalPages: number;
+}
 let fetchCallCount = 0;
 
-const fetchRecipes = async (searchQuery) => {
+const fetchRecipes = async (searchQuery : SearchQuery): Promise<FetchRecipesResponse> => {
   fetchCallCount += 1;
   console.log(`API 호출 횟수: ${fetchCallCount}, 검색 쿼리:`, searchQuery);
 
-  const response = await api.get('/recipe', { params: searchQuery });
+  const response = await api.get<{ data: Recipe[], totalPageNum: number }>('/recipe', { params: searchQuery });
   return {
     recipes: response.data.data,
     totalPages: response.data.totalPageNum,
   };
 };
 
-export const useFetchRecipes = (searchQuery) => {
-  const queryResult = useQuery({
+export const useFetchRecipes = (searchQuery: SearchQuery): UseQueryResult<FetchRecipesResponse, Error> => {
+  const queryResult = useQuery<FetchRecipesResponse, Error>({
     queryKey: ['recipes', searchQuery],
     queryFn: () => fetchRecipes(searchQuery),
     staleTime: 0,
     gcTime: 0,
-    keepPreviousData: true,
+    placeholderData: (previousData) => previousData,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
   });

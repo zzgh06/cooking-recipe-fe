@@ -3,6 +3,7 @@ import { useFetchRecipesByCategory } from "../../hooks/Recipe/useFetchRecipesByC
 import RecipeCard from "../RecipeCard/RecipeCard";
 import RecipeCardSkeleton from "../Skeleton/RecipeCardSkeleton";
 import { Container, Grid, Typography, Pagination, Box, styled } from "@mui/material";
+import { Recipe } from "../../types";
 
 const RecipeAllContainer = styled(Container)({
   display: "flex",
@@ -21,24 +22,28 @@ const NoRecipesMessage = styled(Typography)({
   fontStyle: 'italic',
 });
 
-const RecipeAll = ({ category, path }) => {
-  const [page, setPage] = useState(1);
+interface RecipeAllProps {
+  category : string;
+}
+
+const RecipeAll = ({ category }: RecipeAllProps) => {
+  const [page, setPage] = useState<number>(1);
 
   const { data, isLoading, refetch } = useFetchRecipesByCategory({
     etc: category,
-    page,
+    page: page.toString(),
   });
 
   useEffect(() => {
     refetch();
   }, [category, page, refetch]);
 
-  const handlePageChange = (event, value) => {
+  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
 
-  const recipes = data?.recipeList || [];
-  const totalPages = data?.totalPages || 1;
+  const recipes: Recipe[] = data?.recipeList || [];
+  const totalPages: number = data?.totalPages || 1;
 
   return (
     <RecipeAllContainer>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import {
   AppBar,
@@ -30,6 +30,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../redux/userSlice";
 import { useLoginWithToken } from "../../hooks/User/useLoginWithToken";
+import { RootState } from "../../redux/store";
 
 const StyledAppBar = styled(AppBar)({
   backgroundColor: "#ffffff",
@@ -86,12 +87,11 @@ const SidebarList = styled(List)({
 const Navbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [keyword, setKeyword] = useState("");
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
+  const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
+  const [keyword, setKeyword] = useState<string>("");
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { mutate: fetchUser } = useLoginWithToken();
-  const user = useSelector((state) => state.auth.user);
+  const {user} = useSelector((state: RootState) => state.auth);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -108,7 +108,7 @@ const Navbar = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
-  const handleMenuClick = (event) => {
+  const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -116,7 +116,7 @@ const Navbar = () => {
     setAnchorEl(null);
   };
 
-  const handleSearch = (event) => {
+  const handleSearch = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Enter") {
       if (keyword.trim() === "") {
         navigate("/");
@@ -130,7 +130,7 @@ const Navbar = () => {
   };
 
   const menuItems = ["레시피", "스토어", "My 냉장고"];
-  const menuPathMapping = {
+  const menuPathMapping: { [key: string]: string } = {
     레시피: "recipes/all",
     스토어: "store",
     "My 냉장고": "fridge",
@@ -207,11 +207,13 @@ const Navbar = () => {
                 variant="outlined"
                 placeholder="검색어를 입력하세요"
                 value={keyword}
-                onChange={(e) => setKeyword(e.target.value)}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  setKeyword(e.target.value)
+                }
                 onKeyPress={handleSearch}
                 InputProps={{
                   endAdornment: (
-                    <IconButton onClick={handleSearch}>
+                    <IconButton onClick={handleSearchClick}>
                       <SearchIcon />
                     </IconButton>
                   ),
@@ -260,19 +262,18 @@ const Navbar = () => {
                 <CloseIcon />
               </IconButton>
             </Box>
-            <Box
-              sx={{ padding: "0 16px 16px 16px" }}
-              onClick={handleSearchClick} 
-            >
+            <Box sx={{ padding: "0 16px 16px 16px" }} onClick={handleSearchClick}>
               <StyledTextField
                 variant="outlined"
                 placeholder="검색어를 입력하세요"
                 value={keyword}
-                onChange={(e) => setKeyword(e.target.value)}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  setKeyword(e.target.value)
+                }
                 onKeyPress={handleSearch}
                 InputProps={{
                   endAdornment: (
-                    <IconButton onClick={handleSearch}>
+                    <IconButton onClick={handleSearchClick}>
                       <SearchIcon />
                     </IconButton>
                   ),

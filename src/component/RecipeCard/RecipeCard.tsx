@@ -4,6 +4,7 @@ import { styled } from "@mui/system";
 import { Typography } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock, faSignal } from "@fortawesome/free-solid-svg-icons";
+import { Recipe } from "../../types";
 
 const RecipeCardContainer = styled("div")({
   display: "flex",
@@ -60,15 +61,19 @@ const RecipeName = styled(Typography)(({ theme }) => ({
   },
 }));
 
-const optimizeImageUrl = (url) => {
+const optimizeImageUrl = (url: string) => {
   return url.replace(/\/upload\//, '/upload/c_fill,h_504,w_504,f_auto,q_auto,f_webp/');
 };
 
-const RecipeCard = React.memo(({ item }) => {
+interface RecipeCardProps {
+  item: Recipe; 
+}
+
+const RecipeCard = React.memo(({ item }: RecipeCardProps) => {
   const navigate = useNavigate();
   const optimizedImageUrl = useMemo(() => optimizeImageUrl(item.images[0]), [item.images]);
 
-  const showRecipe = useCallback((id) => {
+  const showRecipe = useCallback((id: string) => {
     navigate(`/recipe/${id}`);
   }, [navigate]);
 
@@ -90,7 +95,7 @@ const RecipeCard = React.memo(({ item }) => {
             <FontAwesomeIcon icon={faSignal} /> {item.difficulty}
           </Typography>
           <Typography variant="subtitle1" align="center">
-            <FontAwesomeIcon icon={faClock} /> {item.time.split("이내")[0]}
+            <FontAwesomeIcon icon={faClock} /> {item.time?.split("이내")[0]}
           </Typography>
         </HeadContainer>
       </CardDescription>

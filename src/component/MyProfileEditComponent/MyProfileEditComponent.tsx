@@ -4,6 +4,7 @@ import CloudinaryUploadWidget from "../../utils/CloudinaryUploadWidget";
 import { useNavigate } from "react-router-dom";
 import defaultProfile from "../../assets/img/profile_user.png";
 import { useUpdateUser } from "../../hooks/User/useUpdateUser";
+import { User } from "../../types";
 
 const HeadContainer = styled('div')({
   display: 'flex',
@@ -58,18 +59,6 @@ const ProfileImage = styled('div')({
   textAlign: 'center'
 })
 
-interface ContactInfo {
-  address: string;
-}
-
-interface User {
-  image: string;
-  email: string;
-  name: string;
-  contact: string;
-  shipTo: ContactInfo;
-}
-
 interface FormErrors {
   email: string;
   name: string;
@@ -83,7 +72,8 @@ interface MyProfileEditComponentProps {
 
 const MyProfileEditComponent = ({user}: MyProfileEditComponentProps ) => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
+  
+  const [formData, setFormData] = useState<User>({
     image: "",
     email: "",
     name: "",
@@ -97,7 +87,7 @@ const MyProfileEditComponent = ({user}: MyProfileEditComponentProps ) => {
     shipTo: "",
   });
   
-  const { mutate: updateUser, isLoading } = useUpdateUser();
+  const { mutate: updateUser, isPending } = useUpdateUser();
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -109,7 +99,7 @@ const MyProfileEditComponent = ({user}: MyProfileEditComponentProps ) => {
         email: user.email || '',
         name: user.name || '',
         contact: formatPhoneNumber(user.contact) || '',
-        shipTo: user.shipTo.address || '',
+        shipTo: user.shipTo || '' ,
       });
     }
   }, [user]);
@@ -161,7 +151,7 @@ const MyProfileEditComponent = ({user}: MyProfileEditComponentProps ) => {
     navigate('/account/profile');
   };
 
-  const formatPhoneNumber = (value: string) => {
+  const formatPhoneNumber = (value: string): string => {
     let cleanValue = value.replace(/\D/g, '');
     if (cleanValue.length > 11) {
       cleanValue = cleanValue.slice(0, 11);
@@ -253,7 +243,7 @@ const MyProfileEditComponent = ({user}: MyProfileEditComponentProps ) => {
                   variant="contained"
                   color="primary"
                   type="submit"
-                  disabled={isLoading}
+                  disabled={isPending}
                 >
                   저장하기
                 </EditSubmitBtn>

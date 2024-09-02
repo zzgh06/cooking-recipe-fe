@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   Container,
   Typography,
@@ -14,9 +14,11 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { AddCircleOutline } from "@mui/icons-material";
-import { useFetchRecipes } from "../../hooks/Recipe/useFetchRecipes";
 import RecipeForm from "../RecipeForm/RecipeForm";
 import { useEditRecipe } from "../../hooks/Recipe/useEditRecipe";
+import { RootState } from "../../redux/store";
+import { Recipe, SearchQuery } from "../../types";
+import { useFetchRecipes } from "../../hooks/Recipe/useFetchRecipes";
 
 const HeadContainer = styled("div")({
   display: "flex",
@@ -44,32 +46,33 @@ const NoRecipesMessage = styled(Typography)({
 
 const MyRecipeComponent = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const [showForm, setShowForm] = useState(false);
-  const [mode, setMode] = useState("");
-  const [selectedRecipe, setSelectedRecipe] = useState(null);
-  const user = useSelector((state) => state.auth.user);
-  const { data : recipesData, refetch } = useFetchRecipes();
+  const [showForm, setShowForm] = useState<boolean>(false);
+  const [mode, setMode] = useState<string>("");
+  const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+  const { user } = useSelector((state: RootState) => state.auth);
   const { mutate: editRecipe } = useEditRecipe();
+  const { data : recipesData, refetch } = useFetchRecipes({} as SearchQuery);
 
-  const userRecipes = recipesData?.recipes.filter(
-    (recipe) => recipe.userId === user?._id
+  const userRecipes = recipesData?.recipes?.filter(
+    (recipe: Recipe) => recipe.userId === user?._id
   );
 
-  const handleRecipe = (id) => {
+  const handleRecipe = (id: string) => {
     navigate(`/recipe/${id}`);
   };
 
-  const openEditForm = (recipe) => {
+  const openEditForm = (recipe: Recipe) => {
     setSelectedRecipe(recipe);
     setMode("edit");
     setShowForm(true);
   };
 
-  const handleFormSubmit = (recipeData) => {
-    editRecipe({ id: selectedRecipe._id, updatedData: recipeData });
-    refetch();
-    setShowForm(false);
+  const handleFormSubmit = (recipeData: Recipe) => {
+    if (selectedRecipe) {
+      editRecipe({ id: selectedRecipe._id, updatedData: recipeData });
+      refetch();
+      setShowForm(false);
+    }
   };
 
   return (
@@ -81,7 +84,7 @@ const MyRecipeComponent = () => {
             <Typography variant="subtitle1">내 레시피</Typography>
           </HeadContainer>
         </Box>
-        {userRecipes?.length > 0 ? (
+        {userRecipes && userRecipes.length > 0 ? (
           <Grid container spacing={3}>
             {userRecipes?.map((recipe) => (
               <Grid item xs={12} sm={6} md={4} lg={3} key={recipe._id}>

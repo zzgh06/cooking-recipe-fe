@@ -2,7 +2,17 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Box, Typography } from "@mui/material";
 
-const RecentlyViewed = ({ recentlyViewedItems }) => {
+interface RecentlyViewedItem {
+  id: string;
+  name: string;
+  images: string;
+}
+
+interface RecentlyViewedProps {
+  recentlyViewedItems: RecentlyViewedItem[];
+}
+
+const RecentlyViewed = ({ recentlyViewedItems }: RecentlyViewedProps) => {
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -10,7 +20,7 @@ const RecentlyViewed = ({ recentlyViewedItems }) => {
     });
   };
 
-  const optimizeImageUrl = (url) => {
+  const optimizeImageUrl = (url: string) => {
     return url.replace(/\/upload\//, '/upload/c_fill,h_140,w_140,f_auto,q_auto,f_webp/');
   };
 

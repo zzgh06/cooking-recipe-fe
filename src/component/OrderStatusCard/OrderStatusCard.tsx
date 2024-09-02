@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardContent, Typography, Badge, Box, Grid } from '@mui/material';
+import { Card, CardContent, Typography, Box, Grid, Chip } from '@mui/material';
 import { currencyFormat } from '../../utils/number';
 
 const badgeColors = {
@@ -7,10 +7,33 @@ const badgeColors = {
   "Processing": "info",
   "Completed": "success",
   "Cancelled": "error",
-  "Unknown": "secondary"
-};
+  "Unknown": "default"
+} as const;
 
-const OrderStatusCard = ({ orderItem }) => {
+interface Ingredient {
+  name: string;
+  image: string;
+}
+
+interface OrderItemDetail {
+  ingredientId: Ingredient;
+}
+
+interface OrderItem {
+  orderNum: number;
+  createdAt: string;
+  items: OrderItemDetail[];
+  totalPrice: number;
+  status: keyof typeof badgeColors;
+}
+
+
+interface OrderStatusCardProps {
+  orderItem: OrderItem;
+
+}
+
+const OrderStatusCard = ({ orderItem }: OrderStatusCardProps) => {
   const orderNum = orderItem.orderNum || "N/A";
   const createdAt = orderItem.createdAt ? orderItem.createdAt.slice(0, 10) : "N/A";
   const ingredientName = orderItem.items?.[0]?.ingredientId?.name || "Unknown product";
@@ -51,9 +74,7 @@ const OrderStatusCard = ({ orderItem }) => {
             <Typography variant="caption" color="textSecondary">
               주문상태
             </Typography>
-            <Badge color={badgeColor} variant="contained">
-              {status}
-            </Badge>
+            <Chip label={status} color={badgeColor} variant="outlined" />
           </Box>
         </Grid>
       </Grid>

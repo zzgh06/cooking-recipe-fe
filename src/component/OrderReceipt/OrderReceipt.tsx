@@ -3,7 +3,22 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { currencyFormat } from "../../utils/number";
 import { Box, Typography, Button } from "@mui/material";
 
-const OrderReceipt = ({ selectedCartItems, totalPrice }) => {
+interface Ingredient {
+  name: string;
+  price: number;
+}
+
+interface CartItem {
+  ingredientId: Ingredient;
+  qty: number;
+}
+
+interface OrderReceiptProps {
+  selectedCartItems: CartItem[];
+  totalPrice: number;
+}
+
+const OrderReceipt = ({ selectedCartItems, totalPrice }: OrderReceiptProps) => {
   const location = useLocation();
   const navigate = useNavigate();
 
