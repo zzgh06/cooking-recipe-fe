@@ -17,8 +17,10 @@ import { useFetchRecipes } from "../hooks/Recipe/useFetchRecipes";
 import { useCreateRecipe } from "../hooks/Recipe/useCreateRecipe";
 import { useEditRecipe } from "../hooks/Recipe/useEditRecipe";
 import { useDeleteRecipe } from "../hooks/Recipe/useDeleteRecipe";
+import { useQueryClient } from "@tanstack/react-query";
 
 const AdminRecipePage = () => {
+  const queryClient = useQueryClient()
   const [query, setQuery] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState({
     page: query.get("page") || 1,
@@ -27,7 +29,7 @@ const AdminRecipePage = () => {
   const [showForm, setShowForm] = useState(false);
   const [mode, setMode] = useState("new");
   const [selectedRecipe, setSelectedRecipe] = useState(null);
-  const { data: recipesData, isLoading } = useFetchRecipes(searchQuery);
+  const { data: recipesData, isLoading, isFetching } = useFetchRecipes(searchQuery);
   const { mutate: createRecipe } = useCreateRecipe();
   const { mutate: editRecipe } = useEditRecipe();
   const { mutate: deleteRecipe } = useDeleteRecipe();
@@ -77,15 +79,8 @@ const AdminRecipePage = () => {
     setShowForm(false);
   };
 
-  // useEffect(() => {
-  //   const intervalId = setInterval(() => {
-  //     refetch();
-  //   }, 5000); // 5초마다 요청
 
-  //   return () => clearInterval(intervalId); // 컴포넌트가 언마운트될 때 타이머를 정리
-  // }, [refetch]);
-
-  if (isLoading) {
+  if (isLoading || isFetching) {
     return (
       <Container maxWidth="lg" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
         <CircularProgress size="100px" sx={{color: "green"}} />
@@ -93,6 +88,7 @@ const AdminRecipePage = () => {
     );
   }
 
+  console.log(queryClient.getQueryCache());
   return (
     <Container maxWidth="lg">
       <Box sx={{ mt: 2 }}>
