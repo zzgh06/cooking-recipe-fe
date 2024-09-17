@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Dialog,
@@ -13,31 +13,43 @@ import {
 import { setSelectedIngredients } from "../../redux/ingredientSlice";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../../redux/store";
-
-interface Ingredient {
-  _id: string;
-  name: string;
-}
+import { Ingredient } from "../../types";
 
 interface IngredientDialogProps {
   open: boolean;
-  handleClose: () => void; 
-  ingredients: Ingredient[];
+  handleClose: () => void;
+  ingredients: Ingredient[] | { name: string; qty: number; unit: string; }[];
 }
 
-const IngredientDialog = ({ open, handleClose, ingredients }:IngredientDialogProps) => {
+const isFullIngredient = (ingredient: any): ingredient is Ingredient => {
+  return (ingredient as Ingredient)._id !== undefined;
+};
+
+const IngredientDialog = ({ open, handleClose, ingredients }: IngredientDialogProps) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const selectedIngredients = useSelector(
-    (state: RootState) => state.ingredients?.selectedIngredients ?? [] as string[]
+    (state: RootState) => state.ingredients?.selectedIngredients ?? []
   );
-  
+
   const [checkedIngredients, setCheckedIngredients] = useState<boolean[]>(
     ingredients.map((ingredient) =>
-      selectedIngredients.includes(ingredient._id as string) 
+      isFullIngredient(ingredient)
+        ? selectedIngredients.some(selected => selected._id === ingredient._id)
+        : false
     )
   );
+
+  useEffect(() => {
+    setCheckedIngredients(
+      ingredients.map((ingredient) =>
+        isFullIngredient(ingredient)
+          ? selectedIngredients.some(selected => selected._id === ingredient._id)
+          : false
+      )
+    );
+  }, [ingredients, selectedIngredients]);
 
   const handleCheckboxChange = (index: number) => {
     const newCheckedIngredients = [...checkedIngredients];
@@ -46,10 +58,10 @@ const IngredientDialog = ({ open, handleClose, ingredients }:IngredientDialogPro
   };
 
   const handleSave = () => {
-    const selectedNames = ingredients
-      .filter((_, index) => checkedIngredients[index])
-      .map((ingredient) => ingredient.name);
-    dispatch(setSelectedIngredients(selectedNames));
+    const selectedIngredientsToSave = ingredients.filter(
+      (ingredient, index) => checkedIngredients[index] && isFullIngredient(ingredient)
+    ) as Ingredient[];
+    dispatch(setSelectedIngredients(selectedIngredientsToSave));
     handleClose();
     navigate('/fridge');
   };
@@ -60,7 +72,7 @@ const IngredientDialog = ({ open, handleClose, ingredients }:IngredientDialogPro
       <DialogContent>
         <DialogContentText>아래 목록에서 재료를 선택하세요.</DialogContentText>
         <Box>
-          {ingredients?.map((ingredient, index) => (
+          {ingredients.map((ingredient, index) => (
             <FormControlLabel
               key={index}
               control={

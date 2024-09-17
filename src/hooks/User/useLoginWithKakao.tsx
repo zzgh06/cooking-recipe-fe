@@ -3,14 +3,11 @@ import api from '../../utils/api';
 import { useDispatch } from 'react-redux';
 import { setLoginData, setUser } from '../../redux/userSlice';
 import { setToastMessage } from '../../redux/commonUISlice';
+import { User } from '../../types';
 
 interface KakaoLoginResponse {
   token: string;
-  user: {
-    id: string;
-    name: string;
-    email: string;
-  };
+  user: User;
 }
 
 interface KakaoLoginError {

@@ -4,7 +4,7 @@ import { TextField, MenuItem } from '@mui/material';
 interface CategorySelectProps {
   label: string;
   options: string[];
-  value: Number;
+  value: string;
   onChange: (e:React.ChangeEvent<HTMLInputElement>) => void
 }
 

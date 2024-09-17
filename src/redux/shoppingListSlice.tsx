@@ -10,7 +10,6 @@ const shoppingListSlice = createSlice({
   name: "shoppingList",
   initialState,
   reducers: {
-    // PayloadAction : 액션 타입
     setShoppingList: (state, action: PayloadAction<ShoppingListItem[]>) => {
       state.selectedShoppingList = action.payload.filter(
         (item) => !item.completed

@@ -2,11 +2,7 @@ import React from "react";
 import IngredientCard from "../IngredientCard/IngredientCard";
 import { Box, Container, Grid, Typography } from "@mui/material";
 import IngredientCardSkeleton from "../Skeleton/IngredientCardSkeleton";
-
-interface Ingredient {
-  _id: string;
-  name: string;
-}
+import { Ingredient } from "../../types";
 
 interface IngredientThemeCardProps {
   ingredients: Ingredient[];

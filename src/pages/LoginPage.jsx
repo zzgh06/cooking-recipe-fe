@@ -56,7 +56,6 @@ const LoginPage = () => {
   const handleKakaoLogin = async (kakaoData) => {
     try {
       await loginWithKakao(kakaoData);
-      await fetchUser();
       navigate("/");
     } catch (err) {
       console.error("카카오 로그인 실패: ", err);
@@ -191,12 +190,7 @@ const LoginPage = () => {
           />
         </Box>
         <Box>
-          <KakaoLogin
-            onSuccess={handleKakaoLogin}
-            onError={() => {
-              console.log("카카오 로그인 실패");
-            }}
-          />
+          <KakaoLogin />
         </Box>
       </Box>
     </Container>

@@ -1,7 +1,7 @@
 import React from "react";
 
 interface DeliveryEstimateProps {
-  address: string[];
+  address: string;
 }
 
 const DeliveryEstimate = ({ address }: DeliveryEstimateProps) => {

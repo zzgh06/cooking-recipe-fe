@@ -5,10 +5,13 @@
     "strict": true,
     "allowJs": true,
     "esModuleInterop": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "typeRoots": ["./node_modules/@types", "./src/types"],
   },
   "include": [
     "src",
-    "src/**/*", "declaration.d.ts"
+    "src/**/*", 
+    "src/types/declaration.d.tsation.d.ts",
+    "src/types/react-rating-stars-component.d.ts"
   ]
 }

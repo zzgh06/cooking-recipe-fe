@@ -1,11 +1,7 @@
 import React from "react";
 import { Grid, Typography, Box } from "@mui/material";
 import SearchRecipeCard from "../SearchRecipeCard/SearchRecipeCard";
-
-interface RecipeItem {
-  _id: string;
-  [key: string]: any;
-}
+import { RecipeItem } from "../../types";
 
 interface MyFridgeSearchResultsProps {
   recipeList: RecipeItem[];

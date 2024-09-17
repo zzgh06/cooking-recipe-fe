@@ -62,7 +62,7 @@ const RecipeName = styled(Typography)(({ theme }) => ({
 }));
 
 const optimizeImageUrl = (url: string) => {
-  return url.replace(/\/upload\//, '/upload/c_fill,h_504,w_504,f_auto,q_auto,f_webp/');
+  return url?.replace(/\/upload\//, '/upload/c_fill,h_504,w_504,f_auto,q_auto,f_webp/');
 };
 
 interface RecipeCardProps {
@@ -84,7 +84,7 @@ const RecipeCard = React.memo(({ item }: RecipeCardProps) => {
         alt={item.name}
         loading="eager"
         fetchPriority="high"
-        onClick={() => showRecipe(item._id)}
+        onClick={() => showRecipe(item._id || "")}
       />
       <CardDescription>
         <RecipeName variant="h6" align="center">

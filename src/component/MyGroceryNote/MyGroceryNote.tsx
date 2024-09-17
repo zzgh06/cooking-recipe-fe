@@ -138,14 +138,14 @@ const MyGroceryNote = () => {
               </Typography>
               {isLoading && (
                 <LoadingOverlay>
-                  <CircularProgress sx={{color: "green"}} />
+                  <CircularProgress sx={{ color: "green" }} />
                 </LoadingOverlay>
               )}
               <List>
                 {selectedShoppingList?.length > 0 ? (
-                  selectedShoppingList.map((item) => (
+                  selectedShoppingList.map((item, index) => (
                     <ListItems
-                      key={item._id}
+                      key={`selected-${item._id}-${index}`}
                       sx={{ display: "flex", alignItems: "center" }}
                     >
                       <StyledCheckbox
@@ -178,14 +178,14 @@ const MyGroceryNote = () => {
               </Typography>
               {isLoading && (
                 <LoadingOverlay>
-                  <CircularProgress sx={{color: "green"}} />
+                  <CircularProgress sx={{ color: "green" }} />
                 </LoadingOverlay>
               )}
               <List>
                 {completedShoppingList?.length > 0 ? (
-                  completedShoppingList.map((item) => (
+                  completedShoppingList.map((item, index) => (
                     <ListItems
-                      key={item._id}
+                      key={`completed-${item._id}-${index}`}
                       sx={{ display: "flex", alignItems: "center" }}
                     >
                       <Typography

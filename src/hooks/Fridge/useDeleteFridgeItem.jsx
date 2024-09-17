@@ -6,7 +6,6 @@ import { removeIngredientToFridge } from "../../redux/fridgeSlice";
 
 const deleteFridgeItem = async (id) => {
   const response = await api.delete(`/frige/${id}`);
-  console.log("response.data.data", response.data)
   return response.data.userFrige;
 };
 

@@ -68,11 +68,6 @@ interface OrderItem {
   status: string;
 }
 
-interface FetchOrderResponse {
-  orderList: OrderItem[];
-  totalPages: number;
-}
-
 const MyOrderComponent = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();

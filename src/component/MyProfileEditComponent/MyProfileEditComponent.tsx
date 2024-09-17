@@ -66,6 +66,14 @@ interface FormErrors {
   shipTo: string;
 }
 
+interface EditableUserInfo {
+  image: string;
+  email: string;
+  name: string;
+  contact: string;
+  shipTo: string;
+}
+
 interface MyProfileEditComponentProps {
   user: User;
 }
@@ -73,7 +81,7 @@ interface MyProfileEditComponentProps {
 const MyProfileEditComponent = ({user}: MyProfileEditComponentProps ) => {
   const navigate = useNavigate();
   
-  const [formData, setFormData] = useState<User>({
+  const [formData, setFormData] = useState<EditableUserInfo>({
     image: "",
     email: "",
     name: "",
@@ -91,14 +99,13 @@ const MyProfileEditComponent = ({user}: MyProfileEditComponentProps ) => {
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-
   useEffect(() => {
     if (user) {
       setFormData({
         image: user.image || '',
         email: user.email || '',
         name: user.name || '',
-        contact: formatPhoneNumber(user.contact) || '',
+        contact: formatPhoneNumber(user.contact || '') || '',
         shipTo: user.shipTo || '' ,
       });
     }
@@ -137,8 +144,8 @@ const MyProfileEditComponent = ({user}: MyProfileEditComponentProps ) => {
     if (!nameRegex.test(name)) {
       errors.name = '이름은 한글이나 영어만 입력할 수 있습니다.';
     }
-    const cleanedContact = contact.replace(/\D/g, '');
-    if (cleanedContact.length !== 11) {
+    const cleanedContact = contact?.replace(/\D/g, '');
+    if (cleanedContact?.length !== 11) {
       errors.contact = '전화번호는 11자리 숫자여야 합니다.';
     }
 

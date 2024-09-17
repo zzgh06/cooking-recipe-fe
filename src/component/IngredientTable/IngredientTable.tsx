@@ -11,6 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { Ingredient } from "../../types";
 
 const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   boxShadow: theme.shadows[1],
@@ -45,24 +46,12 @@ const DescriptionCell = styled(StyledTableCell)(({ theme }) => ({
   whiteSpace: 'nowrap',
 }));
 
-interface Item {
-  _id: string;
-  name: string;
-  description?: string;
-  price?: number;
-  discountPrice?: number;
-  category?: string[];
-  stock?: number;
-  status?: string;
-  reviewCnt?: number;
-  images: string[];
-}
 
 interface IngredientTableProps {
   header: string[];
-  data: Item[];
+  data: Ingredient[];
   deleteItem: (id: string) => void;
-  openEditForm: (item: Item) => void;
+  openEditForm: (item: Ingredient) => void;
 }
 
 const optimizedImageUrl = (url?: string): string =>

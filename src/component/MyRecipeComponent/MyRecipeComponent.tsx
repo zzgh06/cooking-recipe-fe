@@ -69,7 +69,7 @@ const MyRecipeComponent = () => {
 
   const handleFormSubmit = (recipeData: Recipe) => {
     if (selectedRecipe) {
-      editRecipe({ id: selectedRecipe._id, updatedData: recipeData });
+      editRecipe({ id: selectedRecipe._id || "", updatedData: recipeData });
       refetch();
       setShowForm(false);
     }
@@ -117,7 +117,7 @@ const MyRecipeComponent = () => {
                     <Button
                       variant="contained"
                       color="primary"
-                      onClick={() => handleRecipe(recipe._id)}
+                      onClick={() => handleRecipe(recipe._id || "")}
                     >
                       보기
                     </Button>
@@ -174,7 +174,7 @@ const MyRecipeComponent = () => {
             </Typography>
             <RecipeForm
               onSubmit={handleFormSubmit}
-              initialData={selectedRecipe}
+              initialData={selectedRecipe || undefined}
             />
           </Box>
         </Modal>

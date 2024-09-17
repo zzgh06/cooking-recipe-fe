@@ -5,6 +5,7 @@ import { Box, Typography, IconButton, styled, Grid } from "@mui/material";
 import IngredientCard from "../IngredientCard/IngredientCard";
 import { ingredientResponsive } from "../../constants/responsive";
 import IngredientCardSkeleton from "../Skeleton/IngredientCardSkeleton";
+import { Ingredient } from "../../types";
 
 const IngredientCarouselWrapper = styled(Box)(({ theme }) => ({
   position: "relative",
@@ -59,11 +60,6 @@ const LeftArrow = styled(CustomArrowIngredient)({
 const RightArrow = styled(CustomArrowIngredient)({
   right: 0,
 });
-
-interface Ingredient {
-  _id: string;
-  name: string;
-}
 
 interface IngredientSliderProps {
   title: string;

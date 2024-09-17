@@ -7,14 +7,14 @@ interface UsersDataPayload {
 }
 
 interface AuthState {
-  registrationData: any;  // registrationData의 타입을 구체적으로 정의할 수 있다면 변경하세요
-  loginData: any;         // loginData의 타입을 구체적으로 정의할 수 있다면 변경하세요
+  registrationData: any;
+  loginData: any;   
   user: User | null;
   usersData: User[];
   totalPageNum: number;
   error: string | null;
   isAuthenticated: boolean;
-  loading?: boolean;      // loading이 일부 액션에만 쓰이므로 optional로 설정
+  loading?: boolean;
 }
 
 const initialState: AuthState  = {

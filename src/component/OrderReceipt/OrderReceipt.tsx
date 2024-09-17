@@ -3,13 +3,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { currencyFormat } from "../../utils/number";
 import { Box, Typography, Button } from "@mui/material";
 
-interface Ingredient {
-  name: string;
-  price: number;
-}
-
 interface CartItem {
-  ingredientId: Ingredient;
+  ingredientId: {
+    name: string;
+    price: number | undefined;
+  };
   qty: number;
 }
 
@@ -59,7 +57,7 @@ const OrderReceipt = ({ selectedCartItems, totalPrice }: OrderReceiptProps) => {
                 {item?.ingredientId?.name} x {item?.qty}
               </Typography>
               <Typography variant="body1">
-                ₩ {currencyFormat(item?.ingredientId?.price * item?.qty)}
+                ₩ {currencyFormat((item?.ingredientId?.price ?? 0) * item?.qty)}
               </Typography>
             </Box>
           ))

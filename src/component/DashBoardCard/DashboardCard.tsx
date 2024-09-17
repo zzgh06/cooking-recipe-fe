@@ -23,6 +23,7 @@ const StyledCardContent = styled(CardContent)(({ theme }) => ({
 interface DashBoardCardProps {
   status: string;
   count: number;
+  borderColor?: string;
 }
 
 const DashBoardCard = ({ status, count }: DashBoardCardProps) => {
