@@ -215,7 +215,7 @@ const AdminOrderPage = () => {
 
       <OrderTable
         header={tableHeader}
-        data={data?.data}
+        data={data?.data || []}
         openEditForm={openEditForm}
         badgeBg={badgeBg}
       />

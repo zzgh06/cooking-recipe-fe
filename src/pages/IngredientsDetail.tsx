@@ -52,7 +52,7 @@ const preloadImage = (url: string) => {
 };
 
 interface IngredientDetail extends Ingredient {
-  detail : string;
+  detail: string;
 }
 
 const IngredientsDetail = () => {
@@ -60,7 +60,7 @@ const IngredientsDetail = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
   const { data: ingredientDataById, isLoading: isLoadingById } = useGetIngredient(id);
-  const data = ingredientDataById as IngredientDetail | undefined;;
+  const data = ingredientDataById as IngredientDetail | undefined;
   const isLoading = isLoadingById;
   const { mutate: addToCart, isPending: isAdding } = useAddToCart();
 
@@ -112,7 +112,11 @@ const IngredientsDetail = () => {
       navigate("/login");
       return;
     }
-    addToCart({ ingredientId: id, qty: 1 });
+    if (id) {
+      addToCart({ ingredientId: id, qty: 1 });
+    } else {
+      console.error("Ingredient ID is missing");
+    }
   };
 
   const goHome = () => {
@@ -129,7 +133,7 @@ const IngredientsDetail = () => {
   };
 
   const optimizedImageUrl = (url: string) =>
-    url?.replace(/\/upload\//, "/upload/c_fill,h_1100,w_1100,f_webp/");
+    url.replace(/\/upload\//, "/upload/c_fill,h_1100,w_1100,f_webp/");
 
   if (isLoading) {
     return <IngredientsDetailSkeleton />;

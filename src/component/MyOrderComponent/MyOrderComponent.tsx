@@ -30,8 +30,8 @@ import { currencyFormat } from "../../utils/number";
 import MyPageOrderDialog from "../MyPageOrderDialog/MyPageOrderDialog";
 import { setSelectedOrder } from "../../redux/orderSlice";
 import { useFetchOrder } from "../../hooks/Order/useFetchOrder";
+import { OrderItem } from "../../types";
 
-// 테이블 셀 스타일
 const cellStyle1 = {
   whiteSpace: "nowrap",
   overflow: "hidden",
@@ -55,19 +55,6 @@ const HeadContainer = styled("div")({
   paddingLeft: "10px",
 });
 
-interface OrderItem {
-  _id: string;
-  orderNum: string;
-  createdAt: string;
-  items: Array<{
-    ingredientId: {
-      name: string;
-    };
-  }>;
-  totalPrice: number;
-  status: string;
-}
-
 const MyOrderComponent = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -75,8 +62,8 @@ const MyOrderComponent = () => {
   const [recentChecked, setRecentChecked] = useState(false);
   const [oldChecked, setOldChecked] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
   const [selectedOption, setSelectedOption] = useState("orderNum");
   const [page, setPage] = useState(1);
   const { data, isLoading } = useFetchOrder({ ...searchQuery, page });
@@ -99,7 +86,7 @@ const MyOrderComponent = () => {
       sortedList.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
     }
     setSortedOrderList(sortedList);
-  }, [recentChecked, oldChecked]);
+  }, [recentChecked, oldChecked, orderList]);
 
   const handleRecentChange = (event: ChangeEvent<HTMLInputElement>) => {
     setRecentChecked(event.target.checked);
@@ -113,14 +100,9 @@ const MyOrderComponent = () => {
 
   const handleSearch = (event: FormEvent) => {
     event.preventDefault();
-    if (
-      startDate &&
-      endDate &&
-      isValid(new Date(startDate)) &&
-      isValid(new Date(endDate))
-    ) {
-      const formattedStartDate = startOfDay(new Date(startDate));
-      const formattedEndDate = endOfDay(new Date(endDate));
+    if (startDate && endDate && isValid(startDate) && isValid(endDate)) {
+      const formattedStartDate = startOfDay(startDate);
+      const formattedEndDate = endOfDay(endDate);
 
       setSearchQuery({
         ...searchQuery,
@@ -143,7 +125,6 @@ const MyOrderComponent = () => {
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
-    setSortedOrderList(orderList);
   };
 
   const handleReset = () => {
@@ -156,7 +137,7 @@ const MyOrderComponent = () => {
     setPage(1);
   };
 
-  if (isLoading)
+  if (isLoading) {
     return (
       <Container
         maxWidth="lg"
@@ -167,9 +148,10 @@ const MyOrderComponent = () => {
           minHeight: "100vh",
         }}
       >
-        <CircularProgress size="100px" sx={{color: "green"}} />
+        <CircularProgress size="100px" sx={{ color: "green" }} />
       </Container>
     );
+  }
 
   return (
     <Grid container>
@@ -199,7 +181,6 @@ const MyOrderComponent = () => {
                 setEndDate={setEndDate}
               />
             </Grid>
-            {/* 주문 번호 검색 */}
             <Grid container spacing={2} mt={1}>
               <Grid item xs={12} md={2}>
                 <Select
@@ -254,7 +235,6 @@ const MyOrderComponent = () => {
               </Grid>
             </Grid>
           </Grid>
-          {/* 정렬기준 */}
           <Box sx={{ mt: "10px" }}>
             <FormGroup
               style={{
@@ -280,7 +260,6 @@ const MyOrderComponent = () => {
               />
             </FormGroup>
           </Box>
-          {/* 주문 내역 테이블 */}
           <Typography variant="h6" sx={{ marginBottom: "10px" }}>
             주문 내역/배송 상태
           </Typography>
@@ -295,9 +274,8 @@ const MyOrderComponent = () => {
                   <TableCell style={cellStyle1}>주문상태</TableCell>
                 </TableRow>
               </TableHead>
-              {/* 테이블 바디 */}
               <TableBody>
-                {sortedOrderList?.length > 0 ? (
+                {sortedOrderList.length > 0 ? (
                   sortedOrderList.map((item) => (
                     <TableRow
                       key={item._id}
@@ -349,7 +327,6 @@ const MyOrderComponent = () => {
             color="primary"
           />
         </Box>
-        {/* 주문 상세 다이얼로그 */}
         <MyPageOrderDialog open={dialogOpen} handleClose={handleCloseDialog} />
       </Grid>
     </Grid>

@@ -24,14 +24,15 @@ interface CartItemProps {
     price?: number;
     unit?: string;
     images: string[];
-    _id?: string;
-  };
+    _id: string;
+  }  
   qty: number;
-  selectedItems: string[]
+  selectedItems: string[];
 }
 
 const CartItem= ({ item, qty, selectedItems }: CartItemProps) => {
   const dispatch = useDispatch<AppDispatch>();
+  
   const isSelected = item._id ? selectedItems.includes(item._id) : false;
   const { mutate: deleteItem, isPending: isDeleting } = useDeleteCartItem();
   const { mutate: editCartItem } = useEditCartItem();
@@ -42,13 +43,13 @@ const CartItem= ({ item, qty, selectedItems }: CartItemProps) => {
     }
   };
   
-
   const handleQtyChange = (event: SelectChangeEvent<number>) => {
-    const value = event.target.value;
-    if (item._id) {
+    const value = Number(event.target.value); 
+    if (!isNaN(value) && item._id) { 
       editCartItem({ ingredientId: item._id, qty: value });
     }
   };
+  
   const handleDelete = () => {
     if (item._id) {
       deleteItem({ ingredientId: item._id });

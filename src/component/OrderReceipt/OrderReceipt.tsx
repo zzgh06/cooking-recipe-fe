@@ -29,7 +29,7 @@ const OrderReceipt = ({ selectedCartItems, totalPrice }: OrderReceiptProps) => {
         borderRadius: 1,
         boxShadow: 1,
         width: "100%",
-        maxWidth: 600,
+        maxWidth: 800,
         mx: "auto",
       }}
     >

@@ -25,21 +25,22 @@ interface CartState {
 const CartPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { data: cartItems, isLoading } = useFetchCart();
+  const { data: cartItems, isLoading, refetch} = useFetchCart();
   const { cartItem, selectedItems } = useSelector<RootState, CartState>((state: RootState) => state.cart);
 
   useEffect(() => {
     if (cartItems) {
       dispatch(setCartItems(cartItems));
+      refetch();
     }
   }, [cartItems, dispatch]);
 
-  const selectedCartItems = cartItem?.filter((item) =>
-    selectedItems.includes(item?.ingredientId._id)
+  const selectedCartItems = cartItem.filter((item) =>
+    item.ingredientId && selectedItems.includes(item.ingredientId._id)
   );
 
-  const totalPrice = selectedCartItems?.reduce(
-    (total, item) => total + (item.ingredientId.price ?? 0) * item.qty,
+  const totalPrice = selectedCartItems.reduce(
+    (total, item) => total + (item.ingredientId?.price ?? 0) * item.qty,
     0
   );
 
@@ -89,8 +90,7 @@ const CartPage = () => {
               장바구니가 비어 있습니다.
             </Typography>
             <Typography variant="body1" sx={{ mb: 3 }}>
-              현재 장바구니에 담긴 아이템이 없습니다. 새로운 상품을
-              추가해보세요!
+              현재 장바구니에 담긴 아이템이 없습니다. 새로운 상품을 추가해보세요!
             </Typography>
             <Button
               variant="contained"
@@ -104,20 +104,22 @@ const CartPage = () => {
         ) : (
           <Grid container spacing={2} justifyContent="center">
             <Grid item xs={12} md={7}>
-              {cartItem?.map((item) => (
-                <CartItem
-                  key={item?.ingredientId._id}
-                  item={item?.ingredientId}
-                  qty={item?.qty}
-                  selectedItems={selectedItems}
-                />
-              ))}
+              {cartItem.map((item) => 
+                item.ingredientId && (
+                  <CartItem
+                    key={item.ingredientId._id}
+                    item={item.ingredientId}
+                    qty={item.qty}
+                    selectedItems={selectedItems}
+                  />
+                )
+              )}
             </Grid>
             <Grid item xs={12} md={5}>
-              <OrderReceipt
-                selectedCartItems={selectedCartItems}
-                totalPrice={totalPrice}
-              />
+                <OrderReceipt
+                  selectedCartItems={selectedCartItems}
+                  totalPrice={totalPrice}
+                />
             </Grid>
           </Grid>
         )}
@@ -125,5 +127,6 @@ const CartPage = () => {
     </Container>
   );
 };
+
 
 export default CartPage;

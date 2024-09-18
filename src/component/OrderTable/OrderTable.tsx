@@ -54,7 +54,7 @@ const OrderTable = ({ header, data, openEditForm, badgeBg }: OrderTableProps) =>
               <StyledTableRow key={index} onClick={() => openEditForm(item)}>
                 <StyledTableCell>{index + 1}</StyledTableCell>
                 <StyledTableCell>{item.orderNum}</StyledTableCell>
-                <StyledTableCell>{item.createdAt.slice(0, 10)}</StyledTableCell>
+                <StyledTableCell>{item.createdAt?.slice(0, 10)}</StyledTableCell>
                 <StyledTableCell>{item.userId?.email}</StyledTableCell>
                 <StyledTableCell>
                   {item.items.length > 0 ? (

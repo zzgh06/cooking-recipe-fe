@@ -30,10 +30,10 @@ const cartSlice = createSlice({
       state.cartItem = action.payload;
       state.selectedItems = action.payload.map((item) => item.ingredientId._id || "");
     },
-    setAddToCart: (state, action: PayloadAction<{ data: CartItemType }>) => {
-      state.cartItem.push(action.payload.data);
+    setAddToCart: (state, action: PayloadAction<CartItemType>) => { 
+      state.cartItem.push(action.payload);
     },
-    removeCartItem: (state, action: PayloadAction<CartItemType[] | undefined>) => {
+    removeCartItem: (state, action: PayloadAction<CartItemType[]>) => {
       if (action.payload && action.payload.length > 0) {
         state.cartItem = action.payload;
       } else {

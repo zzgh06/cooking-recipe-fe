@@ -100,6 +100,7 @@ const PaymentPage = () => {
       console.error("Failed to delete cart items:", error);
     }
   };
+  
 
   const handleFormChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -238,7 +239,7 @@ const PaymentPage = () => {
             </Box>
           </Box>
         </Grid>
-        <Grid item lg={5} sx={{ display: { xs: 'block' } }}>
+        <Grid item lg={5} md={12} sx={{ display: { xs: 'block' } }}>
           <OrderReceipt
             selectedCartItems={selectedCartItems}
             totalPrice={totalPrice}

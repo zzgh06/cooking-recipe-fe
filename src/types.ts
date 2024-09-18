@@ -68,8 +68,6 @@ export interface Ingredient {
   totalSales: number; 
 }
 
-
-
 export interface Review {
   _id: string;
   recipeId?: string;
@@ -84,8 +82,8 @@ export interface Review {
 }
 
 export interface Order {
-  orderNum: string;
-  createdAt: string;
+  orderNum?: string;
+  createdAt?: string;
   userId?: {
     email: string;
   };
@@ -102,6 +100,42 @@ export interface Order {
   };
   totalPrice: number;
   status: string;
+}
+
+export interface OrderItem {
+  _id: string;
+  orderNum: string;
+  createdAt: string;
+  items: Array<{
+    ingredientId: {
+      name: string;
+    };
+  }>;
+  totalPrice: number;
+  status: string;
+}
+
+export interface CreateOrderResponse {
+  orderNum: string;     
+  createdAt: string;       
+  userId?: {
+    email: string;        
+  };
+  items: {
+    ingredientId?: {
+      name: string;         
+    };
+    price: number;          
+    qty: number;           
+  }[];
+  contactInfo?: {
+    shipTo: {
+      address: string;      
+      city: string;         
+    };
+  };
+  totalPrice: number;       
+  status: string;           
 }
 
 export interface CartItemType {

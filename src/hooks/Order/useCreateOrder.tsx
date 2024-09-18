@@ -1,19 +1,44 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, UseMutationResult } from "@tanstack/react-query";
 import api from "../../utils/api";
 import { useDispatch } from "react-redux";
 import { setToastMessage } from "../../redux/commonUISlice";
 import { useNavigate } from "react-router-dom";
 import { addOrderToState } from "../../redux/orderSlice";
 
-const createOrder = async (data) => {
+interface createOrderParams {
+  totalPrice: number;
+  contactInfo: {
+    shipTo: {
+      address: string;
+      city: string;
+      zip: string;
+    };
+    contact: {
+      firstName: string;
+      lastName: string;
+      contact: string;
+    };
+  };
+  items: {
+    ingredientId: string;
+    price?: number;
+    qty?: number;
+  }[];
+}
+
+const createOrder = async (data: createOrderParams): Promise<string> => {
   const response = await api.post("/order", data);
   return response.data.orderNum;
 };
 
-export const useCreateOrder = () => {
+export const useCreateOrder = (): UseMutationResult<
+  string,
+  unknown,
+  createOrderParams
+> => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  return useMutation({
+  return useMutation<string, unknown, createOrderParams>({
     mutationFn: createOrder,
     onSuccess: (data) => {
       dispatch(addOrderToState(data));
@@ -25,7 +50,7 @@ export const useCreateOrder = () => {
       );
       navigate("/payment/success");
     },
-    onError: (error) => {
+    onError: (error: any) => {
       dispatch(
         setToastMessage({
           message: error.error,

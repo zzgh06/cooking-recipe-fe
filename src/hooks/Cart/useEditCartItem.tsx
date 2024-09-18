@@ -1,22 +1,28 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, UseMutationResult, useQueryClient } from "@tanstack/react-query";
 import api from "../../utils/api";
 import { useDispatch } from "react-redux";
 import { setToastMessage } from "../../redux/commonUISlice";
 import { updateCartItemState } from "../../redux/cartSlice";
+import { CartItemType } from "../../types";
 
-const editCartItem = async ({ ingredientId, qty }) => {
+interface editCartItemParams {
+  ingredientId : string;
+  qty : number;
+}
+
+const editCartItem = async ({ ingredientId, qty }: editCartItemParams): Promise<CartItemType> => {
   const response = await api.put(`/cart/${ingredientId}`, { qty });
   return response.data.data;
 };
 
-export const useEditCartItem = () => {
+export const useEditCartItem = (): UseMutationResult<CartItemType, unknown, editCartItemParams> => {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
 
-  return useMutation({
+  return useMutation<CartItemType, unknown, editCartItemParams>({
     mutationFn: editCartItem,
     onSuccess: (data) => {
-      queryClient.invalidateQueries(["cart"]);
+      queryClient.invalidateQueries({ queryKey : ["cart"] });
       dispatch(updateCartItemState(data));
       dispatch(
         setToastMessage({
@@ -25,7 +31,7 @@ export const useEditCartItem = () => {
         })
       );
     },
-    onError: (error) => {
+    onError: (error: any) => {
       dispatch(
         setToastMessage({
           message: error.error,

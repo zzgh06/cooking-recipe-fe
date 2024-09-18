@@ -1,19 +1,26 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, UseMutationResult } from "@tanstack/react-query";
 import api from "../../utils/api";
 import { useDispatch } from "react-redux";
 import { setToastMessage } from "../../redux/commonUISlice";
 import { setAddToCart } from "../../redux/cartSlice";
+import { CartItemType } from "../../types";
 
-const addItemToCart = async ({ ingredientId, qty }) => {
+interface AddItemToCartParams {
+  ingredientId: string;
+  qty: number;
+}
+
+const addItemToCart = async ({ ingredientId, qty }: AddItemToCartParams): Promise<CartItemType> => {
   const response = await api.post(`/cart`, { ingredientId, qty });
   return response.data.data;
 };
 
-export const useAddToCart = () => {
+export const useAddToCart = (): UseMutationResult<CartItemType, unknown, AddItemToCartParams> => {
   const dispatch = useDispatch();
-  return useMutation({
+  
+  return useMutation<CartItemType, unknown, AddItemToCartParams>({
     mutationFn: addItemToCart,
-    onSuccess: (data) => {
+    onSuccess: (data: CartItemType) => {
       dispatch(setAddToCart(data));
       dispatch(
         setToastMessage({
@@ -22,10 +29,10 @@ export const useAddToCart = () => {
         })
       );
     },
-    onError: (error) => {
+    onError: (error: any) => {
       dispatch(
         setToastMessage({
-          message: error.error,
+          message: error?.message || "에러 발생",
           status: "error",
         })
       );

@@ -17,7 +17,8 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Typography
+  Typography,
+  Box
 } from "@mui/material";
 import { RootState } from "../../redux/store";
 
@@ -56,7 +57,7 @@ interface OrderDetailDialogProps {
   handleClose: () => void;
 }
 
-const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({ open, handleClose }) => {
+const OrderDetailDialog = ({ open, handleClose }: OrderDetailDialogProps) => {
   const queryClient = useQueryClient();
   const { selectedOrder } = useSelector((state: RootState) => state.order) as { selectedOrder: SelectedOrder | null };
   const [orderStatus, setOrderStatus] = useState<string>(selectedOrder?.status || "");
@@ -84,8 +85,8 @@ const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({ open, handleClose
       console.error("Failed to update order:", error);
     }
   };
-  
-  
+
+
   if (!selectedOrder) {
     return null;
   }
@@ -139,36 +140,39 @@ const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({ open, handleClose
             </TableRow>
           </TableBody>
         </Table>
-        <form onSubmit={submitStatus}>
-          <TextField
-            select
-            label="Status"
-            value={orderStatus}
-            onChange={handleStatusChange}
-            fullWidth
-            margin="normal"
-          >
-            {ORDER_STATUS.map((status, idx) => (
-              <MenuItem key={idx} value={status.toLowerCase()}>
-                {status}
-              </MenuItem>
-            ))}
-          </TextField>
-        </form>
+        <Box sx={{ mt: 2 }}>
+          <form onSubmit={submitStatus}>
+            <TextField
+              select
+              label="Status"
+              value={orderStatus}
+              onChange={handleStatusChange}
+              fullWidth
+              margin="normal"
+            >
+              {ORDER_STATUS.map((status, idx) => (
+                <MenuItem key={idx} value={status.toLowerCase()}>
+                  {status}
+                </MenuItem>
+              ))}
+            </TextField>
+            <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
+              <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                disabled={isPending}
+                sx={{ mr: 1 }}
+              >
+                저장
+              </Button>
+              <Button variant="outlined" color="secondary" onClick={handleClose}>
+                닫기
+              </Button>
+            </Box>
+          </form>
+        </Box>
       </DialogContent>
-      <DialogActions>
-        <Button variant="outlined" color="secondary" onClick={handleClose}>
-          닫기
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          type="submit"
-          disabled={isPending} 
-        >
-          저장
-        </Button>
-      </DialogActions>
     </Dialog>
   );
 };
