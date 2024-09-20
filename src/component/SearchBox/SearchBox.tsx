@@ -43,7 +43,6 @@ const SearchBox = ({
     }
   }, [selectedIngredients]);
 
-  // Enter 키 입력 시 검색 실행
   const onCheckEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       event.preventDefault(); 
@@ -51,7 +50,6 @@ const SearchBox = ({
     }
   };
 
-  // 검색 버튼 클릭 시 검색 실행
   const handleSearch = () => {
     const currentKeyword = keyword; 
     if (currentKeyword.trim() === '') {
@@ -62,7 +60,6 @@ const SearchBox = ({
     }
   };
 
-  // 검색어 입력 시 키워드 상태 업데이트
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setKeyword(event.target.value);
   };

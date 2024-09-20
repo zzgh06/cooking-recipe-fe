@@ -22,6 +22,7 @@ interface UserTableProps {
 }
 
 const UserTable = ({ header, data, onRowClick }: UserTableProps) => {
+  console.log(data)
   return (
     <Box sx={{ overflowX: 'auto' }}>
       <StyledTableContainer>
@@ -46,7 +47,6 @@ const UserTable = ({ header, data, onRowClick }: UserTableProps) => {
                   <TableCell>{user.name}</TableCell>
                   <TableCell>{user.email}</TableCell>
                   <TableCell>{user.level}</TableCell>
-                  <TableCell>{user.shipTo}</TableCell>
                   <TableCell>{user.createdAt ? user.createdAt.slice(0, 10) : 'N/A'}</TableCell>
                 </StyledTableRow>
               ))

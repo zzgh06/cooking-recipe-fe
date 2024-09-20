@@ -5,29 +5,20 @@ import IngredientCard from '../component/IngredientCard/IngredientCard';
 import { Grid, Box, CircularProgress, Typography, Divider } from '@mui/material';
 import { useFetchRecipes } from '../hooks/Recipe/useFetchRecipes';
 import { useFetchIngredients } from '../hooks/Recipe/useFetchIngredients';
-import { Recipe, Ingredient } from '../types';
 
-interface FetchRecipesResponse {
-  recipes: Recipe[];
-}
-
-interface FetchIngredientsResponse {
-  ingredients: Ingredient[];
-}
-
-const SearchResults: React.FC = () => {
+const SearchResults = () => {
   const [query] = useSearchParams();
   const keyword = query.get('name') || '';
 
   const {
     data: recipesData,
     isLoading: recipesLoading,
-  } = useFetchRecipes({ name: keyword }) as { data: FetchRecipesResponse | undefined; isLoading: boolean };
+  } = useFetchRecipes({ name: keyword }) 
 
   const {
     data: ingredientsData,
     isLoading: ingredientsLoading,
-  } = useFetchIngredients({ name: keyword, page: 1 }) as { data: FetchIngredientsResponse | undefined; isLoading: boolean };
+  } = useFetchIngredients({ name: keyword, page: 1 }) 
 
   const isLoading = recipesLoading || ingredientsLoading;
 
@@ -65,13 +56,13 @@ const SearchResults: React.FC = () => {
           <Typography variant="h5" fontWeight="600" gutterBottom sx={{ mb: 3 }}>
             재료 검색 결과
           </Typography>
-          {ingredientsData && ingredientsData.ingredients.length === 0 ? (
+          {ingredientsData && ingredientsData.data.length === 0 ? (
             <Typography variant="body1" fontSize="20px">
               재료 검색 결과가 없습니다. 😅
             </Typography>
           ) : (
             <Grid container spacing={3}>
-              {ingredientsData && ingredientsData.ingredients.map((ing) => (
+              {ingredientsData && ingredientsData.data.map((ing) => (
                 <Grid item xs={12} sm={6} md={4} lg={3} key={ing._id}>
                   <IngredientCard item={ing} />
                 </Grid>
