@@ -19,8 +19,6 @@ const RecentlyViewed = ({ recentlyViewedItems }: RecentlyViewedProps) => {
     return url.replace(/\/upload\//, '/upload/c_fill,h_140,w_140,f_auto,q_auto,f_webp/');
   };
 
-  console.log("recentlyViewedItems", recentlyViewedItems)
-
   return (
     <Box
       sx={{

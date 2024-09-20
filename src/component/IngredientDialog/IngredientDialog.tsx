@@ -14,6 +14,7 @@ import { setSelectedIngredients } from "../../redux/ingredientSlice";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../../redux/store";
 import { Ingredient } from "../../types";
+import { setToastMessage } from "../../redux/commonUISlice";
 
 interface IngredientDialogProps {
   open: boolean;
@@ -29,6 +30,7 @@ const IngredientDialog = ({ open, handleClose, ingredients }: IngredientDialogPr
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const { user } = useSelector((state: RootState) => state.auth);
   const selectedIngredients = useSelector(
     (state: RootState) => state.ingredients?.selectedIngredients ?? []
   );
@@ -58,12 +60,16 @@ const IngredientDialog = ({ open, handleClose, ingredients }: IngredientDialogPr
   };
 
   const handleSave = () => {
-    const selectedIngredientsToSave = ingredients.filter(
-      (ingredient, index) => checkedIngredients[index] && isFullIngredient(ingredient)
-    ) as Ingredient[];
-    dispatch(setSelectedIngredients(selectedIngredientsToSave));
-    handleClose();
-    navigate('/fridge');
+    if (user) {
+      const selectedIngredientsToSave = ingredients.filter(
+        (ingredient, index) => checkedIngredients[index] && isFullIngredient(ingredient)
+      ) as Ingredient[];
+      dispatch(setSelectedIngredients(selectedIngredientsToSave));
+      handleClose();
+      navigate('/fridge');
+    } else {
+      dispatch(setToastMessage({ message: "로그인이 필요한 서비스 입니다.", status: "error" }));
+    }
   };
 
   return (

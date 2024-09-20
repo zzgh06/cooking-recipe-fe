@@ -15,6 +15,9 @@ import { useNavigate } from "react-router-dom";
 import { useAddToShoppingList } from "../../hooks/ShoppingList/useAddToShoppingList";
 import { useQueryClient } from "@tanstack/react-query";
 import { Ingredient } from "../../types";
+import { RootState } from "../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { setToastMessage } from "../../redux/commonUISlice";
 
 const HeadContainer = styled(Box)({
   display: "flex",
@@ -50,11 +53,13 @@ const isFullIngredient = (ingredient: Ingredient | { name: string; qty: number; 
 
 
 const ShoppingListDialog = ({ open, handleClose, ingredients }: ShoppingListDialogProps) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
   const [allChecked, setAllChecked] = useState(true);
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const addToShoppingListMutation = useAddToShoppingList();
+  const { user } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     if (open) {
@@ -78,10 +83,17 @@ const ShoppingListDialog = ({ open, handleClose, ingredients }: ShoppingListDial
   };
 
   const handleSaveList = async () => {
+    if (!user) {
+      dispatch(setToastMessage({
+        message: "로그인이 필요한 서비스입니다.",
+        status: "error",
+      }));
+      return;
+    }
+
     const selectedIngredients = ingredients.filter(
       (ingredient) => isFullIngredient(ingredient) && checkedItems[ingredient._id]
     );
-
     try {
       await addToShoppingListMutation.mutateAsync(selectedIngredients);
       queryClient.invalidateQueries({ queryKey: ["shoppingList"] });

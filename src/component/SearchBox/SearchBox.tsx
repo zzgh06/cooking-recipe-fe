@@ -37,21 +37,23 @@ const SearchBox = ({
 
   useEffect(() => {
     if (selectedIngredients && selectedIngredients.length > 0) {
-      setKeyword(selectedIngredients.join(', '));
+      const ingredientNames = selectedIngredients.map(ingredient => ingredient.name); 
+      setKeyword(ingredientNames.join(', ')); 
     } else {
       setKeyword('');
     }
   }, [selectedIngredients]);
-
+  
+  
   const onCheckEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      event.preventDefault(); 
+      event.preventDefault();
       handleSearch();
     }
   };
 
   const handleSearch = () => {
-    const currentKeyword = keyword; 
+    const currentKeyword = keyword;
     if (currentKeyword.trim() === '') {
       setKeyword('');
       setSearchQuery({ ...searchQuery, page: 1, [field]: '' });

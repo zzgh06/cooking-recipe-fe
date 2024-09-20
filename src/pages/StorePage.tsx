@@ -57,8 +57,6 @@ const StorePage = () => {
     });
   }, []);
 
-  console.log("data", data)
-
   const newIngredients = data?.ingredients.filter((ing: Ingredient) =>
     ing.category?.includes("신상")
   );
