@@ -6,7 +6,7 @@ import { clearSelectedItems } from "../../redux/cartSlice";
 import { AxiosError } from "axios";
 import { RootState } from "../../redux/store";
 
-const deleteSelectedCartItemsApi = async (selectedItems: string[]): Promise<void> => {
+const deleteSelectedCartItems = async (selectedItems: string[]): Promise<void> => {
   try {
     for (const id of selectedItems) {
       await api.delete(`/cart/${id}`);
@@ -23,7 +23,7 @@ export const useDeleteSelectedCartItems = () => {
   const selectedItems = useSelector((state: RootState) => state.cart.selectedItems);
 
   return useMutation<void, Error>({
-    mutationFn: () => deleteSelectedCartItemsApi(selectedItems),
+    mutationFn: () => deleteSelectedCartItems(selectedItems),
     onSuccess: async () => {
       await queryClient.invalidateQueries({queryKey : ["cart"]});
       dispatch(clearSelectedItems());

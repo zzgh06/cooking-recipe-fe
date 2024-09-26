@@ -10,6 +10,5 @@ export const useRecipeFavorite = () => {
   return useQuery({
     queryKey: ['recipeFavorite'],
     queryFn: fetchRecipeFavorite,
-    retry: 2,
   });
 };

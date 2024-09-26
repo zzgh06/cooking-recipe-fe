@@ -59,7 +59,7 @@ const IngredientsDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { user } = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
-  const { data: ingredientDataById, isLoading: isLoadingById } = useGetIngredient(id);
+  const { data: ingredientDataById, isLoading: isLoadingById } = useGetIngredient(id || "");
   const data = ingredientDataById as IngredientDetail | undefined;
   const isLoading = isLoadingById;
   const { mutate: addToCart, isPending: isAdding } = useAddToCart();

@@ -152,7 +152,7 @@ export interface FridgeItem {
 export interface ShoppingListItem {
   _id: string;
   name: string;
-  completed: boolean; 
+  completed?: boolean; 
 }
 
 export interface ShoppingListState {

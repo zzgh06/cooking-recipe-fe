@@ -25,7 +25,6 @@ const ingredientSlice = createSlice({
   initialState,
   reducers: {
     setSelectedIngredients: (state, action: PayloadAction<Ingredient[]>) => {
-      console.log(action.payload)
       state.selectedIngredients = action.payload;
     },
     addIngredientToState: (state, action: PayloadAction<Ingredient>) => {

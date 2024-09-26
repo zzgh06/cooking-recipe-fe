@@ -52,36 +52,6 @@ interface Step {
   image: string | null;
 }
 
-// interface IngredientInForm {
-//   name: string;
-//   qty: number;
-//   unit: string;
-// }
-
-// interface RecipeFormData {
-//   _id?: string;
-//   name: string;
-//   description: string;
-//   images: string[];
-//   foodCategory: string;
-//   moodCategory: string;
-//   methodCategory: string;
-//   ingredientCategory: string;
-//   etcCategory: string;
-//   servings: string;
-//   time: string;
-//   difficulty: string;
-//   ingredients: Ingredient[]; 
-//   steps: Step[];
-//   categories?: {
-//     food: string;
-//     mood: string;
-//     method: string;
-//     ingredient: string;
-//     etc: string;
-//   };
-// }
-
 
 interface RecipeFormProps {
   onSubmit: (data: Recipe) => void;

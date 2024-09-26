@@ -53,15 +53,6 @@ const LoginPage = () => {
     console.error("구글 로그인 실패: ", error);
   };
 
-  const handleKakaoLogin = async (kakaoData) => {
-    try {
-      await loginWithKakao(kakaoData);
-      navigate("/");
-    } catch (err) {
-      console.error("카카오 로그인 실패: ", err);
-    }
-  };
-
   const handleLogin = async (event) => {
     event.preventDefault();
     const { id, password } = formData;

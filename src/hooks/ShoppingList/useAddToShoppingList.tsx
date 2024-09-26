@@ -3,7 +3,13 @@ import api from "../../utils/api";
 import { useDispatch } from "react-redux";
 import { addToShoppingListToState } from "../../redux/shoppingListSlice";
 
-const addToShoppingList = async (items) => {
+interface AddToShoppingListItems {
+  name: string;
+  qty: number;
+  unit: string;
+}
+
+const addToShoppingList = async (items: AddToShoppingListItems[]) => {
   const response = await api.post("shoppingList/add", { items });
   return response.data.data;
 };
@@ -15,10 +21,10 @@ export const useAddToShoppingList = () => {
   return useMutation({
     mutationFn: addToShoppingList,
     onSuccess: (data) => {
-      queryClient.invalidateQueries(["shoppingList"]);
+      queryClient.invalidateQueries({queryKey: ["shoppingList"]});
       dispatch(addToShoppingListToState(data));
     },
-    onError: (error) => {
+    onError: (error: any) => {
       console.error("Error adding to shopping list:", error);
     },
   });

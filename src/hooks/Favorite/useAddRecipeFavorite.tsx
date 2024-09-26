@@ -3,7 +3,7 @@ import api from '../../utils/api';
 import { useDispatch } from 'react-redux';
 import { setToastMessage } from '../../redux/commonUISlice';
 
-const addRecipeFavorite = async (id) => {
+const addRecipeFavorite = async (id: string) => {
   const response = await api.put(`/favorite/${id}`);
   return response.data;
 };
@@ -14,7 +14,7 @@ export const useAddRecipeFavorite = () => {
   return useMutation({
     mutationFn: addRecipeFavorite,
     onSuccess: () => {
-      queryClient.invalidateQueries(['recipeFavorite']);
+      queryClient.invalidateQueries({ queryKey:['recipeFavorite']});
       dispatch(
         setToastMessage({
           message: "레시피를 찜했습니다.",
@@ -22,7 +22,7 @@ export const useAddRecipeFavorite = () => {
         })
       );
     },
-    onError: (error) => {
+    onError: (error: any) => {
       console.error('Error adding recipe to favorites:', error.message);
     }
   });

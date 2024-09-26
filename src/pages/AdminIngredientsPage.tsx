@@ -101,7 +101,7 @@ const AdminIngredientsPage = () => {
 
       <IngredientTable
         header={tableHeader}
-        data={data?.ingredients}
+        data={data?.ingredients || []}
         deleteItem={deleteItem}
         openEditForm={openEditForm}
       />

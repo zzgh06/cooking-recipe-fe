@@ -64,7 +64,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog, selectedIngredient }: 
     if (mode === 'new') {
       createIngredient(formData);
     } else {
-      editIngredient({ id: selectedIngredient?._id, ingredient: formData });
+      editIngredient({ id: selectedIngredient?._id || "", ingredient: formData });
     }
     setShowDialog(false);
   };

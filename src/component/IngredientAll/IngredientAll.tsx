@@ -80,7 +80,7 @@ const IngredientAll = () => {
                 <IngredientCardSkeleton />
               </Grid>
             ))
-          : data.ingredients.slice(0, displayCount).map((ing : Ingredient) => (
+          : data?.ingredients.slice(0, displayCount).map((ing : Ingredient) => (
               <Grid item xs={12} md={6} lg={3} key={ing._id}>
                 <IngredientCard item={ing} />
               </Grid>

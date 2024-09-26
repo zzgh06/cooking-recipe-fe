@@ -145,9 +145,9 @@ const RecipeDetail = () => {
       return;
     }
     if (isFavorite && recipeDetail) {
-      deleteRecipeFavorite(recipeDetail._id);
+      deleteRecipeFavorite(recipeDetail._id || "");
     } else if (recipeDetail) {
-      addRecipeFavorite(recipeDetail._id);
+      addRecipeFavorite(recipeDetail._id || "");
     }
     setIsFavorite((prev) => !prev);
   }, [isFavorite, user, navigate, recipeDetail, addRecipeFavorite, deleteRecipeFavorite]);

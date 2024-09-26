@@ -2,8 +2,9 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../../utils/api";
 import { useDispatch } from "react-redux";
 import { removeShoppingListItem } from "../../redux/shoppingListSlice";
+import { ShoppingListItem } from "../../types";
 
-const removeFromShoppingList = async (itemId) => {
+const removeFromShoppingList = async (itemId: string): Promise<ShoppingListItem[]> => {
   const response = await api.post("shoppingList/remove", { itemId });
   return response.data.data;
 };
@@ -15,7 +16,7 @@ export const useRemoveFromShoppingList = () => {
   return useMutation({
     mutationFn: removeFromShoppingList,
     onSuccess: (data) => {
-      queryClient.invalidateQueries(["shoppingList"]);
+      queryClient.invalidateQueries({ queryKey: ["shoppingList"] });
       dispatch(removeShoppingListItem(data))
     },
     onError: (error) => {

@@ -3,7 +3,7 @@ import api from '../../utils/api';
 import { useDispatch } from 'react-redux';
 import { setToastMessage } from '../../redux/commonUISlice';
 
-const deleteRecipeFavorite = async (id) => {
+const deleteRecipeFavorite = async (id: string) => {
   const response = await api.delete(`/favorite/${id}`);
   return response.data;
 };
@@ -14,7 +14,7 @@ export const useDeleteRecipeFavorite = () => {
   return useMutation({
     mutationFn: deleteRecipeFavorite,
     onSuccess: () => {
-      queryClient.invalidateQueries(['recipeFavorite']);
+      queryClient.invalidateQueries({queryKey: ['recipeFavorite']});
       dispatch(
         setToastMessage({
           message: "레시피 찜을 취소했습니다.",
@@ -22,7 +22,7 @@ export const useDeleteRecipeFavorite = () => {
         })
       );
     },
-    onError: (error) => {
+    onError: (error: any) => {
       console.error('Error removing recipe from favorites:', error.message);
     }
   });

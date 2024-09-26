@@ -2,8 +2,9 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../../utils/api";
 import { moveToCompletedListState } from "../../redux/shoppingListSlice";
 import { useDispatch } from "react-redux";
+import { ShoppingListItem } from "../../types";
 
-const moveToCompletedList = async (item) => {
+const moveToCompletedList = async (item: ShoppingListItem): Promise<ShoppingListItem[]> => {
   const response = await api.post("shoppingList/moveToShoppingList", { item });
   return response.data.data;
 };
@@ -15,7 +16,7 @@ export const useMoveToCompletedList = () => {
   return useMutation({
     mutationFn: moveToCompletedList,
     onSuccess: (data) => {
-      queryClient.invalidateQueries(["shoppingList"]);
+      queryClient.invalidateQueries({ queryKey: ["shoppingList"] });
       dispatch(moveToCompletedListState(data))
     },
     onError: (error) => {

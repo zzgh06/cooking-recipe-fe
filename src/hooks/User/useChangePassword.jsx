@@ -1,5 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import api from '../../utils/api';
+import { useDispatch } from 'react-redux';
+import { setToastMessage } from '../../redux/commonUISlice';
 
 const changePassword = async (newPassword) => {
   const response = await api.put('/password/change-password', { newPassword });
@@ -7,13 +9,14 @@ const changePassword = async (newPassword) => {
 };
 
 export const useChangePassword = () => {
+  const dispatch = useDispatch();
   return useMutation({
     mutationFn: changePassword,
     onSuccess: (data) => {
-      alert(`${data.message}`);
+      dispatch(setToastMessage({ message: data.message, status: "success" }));
     },
     onError: (error) => {
-      return error.error || 'Request failed';
+      dispatch(setToastMessage({ message: error.error, status: "error" }));
     },
   });
 };

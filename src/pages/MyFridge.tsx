@@ -296,7 +296,7 @@ const MyFridge = () => {
               {recipeLoading ? (
                 <CircularProgress size="60px" sx={{ color: "green" }} />
               ) : (
-                <MyFridgeSearchResults recipeList={recipeList} />
+                <MyFridgeSearchResults recipeList={recipeList || []} />
               )}
             </DialogContent>
             <DialogActions sx={{ display: "flex", justifyContent: "center" }}>

@@ -72,7 +72,7 @@ const StorePage = () => {
       <BannerComponent images={images} />
       <IngredientSlider
         title={"베스트 상품"}
-        ingredients={bestIngredients?.slice(0, 8)}
+        ingredients={bestIngredients?.slice(0, 8) || []}
         loading={isLoading}
       />
       <Suspense
@@ -86,12 +86,12 @@ const StorePage = () => {
       </Suspense>
       <IngredientSlider
         title={"신상품"}
-        ingredients={newIngredients?.slice(0, 8)}
+        ingredients={newIngredients?.slice(0, 8) || []}
         loading={isLoading}
       />
       <Suspense fallback={<CircleRounded />}>
         <IngredientThemeCard
-          ingredients={topDiscountedIngredients}
+          ingredients={topDiscountedIngredients || []}
           loading={isLoading}
         />
       </Suspense>

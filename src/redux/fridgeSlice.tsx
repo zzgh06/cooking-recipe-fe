@@ -3,7 +3,7 @@ import { Ingredient, Recipe } from "../types";
 
 interface FridgeItem {
   _id: string;
-  ingredientId: Ingredient[];
+  ingredientId: Ingredient;
 
 }
 
@@ -24,12 +24,13 @@ const fridgeSlice = createSlice({
     setFridgeItems: (state, action: PayloadAction<FridgeItem[]>) => {
       state.fridgeItems = action.payload;
     },
-    setAddIngredientToFridge: (state, action: PayloadAction<FridgeItem>) => {
-      state.fridgeItems.push(action.payload);
+    setAddIngredientToFridge: (state, action: PayloadAction<FridgeItem[]>) => {
+      state.fridgeItems.push(...action.payload); 
     },
-    removeIngredientToFridge: (state, action: PayloadAction<FridgeItem>) => {
+    removeIngredientToFridge: (state, action: PayloadAction<FridgeItem[]>) => {
+      const idsToRemove = action.payload.map(item => item._id);
       state.fridgeItems = state.fridgeItems.filter(
-        (item) => item._id !== action.payload._id
+        (item) => !idsToRemove.includes(item._id)
       );
     },
   },
