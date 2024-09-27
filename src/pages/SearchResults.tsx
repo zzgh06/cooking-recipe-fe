@@ -20,7 +20,6 @@ const SearchResults = () => {
     isLoading: ingredientsLoading,
   } = useFetchIngredients({ name: keyword, page: 1 }) 
 
-  console.log("ingredientsData", ingredientsData)
   const isLoading = recipesLoading || ingredientsLoading;
 
   return (
