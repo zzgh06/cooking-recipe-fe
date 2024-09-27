@@ -20,6 +20,7 @@ const SearchResults = () => {
     isLoading: ingredientsLoading,
   } = useFetchIngredients({ name: keyword, page: 1 }) 
 
+  console.log("ingredientsData", ingredientsData)
   const isLoading = recipesLoading || ingredientsLoading;
 
   return (
@@ -56,13 +57,13 @@ const SearchResults = () => {
           <Typography variant="h5" fontWeight="600" gutterBottom sx={{ mb: 3 }}>
             재료 검색 결과
           </Typography>
-          {ingredientsData && ingredientsData.data.length === 0 ? (
+          {ingredientsData && ingredientsData.data.ingredients.length === 0 ? (
             <Typography variant="body1" fontSize="20px">
               재료 검색 결과가 없습니다. 😅
             </Typography>
           ) : (
             <Grid container spacing={3}>
-              {ingredientsData && ingredientsData.data.map((ing) => (
+              {ingredientsData && ingredientsData.data.ingredients.map((ing) => (
                 <Grid item xs={12} sm={6} md={4} lg={3} key={ing._id}>
                   <IngredientCard item={ing} />
                 </Grid>

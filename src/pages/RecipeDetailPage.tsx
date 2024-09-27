@@ -159,7 +159,7 @@ const RecipeDetail = () => {
   const handleCloseShoppingListDialog = () => setOpenShoppingListDialog(false);
 
   const handlePurchaseClick = useCallback((ingredientName: string) => {
-    navigate(`/ingredients?name=${encodeURIComponent(ingredientName)}`);
+    navigate(`/search?name=${encodeURIComponent(ingredientName)}`);
   }, [navigate]);
 
   const getDifficultyStars = (difficulty: string) => {

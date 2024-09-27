@@ -32,7 +32,7 @@ export const useAddToCart = (): UseMutationResult<CartItemType, unknown, AddItem
     onError: (error: any) => {
       dispatch(
         setToastMessage({
-          message: error?.message || "에러 발생",
+          message: error.error,
           status: "error",
         })
       );

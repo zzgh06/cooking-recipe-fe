@@ -16,7 +16,7 @@ export interface User {
 }
 
 export interface Recipe {
-  _id?: string;
+  _id: string;
   userId?: string;
   name: string;
   description: string;
@@ -29,7 +29,7 @@ export interface Recipe {
   servings: string;
   time: string;
   difficulty: string;
-  ingredients: Ingredient[] | { name: string; qty: number; unit: string; }[];
+  ingredients: Ingredient[] | { _id?: string; name: string; qty: number; unit: string; }[];
   steps: { description: string; image: string | null }[];
   categories?: {
     food: string;

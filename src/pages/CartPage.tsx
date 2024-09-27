@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setCartItems } from "../redux/cartSlice";
 import { RootState } from "../redux/store";
 import { CartItemType } from "../types";
+import { setToastMessage } from "../redux/commonUISlice";
 
 interface CartState {
   cartItem: CartItemType[];
@@ -25,6 +26,7 @@ interface CartState {
 const CartPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.auth.user);
   const { data: cartItems, isLoading, refetch} = useFetchCart();
   const { cartItem, selectedItems } = useSelector<RootState, CartState>((state: RootState) => state.cart);
 
@@ -34,6 +36,22 @@ const CartPage = () => {
       refetch();
     }
   }, [cartItems, dispatch]);
+
+  useEffect(() => {
+    if (isLoading) {
+      return;
+    }
+
+    if (!user) {
+      dispatch(
+        setToastMessage({
+          message: "로그인이 필요한 서비스 입니다.",
+          status: "error",
+        })
+      );
+      navigate("/login");
+    }
+  }, [isLoading]);
 
   const selectedCartItems = cartItem.filter((item) =>
     item.ingredientId && selectedItems.includes(item.ingredientId._id)

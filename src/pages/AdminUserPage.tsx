@@ -33,7 +33,7 @@ const AdminUserPage = () => {
     "Ship To",
     "Join Date",
   ];
-
+console.log("usersData", usersData)
 
   useEffect(() => {
     const params = new URLSearchParams(searchQuery as unknown as Record<string, string>);

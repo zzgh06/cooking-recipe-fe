@@ -486,15 +486,7 @@ const RecipeForm = ({ onSubmit, initialData }: RecipeFormProps) => {
               />
             )}
           </Grid>
-          <Grid item xs={12} sm={2}>
-            <IconButton
-              sx={{ width: "70px", padding: "15px 0" }}
-              color="error"
-              onClick={() => handleDeleteStep(index)}
-            >
-              <DeleteIcon />
-            </IconButton>
-          </Grid>
+      
         </Grid>
       ))}
       <Button

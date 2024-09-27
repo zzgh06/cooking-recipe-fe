@@ -8,7 +8,9 @@ interface IngredientSearchQuery {
 }
 
 interface IngredientResponse {
-  data: Ingredient[];
+  data: {
+    ingredients : Ingredient[];
+  }
 }
 
 const fetchIngredients = async (searchQuery: IngredientSearchQuery): Promise<IngredientResponse> => {

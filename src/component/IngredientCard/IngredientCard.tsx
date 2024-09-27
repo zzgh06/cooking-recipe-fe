@@ -270,7 +270,6 @@ const IngredientCard = ({ item }: IngredientCardProps) => {
                 color="success"
                 onClick={addCart}
                 sx={{ width: "100%" }}
-              // disabled={isLoading}
               >
                 담기
               </Button>

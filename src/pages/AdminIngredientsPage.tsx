@@ -83,7 +83,7 @@ const AdminIngredientsPage = () => {
             variant="contained"
             color="primary"
             onClick={handleShowAll}
-            sx={{ width: "300px" }}
+            sx={{ width: "300px", marginLeft: "10px" }}
           >
             Show All
           </Button>
