@@ -56,9 +56,11 @@ const AppRouter = () => {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/find-password" element={<FindPasswordPage />} />
         <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
-        <Route path="/account/verify-current-password" element={<VerifyCurrentPassword />} />
+        <Route
+          path="/account/verify-current-password"
+          element={<VerifyCurrentPassword onVerifySuccess={() => console.log("Verification successful")} />}
+        />       
         <Route path="/account/change-password" element={<ChangePasswordPage />} />
-
         <Route path="/ingredients/:id" element={<IngredientsDetail />} />
         <Route path="/ingredients" element={<IngredientsDetail />} />
         <Route path="/recipes/all" element={<RecipePage />} />

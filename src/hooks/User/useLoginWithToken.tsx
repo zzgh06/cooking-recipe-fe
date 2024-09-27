@@ -1,8 +1,9 @@
-import { useMutation, UseMutationResult } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import api from '../../utils/api';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../redux/userSlice';
 import { User } from '../../types';
+import { setToastMessage } from '../../redux/commonUISlice';
 
 interface LoginResponse {
   user: User;
@@ -21,8 +22,8 @@ export const useLoginWithToken = () => {
     onSuccess: (data) => {
       dispatch(setUser(data.user));
     },
-    onError: () => {
-      sessionStorage.removeItem('token');
-    },
+    onError: (error: any) => {
+      console.error(error.error)
+    }
   });
 };

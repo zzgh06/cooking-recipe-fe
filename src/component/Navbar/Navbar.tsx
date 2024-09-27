@@ -91,7 +91,7 @@ const Navbar = () => {
   const [keyword, setKeyword] = useState<string>("");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { mutate: fetchUser } = useLoginWithToken();
-  const {user} = useSelector((state: RootState) => state.auth);
+  const { user } = useSelector((state: RootState) => state.auth);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -303,24 +303,24 @@ const Navbar = () => {
         >
           {user?.name
             ? [
-                <MenuItem
-                  key="profile"
-                  onClick={() => navigate("/account/profile")}
-                >
-                  {user?.name}님
-                </MenuItem>,
-                <MenuItem key="logout" onClick={handleLogout}>
-                  로그아웃
-                </MenuItem>,
-              ]
+              <MenuItem
+                key="profile"
+                onClick={() => navigate("/account/profile")}
+              >
+                {user?.name}님
+              </MenuItem>,
+              <MenuItem key="logout" onClick={handleLogout}>
+                로그아웃
+              </MenuItem>,
+            ]
             : [
-                <MenuItem key="register" onClick={() => navigate("/register")}>
-                  회원가입
-                </MenuItem>,
-                <MenuItem key="login" onClick={() => navigate("/login")}>
-                  로그인
-                </MenuItem>,
-              ]}
+              <MenuItem key="register" onClick={() => navigate("/register")}>
+                회원가입
+              </MenuItem>,
+              <MenuItem key="login" onClick={() => navigate("/login")}>
+                로그인
+              </MenuItem>,
+            ]}
         </Menu>
       </Toolbar>
     </StyledAppBar>

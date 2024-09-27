@@ -1,16 +1,17 @@
-import React, { useEffect } from "react";
+import React, { ReactNode, useEffect } from "react";
 import { useLocation } from "react-router";
-import { useSelector } from "react-redux";
 import { Box, Grid, Container, CssBaseline } from "@mui/material";
 import Sidebar from "../component/SideBar/SideBar";
 import Navbar from "../component/Navbar/Navbar";
 import Footer from "../component/Footer/Footer";
 import ToastMessage from "../component/ToastMessage/ToastMessage";
 
-const AppLayout = ({ children }) => {
-  const location = useLocation();
-  const user = useSelector((state) => state.auth.user);
+interface AppLayoutProps {
+  children: ReactNode;
+}
 
+const AppLayout = ({ children }: AppLayoutProps) => {
+  const location = useLocation();
   useEffect(() => {
     console.log("Current location:", location.pathname);
   }, [location]);
@@ -32,7 +33,7 @@ const AppLayout = ({ children }) => {
         </Grid>
       ) : (
         <>
-          <Navbar user={user} />
+          <Navbar />
           <Box component="main" sx={{ paddingTop: "80px" }}>
             {children}
           </Box>
