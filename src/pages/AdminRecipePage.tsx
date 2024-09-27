@@ -18,8 +18,10 @@ import { useCreateRecipe } from "../hooks/Recipe/useCreateRecipe";
 import { useEditRecipe } from "../hooks/Recipe/useEditRecipe";
 import { useDeleteRecipe } from "../hooks/Recipe/useDeleteRecipe";
 import { Recipe, SearchQuery } from "../types";
+import { useQueryClient } from "@tanstack/react-query";
 
 const AdminRecipePage = () => {
+  const queryClient = useQueryClient()
   const [query, setQuery] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState<SearchQuery>({
     page: Number(query.get("page")) || 1,

@@ -11,27 +11,33 @@ interface LoginUserResponse {
   user: User;
 }
 
-const loginUser = async (userData: User): Promise<LoginUserResponse> => {
+interface LoginData {
+  id: string;
+  password: string;
+}
+
+const loginUser = async (userData: LoginData): Promise<LoginUserResponse> => {
   const response = await api.post('/auth/login', userData);
   sessionStorage.setItem('token', response.data.token);
   return response.data;
 };
 
-export const useLoginUser = (): UseMutationResult<LoginUserResponse, any, User> => {
+export const useLoginUser = (): UseMutationResult<LoginUserResponse, any, LoginData> => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  return useMutation<LoginUserResponse, any, User>({
+  
+  return useMutation<LoginUserResponse, any, LoginData>({
     mutationFn: loginUser,
     onSuccess: (data) => {
       dispatch(setUser(data.user));
       dispatch(setLoginData(data.user));
-      navigate("/")
+      navigate("/");
     },
     onError: (error) => {
       dispatch(
         setToastMessage({
           message: error.error || "로그인 실패",
-          status: 'error',
+          status: "error",
         })
       );
     },
