@@ -3,7 +3,6 @@ import api from '../../utils/api';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../redux/userSlice';
 import { User } from '../../types';
-import { setToastMessage } from '../../redux/commonUISlice';
 
 interface LoginResponse {
   user: User;
