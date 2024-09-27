@@ -1,25 +1,28 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, UseMutationResult } from '@tanstack/react-query';
 import api from '../../utils/api';
 import { useDispatch } from 'react-redux';
 import { setLoginData, setUser } from '../../redux/userSlice';
-import { useNavigate } from 'react-router-dom';
 import { setToastMessage } from '../../redux/commonUISlice';
+import { User } from '../../types';
 
-const loginUser = async (userData) => {
-  const response = await api.post('/auth/login', userData);
+interface LoginResponse {
+  token: string;
+  user: User;
+}
+
+const loginWithGoogle = async (token: string): Promise<LoginResponse> => {
+  const response = await api.post('/auth/google', { token });
   sessionStorage.setItem('token', response.data.token);
   return response.data;
 };
 
-export const useLoginUser = () => {
+export const useLoginWithGoogle = (): UseMutationResult<LoginResponse, any, string> => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  return useMutation({
-    mutationFn: loginUser,
+  return useMutation<LoginResponse, any, string>({
+    mutationFn: loginWithGoogle,
     onSuccess: (data) => {
       dispatch(setUser(data.user));
       dispatch(setLoginData(data.user));
-      navigate("/")
     },
     onError: (error) => {
       dispatch(

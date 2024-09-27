@@ -3,7 +3,11 @@ import api from '../../utils/api';
 import { useDispatch } from 'react-redux';
 import { setError } from '../../redux/userSlice';
 
-const forgotPassword = async ({ email }) => {
+interface ForgotPasswordParams {
+  email: string;
+}
+
+const forgotPassword = async ({ email }: ForgotPasswordParams) => {
   await api.post('/password/forgot-password', { email });
 };
 
@@ -15,7 +19,7 @@ export const useForgotPassword = () => {
     onSuccess: () => {
       alert("비밀번호 재설정 이메일이 발송되었습니다 !");
     },
-    onError: (error) => {
+    onError: (error: any) => {
       dispatch(setError(error.error || 'Request failed'));
     },
   });

@@ -1,9 +1,9 @@
-export const currencyFormat = (value) => {
+export const currencyFormat = (value: number) => {
   const number = value !== undefined ? value : 0;
   return number.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
 };
 
-export const cc_expires_format = (string) => {
+export const cc_expires_format = (string: string) => {
   return string
     .replace(
       /[^0-9]/g,

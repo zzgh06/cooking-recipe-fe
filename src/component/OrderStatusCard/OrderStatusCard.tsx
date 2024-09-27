@@ -37,7 +37,7 @@ const OrderStatusCard = ({ orderItem }: OrderStatusCardProps) => {
   const orderNum = orderItem.orderNum || "N/A";
   const createdAt = orderItem.createdAt ? orderItem.createdAt.slice(0, 10) : "N/A";
   const ingredientName = orderItem.items?.[0]?.ingredientId?.name || "Unknown product";
-  const totalPrice = orderItem.totalPrice ? orderItem.totalPrice : "0";
+  const totalPrice = orderItem.totalPrice ? orderItem.totalPrice : 0;
   const status = orderItem.status || "Unknown";
   const badgeColor = badgeColors[status] || "default";
 

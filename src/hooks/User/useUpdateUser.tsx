@@ -1,18 +1,27 @@
-import { useMutation, UseMutationResult } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import api from '../../utils/api';
 import { useDispatch } from 'react-redux';
 import { setUpdateUser, setError } from '../../redux/userSlice';
 import { setToastMessage } from '../../redux/commonUISlice';
+import { User } from '../../types';
 
-const updateUser = async (formData: any): Promise<any> => {
+interface UpdateUserData {
+  email?: string;
+  name?: string;
+  shipTo?: string;
+  contact?: string;
+  image?: string;
+}
+
+const updateUser = async (formData: UpdateUserData): Promise<User> => {
   const response = await api.put('/user/me', formData);
   return response.data.data;
 };
 
-export const useUpdateUser = (): UseMutationResult<any, any, any> => {
+export const useUpdateUser = ()=> {
   const dispatch = useDispatch();
 
-  return useMutation<any, any, any>({
+  return useMutation({
     mutationFn: updateUser,
     onSuccess: (data) => {
       dispatch(setUpdateUser(data));

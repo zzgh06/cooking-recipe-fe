@@ -3,12 +3,13 @@ export interface SearchQuery {
 }
 
 export interface User {
-  _id: string;
-  level : string;
-  email: string;
+  _id?: string;
+  level?: string;
   id: string;
+  password: string;
   name: string;
-  image: string;
+  email: string;
+  image?: string;
   contact: string;
   shipTo: string;
   createdAt?: string;

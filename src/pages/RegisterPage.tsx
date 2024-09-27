@@ -62,7 +62,7 @@ const RegisterPage = () => {
     }));
   };
 
-  const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred";
+  const errorMessage = error.error
 
   return (
     <Container maxWidth="sm" sx={{ mt: 4, mb: 4 }}>
@@ -83,15 +83,6 @@ const RegisterPage = () => {
           onChange={handleChange}
         />
         <TextField
-          id="email"
-          label="이메일"
-          placeholder="예: fridge@naver.com"
-          variant="outlined"
-          type="email"
-          required
-          onChange={handleChange}
-        />
-        <TextField
           id="password"
           label="비밀번호"
           placeholder="비밀번호를 입력해 주세요"
@@ -106,6 +97,15 @@ const RegisterPage = () => {
           placeholder="비밀번호를 한 번 더 입력해 주세요"
           variant="outlined"
           type="password"
+          required
+          onChange={handleChange}
+        />
+        <TextField
+          id="email"
+          label="이메일"
+          placeholder="예: fridge@naver.com"
+          variant="outlined"
+          type="email"
           required
           onChange={handleChange}
         />

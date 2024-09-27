@@ -21,6 +21,11 @@ const ResetPasswordPage = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
+    if (!token) {
+      setErrorMessage("유효하지 않은 토큰입니다.");
+      return;
+    }
 
     if (password.includes(" ")) {
       setGapMessage("비밀번호에는 공백을 포함할 수 없습니다.");

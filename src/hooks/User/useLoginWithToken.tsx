@@ -1,9 +1,14 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, UseMutationResult } from '@tanstack/react-query';
 import api from '../../utils/api';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../redux/userSlice';
+import { User } from '../../types';
 
-const fetchUser = async () => {
+interface LoginResponse {
+  user: User;
+}
+
+const fetchUser = async (): Promise<LoginResponse> => {
   const response = await api.get('/user/me');
   return response.data;
 };
