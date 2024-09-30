@@ -1,13 +1,15 @@
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import RecipeForm from "../component/RecipeForm/RecipeForm";
 import { useNavigate } from "react-router-dom";
 import { Container } from "@mui/material";
 import { useCreateRecipe } from "../hooks/Recipe/useCreateRecipe";
 import { RootState } from "../redux/store";
 import { Recipe } from "../types";
+import { setToastMessage } from "../redux/commonUISlice";
 
 const MyRecipePage = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.auth.user);
   const { mutate: createRecipe } = useCreateRecipe();
@@ -15,6 +17,10 @@ const MyRecipePage = () => {
   useEffect(() => {
     if (!user) {
       navigate("/login");
+      dispatch(setToastMessage({
+        message: "로그인이 필요한 서비스 입니다.",
+        status: "error"
+      }))
     }
   }, [user, navigate]);
 

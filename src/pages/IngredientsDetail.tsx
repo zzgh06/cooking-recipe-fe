@@ -17,9 +17,10 @@ import Review from "../component/Review/Review";
 import IngredientsDetailSkeleton from "../component/Skeleton/IngredientsDetailSkeleton";
 import { useGetIngredient } from "../hooks/Ingredient/useGetIngredient";
 import { useAddToCart } from "../hooks/Cart/useAddToCart";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { Ingredient } from "../types";
+import { setToastMessage } from "../redux/commonUISlice";
 
 const ShoppingTabs = styled(Tabs)({
   width: "100%",
@@ -56,9 +57,10 @@ interface IngredientDetail extends Ingredient {
 }
 
 const IngredientsDetail = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const { user } = useSelector((state: RootState) => state.auth);
-  const navigate = useNavigate();
   const { data: ingredientDataById, isLoading: isLoadingById } = useGetIngredient(id || "");
   const data = ingredientDataById as IngredientDetail | undefined;
   const isLoading = isLoadingById;
@@ -110,6 +112,10 @@ const IngredientsDetail = () => {
   const addCart = () => {
     if (!user) {
       navigate("/login");
+      dispatch(setToastMessage({
+        message: "로그인이 필요한 서비스 입니다.",
+        status: "error",
+      }))
       return;
     }
     if (id) {

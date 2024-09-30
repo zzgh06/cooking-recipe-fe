@@ -119,10 +119,6 @@ const MyFridge = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (isLoading) {
-      return;
-    }
-
     if (!user) {
       dispatch(
         setToastMessage({
@@ -132,7 +128,7 @@ const MyFridge = () => {
       );
       navigate("/login");
     }
-  }, [isLoading]);
+  }, []);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newSearchQuery = { ...searchQuery, name: e.target.value };
