@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Button,
   Container,
@@ -12,19 +12,14 @@ import {
 import SearchBox from "../component/SearchBox/SearchBox";
 import RecipeTable from "../component/RecipeTable/RecipeTable";
 import RecipeForm from "../component/RecipeForm/RecipeForm";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useFetchRecipes } from "../hooks/Recipe/useFetchRecipes";
 import { useCreateRecipe } from "../hooks/Recipe/useCreateRecipe";
 import { useEditRecipe } from "../hooks/Recipe/useEditRecipe";
 import { useDeleteRecipe } from "../hooks/Recipe/useDeleteRecipe";
 import { Recipe, SearchQuery } from "../types";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../redux/store";
-import { setToastMessage } from "../redux/commonUISlice";
 
 const AdminRecipePage = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [query, setQuery] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState<SearchQuery>({
     page: Number(query.get("page")) || 1,
@@ -34,7 +29,6 @@ const AdminRecipePage = () => {
   const [mode, setMode] = useState("new");
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
   const { data: recipesData, isLoading } = useFetchRecipes(searchQuery);
-  const user = useSelector((state: RootState) => state.auth.user);
   const { mutate: createRecipe } = useCreateRecipe();
   const { mutate: editRecipe } = useEditRecipe();
   const { mutate: deleteRecipe } = useDeleteRecipe();
@@ -83,18 +77,6 @@ const AdminRecipePage = () => {
     }
     setShowForm(false);
   };
-
-  useEffect(()=>{
-    if(user?.level !== 'admin') {
-      navigate("/");
-      dispatch(
-        setToastMessage({
-          message: "현재 권한으로는 접근이 불가능한 페이지 입니다.",
-          status: "error",
-        })
-      );
-    }
-  }, [])
 
   if (isLoading) {
     return (

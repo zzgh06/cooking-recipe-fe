@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { Link } from "react-router-dom";
@@ -15,6 +15,8 @@ import {
 import { useLoginUser } from "../hooks/User/useLoginUser";
 import { useLoginWithGoogle } from "../hooks/User/useLoginWithGoogle";
 import { useLoginWithToken } from "../hooks/User/useLoginWithToken";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 
 interface FormData {
   id: string;
@@ -32,7 +34,7 @@ const LoginPage = () => {
     id: "",
     password: "",
   });
-
+  const user = useSelector((state: RootState) => state.auth.user);
   const { mutate: fetchUser } = useLoginWithToken();
   const { mutate: loginUser } = useLoginUser();
 
@@ -42,6 +44,11 @@ const LoginPage = () => {
     error: loginWithGoogleError,
   } = useLoginWithGoogle();
 
+  useEffect(()=>{
+    if(user) {
+      navigate('/')
+    }
+  },[])
 
   const handleGoogleSuccess = async (response: CredentialResponse) => {
     try {

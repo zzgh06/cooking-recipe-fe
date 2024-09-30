@@ -1,19 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Box, Button, CircularProgress, Container, Pagination, Stack } from "@mui/material";
 import SearchBox from "../component/SearchBox/SearchBox";
 import IngredientTable from "../component/IngredientTable/IngredientTable";
 import NewItemDialog from "../component/NewItemDialog/NewItemDialog";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useFetchIngredients } from "../hooks/Ingredient/useFetchIngredients";
 import { useDeleteIngredient } from "../hooks/Ingredient/useDeleteIngredient";
 import { Ingredient, SearchQuery } from "../types";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../redux/store";
-import { setToastMessage } from "../redux/commonUISlice";
 
 const AdminIngredientsPage = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [query, setQuery] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState<SearchQuery>({
     page: Number(query.get("page")) || 1,  
@@ -22,7 +17,6 @@ const AdminIngredientsPage = () => {
   const [showDialog, setShowDialog] = useState<boolean>(false);
   const [mode, setMode] = useState<"new" | "edit">("new");
   const [selectedIngredient, setSelectedIngredient] = useState<Ingredient | null>(null);
-  const user = useSelector((state: RootState) => state.auth.user);
   const { data, refetch, isLoading } = useFetchIngredients(searchQuery);
   const { mutate: deleteIngredient } = useDeleteIngredient();
 
@@ -39,18 +33,6 @@ const AdminIngredientsPage = () => {
     "Image",
     "Actions",
   ];
-
-  useEffect(()=>{
-    if(user?.level !== 'admin') {
-      navigate("/");
-      dispatch(
-        setToastMessage({
-          message: "현재 권한으로는 접근이 불가능한 페이지 입니다.",
-          status: "error",
-        })
-      );
-    }
-  }, [])
 
   const handleShowAll = () => {
     setSearchQuery({ page: 1, name: "" });

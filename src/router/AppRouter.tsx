@@ -68,6 +68,7 @@ const AppRouter = () => {
         <Route path="/recipes/new" element={<RecipePage />} />
         <Route path="/recipes/:category" element={<RecipePage />} />
         <Route path="/recipe/:id" element={<RecipeDetail />} />
+        <Route path="/search" element={<SearchResults />} />
 
         <Route element={<PrivateRoute permissionLevel="customer" />}>
           <Route path="/fridge" element={<MyFridge />} />
@@ -76,7 +77,6 @@ const AppRouter = () => {
           <Route path="/payment/success" element={<OrderCompletePage />} />
           <Route path="/account/profile" element={<MyProfile />} />
           <Route path="/account/recipe" element={<MyRecipePage />} />
-          <Route path="/search" element={<SearchResults />} />
         </Route>
 
         <Route element={<PrivateRoute permissionLevel="admin" />}>
