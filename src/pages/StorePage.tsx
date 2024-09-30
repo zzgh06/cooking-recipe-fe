@@ -29,7 +29,7 @@ const SubBannerSkeleton = styled(Box)(({ theme }) => ({
 }));
 
 interface RecentlyViewedIngredient {
-  id : string;
+  id: string;
   images: string;
   name: string;
 }
@@ -57,10 +57,9 @@ const StorePage = () => {
     });
   }, []);
 
-  const newIngredients = data?.ingredients.filter((ing: Ingredient) =>
-    ing.category?.includes("신상")
-  );
-
+  const newIngredients = data?.ingredients
+  .filter((ing: Ingredient) => ing.category?.includes("신상") && ing.createdAt)
+  .sort((a: Ingredient, b: Ingredient) => new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime());
   const bestIngredients = data?.ingredients.filter((ing: Ingredient) => ing.totalSales > 0);
   const topDiscountedIngredients = data?.ingredients
     .filter((ing: Ingredient) => ing.discountPrice !== undefined)

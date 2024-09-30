@@ -67,6 +67,7 @@ export interface Ingredient {
   status?: string;
   reviewCnt?: number;
   totalSales: number; 
+  createdAt?: string;
 }
 
 export interface Review {
