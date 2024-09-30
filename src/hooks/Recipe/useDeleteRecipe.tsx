@@ -1,4 +1,4 @@
-import { useMutation, UseMutationResult } from '@tanstack/react-query';
+import { useMutation, UseMutationResult, useQueryClient } from '@tanstack/react-query';
 import api from '../../utils/api';
 import { useDispatch } from 'react-redux';
 import { setToastMessage } from '../../redux/commonUISlice';
@@ -13,10 +13,12 @@ const deleteRecipe = async (id: string): Promise<DeleteRecipeResponse> => {
 
 export const useDeleteRecipe = (): UseMutationResult<DeleteRecipeResponse, any, string> => {
   const dispatch = useDispatch();
+  const queryClient = useQueryClient();
   
   return useMutation<DeleteRecipeResponse, any, string>({
     mutationFn: deleteRecipe,
     onSuccess: (id: string) => {
+      queryClient.invalidateQueries({queryKey: ['recipes']})
       dispatch(removeRecipe(id));
       dispatch(
         setToastMessage({

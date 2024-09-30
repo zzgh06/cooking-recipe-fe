@@ -1,16 +1,16 @@
-import { useMutation, UseMutationResult } from "@tanstack/react-query";
+import { useMutation, UseMutationResult, useQueryClient } from "@tanstack/react-query";
 import api from "../../utils/api";
 import { useDispatch } from "react-redux";
 import { setToastMessage } from "../../redux/commonUISlice";
 import { addRecipeToState } from "../../redux/recipeSlice";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Recipe } from "../../types";
 
 interface RecipeResponse {
   recipe: Recipe;
 }
 
-const createRecipe = async (recipeData : Recipe): Promise<Recipe> => {
+const createRecipe = async (recipeData: Recipe): Promise<Recipe> => {
   const response = await api.post<RecipeResponse>("/recipe", recipeData);
   return response.data.recipe;
 };
@@ -22,10 +22,13 @@ export const useCreateRecipe = (): UseMutationResult<
 > => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const location = useLocation();
 
   return useMutation({
     mutationFn: createRecipe,
     onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['recipes'] })
       dispatch(addRecipeToState(data));
       dispatch(
         setToastMessage({
@@ -33,7 +36,11 @@ export const useCreateRecipe = (): UseMutationResult<
           status: "success",
         })
       );
-      navigate("/");
+      if (location.pathname.includes("/admin/recipe")) {
+        navigate("/admin/recipe");
+      } else {
+        navigate("/");
+      }
     },
     onError: (error: any) => {
       dispatch(

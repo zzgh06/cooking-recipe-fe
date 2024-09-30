@@ -1,4 +1,4 @@
-import { useMutation, UseMutationResult } from "@tanstack/react-query";
+import { useMutation, UseMutationResult, useQueryClient } from "@tanstack/react-query";
 import api from "../../utils/api";
 import { useDispatch } from "react-redux";
 import { setToastMessage } from "../../redux/commonUISlice";
@@ -12,9 +12,11 @@ const createIngredient = async (ingredient: Ingredient): Promise<Ingredient> => 
 
 export const useCreateIngredient = (): UseMutationResult<Ingredient, unknown, Ingredient> => {
   const dispatch = useDispatch();
+  const queryClient = useQueryClient();
   return useMutation<Ingredient, unknown, Ingredient>({
     mutationFn: createIngredient,
     onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['ingredients'] });
       dispatch(addIngredientToState(data))
       dispatch(
         setToastMessage({
