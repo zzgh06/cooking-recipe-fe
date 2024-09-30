@@ -9,12 +9,8 @@ import Stack from '@mui/material/Stack';
 import { useGetUsersInfo } from '../hooks/User/useGetUsersInfo';
 import { useDeleteUser } from '../hooks/User/useDeleteUser';
 import { SearchQuery, User } from '../types';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../redux/store';
-import { setToastMessage } from '../redux/commonUISlice';
 
 const AdminUserPage = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [query, setQuery] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState<SearchQuery>({
@@ -24,7 +20,6 @@ const AdminUserPage = () => {
   const [showDialog, setShowDialog] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const { data, isLoading } = useGetUsersInfo(searchQuery);
-  const user = useSelector((state: RootState) => state.auth.user);
   const { mutateAsync: deleteUser } = useDeleteUser();
 
   const usersData: User[] = data?.usersData || [];
@@ -44,18 +39,6 @@ const AdminUserPage = () => {
     const queryString = params.toString();
     navigate("?" + queryString);
   }, [searchQuery, navigate]);
-
-  useEffect(()=>{
-    if(user?.level !== 'admin') {
-      navigate("/");
-      dispatch(
-        setToastMessage({
-          message: "현재 권한으로는 접근이 불가능한 페이지 입니다.",
-          status: "error",
-        })
-      );
-    }
-  }, [])
 
   const handleUserDelete = async (id: string) => {
     await deleteUser(id);

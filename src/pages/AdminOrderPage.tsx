@@ -12,7 +12,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import OrderTable from "../component/OrderTable/OrderTable";
 import DashBoardCard from "../component/DashBoardCard/DashboardCard";
 import OrderDetailDialog from "../component/OrderDetailDialog/OrderDetailDialog";
@@ -21,8 +21,6 @@ import { endOfDay, format, isValid, startOfDay } from "date-fns";
 import DateFilterCondition from "../component/DateFilterCondition/DateFilterCondition";
 import { useFetchOrderList } from "../hooks/Order/useFetchOrderList";
 import { Order } from "../types";
-import { setToastMessage } from "../redux/commonUISlice";
-import { RootState } from "../redux/store";
 
 interface SearchQuery {
   page: number;
@@ -58,7 +56,6 @@ const AdminOrderPage = () => {
   const [selectedOption, setSelectedOption] = useState<string>("orderNum");
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
-  const user = useSelector((state: RootState) => state.auth.user);
   const { data, isLoading } = useFetchOrderList(searchQuery);
 
   const tableHeader: string[] = [
@@ -77,17 +74,6 @@ const AdminOrderPage = () => {
     navigate("?" + params.toString());
   }, [searchQuery, navigate]);
 
-  useEffect(()=>{
-    if(user?.level !== 'admin') {
-      navigate("/");
-      dispatch(
-        setToastMessage({
-          message: "현재 권한으로는 접근이 불가능한 페이지 입니다.",
-          status: "error",
-        })
-      );
-    }
-  }, [])
 
   const openEditForm = (order: Order) => {
     setOpen(true);
