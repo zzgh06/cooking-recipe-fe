@@ -36,12 +36,8 @@ const CartPage = () => {
       refetch();
     }
   }, [cartItems, dispatch]);
-
+  console.log(user)
   useEffect(() => {
-    if (isLoading) {
-      return;
-    }
-
     if (!user) {
       dispatch(
         setToastMessage({
@@ -51,7 +47,7 @@ const CartPage = () => {
       );
       navigate("/login");
     }
-  }, [isLoading]);
+  }, []);
 
   const selectedCartItems = cartItem.filter((item) =>
     item.ingredientId && selectedItems.includes(item.ingredientId._id)

@@ -20,10 +20,11 @@ import {
 } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useAddToCart } from "../../hooks/Cart/useAddToCart";
 import { currencyFormat } from "../../utils/number";
 import { RootState } from "../../redux/store";
+import { setToastMessage } from "../../redux/commonUISlice";
 
 const StyledCard = styled(Card)(({ theme }) => ({
   position: "relative",
@@ -111,6 +112,7 @@ interface IngredientCardProps {
 }
 
 const IngredientCard = ({ item }: IngredientCardProps) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [open, setOpen] = useState<boolean>(false);
   const [qty, setQty] = useState<number>(1);
@@ -136,6 +138,10 @@ const IngredientCard = ({ item }: IngredientCardProps) => {
   const addCart = () => {
     if (!user) {
       navigate("/login");
+      dispatch(setToastMessage({
+          message: "로그인이 필요한 서비스 입니다.",
+          status: "error",
+        }))
       return;
     }
 
