@@ -56,7 +56,7 @@ const SearchResults = () => {
           <Typography variant="h5" fontWeight="600" gutterBottom sx={{ mb: 3 }}>
             재료 검색 결과
           </Typography>
-          {ingredientsData && ingredientsData.data.ingredients.length === 0 ? (
+          {ingredientsData && ingredientsData.data?.ingredients?.length === 0 ? (
             <Typography variant="body1" fontSize="20px">
               재료 검색 결과가 없습니다. 😅
             </Typography>

@@ -116,17 +116,20 @@ const Navbar = () => {
     setAnchorEl(null);
   };
 
+
   const handleSearch = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Enter") {
-      if (keyword.trim() === "") {
-        navigate("/");
-      } else {
-        navigate(`/search?name=${keyword}`);
-      }
+      handleSearchClick();
     }
   };
 
   const handleSearchClick = () => {
+    if (keyword.trim() === "") {
+      navigate("/");
+    } else {
+      navigate(`/search?name=${keyword}`);
+    }
+    setKeyword("");
   };
 
   const menuItems = ["레시피", "스토어", "My 냉장고"];

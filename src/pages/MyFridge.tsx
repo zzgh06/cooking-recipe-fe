@@ -272,7 +272,7 @@ const MyFridge = () => {
             >
               {isLoading ? (
                 <CircularProgress size="60px" sx={{ color: "green" }} />
-              ) : ingredientData?.ingredients.length === 0 ? (
+              ) : ingredientData?.ingredients?.length === 0 ? (
                 <Box sx={{padding: "50px 90px", boxShadow: 1, borderRadius: 2}}>
                   <Typography variant="h5" fontSize="20px">일치하는 재료가 없습니다. 😅</Typography>
                 </Box>
