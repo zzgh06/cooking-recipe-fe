@@ -16,7 +16,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { setCartItems } from "../redux/cartSlice";
 import { RootState } from "../redux/store";
 import { CartItemType } from "../types";
-import { setToastMessage } from "../redux/commonUISlice";
 
 interface CartState {
   cartItem: CartItemType[];

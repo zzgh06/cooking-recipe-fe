@@ -22,10 +22,8 @@ import {
 import { useFetchIngredients } from "../hooks/Ingredient/useFetchIngredients";
 import { useFetchFridgeItems } from "../hooks/Fridge/useFetchFridgeItems";
 import { useFetchRecommendedRecipes } from "../hooks/Fridge/useFetchRecommendedRecipes";
-import { setToastMessage } from "../redux/commonUISlice";
 import { RootState } from "../redux/store";
 import { FridgeItem, Ingredient, RecentlyViewedItem, SearchQuery } from "../types";
-import { useLoginWithToken } from "../hooks/User/useLoginWithToken";
 
 const FridgeContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -72,7 +70,6 @@ const MyFridge = () => {
     page: Number(query.get("page")) || 1,
     name: query.get("name") || "",
   });
-  const user = useSelector((state: RootState) => state.auth.user);
   const { data: ingredientData, isLoading } = useFetchIngredients(searchQuery);
   const { data: fridgeData, refetch } = useFetchFridgeItems(query);
   const [hasSearched, setHasSearched] = useState<boolean>(false);

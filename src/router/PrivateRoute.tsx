@@ -1,8 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
 import { RootState } from "../redux/store";
-import { useLoginWithToken } from "../hooks/User/useLoginWithToken";
 import { setToastMessage } from "../redux/commonUISlice";
 
 interface PrivateRouteProps {
