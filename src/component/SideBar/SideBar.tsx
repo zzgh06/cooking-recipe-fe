@@ -37,6 +37,7 @@ const Sidebar = () => {
   };
 
   const menuItems = [
+    { text: "DashBoard", url: "/admin/dashboard" },
     { text: "Recipe", url: "/admin/recipe?page=1" },
     { text: "Ingredients", url: "/admin/ingredients?page=1" },
     { text: "Order", url: "/admin/order?page=1" },
