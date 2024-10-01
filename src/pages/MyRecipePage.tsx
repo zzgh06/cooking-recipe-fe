@@ -14,16 +14,6 @@ const MyRecipePage = () => {
   const user = useSelector((state: RootState) => state.auth.user);
   const { mutate: createRecipe } = useCreateRecipe();
 
-  useEffect(() => {
-    if (!user) {
-      navigate("/login");
-      dispatch(setToastMessage({
-        message: "로그인이 필요한 서비스 입니다.",
-        status: "error"
-      }))
-    }
-  }, [user, navigate]);
-
   const handleSubmit = async (data: Recipe) => {
     if (!user) return;
     const recipeData: Recipe = {

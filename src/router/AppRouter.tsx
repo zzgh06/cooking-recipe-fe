@@ -59,7 +59,7 @@ const AppRouter = () => {
         <Route
           path="/account/verify-current-password"
           element={<VerifyCurrentPassword onVerifySuccess={() => console.log("Verification successful")} />}
-        />       
+        />
         <Route path="/account/change-password" element={<ChangePasswordPage />} />
         <Route path="/ingredients/:id" element={<IngredientsDetail />} />
         <Route path="/ingredients" element={<IngredientsDetail />} />
@@ -73,10 +73,10 @@ const AppRouter = () => {
         <Route element={<PrivateRoute permissionLevel="customer" />}>
           <Route path="/fridge" element={<MyFridge />} />
           <Route path="/cart" element={<CartPage />} />
+          <Route path="/account/recipe" element={<MyRecipePage />} />
           <Route path="/payment" element={<PaymentPage />} />
           <Route path="/payment/success" element={<OrderCompletePage />} />
           <Route path="/account/profile" element={<MyProfile />} />
-          <Route path="/account/recipe" element={<MyRecipePage />} />
         </Route>
 
         <Route element={<PrivateRoute permissionLevel="admin" />}>

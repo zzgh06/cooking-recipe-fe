@@ -1,29 +1,27 @@
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
 import { RootState } from "../redux/store";
 import { useLoginWithToken } from "../hooks/User/useLoginWithToken";
-import { CircularProgress } from "@mui/material";
+import { setToastMessage } from "../redux/commonUISlice";
 
 interface PrivateRouteProps {
   permissionLevel: string;
 }
 
-const PrivateRoute = ({permissionLevel}: PrivateRouteProps) => {
+const PrivateRoute = ({ permissionLevel }: PrivateRouteProps) => {
+  const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.auth.user);
-  const { mutate: fetchUser } = useLoginWithToken();
-  
-  useEffect(()=>{
-    fetchUser();
-  }, [])
-
+ 
   if (!user) {
-    return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <CircularProgress />
-      </div>
+    dispatch(
+      setToastMessage({
+        message: "로그인이 필요한 서비스 입니다.",
+        status: "error",
+      })
     );
   }
+
   const isAuthenticated =
     user?.level === permissionLevel || user?.level === "admin";
 

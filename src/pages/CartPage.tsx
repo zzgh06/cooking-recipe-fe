@@ -36,19 +36,7 @@ const CartPage = () => {
       refetch();
     }
   }, [cartItems, dispatch]);
-  console.log(user)
-  useEffect(() => {
-    if (!user) {
-      dispatch(
-        setToastMessage({
-          message: "로그인이 필요한 서비스 입니다.",
-          status: "error",
-        })
-      );
-      navigate("/login");
-    }
-  }, []);
-
+ 
   const selectedCartItems = cartItem.filter((item) =>
     item.ingredientId && selectedItems.includes(item.ingredientId._id)
   );

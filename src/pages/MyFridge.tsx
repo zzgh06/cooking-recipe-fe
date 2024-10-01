@@ -25,6 +25,7 @@ import { useFetchRecommendedRecipes } from "../hooks/Fridge/useFetchRecommendedR
 import { setToastMessage } from "../redux/commonUISlice";
 import { RootState } from "../redux/store";
 import { FridgeItem, Ingredient, RecentlyViewedItem, SearchQuery } from "../types";
+import { useLoginWithToken } from "../hooks/User/useLoginWithToken";
 
 const FridgeContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -117,18 +118,6 @@ const MyFridge = () => {
       dispatch(setSelectedIngredients([]));
     };
   }, [dispatch]);
-
-  useEffect(() => {
-    if (!user) {
-      dispatch(
-        setToastMessage({
-          message: "로그인이 필요한 서비스 입니다.",
-          status: "error",
-        })
-      );
-      navigate("/login");
-    }
-  }, []);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newSearchQuery = { ...searchQuery, name: e.target.value };
