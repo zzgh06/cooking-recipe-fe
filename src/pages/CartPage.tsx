@@ -25,7 +25,6 @@ interface CartState {
 const CartPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const user = useSelector((state: RootState) => state.auth.user);
   const { data: cartItems, isLoading, refetch} = useFetchCart();
   const { cartItem, selectedItems } = useSelector<RootState, CartState>((state: RootState) => state.cart);
 

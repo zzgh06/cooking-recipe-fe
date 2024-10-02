@@ -11,6 +11,7 @@ import {
   Box,
   Link as MuiLink,
   Alert,
+  CircularProgress,
 } from "@mui/material";
 import { useLoginUser } from "../hooks/User/useLoginUser";
 import { useLoginWithGoogle } from "../hooks/User/useLoginWithGoogle";
@@ -30,6 +31,7 @@ interface LoginData {
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
   const [formData, setFormData] = useState<FormData>({
     id: "",
     password: "",
@@ -44,11 +46,25 @@ const LoginPage = () => {
     error: loginWithGoogleError,
   } = useLoginWithGoogle();
 
-  useEffect(()=>{
-    if(user) {
+  useEffect(() => {
+    const initializePage = async () => {
+      try {
+        const token = sessionStorage.getItem('token');
+        if (token) {
+          await fetchUser();
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    initializePage();
+  }, []);
+
+  useEffect(() => {
+    if (user) {
       navigate('/')
     }
-  },[])
+  }, [])
 
   const handleGoogleSuccess = async (response: CredentialResponse) => {
     try {
@@ -64,7 +80,6 @@ const LoginPage = () => {
     }
   };
 
-
   const handleGoogleFailure = () => {
     console.error("구글 로그인 실패");
   };
@@ -72,7 +87,7 @@ const LoginPage = () => {
   const handleLogin = async (event: FormEvent) => {
     event.preventDefault();
     const { id, password } = formData;
-    const loginData: LoginData = { id, password }; 
+    const loginData: LoginData = { id, password };
     await loginUser(loginData);
   };
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,8 +99,22 @@ const LoginPage = () => {
   };
 
   const error = isLoginWithGoogleError
-  const errorMessage =
-    loginWithGoogleError?.message
+  const errorMessage = loginWithGoogleError?.message
+
+  if (isLoading) {
+     return (
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minHeight: '50vh',
+        }}
+      >
+        <CircularProgress size={100} />
+      </Box>
+    );
+  }
 
   return (
     <Container
@@ -152,19 +181,6 @@ const LoginPage = () => {
           mb: 2,
         }}
       >
-        <MuiLink
-          component={Link}
-          to="/find-id"
-          sx={{
-            pr: 2,
-            borderRight: 2,
-            borderColor: "black",
-            textDecoration: "none",
-            color: "black",
-          }}
-        >
-          아이디 찾기
-        </MuiLink>
         <MuiLink
           component={Link}
           to="/find-password"

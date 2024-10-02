@@ -5,16 +5,23 @@ import Sidebar from "../component/SideBar/SideBar";
 import Navbar from "../component/Navbar/Navbar";
 import Footer from "../component/Footer/Footer";
 import ToastMessage from "../component/ToastMessage/ToastMessage";
+import { useLoginWithToken } from "../hooks/User/useLoginWithToken";
 
-interface AppLayoutProps {
-  children: ReactNode;
-}
-
-const AppLayout = ({ children }: AppLayoutProps) => {
+const AppLayout = ({ children }: { children: ReactNode }) => {
   const location = useLocation();
+  const { mutate: fetchUser } = useLoginWithToken();
+
+  useEffect(() => {
+    const token = sessionStorage.getItem('token');
+    if (token) {
+      fetchUser();
+    }
+  }, []);
+
   useEffect(() => {
     console.log("Current location:", location.pathname);
   }, [location]);
+
 
   const isAdminPage = location.pathname.includes("admin");
 
