@@ -1,67 +1,68 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import IngredientCard from "../IngredientCard/IngredientCard";
-import { Box, Grid, Button, Typography, Container } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import { Grid, Typography, Container } from "@mui/material";
 import IngredientCardSkeleton from "../Skeleton/IngredientCardSkeleton";
 import { useFetchIngredients } from "../../hooks/Ingredient/useFetchIngredients";
 import { Ingredient } from "../../types";
 
-const LoadMoreButton = styled(Button)({
-  border: "1px solid #ddd",
-  background: "linear-gradient(90deg, #4a9c75, #0095b3)",
-  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-  color: "white",
-  width: "250px",
-  fontSize: "16px",
-  padding: "10px 20px",
-  borderRadius: "30px",
-  "&:hover": {
-    background: "linear-gradient(90deg, #00b35f, #0095b3)",
-    boxShadow: "0 6px 20px rgba(0, 255, 221, 0.5)",
-  },
-  "&:focus": {
-    outline: "none",
-  },
-});
-
-
 const IngredientAll = () => {
   const [searchParams] = useSearchParams();
-  const [displayCount, setDisplayCount] = useState<number>(8);
+  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [hasMore, setHasMore] = useState<boolean>(true);
+  const [isFetchingMore, setIsFetchingMore] = useState<boolean>(false);
+
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const loadMoreTriggerRef = useRef<HTMLDivElement | null>(null);
 
   const searchQuery = {
     name: searchParams.get("name") || "",
     category: searchParams.get("category") || "",
+    page: currentPage,
   };
 
-  const { data, isLoading, isError, error } =
-    useFetchIngredients(searchQuery);
+  const { data, isLoading, isError, error } = useFetchIngredients(searchQuery);
 
   useEffect(() => {
+    setIngredients([]);
     setCurrentPage(1);
-    setDisplayCount(8);
     setHasMore(true);
   }, [searchParams]);
 
   useEffect(() => {
     if (data) {
-      setHasMore(data?.ingredients.length > displayCount || currentPage < data?.totalPages);
+      const delay = 1000; 
+      setTimeout(() => {
+        setIngredients((prev) => [...prev, ...data.ingredients]);
+        setHasMore(currentPage < data.totalPages);
+        setIsFetchingMore(false);
+      }, delay);
     }
   }, [data, currentPage]);
 
-  const loadMore = () => {
-    const nextPage = currentPage + 1;
-    if (data?.ingredients && displayCount < data?.ingredients.length) {
-      setDisplayCount(displayCount + 4);
-    } else if (data && currentPage < data.totalPages) {
-      setCurrentPage(nextPage);
-    } else {
-      setHasMore(false);
+  const loadMore = useCallback(() => {
+    if (hasMore && !isLoading && !isFetchingMore) {
+      setIsFetchingMore(true);
+      setCurrentPage((prev) => prev + 1);
     }
-  };
+  }, [hasMore, isLoading, isFetchingMore]);
+
+  useEffect(() => {
+    if (!loadMoreTriggerRef.current || !hasMore) return;
+
+    observerRef.current = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        loadMore();
+      }
+    }, { threshold: 0.8 });
+
+    observerRef.current.observe(loadMoreTriggerRef.current);
+
+    return () => {
+      observerRef.current?.disconnect();
+    };
+  }, [loadMore, hasMore]);
 
   return (
     <Container sx={{ p: 3 }}>
@@ -74,24 +75,28 @@ const IngredientAll = () => {
         모든 상품
       </Typography>
       <Grid container spacing={2}>
-        {isLoading
-          ? Array.from(new Array(8)).map((_, index) => (
-              <Grid key={index} item xs={12} md={6} lg={3}>
-                <IngredientCardSkeleton />
-              </Grid>
-            ))
-          : data?.ingredients.slice(0, displayCount).map((ing : Ingredient) => (
-              <Grid item xs={12} md={6} lg={3} key={ing._id}>
-                <IngredientCard item={ing} />
-              </Grid>
-            ))}
+        {isLoading && Array.from(new Array(8)).map((_, index) => (
+          <Grid key={index} item xs={12} md={6} lg={3}>
+            <IngredientCardSkeleton />
+          </Grid>
+        ))}
+        {ingredients.map((ing: Ingredient) => (
+          <Grid item xs={12} md={6} lg={3} key={ing._id}>
+            <IngredientCard item={ing} />
+          </Grid>
+        ))}
       </Grid>
       {isError && <Typography>Error: {error.message}</Typography>}
-      {hasMore && !isLoading && (
-        <Box sx={{ textAlign: "center", my: 3 }}>
-          <LoadMoreButton onClick={loadMore}>더보기</LoadMoreButton>
-        </Box>
+      {isFetchingMore && (
+        <Grid container spacing={2}>
+          {Array.from(new Array(4)).map((_, index) => (
+            <Grid key={index} item xs={12} md={6} lg={3}>
+              <IngredientCardSkeleton />
+            </Grid>
+          ))}
+        </Grid>
       )}
+      <div ref={loadMoreTriggerRef} style={{ height: "1px" }} />
     </Container>
   );
 };
