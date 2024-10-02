@@ -2,6 +2,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import React, { Suspense, lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
+import AdminDashBoardPage from '../pages/AdminDashBoardPage';
 
 const MainPage = lazy(() => import("../pages/MainPage"));
 const StorePage = lazy(() => import("../pages/StorePage"));
@@ -80,6 +81,7 @@ const AppRouter = () => {
         </Route>
 
         <Route element={<PrivateRoute permissionLevel="admin" />}>
+          <Route path="/admin/dashboard" element={<AdminDashBoardPage />} />
           <Route path="/admin/recipe" element={<AdminRecipePage />} />
           <Route path="/admin/ingredients" element={<AdminIngredientsPage />} />
           <Route path="/admin/order" element={<AdminOrderPage />} />

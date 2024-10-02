@@ -84,6 +84,7 @@ export interface Review {
 }
 
 export interface Order {
+  _id?: string;
   orderNum?: string;
   createdAt?: string;
   userId?: {
@@ -101,7 +102,7 @@ export interface Order {
     };
   };
   totalPrice: number;
-  status: string;
+  status: 'preparing' | 'shipping' | 'delivered' | 'refund';
 }
 
 export interface OrderItem {
@@ -114,7 +115,7 @@ export interface OrderItem {
     };
   }>;
   totalPrice: number;
-  status: string;
+  status: 'preparing' | 'shipping' | 'delivered' | 'refund';
 }
 
 export interface CreateOrderResponse {

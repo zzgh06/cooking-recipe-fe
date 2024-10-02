@@ -102,7 +102,7 @@ const OrderDetailDialog = ({ open, handleClose }: OrderDetailDialogProps) => {
           주문날짜: {selectedOrder.createdAt.slice(0, 10)}
         </Typography>
         <Typography variant="body1" gutterBottom>
-          이메일: {selectedOrder.userId.email}
+          이메일: {selectedOrder.userId?.email}
         </Typography>
         <Typography variant="body1" gutterBottom>
           주소: {selectedOrder.contactInfo.shipTo.address} {selectedOrder.contactInfo.shipTo.city}

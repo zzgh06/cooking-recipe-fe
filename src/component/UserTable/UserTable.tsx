@@ -22,7 +22,7 @@ interface UserTableProps {
 }
 
 const UserTable = ({ header, data, onRowClick }: UserTableProps) => {
-  console.log("data", data)
+
   return (
     <Box sx={{ overflowX: 'auto' }}>
       <StyledTableContainer>

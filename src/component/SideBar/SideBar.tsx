@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Drawer,
@@ -10,8 +10,10 @@ import {
   useTheme,
   useMediaQuery,
   Box,
+  IconButton,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import MenuIcon from '@mui/icons-material/Menu'; // 메뉴 아이콘을 가져옵니다.
 
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
@@ -30,13 +32,18 @@ const SidebarListItem = styled(ListItem)(({ theme }) => ({
 const Sidebar = () => {
   const navigate = useNavigate();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
+  const [open, setOpen] = useState(false); 
 
   const handleSelectMenu = (url: string) => {
     navigate(url);
+    if (isMobile) {
+      setOpen(false);
+    }
   };
 
   const menuItems = [
+    { text: "DashBoard", url: "/admin/dashboard" },
     { text: "Recipe", url: "/admin/recipe?page=1" },
     { text: "Ingredients", url: "/admin/ingredients?page=1" },
     { text: "Order", url: "/admin/order?page=1" },
@@ -46,41 +53,52 @@ const Sidebar = () => {
   return (
     <Box sx={{ display: "flex" }}>
       {isMobile ? (
-        <Drawer
-          variant="temporary"
-          open
-          onClose={() => {}}
-          ModalProps={{
-            keepMounted: true,
-          }}
-          sx={{
-            display: { xs: "block", md: "none" },
-            "& .MuiDrawer-paper": {
-              width: 240,
-            },
-          }}
-        >
-          <DrawerHeader>
-            <Typography
-              variant="h6"
-              onClick={() => navigate("/")}
-              sx={{ cursor: "pointer" }}
-            >
-              What’s in your fridge
-            </Typography>
-          </DrawerHeader>
-          <Divider />
-          <List>
-            {menuItems.map((item) => (
-              <SidebarListItem
-                key={item.text}
-                onClick={() => handleSelectMenu(item.url)}
+        <>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            onClick={() => setOpen(true)}
+            sx={{ margin: 1 }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Drawer
+            variant="temporary"
+            open={open}
+            onClose={() => setOpen(false)}
+            ModalProps={{
+              keepMounted: true,
+            }}
+            sx={{
+              display: { xs: "block", md: "none" },
+              "& .MuiDrawer-paper": {
+                width: 240,
+              },
+            }}
+          >
+            <DrawerHeader>
+              <Typography
+                variant="h6"
+                onClick={() => navigate("/")}
+                sx={{ cursor: "pointer" }}
               >
-                <ListItemText primary={item.text} />
-              </SidebarListItem>
-            ))}
-          </List>
-        </Drawer>
+                What’s in your fridge
+              </Typography>
+            </DrawerHeader>
+            <Divider />
+            <List>
+              {menuItems.map((item) => (
+                <SidebarListItem
+                  key={item.text}
+                  onClick={() => handleSelectMenu(item.url)}
+                >
+                  <ListItemText primary={item.text} />
+                </SidebarListItem>
+              ))}
+            </List>
+          </Drawer>
+        </>
       ) : (
         <Drawer
           variant="permanent"

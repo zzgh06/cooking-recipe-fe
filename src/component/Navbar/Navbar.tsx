@@ -163,7 +163,7 @@ const Navbar = () => {
               variant="contained"
               color="success"
               component={Link}
-              to="/admin/recipe"
+              to="/admin/dashboard"
               sx={{ marginRight: 2 }}
             >
               Admin page
