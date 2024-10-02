@@ -24,10 +24,10 @@ const AppLayout = ({ children }: AppLayoutProps) => {
       <ToastMessage />
       {isAdminPage ? (
         <Grid container spacing={2} sx={{ minHeight: "100vh" }}>
-          <Grid item xs={12} md={2}>
+          <Grid item xs={12} lg={2}>
             <Sidebar />
           </Grid>
-          <Grid item xs={12} md={10}>
+          <Grid item xs={12} lg={10}>
             <Container>{children}</Container>
           </Grid>
         </Grid>

@@ -9,6 +9,8 @@ import {
   Alert,
 } from "@mui/material";
 import { useRegisterUser } from "../hooks/User/useRegisterUser";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 
 interface FormData {
   id: string;
@@ -62,7 +64,7 @@ const RegisterPage = () => {
     }));
   };
 
-  const errorMessage = error.error
+  const errorMessage = error?.error
 
   return (
     <Container maxWidth="sm" sx={{ mt: 4, mb: 4 }}>
