@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setCartItems } from "../redux/cartSlice";
 import { RootState } from "../redux/store";
 import { CartItemType } from "../types";
+import CartPageSkeleton from "../component/Skeleton/CartPageSkeleton";
 
 interface CartState {
   cartItem: CartItemType[];
@@ -46,21 +47,7 @@ const CartPage = () => {
 
   if (isLoading) {
     return (
-      <Container sx={{ mb: 4 }} style={{textAlign: "center"}}>
-        <Typography variant="h4" component="h2" align="center" sx={{ my: 5 }}>
-          장바구니
-        </Typography>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            minHeight: "300px",
-          }}
-        >
-          <CircularProgress size="100px" sx={{color: "green"}} />
-        </Box>
-      </Container>
+      <CartPageSkeleton />
     );
   }
 

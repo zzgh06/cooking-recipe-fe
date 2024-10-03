@@ -24,6 +24,7 @@ import { useFetchFridgeItems } from "../hooks/Fridge/useFetchFridgeItems";
 import { useFetchRecommendedRecipes } from "../hooks/Fridge/useFetchRecommendedRecipes";
 import { RootState } from "../redux/store";
 import { FridgeItem, Ingredient, RecentlyViewedItem, SearchQuery } from "../types";
+import MyFridgeSkeleton from "../component/Skeleton/MyFridgeSkeleton";
 
 const FridgeContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -70,8 +71,8 @@ const MyFridge = () => {
     page: Number(query.get("page")) || 1,
     name: query.get("name") || "",
   });
-  const { data: ingredientData, isLoading } = useFetchIngredients(searchQuery);
-  const { data: fridgeData, refetch } = useFetchFridgeItems(query);
+  const { data: ingredientData, isLoading : ingredientLoading } = useFetchIngredients(searchQuery);
+  const { data: fridgeData, isLoading, refetch } = useFetchFridgeItems(query);
   const [hasSearched, setHasSearched] = useState<boolean>(false);
   const [checkedItems, setCheckedItems] = useState<Set<string>>(new Set());
   const [recentlyViewedItems, setRecentlyViewedItems] = useState<RecentlyViewedItem[]>([]);
@@ -152,6 +153,12 @@ const MyFridge = () => {
     setOpen(false);
     setRecommendClicked(false);
   };
+
+  if(isLoading) {
+    return (
+      <MyFridgeSkeleton />
+    )
+  }
 
   return (
     <Box sx={{ padding: { xs: "20px", sm: "30px", md: "50px 150px" } }}>
@@ -256,7 +263,7 @@ const MyFridge = () => {
                 marginBottom: "20px",
               }}
             >
-              {isLoading ? (
+              {ingredientLoading ? (
                 <CircularProgress size="60px" sx={{ color: "green" }} />
               ) : ingredientData?.ingredients?.length === 0 ? (
                 <Box sx={{padding: "50px 90px", boxShadow: 1, borderRadius: 2}}>
