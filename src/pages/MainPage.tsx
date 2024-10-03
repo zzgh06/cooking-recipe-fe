@@ -69,7 +69,7 @@ const MainPage = () => {
         <SubBanner img={banner2} />
       </Suspense>
 
-      <RecommendRecipe recommendRecipes={recommendRecipes} />
+      <RecommendRecipe recommendRecipes={recommendRecipes} isLoading={isLoading} />
     </>
   );
 };

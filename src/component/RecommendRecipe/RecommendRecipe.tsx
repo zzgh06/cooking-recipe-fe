@@ -3,6 +3,7 @@ import { Container, Grid, Box, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import { useNavigate } from "react-router-dom";
 import { Recipe } from "../../types";
+import RecipeSkeleton from "../Skeleton/RecommendRecipeSkeleton";
 
 const ImageContainer = styled(Box)({
   position: "relative",
@@ -43,11 +44,7 @@ const optimizeImageUrl = (url: string) => {
   return url?.replace(/\/upload\//, "/upload/c_fill,h_1082,w_1082,f_webp/");
 };
 
-interface RecommendRecipeProps {
-  recommendRecipes : Recipe[];
-}
-
-const RecommendRecipe = React.memo(({ recommendRecipes }: RecommendRecipeProps) => {
+const RecommendRecipe = React.memo(({ recommendRecipes, isLoading }: { recommendRecipes: Recipe[], isLoading: boolean }) => {
   const navigate = useNavigate();
 
   const showRecipe = useCallback(
@@ -62,6 +59,12 @@ const RecommendRecipe = React.memo(({ recommendRecipes }: RecommendRecipeProps) 
       optimizeImageUrl(recipe.images[0])
     );
   }, [recommendRecipes]);
+
+  if(isLoading) {
+    return (
+      <RecipeSkeleton />
+    )
+  }
 
   return (
     <Container sx={{ padding: { xs: "30px", sm: "50px", md: "50px 100px" } }}>
