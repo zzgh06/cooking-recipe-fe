@@ -36,10 +36,28 @@ const StyledTab = styled(Tab)({
   },
 });
 
-const ImageContainer = styled("div")<{ isExpanded: boolean }>(({ isExpanded }) => ({
-  height: isExpanded ? "auto" : "400px",
+const ImageContainer = styled("div")<{ height: number }>(({ height }) => ({
+  height: height,
   overflow: "hidden",
   transition: "height 0.5s ease-in-out",
+  position: "relative",
+}));
+
+const StyledImage = styled("img")({
+  maxWidth: "100%",
+  height: "auto",
+  display: "block",
+});
+
+const GradientOverlay = styled("div")<{ show: boolean }>(({ show }) => ({
+  position: "absolute",
+  bottom: 0,
+  left: 0,
+  right: 0,
+  height: show ? "50px" : "0",
+  background: "linear-gradient(to bottom, transparent, white)",
+  transition: "height 0.5s ease-in-out",
+  pointerEvents: "none",
 }));
 
 const MoreButton = styled(Button)({
@@ -69,9 +87,31 @@ const IngredientsDetail = () => {
   const [address, setAddress] = useState("지역을 선택해주세요");
   const [value, setValue] = useState<number>(0);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [containerHeight, setContainerHeight] = useState<number>(400);
 
+  const imageRef = useRef<HTMLImageElement>(null);
   const detailsRef = useRef<HTMLDivElement>(null);
   const reviewsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const updateHeight = () => {
+      if (imageRef.current) {
+        setContainerHeight(isExpanded ? imageRef.current.offsetHeight : 400);
+      }
+    };
+
+    if (imageRef.current && imageRef.current.complete) {
+      updateHeight();
+    } else if (imageRef.current) {
+      imageRef.current.addEventListener('load', updateHeight);
+    }
+
+    return () => {
+      if (imageRef.current) {
+        imageRef.current.removeEventListener('load', updateHeight);
+      }
+    };
+  }, [isExpanded]);
 
   useEffect(() => {
     if (data?._id) {
@@ -205,18 +245,17 @@ const IngredientsDetail = () => {
               </ShoppingTabs>
               <Box>
                 <Box ref={detailsRef}>
-                  <ImageContainer isExpanded={isExpanded}>
+                  <ImageContainer height={containerHeight}>
                     {data.images[1] ? (
-                      <img
-                        src={optimizedImageUrl(data.images[1])}
-                        alt={data.name}
-                        style={{
-                          maxWidth: "100%",
-                          height: "auto",
-                          display: "block",
-                        }}
-                        loading="lazy"
-                      />
+                      <>
+                        <StyledImage
+                          ref={imageRef}
+                          src={optimizedImageUrl(data.images[1])}
+                          alt={data.name}
+                          loading="lazy"
+                        />
+                        <GradientOverlay show={!isExpanded} />
+                      </>
                     ) : (
                       <Box
                         sx={{
@@ -231,7 +270,7 @@ const IngredientsDetail = () => {
                       </Box>
                     )}
                   </ImageContainer>
-                  <Box sx={{ display: "flex", justifyContent: "center" }}>
+                  <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
                     <MoreButton
                       variant={isExpanded ? "outlined" : "contained"}
                       color="success"
