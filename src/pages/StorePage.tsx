@@ -9,8 +9,8 @@ import RecentlyViewed from "../component/RecentlyViewed/RecentlyViewed";
 import mainBanner1 from "../assets/img/mainBanner1.png";
 import mainBanner2 from "../assets/img/mainBanner2.png";
 import { Ingredient, RecentlyViewedItem } from "../types";
+import SubBanner from "../component/SubBanner/SubBanner";
 
-const SubBanner = lazy(() => import("../component/SubBanner/SubBanner"));
 const IngredientThemeCard = lazy(() =>
   import("../component/IngredientThemeCard/IngredientThemeCard")
 );
@@ -18,15 +18,12 @@ const IngredientAll = lazy(() =>
   import("../component/IngredientAll/IngredientAll")
 );
 
-const SubBannerSkeleton = styled(Box)(({ theme }) => ({
-  display: "flex",
-  justifyContent: "center",
+const BannerSkeleton = styled(Box)(({ theme }) => ({
   width: "100%",
-  padding: "0 200px",
-  [theme.breakpoints.down("md")]: {
-    padding: "0 50px",
-  },
+  height: "300px",
+  backgroundColor: theme.palette.grey[200],
 }));
+
 
 interface RecentlyViewedIngredient {
   id: string;
@@ -58,8 +55,8 @@ const StorePage = () => {
   }, []);
 
   const newIngredients = data?.ingredients
-  .filter((ing: Ingredient) => ing.category?.includes("신상") && ing.createdAt)
-  .sort((a: Ingredient, b: Ingredient) => new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime());
+    .filter((ing: Ingredient) => ing.category?.includes("신상") && ing.createdAt)
+    .sort((a: Ingredient, b: Ingredient) => new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime());
   const bestIngredients = data?.ingredients.filter((ing: Ingredient) => ing.totalSales > 0);
   const topDiscountedIngredients = data?.ingredients
     .filter((ing: Ingredient) => ing.discountPrice !== undefined)
@@ -68,41 +65,32 @@ const StorePage = () => {
 
   return (
     <div>
-      <BannerComponent images={images} />
+      <Suspense fallback={<BannerSkeleton />}>
+        <BannerComponent images={images} />
+      </Suspense>
       <IngredientSlider
         title={"베스트 상품"}
         ingredients={bestIngredients?.slice(0, 8) || []}
         loading={isLoading}
       />
-      <Suspense
-        fallback={
-          <SubBannerSkeleton>
-            <Skeleton variant="rectangular" width="100%" height={130} />
-          </SubBannerSkeleton>
-        }
-      >
-        <SubBanner img={require("../assets/img/banner3.jpg")} />
-      </Suspense>
+
+      <SubBanner img={require("../assets/img/banner3.jpg")} />
+
       <IngredientSlider
         title={"신상품"}
         ingredients={newIngredients?.slice(0, 8) || []}
         loading={isLoading}
       />
+
       <Suspense fallback={<CircleRounded />}>
         <IngredientThemeCard
           ingredients={topDiscountedIngredients || []}
           loading={isLoading}
         />
       </Suspense>
-      <Suspense
-        fallback={
-          <SubBannerSkeleton>
-            <Skeleton variant="rectangular" width="100%" height={130} />
-          </SubBannerSkeleton>
-        }
-      >
-        <SubBanner img={require("../assets/img/banner4.jpg")} />
-      </Suspense>
+
+      <SubBanner img={require("../assets/img/banner4.jpg")} />
+
       <Suspense fallback={<CircularProgress />}>
         <IngredientAll />
       </Suspense>

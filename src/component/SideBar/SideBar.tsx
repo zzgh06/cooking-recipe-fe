@@ -71,7 +71,7 @@ const Sidebar = () => {
               keepMounted: true,
             }}
             sx={{
-              display: { xs: "block", md: "none" },
+              display: { xs: "block", lg: "none" },
               "& .MuiDrawer-paper": {
                 width: 240,
               },
