@@ -5,7 +5,6 @@ import React, { ReactNode } from 'react'
 const HoverCard = styled(Card)({
   transition: 'transform 0.2s, background-color 0.2s',
   '&:hover': {
-    // backgroundColor: '#C4D2A7',
     transform: 'scale(1.02)',
   },
 });

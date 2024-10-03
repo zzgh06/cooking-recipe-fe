@@ -10,9 +10,7 @@ import ReactStars from "react-rating-stars-component";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 
-// hook 함수 내에 또 다른 hook 함수를 중첩해서 
-// CustomTextField 내에 글자를 입력하면 포커싱이 아웃되는 버그 발견
-// mui styled를 사용한 것들은 함수 밖에 만들어야 이와 같은 버그가 생겨나지 않음
+
 const ReviewContainer = styled(Box)({
   display: "flex",
   alignItems: "center",
@@ -68,7 +66,6 @@ const ReviewForm = ({
   const [rating, setRating] = useState(initialRating);
   const [starError, setStarError] = useState(false);
 
-  // [ 별점 수 확인 및 에러 처리 ]
   const checkStarLength = (value: number) => {
     if (value < 1) {
       setStarError(true);

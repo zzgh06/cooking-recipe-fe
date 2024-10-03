@@ -10,7 +10,6 @@ const RecipePage = () => {
   const location = useLocation();
   const { category } = useParams() as { category: string };
 
-  // URL 경로에서 마지막 부분 추출
   const pathArray = location.pathname.split("/");
   const path = pathArray[pathArray.length - 1];
 

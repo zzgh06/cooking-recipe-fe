@@ -10,7 +10,6 @@ interface CopyClipButtonProps {
 
 
 const CopyClipButton = ({ recipeDetail }: CopyClipButtonProps) => {
-  // Clipboard API를 통한 Clipboard 구현
   const copyURLToClipboard = async (text:string) => {
     try {
       await navigator.clipboard.writeText(text);
