@@ -62,7 +62,7 @@ const SearchResults = () => {
             </Typography>
           ) : (
             <Grid container spacing={3}>
-              {ingredientsData && ingredientsData.data.ingredients.map((ing) => (
+              {ingredientsData && ingredientsData.data?.ingredients?.map((ing) => (
                 <Grid item xs={12} sm={6} md={4} lg={3} key={ing._id}>
                   <IngredientCard item={ing} />
                 </Grid>
