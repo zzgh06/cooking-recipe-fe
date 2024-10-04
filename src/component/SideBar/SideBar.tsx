@@ -13,7 +13,7 @@ import {
   IconButton,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import MenuIcon from '@mui/icons-material/Menu'; // 메뉴 아이콘을 가져옵니다.
+import MenuIcon from '@mui/icons-material/Menu';
 
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",

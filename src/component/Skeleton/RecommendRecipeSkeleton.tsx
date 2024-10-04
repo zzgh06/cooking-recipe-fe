@@ -28,7 +28,7 @@ const RecipeSkeleton = () => {
             variant="rectangular" 
             sx={{ 
               width: "100%", 
-              paddingTop: "100%", // 1:1 aspect ratio
+              paddingTop: "100%",
               borderRadius: 1 
             }} 
           />
