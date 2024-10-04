@@ -60,7 +60,7 @@ const RecommendRecipe = React.memo(({ recommendRecipes, isLoading }: { recommend
     );
   }, [recommendRecipes]);
 
-  if(isLoading) {
+  if (isLoading) {
     return (
       <RecipeSkeleton />
     )
@@ -142,13 +142,14 @@ const RecommendRecipe = React.memo(({ recommendRecipes, isLoading }: { recommend
               <Overlay className="overlay">{recommendRecipes[2]?.name}</Overlay>
             </ImageContainer>
           </Grid>
-          <Grid item lg={12}>
+          <Grid item lg={12} xs={12}>
             <ImageContainer
               onClick={() => showRecipe(recommendRecipes[4]._id || "")}
               sx={{
+                width: "100%",
                 maxHeight: {
                   xs: "300px",
-                  sm: "300px",
+                  sm: "350px",
                   md: "200px",
                   lg: "300px",
                 },
@@ -159,13 +160,17 @@ const RecommendRecipe = React.memo(({ recommendRecipes, isLoading }: { recommend
                 alt={recommendRecipes[4]?.name}
                 loading="lazy"
                 decoding="async"
-                width="600"
+                width="100%" 
                 height="300"
-                srcSet={`${optimizedImages[4]} 600w, ${optimizedImages[4]?.replace(
-                  'h_1082,w_1082',
-                  'h_1200,w_600'
-                )} 1200w`}
-                sizes="(max-width: 600px) 100vw, (max-width: 1200px) 100vw, 600px"
+                sx={{
+                  width: "100%", 
+                  height: {
+                    xs: "300px",
+                    sm: "350px",
+                    md: "200px",
+                    lg: "300px",
+                  },
+                }}
               />
               <Overlay className="overlay">{recommendRecipes[4]?.name}</Overlay>
             </ImageContainer>
