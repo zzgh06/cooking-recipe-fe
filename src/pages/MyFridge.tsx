@@ -270,7 +270,7 @@ const MyFridge = () => {
                   <Typography variant="h5" fontSize="20px">일치하는 재료가 없습니다. 😅</Typography>
                 </Box>
               ) : (
-                ingredientData?.ingredients.map((item: Ingredient) => (
+                ingredientData?.ingredients?.map((item: Ingredient) => (
                   <SearchResultCard key={item._id} item={item} />
                 ))
               )}
