@@ -1,5 +1,5 @@
 # 🍴 레시피와 쇼핑이 더해진 What’s in your fridge
-![image](https://github.com/zzgh06/cooking-recipe-be/assets/127922435/b549bfe3-30e2-4195-9399-683b292fbfee)
+![whats-in-yours-fridge netlify app_ (3)](https://github.com/user-attachments/assets/bba5f1b1-68d8-4f46-acd5-5a2b76bbd649)
 What’s in your fridge 는 사용자가 다양한 레시피를 확인하고, 필요한 식재료를 간편하게 구매할 수 있는 웹사이트입니다.
 >
 <br>
