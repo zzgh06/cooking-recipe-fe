@@ -1,25 +1,9 @@
 # 🍴 레시피와 쇼핑이 더해진 What’s in your fridge
-![image](https://github.com/zzgh06/cooking-recipe-be/assets/127922435/b549bfe3-30e2-4195-9399-683b292fbfee)
-What’s in your fridge 는 사용자가 다양한 레시피를 확인하고, 필요한 식재료를 간편하게 구매할 수 있는 웹사이트입니다.
+![whats-in-yours-fridge netlify app_ (3)](https://github.com/user-attachments/assets/fda42495-0e67-470b-83ee-4fe5f680482f)
+
+**What’s in your fridge 는 사용자가 다양한 레시피를 확인하고, 필요한 식재료를 간편하게 구매할 수 있는 웹사이트입니다.**
 >
 <br>
-
-### 개발 기간
-
-- 전체 개발 기간: 2024-06-16 ~ 2024-06-30
-- 백앤드 구현: 2022-06-18 ~ 2022-06-27
-- 프론트앤드 및 기능 구현: 2022-06-18 ~ 2022-06-30
-
-### 배포 주소
-
-><div>프론트 서버 : https://whats-is-your-fridge.netlify.app/</div>
->백엔드 서버 : http://what-is-your-fridge.us-east-1.elasticbeanstalk.com/
-<br>
-
-### 테스트 계정
-
-- **Test ID**: admin@gmail.com
-- **Test PW**: 123
 
 ## 프로젝트 소개
 
@@ -29,36 +13,24 @@ What’s in your fridge 는 사용자가 다양한 레시피를 확인하고, �
 - 다양한 유저들을 마음에 드는 레시피나 상품에 평점을 주고 댓글을 작성할 수 있습니다.
 <br>
 
+### 배포 주소
+
+> <div>프론트 서버 : https://whats-in-yours-fridge.netlify.app</div>
+> <div>백엔드 서버 : http://whats-in-your-fridge.ap-northeast-2.elasticbeanstalk.com</div>
+> 테스트 계정 : admin / 123
+<br>
+
 ## 팀원 구성
 
 |이정우|정성욱|최충현|오혜림|
 |:------:|:---:|:---:|:-----:|
-|[@leejeongwoo1](https://github.com/leejeongwoo1/leejeongwoo1)|[@SungJung0616](https://github.com/SungJung0616)|[@zzgh06](https://github.com/zzgh06)|[@ohloara](https://github.com/ohloara)|
-<br>
+|[@leejeongwoo1](https://github.com/leejeongwoo1/leejeongwoo1)|[@SungJung0616](https://github.com/SungJung0616)|[@zzgh06](https://github.com/zzgh06)|[@ohloara](https://github.com/ohloara)|<br>
 
-## 시작 가이드
+### 개발 기간
 
-1. 리포지토리 클론
-    ```sh
-    git clone git@github.com:zzgh06/cooking-recipe-be.git
-    ```
-2. 패키지 설치
-    ```sh
-    cd cooking-recipe-be
-    npm install
-    ```
-3. 환경변수 설정
-    ```
-    MONGO_URI=your_mongo_uri
-    JWT_SECRET=your_jwt_secret
-    GOOGLE_CLIENT_ID=your_google_client_id
-    GOOGLE_CLIENT_SECRET=your_google_client_secret
-    ```
-4. 로컬 서버 시작
-    ```sh
-    npm run local_start
-    ```
-<br>
+- 전체 개발 기간: 2024-06-16 ~ 2024-06-30
+- 백앤드 구현: 2024-06-18 ~ 2024-06-27
+- 프론트앤드 및 기능 구현: 2024-06-18 ~ 2024-06-30
 
 ## 📚 STACKS
 ### Environment
@@ -67,32 +39,41 @@ What’s in your fridge 는 사용자가 다양한 레시피를 확인하고, �
 <img src="https://img.shields.io/badge/NPM-%23CB3837.svg?style=for-the-badge&logo=npm&logoColor=white">
 
 ### Development
-<img src="https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white"> <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"> <img src="https://img.shields.io/badge/express-000000?style=for-the-badge&logo=express&logoColor=white"> <img src="https://img.shields.io/badge/bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white"> <img src="https://img.shields.io/badge/mongoDB-47A248?style=for-the-badge&logo=MongoDB&logoColor=white"> <img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"> 
+<img src="https://img.shields.io/badge/Typescript-3178C6?style=for-the-badge&logo=Typescript&logoColor=white"/> <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"> <img src="https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white">  <img src="https://img.shields.io/badge/express-000000?style=for-the-badge&logo=express&logoColor=white"> <img src="https://img.shields.io/badge/mongoDB-47A248?style=for-the-badge&logo=MongoDB&logoColor=white"> <img src="https://img.shields.io/badge/Tailwind CSS-06B6D4?style=for-the-badge&logo=Tailwind CSS&logoColor=white"/> 
+
 ### deployment
 <img src="https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white"> <img src="https://img.shields.io/badge/netlify-%23000000.svg?style=for-the-badge&logo=netlify&logoColor=#00C7B7">
 <br>
 <br>
 
-## 채택한 개발 기술과 브랜치 전략
 
-**React**
+## 담당 역할 및 주요 기능
+1. 상품 목록 무한 스크롤을 통한 전체 상품 정보 제공 구현
+- intersection Observer 및 React Query, useRef 와 같은 React Hook을 통해 위치를 감지하여 새로운 데이터 요청
 
-- 컴포넌트화를 통해 추후 유지보수와 재사용성을 고려했습니다.
-- 유저 배너, 상단과 하단 배너 등 중복되어 사용되는 부분이 많아 컴포넌트화를 통해 리소스 절약이 가능했습니다.
+2. My 냉장고 추천 레시피 제공 구현
+- React Query을 활용한 추천 레시피 제공 기능 구현
 
-**Redux Toolkit**
+3. 장보기 메모 기능 구현
+- React Query 데이터 패칭과 React-Toolkit를 활용한 전역 상태 관리 구현
 
-- Redux Toolkit을 사용하여 상태 관리를 더욱 간편하게 구현했습니다.
-- Redux Toolkit은 기존 Redux보다 설정이 간단하고, 보일러플레이트 코드가 적어 학습 비용을 줄일 수 있었습니다.
-- createSlice와 createAsyncThunk 등을 사용하여 상태와 비동기 로직을 효율적으로 관리했습니다.
+4. 소셜 로그인 및 레시피 공유 기능 구현
+- Kakao API를 활용하여 소셜 로그인 및 레시피 공유     
 
-## 브랜치 전략
+5. 비밀 번호 관련 기능 구현
+- React Query Hook을 통한 비밀번호 재인증 및 변경 기능 구현
+- NodeEmailer API 활용하여 비밀번호 찾기 기능 구현
 
-- Git-flow 전략을 기반으로 master, develop 브랜치와 feature 보조 브랜치를 운용했습니다.
-- master, develop, Feat 브랜치로 나누어 개발을 하였습니다.
-- master 브랜치는 배포 단계에서만 사용하는 브랜치입니다.
-- develop 브랜치는 개발 단계에서 git-flow의 master 역할을 하는 브랜치입니다.
-- Feat 브랜치는 기능 단위로 독립적인 개발 환경을 위하여 사용하고 merge 후 각 브랜치를 삭제해주었습니다.
+6. 관리자 페이지 UI 및 기능 구현
+- chart.js 라이브러리를 기반으로 차트 구현
+- 총 매출 및 신규 가입 고객, 주문상태를 시각화하여 제공
+<br>
+
+## API 문서
+
+- [Swagger API Documentation (Local)](http://localhost:5000/api-docs)
+- [Swagger API Documentation (Production)](http://whats-in-your-fridge.ap-northeast-2.elasticbeanstalk.com/api-docs)
+<br>
 
 ## 프로젝트 구조
 
@@ -106,18 +87,6 @@ What’s in your fridge 는 사용자가 다양한 레시피를 확인하고, �
 
 ![ERD](./public/image/erd.png)
 
-### API
-
-- ![API Auth](./public/image/api_auth.png)
-- ![API User](./public/image/api_user.png)
-- ![API Fridge](./public/image/api_frige.png)
-- ![API Ingredient](./public/image/api_ingredient.png)
-- ![API Recipe](./public/image/api_recipe.png)
-- ![API Cart](./public/image/api_cart.png)
-- ![API Review Recipe](./public/image/api_review_recipe.png)
-- ![API Review Ingredient](./public/image/api_reivew_ingredient.png)
-- ![API Order](./public/image/api_order.png)
-
 ## 프론트앤드
 
 ### 프론트앤드 폴더구조
@@ -128,38 +97,44 @@ What’s in your fridge 는 사용자가 다양한 레시피를 확인하고, �
 
 |레시피 페이지|레시피 상세 페이지|
 |:------:|:------:|
-|![image](https://github.com/zzgh06/cooking-recipe-be/assets/127922435/67fffb80-cd5b-4b85-97ea-4a66c17d8e58)|![image](https://github.com/zzgh06/cooking-recipe-be/assets/127922435/fc0316fc-6b81-485b-9804-4662433d00b0)|
+|![whats-in-yours-fridge netlify app_](https://github.com/user-attachments/assets/41ee5bf0-37c7-4e19-a049-1437d895aa26)|![whats-in-yours-fridge netlify app_account_profile (1)](https://github.com/user-attachments/assets/82c8bce1-d31b-4dc7-b5c1-1a9e558c9b05)|
 
 |스토어 페이지|스토어 상세 페이지|
 |:---:|:------:|
-|![image](https://github.com/zzgh06/cooking-recipe-be/assets/127922435/b5937626-ae3d-43c7-9e29-7ef02f6b5c28)|![image](https://github.com/zzgh06/cooking-recipe-be/assets/127922435/6a69d98e-8a16-4105-b4a7-b8d2ef44f498)|
+|![whats-in-yours-fridge netlify app_ (9)](https://github.com/user-attachments/assets/68fc72ca-90d7-467f-bdb2-397f4d45111c)|![whats-in-yours-fridge netlify app_ (2)](https://github.com/user-attachments/assets/38c51f77-9075-4e3a-8460-406690d813a6)|
 
-|My 냉장고 페이지|admin 페이지|
+|My 냉장고 페이지|카트 페이지|
 |:------:|:------:|
-|![image](https://github.com/zzgh06/cooking-recipe-be/assets/127922435/39273759-b8a2-4ac5-94dd-c5e5e8fb526b)|![image](https://github.com/zzgh06/cooking-recipe-be/assets/127922435/4dde076d-63e9-4655-9a11-d961d5a36ad2)|
+|![whats-in-yours-fridge netlify app_ (10)](https://github.com/user-attachments/assets/02c58d8e-5720-43dc-9a13-311044bd10ae))|![whats-in-yours-fridge netlify app_ (11)](https://github.com/user-attachments/assets/7c892f26-3ceb-454e-8589-9cebd2cd16ed)|
+
+|프로필 페이지|어드민 페이지|
+|:------:|:------:|
+|![whats-in-yours-fridge netlify app_account_profile](https://github.com/user-attachments/assets/00e7466c-30f2-4f48-b472-b3ce8bb13189)|![whats-in-yours-fridge netlify app_ (12)](https://github.com/user-attachments/assets/517c9e7f-1454-4ab3-bb90-b588068e1f63)|
 <br>
 
 ## ⭐ 주요 기능 
   ### 1. 레시피 관리
   - 다양한 레시피 검색 및 작성
   - 레시피 상세 정보 보기
+  - 레시피 좋아요 및 공유하기 
   ### 2. 식재료 관리
   - 필요한 식재료 장바구니 추가
   - 식재료 구매
-  ### 3. 냉장고 관리
+  ### 3. 장보기 메모
+  - 레시피 내 사용되는 재료 중 장보기 메모에 추가
+  - 장보기 목록 중 완료 목록 이동
+  - 장보기 목록 중 삭제가 필요한 목록 삭제 
+  ### 4. 냉장고 관리
   - 냉장고 식재료 관리
   - 냉장고 내 식재료 레시피 추천
-  ### 4. 리뷰 및 사용자 관리
+  ### 5. 리뷰 및 사용자 관리
   - 레시피, 식재료 리뷰 작성
-  ### 5. 챗봇
-  - 문의 기능
 <br>
 
 ## 사용 방법
-1. 홈페이지에서 원하는 레시피를 검색합니다.
-2. 레시피를 클릭하여 상세 정보를 확인합니다.
-3. 필요한 식재료를 장바구니에 추가합니다.
-4. My 냉장고에서 가지고 있는 등록한 후 추천 레시피를 확인합니다.
-5. 장바구니 페이지로 이동하여 식재료를 구매합니다.
-6. 마이 페이지에서 주문현황을 확인할 수 있습니다.
+1. 홈페이지에서 원하는 레시피 상세 페이지에 들어갑니다.
+2. 필요한 식재료 장보기 메모에 추가 혹은 바로 구매가 필요한 식재료를 장바구니에 추가합니다.
+3. 장바구니 페이지로 이동하여 식재료를 구매합니다.
+3. My 냉장고 페이지 내 현재 자신이 가지고 있는 재료(상품)을 등록한 후 추천 레시피를 확인합니다.
+5. 마이 페이지 내에서 주문 정보 및 장보기 메모, 자신이 등록한 레시피 등 개인 정보를 확인, 관리합니다.
 <br>

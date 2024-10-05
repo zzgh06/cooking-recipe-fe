@@ -21,7 +21,7 @@ import {
 } from "@mui/material";
 import { useFetchIngredients } from "../hooks/Ingredient/useFetchIngredients";
 import { useFetchFridgeItems } from "../hooks/Fridge/useFetchFridgeItems";
-import { useFetchRecommendedRecipes } from "../hooks/Fridge/useFetchRecommendedRecipes";
+import { useFetchRecommendedRecipes } from "../hooks/Recipe/useFetchRecommendedRecipes";
 import { RootState } from "../redux/store";
 import { FridgeItem, Ingredient, RecentlyViewedItem, SearchQuery } from "../types";
 import MyFridgeSkeleton from "../component/Skeleton/MyFridgeSkeleton";

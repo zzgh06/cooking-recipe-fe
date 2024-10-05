@@ -4,7 +4,8 @@ import RecipeCard from '../component/RecipeCard/RecipeCard';
 import IngredientCard from '../component/IngredientCard/IngredientCard';
 import { Grid, Box, CircularProgress, Typography, Divider } from '@mui/material';
 import { useFetchRecipes } from '../hooks/Recipe/useFetchRecipes';
-import { useFetchIngredients } from '../hooks/Recipe/useFetchIngredients';
+import { useFetchIngredients } from '../hooks/Ingredient/useFetchIngredients';
+
 
 const SearchResults = () => {
   const [query] = useSearchParams();
@@ -56,13 +57,13 @@ const SearchResults = () => {
           <Typography variant="h5" fontWeight="600" gutterBottom sx={{ mb: 3 }}>
             재료 검색 결과
           </Typography>
-          {ingredientsData && ingredientsData.data?.ingredients?.length === 0 ? (
+          {ingredientsData && ingredientsData?.ingredients?.length === 0 ? (
             <Typography variant="body1" fontSize="20px">
               재료 검색 결과가 없습니다. 😅
             </Typography>
           ) : (
             <Grid container spacing={3}>
-              {ingredientsData && ingredientsData.data?.ingredients?.map((ing) => (
+              {ingredientsData && ingredientsData?.ingredients?.map((ing) => (
                 <Grid item xs={12} sm={6} md={4} lg={3} key={ing._id}>
                   <IngredientCard item={ing} />
                 </Grid>
