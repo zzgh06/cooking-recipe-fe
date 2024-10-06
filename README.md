@@ -85,7 +85,8 @@
 
 ### 백앤드 ERD
 
-![What's in your fridge ERD](https://drive.google.com/file/d/1nL1DgvbKRcPwwrjyzDOq8GV-lfK_8kFw/view?usp=sharing)
+- [What's in your fridge ERD](https://drive.google.com/file/d/1nL1DgvbKRcPwwrjyzDOq8GV-lfK_8kFw/view?usp=sharing)
+
 
 
 ## 프론트앤드
