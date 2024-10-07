@@ -35,10 +35,10 @@ export const ingredientResponsive = {
   },
   tablet: {
     breakpoint: { max: 1400, min: 700 },
-    items: 2,
+    items: 3,
   },
   mobile: {
     breakpoint: { max: 699, min: 0 },
-    items: 1,
+    items: 2,
   },
 };

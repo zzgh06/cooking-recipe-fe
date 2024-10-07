@@ -1,23 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CardMedia,
-  CardMediaProps,
-  FormControl,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Modal,
-  Select,
-  SelectChangeEvent,
-  SxProps,
-  Typography,
-  styled,
-} from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,80 +7,6 @@ import { useAddToCart } from "../../hooks/Cart/useAddToCart";
 import { currencyFormat } from "../../utils/number";
 import { RootState } from "../../redux/store";
 import { setToastMessage } from "../../redux/commonUISlice";
-
-const StyledCard = styled(Card)(({ theme }) => ({
-  position: "relative",
-  marginBottom: "10px",
-  width: "100%",
-  padding: "10px 20px",
-  transition: "all 0.5s",
-  boxShadow: "none",
-  [theme.breakpoints.down('sm')]: {
-    padding: "5px 10px",
-  },
-}));
-
-const StyledCardMedia = styled(CardMedia)<CardMediaProps>(({ theme }) => ({
-  width: "100%",
-  height: "315px",
-  marginBottom: "15px",
-  borderRadius: "8px",
-  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-  transition: "all 0.3s",
-  "&:hover": {
-    transform: "scale(1.01)",
-  },
-  [theme.breakpoints.down('sm')]: {
-    height: "200px",
-  },
-}));
-
-const Title = styled(Typography)(({ theme }) => ({
-  fontSize: "17px",
-  fontWeight: 600,
-  [theme.breakpoints.down('sm')]: {
-    fontSize: "15px",
-  },
-}));
-
-const Price = styled(Typography)(({ theme }) => ({
-  marginTop: "8px",
-  fontSize: "19px",
-  fontWeight: 600,
-  color: "black",
-  [theme.breakpoints.down('sm')]: {
-    fontSize: "16px",
-  },
-}));
-
-const OriginPrice = styled(Typography)(({ theme }) => ({
-  fontSize: "15px",
-  color: "rgb(164, 164, 164)",
-  textDecoration: "line-through",
-  [theme.breakpoints.down('sm')]: {
-    fontSize: "13px",
-  },
-}));
-
-const DiscountRate = styled(Typography)(({ theme }) => ({
-  fontSize: "19px",
-  fontWeight: 600,
-  color: "orangered",
-  [theme.breakpoints.down('sm')]: {
-    fontSize: "16px",
-  },
-}));
-
-const DiscountPrice = styled(Typography)(({ theme }) => ({
-  fontSize: "19px",
-  fontWeight: 600,
-  color: "black",
-  marginLeft: "10px",
-  [theme.breakpoints.down('sm')]: {
-    fontSize: "16px",
-    marginLeft: "5px",
-  },
-}));
 
 interface IngredientCardProps {
   item: {
@@ -108,7 +16,6 @@ interface IngredientCardProps {
     price: number;
     discountPrice?: number;
   };
-  sx?: SxProps;
 }
 
 const IngredientCard = ({ item }: IngredientCardProps) => {
@@ -131,17 +38,17 @@ const IngredientCard = ({ item }: IngredientCardProps) => {
     return Math.floor(discountedPrice);
   };
 
-  const handleQtyChange = (event: SelectChangeEvent<number>) => {
-    setQty(event.target.value as number);
+  const handleQtyChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setQty(Number(event.target.value));
   };
 
   const addCart = () => {
     if (!user) {
       navigate("/login");
       dispatch(setToastMessage({
-          message: "로그인이 필요한 서비스 입니다.",
-          status: "error",
-        }))
+        message: "로그인이 필요한 서비스 입니다.",
+        status: "error",
+      }))
       return;
     }
 
@@ -155,134 +62,99 @@ const IngredientCard = ({ item }: IngredientCardProps) => {
 
   return (
     <>
-      <StyledCard>
-        <StyledCardMedia
-          component="img"
-          image={optimizeImageUrl(item.images[0])}
+      <div className="relative mb-2 w-full p-4 transition-all duration-500 shadow-none">
+        <img
+          src={optimizeImageUrl(item.images[0])}
+          alt={item.name}
+          className="w-full h-80 mb-3 rounded-lg shadow-md transition-transform duration-300 hover:scale-105 cursor-pointer"
           onClick={() => showIngredient(item._id)}
         />
-        <Button
-          variant="outlined"
-          sx={{ width: "100%", padding: "5px 0" }}
+        <button
+          className="flex items-center justify-center w-full py-2 border border-gray-300 rounded hover:bg-gray-100 text-blue-700"
           onClick={handleOpen}
         >
           <FontAwesomeIcon icon={faShoppingCart} />
-          <Typography variant="body2" sx={{ marginLeft: "10px" }}>
-            담기
-          </Typography>
-        </Button>
-        <CardContent>
-          <Title>{item?.name}</Title>
-          <Box>
-            {item?.discountPrice ? (
+          <span className="ml-2">담기</span>
+        </button>
+        <div className="mt-2">
+          <h3 className="text-lg font-semibold">{item.name}</h3>
+          <div>
+            {item.discountPrice ? (
               <>
-                <OriginPrice>{item?.price}원</OriginPrice>
-                <Box display="flex" alignItems="center">
-                  <DiscountRate>{item?.discountPrice}%</DiscountRate>
-                  <DiscountPrice>
-                    {currencyFormat(calculateDiscountedPrice(item?.price, item?.discountPrice))}
-                    원
-                  </DiscountPrice>
-                </Box>
+                <span className="text-sm line-through text-gray-400">{item.price}원</span>
+                <div className="flex items-center">
+                  <span className="text-lg font-semibold text-red-600">{item.discountPrice}%</span>
+                  <span className="text-lg font-semibold text-black ml-2">
+                    {currencyFormat(calculateDiscountedPrice(item.price, item.discountPrice))}원
+                  </span>
+                </div>
               </>
             ) : (
-              <Price>{currencyFormat(item?.price)}원</Price>
+              <span className="text-lg font-semibold">{currencyFormat(item.price)}원</span>
             )}
-          </Box>
-        </CardContent>
-      </StyledCard>
-      <Modal open={open} onClose={handleClose}>
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: { xs: '90%', sm: 350 },
-            bgcolor: "background.paper",
-            borderRadius: "15px",
-            boxShadow: 24,
-            p: 4,
-          }}
-        >
-          <Grid container spacing={2} alignItems="center">
-            <Grid item xs={4}>
-              <img
-                src={optimizeImageUrl(item.images[0])}
-                alt={item.name}
-                style={{ width: "100%" }}
-                loading="lazy"
-              />
-            </Grid>
-            <Grid item xs={8}>
-              <Typography variant="h6" sx={{ mt: 1 }}>
-                {item.name}
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="body1" sx={{ mt: 1 }}>
-                {item.name}
-              </Typography>
-            </Grid>
-            <Grid item xs={7}>
-              {item?.discountPrice ? (
-                <Box display="flex" alignItems="center">
-                  <DiscountPrice sx={{ marginLeft: "0" }}>
-                    {calculateDiscountedPrice(item?.price, item?.discountPrice)}
-                    원
-                  </DiscountPrice>
-                  <OriginPrice sx={{ marginLeft: "10px" }}>
-                    {item?.price}원
-                  </OriginPrice>
-                </Box>
-              ) : (
-                <Price>{item?.price}원</Price>
-              )}
-            </Grid>
-            <Grid item xs={5}>
-              <FormControl fullWidth>
-                <InputLabel>수량</InputLabel>
-                <Select
+          </div>
+        </div>
+      </div>
+      {open && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="absolute inset-0 bg-black opacity-50" onClick={handleClose}></div>
+          <div className="bg-white rounded-lg shadow-lg p-4 z-10 w-11/12 sm:w-80 max-w-lg">
+            <img
+              src={optimizeImageUrl(item.images[0])}
+              alt={item.name}
+              className="w-full h-40 object-cover rounded-lg mb-4" // 이미지의 크기 조정
+              loading="lazy"
+            />
+            <div className="grid grid-cols-1 gap-2">
+              <div>
+                <h4 className="text-lg font-semibold">{item.name}</h4>
+              </div>
+              <div className="flex items-center">
+                {item.discountPrice ? (
+                  <div className="flex items-center">
+                    <span className="text-lg font-semibold">{calculateDiscountedPrice(item.price, item.discountPrice)}원</span>
+                    <span className="text-sm line-through text-gray-400 ml-2">{item.price}원</span>
+                  </div>
+                ) : (
+                  <span className="text-lg font-semibold">{item.price}원</span>
+                )}
+              </div>
+              <div>
+                <label className="block mb-1">수량</label>
+                <select
                   value={qty}
-                  label="수량"
                   onChange={handleQtyChange}
+                  className="w-full border border-gray-300 rounded p-1"
                 >
-                  <MenuItem value={1}>1</MenuItem>
-                  <MenuItem value={2}>2</MenuItem>
-                  <MenuItem value={3}>3</MenuItem>
-                  <MenuItem value={4}>4</MenuItem>
-                  <MenuItem value={5}>5</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              sx={{ display: "flex", justifyContent: "space-between" }}
-            >
-              <Typography variant="h6">합계</Typography>
-              <Typography variant="h6">
-                {calculateDiscountedPrice(item?.price, item?.discountPrice) * qty}원
-              </Typography>
-            </Grid>
-            <Grid item xs={6}>
-              <Button variant="outlined" color="error" onClick={handleClose} sx={{ width: "100%" }}>
-                취소
-              </Button>
-            </Grid>
-            <Grid item xs={6}>
-              <Button
-                variant="contained"
-                color="success"
-                onClick={addCart}
-                sx={{ width: "100%" }}
-              >
-                담기
-              </Button>
-            </Grid>
-          </Grid>
-        </Box>
-      </Modal>
+                  {[1, 2, 3, 4, 5].map((value) => (
+                    <option key={value} value={value}>{value}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-semibold">합계</span>
+                <span className="font-semibold">
+                  {calculateDiscountedPrice(item.price, item.discountPrice) * qty}원
+                </span>
+              </div>
+              <div className="flex justify-between mt-4 gap-1">
+                <button
+                  className="w-full p-2 border border-gray-300 rounded hover:bg-gray-200"
+                  onClick={handleClose}
+                >
+                  취소
+                </button>
+                <button
+                  className="w-full p-2 bg-green-700 text-white rounded hover:bg-green-600"
+                  onClick={addCart}
+                >
+                  담기
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

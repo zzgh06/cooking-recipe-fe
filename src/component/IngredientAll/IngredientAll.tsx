@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import IngredientCard from "../IngredientCard/IngredientCard";
-import { Grid, Typography, Container } from "@mui/material";
 import IngredientCardSkeleton from "../Skeleton/IngredientCardSkeleton";
 import { useFetchIngredients } from "../../hooks/Ingredient/useFetchIngredients";
 import { Ingredient } from "../../types";
@@ -32,7 +31,7 @@ const IngredientAll = () => {
 
   useEffect(() => {
     if (data) {
-      const delay = 1000; 
+      const delay = 1000;
       setTimeout(() => {
         setIngredients((prev) => [...prev, ...data.ingredients]);
         setHasMore(currentPage < data.totalPages);
@@ -65,39 +64,34 @@ const IngredientAll = () => {
   }, [loadMore, hasMore]);
 
   return (
-    <Container sx={{ p: 3 }}>
-      <Typography
-        variant="h4"
-        fontWeight="600"
-        marginBottom="20px"
-        textAlign="center"
-      >
+    <div className="p-3">
+      <h4 className="font-semibold mb-5 text-center text-[35px]">
         모든 상품
-      </Typography>
-      <Grid container spacing={2}>
+      </h4>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-[70px] md:px-[100px]">
         {isLoading && Array.from(new Array(8)).map((_, index) => (
-          <Grid key={index} item xs={12} md={6} lg={3}>
+          <div key={index} className="w-full">
             <IngredientCardSkeleton />
-          </Grid>
+          </div>
         ))}
         {ingredients.map((ing: Ingredient) => (
-          <Grid item xs={12} md={6} lg={3} key={ing._id}>
+          <div className="w-full" key={ing._id}>
             <IngredientCard item={ing} />
-          </Grid>
+          </div>
         ))}
-      </Grid>
-      {isError && <Typography>Error: {error.message}</Typography>}
+      </div>
+      {isError && <p>Error: {error.message}</p>}
       {isFetchingMore && (
-        <Grid container spacing={2}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-[70px] md:px-[100px]">
           {Array.from(new Array(4)).map((_, index) => (
-            <Grid key={index} item xs={12} md={6} lg={3}>
+            <div key={index} className="w-full">
               <IngredientCardSkeleton />
-            </Grid>
+            </div>
           ))}
-        </Grid>
+        </div>
       )}
       <div ref={loadMoreTriggerRef} style={{ height: "1px" }} />
-    </Container>
+    </div>
   );
 };
 

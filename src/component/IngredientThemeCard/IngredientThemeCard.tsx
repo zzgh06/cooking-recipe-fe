@@ -1,6 +1,5 @@
 import React from "react";
 import IngredientCard from "../IngredientCard/IngredientCard";
-import { Box, Container, Grid, Typography } from "@mui/material";
 import IngredientCardSkeleton from "../Skeleton/IngredientCardSkeleton";
 import { Ingredient } from "../../types";
 
@@ -11,31 +10,31 @@ interface IngredientThemeCardProps {
 
 const IngredientThemeCard = ({ ingredients, loading }: IngredientThemeCardProps) => {
   return (
-    <Container >
-      <Grid container spacing={3} sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Grid item lg={3}>
-          <Typography variant="h4" fontSize="28px" fontWeight="600">📣 빅세일 추천특가</Typography>
-          <Typography variant="subtitle1" component="p">
+    <div className="container mx-auto px-[120px]">
+      <div className="flex flex-col lg:flex-row justify-between gap-6">
+        <div className="lg:w-1/4">
+          <h2 className="text-3xl font-semibold">📣 빅세일 추천특가</h2>
+          <p className="text-lg text-gray-600">
             상반기 인기 상품 득템 찬스
-          </Typography>
-        </Grid>
-        <Grid item lg={9}>
-          <Box sx={{ display: "flex", overflowX: "auto" }}>
-            {loading ?
-              Array.from(new Array(2)).map((_, index) => (
-              <Grid key={index} item xs={12} md={6} lg={3}>
-                <IngredientCardSkeleton />
-              </Grid>
-              ))
-            : ingredients.map((ing) => (
-              <Box key={ing._id} sx={{ marginRight: 2 }}>
-                <IngredientCard item={ing} sx={{ minWidth: "275px"}}/>
-              </Box>
-            ))}
-          </Box>
-        </Grid>
-      </Grid>
-    </Container>
+          </p>
+        </div>
+        <div className="lg:w-3/4">
+          <div className="flex overflow-x-auto gap-3">
+            {loading
+              ? Array.from(new Array(3)).map((_, index) => (
+                  <div key={index} className="flex-none w-[275px]">
+                    <IngredientCardSkeleton />
+                  </div>
+                ))
+              : ingredients.map((ing) => (
+                  <div key={ing._id} className="flex-none w-[275px]">
+                    <IngredientCard item={ing} />
+                  </div>
+                ))}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

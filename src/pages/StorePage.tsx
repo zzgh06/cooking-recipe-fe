@@ -90,10 +90,8 @@ const StorePage = () => {
       </Suspense>
 
       <SubBanner img={require("../assets/img/banner4.jpg")} />
+      <IngredientAll />
 
-      <Suspense fallback={<CircularProgress />}>
-        <IngredientAll />
-      </Suspense>
       {recentlyViewedItems.length >= 1 && (
         <RecentlyViewed recentlyViewedItems={recentlyViewedItems} />
       )}
