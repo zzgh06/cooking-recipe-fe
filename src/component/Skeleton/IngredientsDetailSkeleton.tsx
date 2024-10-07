@@ -1,32 +1,33 @@
 import React from "react";
-import { Container, Grid, Skeleton, Box } from "@mui/material";
+import Skeleton from "react-loading-skeleton";
+import 'react-loading-skeleton/dist/skeleton.css'; 
 
 const IngredientsDetailSkeleton = () => {
   return (
-    <Container maxWidth="lg" sx={{ padding: "50px 0" }}>
-      <Grid container spacing={4}>
-        <Grid item lg={6} xs={12} sx={{ textAlign: "center" }}>
-          <Skeleton variant="rectangular" height={400} />
-        </Grid>
-        <Grid item lg={6} xs={12}>
-          <Skeleton variant="text" sx={{ fontSize: 'h4.fontSize' }} />
-          <Skeleton variant="text" sx={{ fontSize: 'h6.fontSize' }} />
-          <Skeleton variant="text" sx={{ fontSize: 'body1.fontSize' }} />
-          <Box sx={{ mt: 4, borderTop: "1px solid #ddd", pt: 2 }}>
-            <Skeleton variant="text" sx={{ fontSize: 'body2.fontSize' }} />
-            <Skeleton variant="text" sx={{ fontSize: 'h6.fontSize' }} />
-            <Skeleton variant="rectangular" height={50} />
-          </Box>
-          <Skeleton variant="rectangular" height={50} />
-        </Grid>
-        <Grid item xs={12} sx={{ mt: 4 }}>
-          <Skeleton variant="rectangular" height={60} />
-          <Skeleton variant="text" sx={{ fontSize: 'body1.fontSize' }}/>
-          <Skeleton variant="rectangular" height={50} />
-          <Skeleton variant="rectangular" height={50} />
-        </Grid>
-      </Grid>
-    </Container>
+    <div className="max-w-screen-lg mx-auto py-12">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="text-center">
+          <Skeleton height={400} width="100%" />
+        </div>
+        <div>
+          <Skeleton height={32} width="100%" className="mb-4" />
+          <Skeleton height={24} width="100%" className="mb-4" />
+          <Skeleton height={20} width="100%" className="mb-4" />
+          <div className="mt-8 border-t border-gray-300 pt-4">
+            <Skeleton height={16} width="100%" className="mb-4" />
+            <Skeleton height={24} width="100%" className="mb-4" />
+            <Skeleton height={50} width="100%" className="mb-4" />
+          </div>
+          <Skeleton height={50} width="100%" className="mb-4" />
+        </div>
+      </div>
+      <div className="mt-8">
+        <Skeleton height={60} width="100%" className="mb-4" />
+        <Skeleton height={20} width="100%" className="mb-4" />
+        <Skeleton height={50} width="100%" className="mb-4" />
+        <Skeleton height={50} width="100%" className="mb-4" />
+      </div>
+    </div>
   );
 };
 

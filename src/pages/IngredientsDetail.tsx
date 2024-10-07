@@ -1,15 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import {
-  Container,
-  Grid,
-  Typography,
-  Button,
-  Box,
-  Tabs,
-  Tab,
-  styled,
-} from "@mui/material";
 import { currencyFormat } from "../utils/number";
 import AddressInput from "../component/AddressInput/AddressInput";
 import DeliveryEstimate from "../component/DeliveryEstimate/DeliveryEstimate";
@@ -21,49 +11,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { Ingredient } from "../types";
 import { setToastMessage } from "../redux/commonUISlice";
-
-const ShoppingTabs = styled(Tabs)({
-  width: "100%",
-  backgroundColor: "rgba(245, 245, 245, 0.85)",
-  marginBottom: "20px",
-});
-
-const StyledTab = styled(Tab)({
-  textTransform: "none",
-  fontWeight: "bold",
-  "&.Mui-selected": {
-    color: "#1976d2",
-  },
-});
-
-const ImageContainer = styled("div")<{ height: number }>(({ height }) => ({
-  height: height,
-  overflow: "hidden",
-  transition: "height 0.5s ease-in-out",
-  position: "relative",
-}));
-
-const StyledImage = styled("img")({
-  maxWidth: "100%",
-  height: "auto",
-  display: "block",
-});
-
-const GradientOverlay = styled("div")<{ show: boolean }>(({ show }) => ({
-  position: "absolute",
-  bottom: 0,
-  left: 0,
-  right: 0,
-  height: show ? "50px" : "0",
-  background: "linear-gradient(to bottom, transparent, white)",
-  transition: "height 0.5s ease-in-out",
-  pointerEvents: "none",
-}));
-
-const MoreButton = styled(Button)({
-  width: "600px",
-  height: "50px",
-});
 
 const preloadImage = (url: string) => {
   const img = new Image();
@@ -78,7 +25,7 @@ const IngredientsDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const { user } = useSelector((state: RootState) => state.auth);
+  const user = useSelector((state: RootState) => state.auth.user);
   const { data: ingredientDataById, isLoading: isLoadingById } = useGetIngredient(id || "");
   const data = ingredientDataById as IngredientDetail | undefined;
   const isLoading = isLoadingById;
@@ -188,128 +135,113 @@ const IngredientsDetail = () => {
   return (
     <>
       {data?._id ? (
-        <Container maxWidth="lg" sx={{ padding: "50px 0" }}>
-          <Grid container spacing={4}>
-            <Grid item lg={6} md={6} xs={12} sx={{ textAlign: "center" }}>
+        <div className="container mx-auto py-12">
+          <div className="grid lg:grid-cols-2 gap-8">
+            <div className="text-center">
               <img
                 src={optimizedImageUrl(data.images[0])}
                 alt={data.name}
-                style={{ maxWidth: "100%", height: "auto", display: "block" }}
+                className="mx-auto max-h-[650px]"
                 fetchPriority="high"
               />
-            </Grid>
-            <Grid item lg={6} md={6} xs={12}>
-              <Typography variant="h4" component="div" gutterBottom>
-                {data.name}
-              </Typography>
-              <Typography variant="h6" component="div">
-                {data.discountPrice && (
-                  <Typography
-                    variant="h6"
-                    component="span"
-                    sx={{ color: "orangered" }}
-                  >
-                    {data.discountPrice}%{" "}
-                  </Typography>
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold mb-4">{data.name}</h1>
+              <div className="text-2xl font-bold text-red-500">
+                {data.discountPrice ? (
+                  <>
+                    {`${data.discountPrice}% `}
+                    {currencyFormat(calculateDiscountedPrice(data.price || 0, data.discountPrice))} 원
+                  </>
+                ) : (
+                  <>
+                    {currencyFormat(data.price || 0)} 원
+                  </>
                 )}
-                {currencyFormat(
-                  calculateDiscountedPrice(data.price || 0, data.discountPrice)
-                )}
-                원
-              </Typography>
-              <Typography variant="body1" component="div" sx={{ mt: 2 }}>
-                {data.description}
-              </Typography>
-              <Box sx={{ mt: 4, borderTop: "1px solid #ddd", pt: 2 }}>
-                <Typography variant="body2" gutterBottom>
-                  배송안내
-                </Typography>
-                <Typography variant="h6">{address}</Typography>
+              </div>
+              <p className="mt-4 text-lg">{data.description}</p>
+              <div className="mt-8 border-t pt-4">
+                <p className="text-gray-600">배송안내</p>
+                <p className="text-xl font-semibold">{address}</p>
                 <AddressInput setAddress={setAddress} />
                 <DeliveryEstimate address={address} />
-              </Box>
-              <Button
-                variant="contained"
-                color="success"
-                sx={{ mt: 1, width: "100%" }}
+              </div>
+              <button
+                className="mt-4 w-full bg-green-700 text-white py-2 px-4 rounded hover:bg-green-600 transition disabled:opacity-50"
                 onClick={addCart}
                 disabled={isAdding}
               >
                 카트에 담기
-              </Button>
-            </Grid>
-            <Grid item xs={12} sx={{ mt: 4 }}>
-              <ShoppingTabs value={value} onChange={handleChange}>
-                <StyledTab label="상세정보" />
-                <StyledTab label="리뷰" />
-              </ShoppingTabs>
-              <Box>
-                <Box ref={detailsRef}>
-                  <ImageContainer height={containerHeight}>
-                    {data.images[1] ? (
-                      <>
-                        <StyledImage
-                          ref={imageRef}
-                          src={optimizedImageUrl(data.images[1])}
-                          alt={data.name}
-                          loading="lazy"
-                        />
-                        <GradientOverlay show={!isExpanded} />
-                      </>
-                    ) : (
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "center",
-                          padding: "30px",
-                        }}
-                      >
-                        <Typography variant="h3" component="div" sx={{ mt: 2 }}>
-                          상세 이미지가 없습니다. 😅
-                        </Typography>
-                      </Box>
+              </button>
+            </div>
+          </div>
+          <div className="mt-8">
+            <div className="flex border-b border-gray-500">
+              <button
+                className={`py-2 px-4 text-lg font-bold transition-colors duration-300 ${value === 0
+                  ? "border-b-2 border-green-700 text-green-700"
+                  : "text-gray-500 hover:text-green-500"
+                  }`}
+                onClick={(e) => handleChange(e, 0)}
+              >
+                상세정보
+              </button>
+              <button
+                className={`py-2 px-4 text-lg font-bold transition-colors duration-300 ${value === 1
+                  ? "border-b-2 border-green-700 text-green-700"
+                  : "text-gray-500 hover:text-green-500"
+                  }`}
+                onClick={(e) => handleChange(e, 1)}
+              >
+                리뷰
+              </button>
+            </div>
+            <div ref={detailsRef} className="mt-8">
+              <div className="overflow-hidden transition-all" style={{ height: containerHeight }}>
+                {data.images[1] ? (
+                  <>
+                    <img
+                      ref={imageRef}
+                      src={optimizedImageUrl(data.images[1])}
+                      alt={data.name}
+                      className="block mx-auto"
+                      loading="lazy"
+                    />
+                    {!isExpanded && (
+                      <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-white to-transparent"></div>
                     )}
-                  </ImageContainer>
-                  <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-                    <MoreButton
-                      variant={isExpanded ? "outlined" : "contained"}
-                      color="success"
-                      onClick={toggleExpand}
-                    >
-                      {isExpanded ? "간략히 보기" : "상품 상세 더보기"}
-                    </MoreButton>
-                  </Box>
-                  <Typography variant="body1" component="div" sx={{ mt: 2 }}>
-                    {data.detail}
-                  </Typography>
-                </Box>
-              </Box>
-              <Box ref={reviewsRef}>
-                <Review type="ingredient" itemId={data._id} />
-              </Box>
-            </Grid>
-          </Grid>
-        </Container>
+                  </>
+                ) : (
+                  <div className="flex justify-center p-8">
+                    <h3 className="text-2xl">상세 이미지가 없습니다. 😅</h3>
+                  </div>
+                )}
+              </div>
+              <div className="flex justify-center mt-4">
+                <button
+                  className={`py-2 px-4 w-full max-w-sm ${isExpanded ? "border" : "bg-green-700 text-white"} rounded`}
+                  onClick={toggleExpand}
+                >
+                  {isExpanded ? "간략히 보기" : "상품 상세 더보기"}
+                </button>
+              </div>
+              <p className="mt-4 text-lg">{data.detail}</p>
+            </div>
+            <div ref={reviewsRef}>
+              <Review type="ingredient" itemId={data._id} />
+            </div>
+          </div>
+        </div>
       ) : (
-        <Container
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            margin: "200px",
-          }}
-        >
-          <Typography variant="h2">
-            해당 상품이 존재하지 않습니다. 😅
-          </Typography>
-          <Button
-            variant="outlined"
+        <div className="container mx-auto my-32 flex flex-col items-center">
+          <h2 className="text-4xl">해당 상품이 존재하지 않습니다. 😅</h2>
+          <button
+            className="mt-8 w-full max-w-xl py-2 px-4 border rounded"
             onClick={goHome}
-            sx={{ width: "700px", my: "20px" }}
           >
             홈으로 이동
-          </Button>
-        </Container>
+          </button>
+        </div>
       )}
     </>
   );

@@ -1,53 +1,7 @@
 import React, { useState, useEffect } from "react";
-import {
-  Box,
-  Button,
-  styled,
-  TextField,
-  Typography,
-} from "@mui/material";
 import ReactStars from "react-rating-stars-component";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
-
-
-const ReviewContainer = styled(Box)({
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "flex-start",
-  flexDirection: "column",
-  gap: 2,
-  padding: "15px",
-  marginBottom: "15px",
-  border: "1px solid #ccc",
-  borderRadius: "5px",
-  backgroundColor: "#f9f9f9",
-});
-
-const RatingStar = styled(Box)({
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  width: "100%",
-});
-
-const TextBox = styled(Box)({
-  display: "flex",
-  flexDirection: "column",
-  width: "100%",
-  marginBottom: "5px"
-});
-
-const CustomTextField = styled(TextField)({
-  "& .MuiOutlinedInput-root": {
-    "&:hover fieldset": {
-      borderColor: "rgba(0, 0, 0, 0.23)",
-    },
-    "&.Mui-focused fieldset": {
-      borderColor: "#f44f08",
-    },
-  },
-});
 
 interface ReviewFormProps {
   initialComment?: string;
@@ -79,7 +33,7 @@ const ReviewForm = ({
     setRating(initialRating);
   }, [initialComment, initialRating]);
 
-  const handleSubmit = (e: React.FormEvent<HTMLDivElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (rating < 1) {
@@ -98,50 +52,51 @@ const ReviewForm = ({
   };
 
   return (
-    <ReviewContainer component="form" onSubmit={handleSubmit}>
-      <Box
-        sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}
-      >
-        <Typography variant="h6">리뷰 작성</Typography>
-        <Box onClick={onClose} sx={{cursor : "pointer"}}>
+    <form 
+      className="flex flex-col items-center justify-start gap-4 p-4 mb-4 border border-gray-300 rounded-lg bg-gray-100"
+      onSubmit={handleSubmit}
+    >
+      <div className="flex justify-between w-full">
+        <h6 className="text-lg">리뷰 작성</h6>
+        <div className="cursor-pointer" onClick={onClose}>
           <FontAwesomeIcon icon={faClose} size="lg" />
-        </Box>
-      </Box>
-      <RatingStar>
-        <Typography variant="body1">평점을 선택해주세요</Typography>
-        <Box sx={{display:"flex", flexDirection: "column"}}>
-        <ReactStars
-          count={5}
-          onChange={handleStarRatingChange}
-          size={24}
-          isHalf={false}
-          activeColor="#f44f08"
-          value={rating}
-        />
-        {starError && (
-          <Typography variant="body2" color="error">
-            별점을 선택해주세요.
-          </Typography>
-        )}
-        </Box>
-      </RatingStar>
-      <TextBox >
-        <CustomTextField
-          variant="outlined"
-          multiline
+        </div>
+      </div>
+      <div className="flex flex-col w-full">
+        <div className="flex justify-between items-center">
+          <span>평점을 선택해주세요</span>
+          <div className="flex flex-col">
+            <ReactStars
+              count={5}
+              onChange={handleStarRatingChange}
+              size={24}
+              isHalf={false}
+              activeColor="#f44f08"
+              value={rating}
+            />
+            {starError && (
+              <span className="text-red-500 text-sm">별점을 선택해주세요.</span>
+            )}
+          </div>
+        </div>
+      </div>
+      <div className="w-full">
+        <textarea
+          className="w-full p-2 border rounded-md outline-none focus:ring focus:border-orange-500 bg-white"
           rows={4}
-          fullWidth
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           required
-          sx={{ backgroundColor: "white" }}
         />
-      </TextBox>
+      </div>
 
-      <Button variant="contained" color="primary" type="submit" sx={{width : "100%"}}>
+      <button
+        className="w-full px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
+        type="submit"
+      >
         등록
-      </Button>
-    </ReviewContainer>
+      </button>
+    </form>
   );
 };
 

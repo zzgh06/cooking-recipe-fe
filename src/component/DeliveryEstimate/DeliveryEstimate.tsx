@@ -24,11 +24,11 @@ const DeliveryEstimate = ({ address }: DeliveryEstimateProps) => {
   ];
 
   let deliveryText = "";
-  let deliveryStyle = {};
+  let textColorClass = "";
 
   if (regionsFast.some((region) => address.includes(region))) {
     deliveryText = "새벽 배송 - 20시까지 주문하면 내일 도착 예정";
-    deliveryStyle = { color: "red" };
+    textColorClass = "text-red-500";
   } else if (regionsRegular.some((region) => address.includes(region))) {
     deliveryText = "일반 배송 - 오늘 출고 예정";
   } else {
@@ -36,17 +36,7 @@ const DeliveryEstimate = ({ address }: DeliveryEstimateProps) => {
   }
   return (
     <div>
-      <p
-        style={{
-          ...deliveryStyle,
-          backgroundColor: "white",
-          border : "1px solid grey",
-          borderRadius : "5px",
-          padding: "10px",
-          marginTop: "10px",
-          fontSize: "x-small",
-        }}
-      >
+      <p className={`bg-white border border-gray-300 rounded-md p-2 mt-2 text-xs ${textColorClass}`}>
         {deliveryText}
       </p>
     </div>
