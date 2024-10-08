@@ -1,5 +1,4 @@
 import React from "react";
-import { Grid, Typography, Box } from "@mui/material";
 import SearchRecipeCard from "../SearchRecipeCard/SearchRecipeCard";
 import { RecipeItem } from "../../types";
 
@@ -9,26 +8,24 @@ interface MyFridgeSearchResultsProps {
 
 const MyFridgeSearchResults = ({ recipeList }: MyFridgeSearchResultsProps) => {
   return (
-    <Box sx={{ padding: 2 }}>
-      <Grid container spacing={2} justifyContent="center">
-        {recipeList?.length === 0 ? (
-          <Box height="300px" textAlign="center" alignContent="center">
-            <Typography variant="body1" fontSize="30px" sx={{ p: 1 }}>
-              추천 레시피가 없습니다.
-            </Typography>
-            <Typography variant="body1" fontSize="17px">
-              당신만의 레시피로 What’s in your fridge를 가득 채워주세요. 👨‍🍳👩‍🍳
-            </Typography>
-          </Box>
-        ) : (
-          recipeList?.map((item) => (
-            <Grid item key={item._id} xs={12} sm={6} md={4}>
+    <div className="p-4">
+      {recipeList?.length === 0 ? (
+        <div className="h-72 flex flex-col justify-center items-center text-center">
+          <p className="text-2xl p-1">추천 레시피가 없습니다.</p>
+          <p className="text-lg">
+            당신만의 레시피로 What’s in your fridge를 가득 채워주세요. 👨‍🍳👩‍🍳
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {recipeList.map((item) => (
+            <div key={item._id} className="w-full">
               <SearchRecipeCard item={item} />
-            </Grid>
-          ))
-        )}
-      </Grid>
-    </Box>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
   );
 };
 

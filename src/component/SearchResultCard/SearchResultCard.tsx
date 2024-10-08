@@ -1,6 +1,5 @@
 import React from 'react';
-import { useAddIngredientToFridge } from '../../hooks/Fridge/useAddIngredientToFridge'; 
-import { Card, CardMedia, CardContent, Typography, Button, Box } from '@mui/material';
+import { useAddIngredientToFridge } from '../../hooks/Fridge/useAddIngredientToFridge';
 import { Ingredient } from '../../types';
 
 interface SearchResultCardProps {
@@ -11,45 +10,30 @@ const SearchResultCard = ({ item }: SearchResultCardProps) => {
   const { mutate: addIngredientToFridge, isPending } = useAddIngredientToFridge();
 
   const handleAddClick = () => {
-    addIngredientToFridge(item._id); 
+    addIngredientToFridge(item._id);
   };
 
   return (
-    <Card
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        width: 350,
-        p: 2,
-        m: 2,
-        boxShadow: 3,
-        '&:hover': { transform: 'translateY(-5px)', boxShadow: 6 },
-        transition: 'transform 0.2s, box-shadow 0.2s',
-      }}
-    >
-      <CardMedia
-        component="img"
-        sx={{ width: 100, height: 100, mr: 2, borderRadius: 1 }}
-        image={item.images[0]}
+    <div className="flex items-center w-[350px] p-4 m-4 shadow-md hover:shadow-lg transition-transform transform hover:-translate-y-1">
+      <img
+        src={item.images[0]}
         alt={item.name}
+        className="w-24 h-24 mr-4 rounded"
       />
-      <Box sx={{ flexGrow: 1 }}>
-        <CardContent sx={{ p: 0 }}>
-          <Typography variant="h6" sx={{ mb: 1, color: 'text.primary' }}>
-            {item.name}
-          </Typography>
-        </CardContent>
-        <Button
-          variant="contained"
-          color="success"
+      <div className="flex-grow">
+        <div className="text-lg font-semibold mb-2 text-gray-900 truncate">
+          {item.name}
+        </div>
+        <button
           onClick={handleAddClick}
-          sx={{ mt: 1, width: '100%' }}
+          className={`mt-2 w-full bg-green-700 text-white py-2 rounded ${isPending ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-600'
+            }`}
           disabled={isPending}
         >
           {isPending ? '추가 중...' : '추가'}
-        </Button>
-      </Box>
-    </Card>
+        </button>
+      </div>
+    </div>
   );
 };
 
