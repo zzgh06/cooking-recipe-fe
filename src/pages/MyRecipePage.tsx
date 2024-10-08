@@ -1,7 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import RecipeForm from "../component/RecipeForm/RecipeForm";
-import { Container } from "@mui/material";
 import { useCreateRecipe } from "../hooks/Recipe/useCreateRecipe";
 import { RootState } from "../redux/store";
 import { Recipe } from "../types";
@@ -24,10 +23,10 @@ const MyRecipePage = () => {
   }
 
   return (
-    <Container sx={{ maxWidth: "1200px", marginTop: "50px" }}>
-      <h1>레시피 등록</h1>
+    <div className="max-w-7xl mx-auto mt-12">
+      <h1 className="text-3xl text-center font-bold mb-4">레시피 등록</h1>
       <RecipeForm onSubmit={handleSubmit} />
-    </Container>
+    </div>
   );
 };
 
