@@ -1,16 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import {
-  Container,
-  Typography,
-  TextField,
-  Button,
-  Box,
-  Alert,
-} from "@mui/material";
 import { useRegisterUser } from "../hooks/User/useRegisterUser";
-import { useSelector } from "react-redux";
-import { RootState } from "../redux/store";
 
 interface FormData {
   id: string;
@@ -42,7 +32,7 @@ const RegisterPage = () => {
     const { id, password, confirmPassword, name, email, contact, shipTo } = formData;
 
     if (password !== confirmPassword) {
-      setPasswordError('Passwords do not match');
+      setPasswordError('비밀번호가 일치하지 않습니다.');
       return;
     } else {
       setPasswordError('');
@@ -67,95 +57,83 @@ const RegisterPage = () => {
   const errorMessage = error?.error
 
   return (
-    <Container maxWidth="sm" sx={{ mt: 4, mb: 4 }}>
-      <Typography variant="h4" gutterBottom align="center">
-        회원가입
-      </Typography>
-      <Box
-        component="form"
-        onSubmit={handleRegister}
-        sx={{ display: "flex", flexDirection: "column", gap: 2 }}
-      >
-        <TextField
+    <div className="max-w-lg mx-auto mt-10 mb-10 p-6">
+      <h1 className="text-3xl font-semibold text-center mb-6">회원가입</h1>
+      <form onSubmit={handleRegister} className="flex flex-col gap-4">
+        <input
           id="id"
-          label="아이디"
+          type="text"
           placeholder="아이디를 입력해 주세요"
-          variant="outlined"
+          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           required
           onChange={handleChange}
         />
-        <TextField
+        <input
           id="password"
-          label="비밀번호"
+          type="password"
           placeholder="비밀번호를 입력해 주세요"
-          variant="outlined"
-          type="password"
+          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           required
           onChange={handleChange}
         />
-        <TextField
+        <input
           id="confirmPassword"
-          label="비밀번호 확인"
-          placeholder="비밀번호를 한 번 더 입력해 주세요"
-          variant="outlined"
           type="password"
+          placeholder="비밀번호를 한 번 더 입력해 주세요"
+          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           required
           onChange={handleChange}
         />
-        <TextField
+        <input
           id="email"
-          label="이메일"
-          placeholder="예: fridge@naver.com"
-          variant="outlined"
           type="email"
+          placeholder="예: fridge@naver.com"
+          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           required
           onChange={handleChange}
         />
-        <TextField
+        <input
           id="name"
-          label="이름"
+          type="text"
           placeholder="이름을 입력해 주세요"
-          variant="outlined"
+          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           required
           onChange={handleChange}
         />
-        <TextField
+        <input
           id="contact"
-          label="휴대폰"
-          placeholder="숫자만 입력해 주세요"
-          variant="outlined"
           type="tel"
+          placeholder="숫자만 입력해 주세요"
+          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           required
           onChange={handleChange}
         />
-        <TextField
+        <input
           id="shipTo"
-          label="주소"
+          type="text"
           placeholder="주소를 입력해 주세요"
-          variant="outlined"
+          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           required
           onChange={handleChange}
         />
         {passwordError && (
-          <Alert severity="error" sx={{ mt: 1 }}>
+          <div className="mt-2 text-red-600">
             {passwordError}
-          </Alert>
+          </div>
         )}
         {error && (
-          <Alert severity="error" sx={{ mt: 1 }}>
+          <div className="mt-2 text-red-600">
             {errorMessage}
-          </Alert>
+          </div>
         )}
-        <Button
+        <button
           type="submit"
-          variant="contained"
-          color="primary"
-          sx={{ mt: 2 }}
+          className="mt-4 bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           회원가입
-        </Button>
-      </Box>
-    </Container>
+        </button>
+      </form>
+    </div>
   );
 };
 
