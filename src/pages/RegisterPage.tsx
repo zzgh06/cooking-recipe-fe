@@ -57,7 +57,7 @@ const RegisterPage = () => {
   const errorMessage = error?.error
 
   return (
-    <div className="max-w-lg mx-auto mt-10 mb-10 p-6">
+    <div className="max-w-lg mx-auto mt-12 mb-10 p-6">
       <h1 className="text-3xl font-semibold text-center mb-6">회원가입</h1>
       <form onSubmit={handleRegister} className="flex flex-col gap-4">
         <input

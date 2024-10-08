@@ -129,7 +129,7 @@ const RecipeForm = ({ onSubmit, initialData }: RecipeFormProps) => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    
+
     const {
       _id,
       name,
@@ -146,7 +146,7 @@ const RecipeForm = ({ onSubmit, initialData }: RecipeFormProps) => {
       ingredients,
       steps,
     } = formData;
-  
+
     const recipeData: Recipe = {
       _id: _id || "",
       name,
@@ -160,7 +160,7 @@ const RecipeForm = ({ onSubmit, initialData }: RecipeFormProps) => {
       servings,
       time,
       difficulty,
-      ingredients, 
+      ingredients,
       steps,
       categories: {
         food: foodCategory,
@@ -170,12 +170,12 @@ const RecipeForm = ({ onSubmit, initialData }: RecipeFormProps) => {
         etc: etcCategory,
       },
     };
-  
+
     onSubmit(recipeData);
     setShowSubmitModal(true);
   };
-  
-  
+
+
 
   const handleCloseModal = () => {
     setShowSubmitModal(false);
@@ -236,8 +236,8 @@ const RecipeForm = ({ onSubmit, initialData }: RecipeFormProps) => {
         )}
       </div>
       <div className="flex justify-start items-baseline border-b-4 border-black p-2.5 mb-4">
-          <h2 className="text-2xl font-bold">요리 정보</h2>
-        </div>
+        <h2 className="text-2xl font-bold">요리 정보</h2>
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {[
           { label: "음식 종류", options: foodCategory, value: formData.foodCategory, field: "foodCategory" },
@@ -291,10 +291,11 @@ const RecipeForm = ({ onSubmit, initialData }: RecipeFormProps) => {
             <div className="sm:col-span-2">
               <button
                 type="button"
-                className="w-full h-12 mt-4 text-red-500 hover:text-red-700"
+                className="w-full h-12 mt-4 bg-red-500 text-white font-semibold rounded-md shadow-md hover:bg-red-600 transition duration-200 ease-in-out flex items-center justify-center"
                 onClick={() => handleDeleteIngredient(index)}
               >
-                <FontAwesomeIcon icon={faTrash} />
+                <FontAwesomeIcon icon={faTrash} className="mr-2" />
+                삭제
               </button>
             </div>
           </div>
@@ -332,10 +333,11 @@ const RecipeForm = ({ onSubmit, initialData }: RecipeFormProps) => {
                 />
                 <button
                   type="button"
-                  className="p-2 text-red-500 hover:text-red-700"
-                  onClick={() => handleDeleteStep(index)}
+                  className="w-[250px] h-auto py-2 bg-red-500 text-white font-semibold rounded-md shadow-md hover:bg-red-600 transition duration-200 ease-in-out flex items-center justify-center"
+                  onClick={() => handleDeleteIngredient(index)}
                 >
-                  <FontAwesomeIcon icon={faTrash} />
+                  <FontAwesomeIcon icon={faTrash} className="mr-2" />
+                  삭제
                 </button>
               </div>
               {step.image && (

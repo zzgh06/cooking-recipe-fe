@@ -1,51 +1,37 @@
-import { Box, Container, styled } from '@mui/material';
-import React from 'react'
-
-const SkeletonBox = styled(Box)({
-  backgroundColor: "#e0e0e0",
-  borderRadius: "4px",
-  marginBottom: "20px",
-});
-
-const SkeletonText = styled(Box)({
-  height: "20px",
-  backgroundColor: "#e0e0e0",
-  borderRadius: "4px",
-  marginBottom: "10px",
-});
-
-const SkeletonImage = styled(Box)({
-  width: "100%",
-  height: "500px",
-  backgroundColor: "#e0e0e0",
-  borderRadius: "8px",
-  marginBottom: "20px",
-});
-
+import React from 'react';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const RecipeDetailSkeleton = () => {
   return (
-    <Container maxWidth="md" sx={{ marginTop: "80px" }}>
-        <SkeletonImage />
-        <SkeletonBox>
-          <SkeletonText sx={{ width: "40%" }} />
-          <SkeletonText sx={{ width: "60%" }} />
-        </SkeletonBox>
-        <SkeletonBox>
-          <SkeletonText sx={{ width: "30%" }} />
-          <SkeletonText sx={{ width: "50%" }} />
-          <SkeletonText sx={{ width: "40%" }} />
-        </SkeletonBox>
-        <SkeletonBox>
-          <SkeletonText sx={{ width: "70%" }} />
-          <SkeletonText sx={{ width: "50%" }} />
-        </SkeletonBox>
-        <SkeletonBox>
-          <SkeletonText sx={{ width: "60%" }} />
-          <SkeletonText sx={{ width: "80%" }} />
-        </SkeletonBox>
-      </Container>
-  )
-}
+    <div className="max-w-3xl mx-auto mt-20 px-4">
+      <div className="mb-8">
+        <Skeleton height={500} className="rounded-lg" />
+      </div>
 
-export default RecipeDetailSkeleton
+      <div className="mb-8">
+        <Skeleton width="40%" height={30} className="mb-2" />
+        <Skeleton width="60%" height={40} />
+      </div>
+
+      <div className="mb-8">
+        <Skeleton width="100%" height={50} className="mb-2" />
+        <Skeleton width="100%" height={50} className="mb-2" />
+        <Skeleton width="100%" height={50} />
+      </div>
+
+      <div className="mb-8">
+        <Skeleton width="100%" height={80} className="mb-2" />
+        <Skeleton width="100%" height={80} className="mb-2" />
+        <Skeleton width="100%" height={80} />
+      </div>
+
+      <div className="mb-8">
+        <Skeleton width="100%" height={100} className="mb-2" />
+        <Skeleton width="100%" height={100} />
+      </div>
+    </div>
+  );
+};
+
+export default RecipeDetailSkeleton;

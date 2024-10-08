@@ -1,76 +1,66 @@
-import { Box, Button, styled } from '@mui/material';
-import React from 'react'
-import { etcCategory } from '../../constants/recipe.constants';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-const RecipeCategoryBar = styled(Box)(({ theme }) => ({
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  position: "fixed",
-  top: "93.5px",
-  width: "100%",
-  height : "auto",
-  padding: "10px 100px",
-  borderTop: "2px solid green",
-  borderBottom: "2px solid green",
-  backgroundColor: "white",
-  zIndex: 999,
-  [theme.breakpoints.down("md")]: {
-    top: "96.5px",
-    padding: "0 10px",
-  },
-}));
-
-const RecipeBtn = styled(Box)({
-  display: "flex",
-  gap: "20px",
-  flexWrap: "wrap",
-  justifyContent: "flex-start",
-});
-
-const RecipeLink = styled(Button)(({ theme }) => ({
-  fontWeight: 600,
-  textDecoration: "none",
-  color: "black",
-  padding: "5px 10px",
-  transition: "all 0.3s ease",
-  "&:hover": {
-    backgroundColor: "lightgrey",
-  },
-  width:"10%",
-  [theme.breakpoints.down("md")]: {
-    textAlign: "center",
-    width: "15%", 
-  },
-}));
+import { etcCategory } from '../../constants/recipe.constants';
 
 const RecipeCategory = () => {
   const navigate = useNavigate();
-  return (
-    <RecipeCategoryBar>
-        <RecipeBtn>
-          <RecipeLink onClick={() => navigate(`/recipes/all`)} sx={{minWidth : "125px"}}>
-            전체 레시피
-          </RecipeLink>
-          <RecipeLink onClick={() => navigate(`/recipes/best`)} sx={{minWidth : "125px"}}>
-            베스트 레시피
-          </RecipeLink>
-          <RecipeLink onClick={() => navigate(`/recipes/new`)} sx={{minWidth : "125px"}}>
-            최신 레시피
-          </RecipeLink>
-          {etcCategory.map((category) => (
-            <RecipeLink
-              key={category}
-              onClick={() => navigate(`/recipes/${category}`)}
-              sx={{width : "80px"}}
-            >
-              {category}
-            </RecipeLink>
-          ))}
-        </RecipeBtn>
-      </RecipeCategoryBar>
-  )
-}
+  const [activeCategory, setActiveCategory] = useState('all');
 
-export default RecipeCategory
+  const handleCategoryClick = (category: string) => {
+    setActiveCategory(category);
+    navigate(`/recipes/${category}`);
+  };
+
+  return (
+    <div className="fixed top-[131px] w-full z-30">
+      <div className="absolute inset-0 bg-gradient-to-b from-emerald-50/80 to-white/90 backdrop-blur-lg border-t border-b border-emerald-100" />
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="flex flex-col gap-4">
+          <div className="flex justify-center gap-2">
+            {[
+              { id: 'all', name: '전체 레시피' },
+              { id: 'best', name: '베스트 레시피' },
+              { id: 'new', name: '최신 레시피' }
+            ].map((item) => (
+              <button
+                key={item.id}
+                onClick={() => handleCategoryClick(item.id)}
+                className={`
+                  px-6 py-2.5 rounded-full font-medium text-sm
+                  transition-all duration-300 transform hover:scale-105
+                  ${activeCategory === item.id
+                    ? 'bg-gradient-to-r from-emerald-500 to-green-400 text-white shadow-lg hover:shadow-emerald-500/25'
+                    : 'bg-white/50 text-gray-700 hover:bg-emerald-50/80 hover:text-emerald-700 border border-emerald-100'
+                  }
+                `}
+              >
+                {item.name}
+              </button>
+            ))}
+          </div>
+          <div className="flex flex-wrap justify-center gap-2">
+            {etcCategory.map((category) => (
+              <button
+                key={category}
+                onClick={() => handleCategoryClick(category)}
+                className={`
+                  px-4 py-1.5 rounded-full text-sm font-medium
+                  transition-all duration-300 transform hover:scale-105
+                  ${activeCategory === category
+                    ? 'bg-gradient-to-r from-green-500 to-emerald-400 text-white shadow-md hover:shadow-green-500/25'
+                    : 'bg-white/50 text-gray-600 hover:bg-emerald-50/80 hover:text-emerald-600 border border-emerald-100'
+                  }
+                `}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className="absolute inset-x-0 bottom-0 h-4 bg-gradient-to-b from-emerald-50/10 to-transparent" />
+    </div>
+  );
+};
+
+export default RecipeCategory;

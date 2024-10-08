@@ -121,7 +121,7 @@ const MyFridge = () => {
   }
 
   return (
-    <div className="py-[50px] sm:px-[10px] md:px-[30px] lg:px-[150px] xl:px-[200px]">
+    <div className="py-[80px] sm:px-[20px] md:px-[30px] lg:px-[150px] xl:px-[200px]">
       <div className="text-center mb-5">
         <h1 className="text-4xl font-bold mb-2">My 냉장고</h1>
         <p className="text-lg">나만의 냉장고에 재료를 추가하고 최적의 레시피를 추천해드려요</p>
@@ -136,7 +136,7 @@ const MyFridge = () => {
             </p>
           ) : (
             <>
-              <div className="grid sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 mb-5">
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 mb-5">
                 {fridgeData?.map((item: FridgeItem) => (
                   <div key={item.ingredientId._id} className="flex">
                     <FridgeItemCard
@@ -197,7 +197,7 @@ const MyFridge = () => {
           )}
 
           {open && (
-            <div className="fixed inset-0 top-[60px] flex items-center justify-center z-50 bg-black bg-opacity-50"> {/* 어두운 배경 추가 */}
+            <div className="fixed top-0 inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
               <div className="bg-white rounded-lg shadow-lg max-w-[800px] w-full p-6 max-h-[80vh] overflow-y-auto">
                 <div className="border-b pb-4 mb-4">
                   <h4 className="text-center text-3xl font-bold">추천 레시피</h4>

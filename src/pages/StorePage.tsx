@@ -1,7 +1,6 @@
 import React, { useEffect, useState, Suspense, lazy, startTransition } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useFetchIngredients } from "../hooks/Ingredient/useFetchIngredients";
-import { Box, CircularProgress, Skeleton, styled } from "@mui/material";
 import { CircleRounded } from "@mui/icons-material";
 import BannerComponent from "../component/Banner/BannerComponent";
 import IngredientSlider from "../component/IngredientSlider/IngredientSlider";
@@ -17,13 +16,6 @@ const IngredientThemeCard = lazy(() =>
 const IngredientAll = lazy(() =>
   import("../component/IngredientAll/IngredientAll")
 );
-
-const BannerSkeleton = styled(Box)(({ theme }) => ({
-  width: "100%",
-  height: "300px",
-  backgroundColor: theme.palette.grey[200],
-}));
-
 
 interface RecentlyViewedIngredient {
   id: string;
@@ -65,23 +57,18 @@ const StorePage = () => {
 
   return (
     <div>
-      <Suspense fallback={<BannerSkeleton />}>
-        <BannerComponent images={images} />
-      </Suspense>
+      <BannerComponent images={images} />
       <IngredientSlider
         title={"베스트 상품"}
         ingredients={bestIngredients?.slice(0, 8) || []}
         loading={isLoading}
       />
-
       <SubBanner img={require("../assets/img/banner3.jpg")} />
-
       <IngredientSlider
         title={"신상품"}
         ingredients={newIngredients?.slice(0, 8) || []}
         loading={isLoading}
       />
-
       <Suspense fallback={<CircleRounded />}>
         <IngredientThemeCard
           ingredients={topDiscountedIngredients || []}

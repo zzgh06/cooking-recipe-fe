@@ -41,7 +41,7 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
       ) : (
         <>
           <Navbar />
-          <Box component="main" sx={{ paddingTop: "80px" }}>
+          <Box component="main" sx={{ paddingTop: "120px" }}>
             {children}
           </Box>
           <Footer />
