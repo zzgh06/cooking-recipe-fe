@@ -3,7 +3,6 @@ import { useNavigate } from "react-router";
 import { useLoginWithKakao } from "../../hooks/User/useLoginWithKakao";
 import { faComment } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button } from "@mui/material";
 
 declare global {
   interface Window {
@@ -41,14 +40,13 @@ const KakaoLogin = () => {
   };
 
   return (
-    <Button
-      variant="outlined"
-      color="warning"
+    <button
       onClick={handleKakaoLogin}
-      startIcon={<FontAwesomeIcon icon={faComment} />}
+      className="flex items-center px-3 py-2 border border-yellow-400 text-yellow-500 rounded-md hover:bg-yellow-400 hover:text-white transition duration-300"
     >
+      <FontAwesomeIcon icon={faComment} className="mr-2" />
       카카오 로그인
-    </Button>
+    </button>
   );
 };
 
