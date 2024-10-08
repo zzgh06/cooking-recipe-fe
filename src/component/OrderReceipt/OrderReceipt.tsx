@@ -1,7 +1,6 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { currencyFormat } from "../../utils/number";
-import { Box, Typography, Button } from "@mui/material";
 
 interface CartItem {
   ingredientId: {
@@ -21,92 +20,47 @@ const OrderReceipt = ({ selectedCartItems, totalPrice }: OrderReceiptProps) => {
   const navigate = useNavigate();
 
   return (
-    <Box
-      sx={{
-        p: 3,
-        border: "1px solid",
-        borderColor: "grey.300",
-        borderRadius: 1,
-        boxShadow: 1,
-        width: "100%",
-        maxWidth: 800,
-        mx: "auto",
-      }}
-    >
-      <Typography variant="h6" gutterBottom>
-        주문 내역
-      </Typography>
-      <Box
-        sx={{
-          mb: 2,
-          borderColor: "grey.300",
-          pb: 2,
-        }}
-      >
+    <div className="p-6 border border-gray-300 rounded-lg shadow w-full max-w-[450px] mx-auto">
+      <h2 className="text-lg font-semibold mb-4">주문 내역</h2>
+      <div className="mb-4 pb-4">
         {selectedCartItems?.length > 0 ? (
           selectedCartItems.map((item, index) => (
-            <Box
+            <div
               key={item?.ingredientId?.name + index}
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                py: 1,
-              }}
+              className="flex justify-between py-2"
             >
-              <Typography variant="body1">
-                {item?.ingredientId?.name} x {item?.qty}
-              </Typography>
-              <Typography variant="body1">
-                ₩ {currencyFormat((item?.ingredientId?.price ?? 0) * item?.qty)}
-              </Typography>
-            </Box>
+              <p>{item?.ingredientId?.name} x {item?.qty}</p>
+              <p>₩ {currencyFormat((item?.ingredientId?.price ?? 0) * item?.qty)}</p>
+            </div>
           ))
         ) : (
-          <Typography variant="body2" color="textSecondary">
-            장바구니에 항목이 없습니다.
-          </Typography>
+          <p className="text-sm text-gray-500">장바구니에 항목이 없습니다.</p>
         )}
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          pt: 2,
-          borderTop: "1px solid",
-          borderColor: "grey.300",
-          mt: 2,
-        }}
-      >
-        <Typography variant="body1" fontWeight="bold">
-          Total:
-        </Typography>
-        <Typography variant="body1" fontWeight="bold">
-          ₩ {currencyFormat(totalPrice)}
-        </Typography>
-      </Box>
+      </div>
+      <div className="flex justify-between pt-4 border-t mt-4">
+        <p className="font-bold">Total:</p>
+        <p className="font-bold">₩ {currencyFormat(totalPrice)}</p>
+      </div>
       {location.pathname.includes("/cart") && selectedCartItems?.length > 0 && (
-        <Button
-          variant="contained"
-          color="success"
+        <button
+          className="w-full bg-green-700 text-white py-2 rounded mt-4 hover:bg-green-700 disabled:opacity-50"
           onClick={() => navigate("/payment")}
           disabled={selectedCartItems?.length === 0}
-          fullWidth
-          sx={{ mt: 2 }}
         >
           결제하기
-        </Button>
+        </button>
       )}
-      <Box sx={{ mt: 2, typography: "body2", color: "textSecondary" }}>
-        <Typography>
+      <div className="mt-4 text-sm text-gray-500">
+        <p>
           가능한 결제 수단 귀하가 결제 단계에 도달할 때까지 가격 및 배송료는
           확인되지 않습니다.
-        </Typography>
-        <Typography>
+        </p>
+        <p>
           30일의 반품 가능 기간, 반품 수수료 및 미수취시 발생하는 추가 배송 요금
           읽어보기 반품 및 환불
-        </Typography>
-      </Box>
-    </Box>
+        </p>
+      </div>
+    </div>
   );
 };
 

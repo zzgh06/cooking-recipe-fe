@@ -1,86 +1,69 @@
 import React from "react";
-import { Container, Grid, Typography, Box, Skeleton } from "@mui/material";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const CartItemSkeleton = () => (
-  <Box sx={{ display: 'flex', mb: 2, p: 2, alignItems: 'center', border: "1px solid lightgrey", borderRadius: 1 }}>
-    <Box sx={{ display: 'flex', alignItems: 'center', flex: '1 0 auto', gap: 2 }}>
-      <Skeleton variant="circular" width={24} height={24} />
-      <Skeleton variant="rectangular" width={100} height={100} sx={{ borderRadius: 1 }} />
-      <Box sx={{ flex: '1 0 auto' }}>
-        <Skeleton variant="text" width="60%" height={32} /> {/* Name */}
-        <Skeleton variant="text" width="30%" height={20} /> {/* Unit */}
-        <Skeleton variant="text" width="40%" height={32} /> {/* Price */}
-      </Box>
-    </Box>
-
-    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1, ml: 2 }}>
-      <Skeleton variant="text" width={60} height={20} />
-      <Skeleton variant="rectangular" width={60} height={40} sx={{ borderRadius: 1 }} />
-    </Box>
-
-    <Skeleton variant="circular" width={40} height={40} sx={{ ml: 2 }} />
-  </Box>
+  <div className="flex mb-4 p-4 items-center border border-gray-300 rounded">
+    <div className="flex items-center flex-1 gap-4">
+      <Skeleton circle width={24} height={24} />
+      <Skeleton width={100} height={100} className="rounded" />
+      <div className="flex-1">
+        <Skeleton width="60%" height={32} /> 
+        <Skeleton width="30%" height={20} /> 
+        <Skeleton width="40%" height={32} />
+      </div>
+    </div>
+    <div className="flex flex-col items-center gap-2 ml-4">
+      <Skeleton width={60} height={20} />
+      <Skeleton width={60} height={40} className="rounded" />
+    </div>
+    <Skeleton circle width={40} height={40} className="ml-4" />
+  </div>
 );
 
 const OrderReceiptSkeleton = () => (
-  <Box sx={{
-    p: 3,
-    border: "1px solid",
-    borderColor: "grey.300",
-    borderRadius: 1,
-    boxShadow: 1,
-    width: "100%",
-    maxWidth: 800,
-    mx: "auto"
-  }}>
-    <Skeleton variant="text" width="30%" height={32} sx={{ mb: 2 }} /> {/* Title */}
+  <div className="p-4 border border-gray-300 rounded shadow w-full max-w-[400px] mx-auto">
+    <Skeleton width="30%" height={32} className="mb-4" /> 
 
     {[...Array(3)].map((_, index) => (
-      <Box key={index} sx={{ display: "flex", justifyContent: "space-between", py: 1 }}>
-        <Skeleton variant="text" width="60%" height={24} />
-        <Skeleton variant="text" width="20%" height={24} />
-      </Box>
+      <div key={index} className="flex justify-between py-2">
+        <Skeleton width="60%" height={24} />
+        <Skeleton width="20%" height={24} />
+      </div>
     ))}
 
-    <Box sx={{
-      display: "flex",
-      justifyContent: "space-between",
-      pt: 2,
-      borderTop: "1px solid",
-      borderColor: "grey.300",
-      mt: 2,
-    }}>
-      <Skeleton variant="text" width="20%" height={24} />
-      <Skeleton variant="text" width="30%" height={24} />
-    </Box>
+    <div className="flex justify-between pt-4 border-t border-gray-300 mt-4">
+      <Skeleton width="20%" height={24} />
+      <Skeleton width="30%" height={24} />
+    </div>
 
-    <Skeleton variant="rectangular" width="100%" height={48} sx={{ mt: 2, borderRadius: 1 }} />
+    <Skeleton width="100%" height={48} className="mt-4 rounded" />
 
-    <Box sx={{ mt: 2 }}>
-      <Skeleton variant="text" width="100%" height={20} />
-      <Skeleton variant="text" width="90%" height={20} />
-      <Skeleton variant="text" width="95%" height={20} />
-    </Box>
-  </Box>
+    <div className="mt-4">
+      <Skeleton width="100%" height={20} />
+      <Skeleton width="90%" height={20} />
+      <Skeleton width="95%" height={20} />
+    </div>
+  </div>
 );
 
 const CartPageSkeleton = () => {
   return (
-    <Container sx={{ mb: 4 }}>
-      <Box sx={{ textAlign: "center", margin: "30px 0" }}>
-        <Skeleton variant="text" width="200px" height={40} sx={{ margin: "0 auto" }} />
-      </Box>
-      <Grid container spacing={2} justifyContent="center">
-        <Grid item xs={12} md={7}>
+    <div className="mb-8 xs:px-[20px] md:px-[50px] lg:px-[200px]">
+      <div className="text-center my-7">
+        <Skeleton width={200} height={40} />
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-1 justify-center">
+        <div className="col-span-3">
           {[...Array(3)].map((_, index) => (
             <CartItemSkeleton key={index} />
           ))}
-        </Grid>
-        <Grid item xs={12} md={5}>
+        </div>
+        <div className="col-span-2">
           <OrderReceiptSkeleton />
-        </Grid>
-      </Grid>
-    </Container>
+        </div>
+      </div>
+    </div>
   );
 };
 
