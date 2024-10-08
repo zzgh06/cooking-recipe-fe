@@ -1,5 +1,4 @@
 import React from "react";
-import { Box, Card, CardActions, CardContent, CardMedia, IconButton, Typography } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircle as faCircleRegular, faTrashAlt } from "@fortawesome/free-regular-svg-icons";
 import { faCheckCircle as faCheckCircleSolid } from "@fortawesome/free-solid-svg-icons";
@@ -27,29 +26,26 @@ const FridgeItemCard = ({ item, id, isChecked, onCheckboxChange }: FridgeItemCar
   };
 
   return (
-    <Card sx={{ width: 120, height: 150, margin: 1, position: 'relative', transition: 'transform 0.2s', '&:hover': { transform: 'scale(1.05)' } }}>
-      <CardActions sx={{ position: 'absolute', top: -3, left: -2, zIndex: 1 }}>
-        <IconButton onClick={onCheckboxChange} size="small">
+    <div className="relative min-w-[90px] w-[120px] h-[150px] m-2 transition-transform transform hover:scale-105 bg-white shadow-md rounded-lg flex flex-col items-center justify-end">
+      <div className="absolute top-4 left-3 z-10">
+        <button onClick={onCheckboxChange} className="text-gray-600">
           <FontAwesomeIcon icon={isChecked ? faCheckCircleSolid : faCircleRegular} />
-        </IconButton>
-      </CardActions>
-      <Box sx={{ position: 'absolute', top: 5, right: 6, zIndex: 1 }}>
-        <IconButton onClick={handleDelete} size="small" color="warning">
+        </button>
+      </div>
+      <div className="absolute top-4 right-3 z-10">
+        <button onClick={handleDelete} className="text-red-500">
           <FontAwesomeIcon icon={faTrashAlt} />
-        </IconButton>
-      </Box>
-      <CardMedia
-        component="img"
-        image={optimizeImageUrl(item.images[0])}
+        </button>
+      </div>
+      <img
+        src={optimizeImageUrl(item.images[0])}
         alt={item.name}
-        sx={{ width: 80, height: 80, objectFit: 'cover', borderRadius: '50%', margin: 'auto', marginTop: 3 }}
+        className="w-20 h-20 object-cover rounded-full"
       />
-      <CardContent sx={{ padding: '8px', textAlign: 'center' }}>
-        <Typography variant="body2" fontWeight="bold" noWrap>
-          {item.name}
-        </Typography>
-      </CardContent>
-    </Card>
+      <div className="text-center p-2 w-full">
+        <p className="text-sm font-bold truncate w-full">{item.name}</p>
+      </div>
+    </div>
   );
 };
 

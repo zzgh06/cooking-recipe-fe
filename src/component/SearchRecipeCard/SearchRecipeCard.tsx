@@ -1,39 +1,32 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardMedia, Typography, Box, Button } from "@mui/material";
 import { RecipeItem } from '../../types';
 
-interface SearchRecipeCardProps {
-  item: RecipeItem;
-}
-
-const SearchRecipeCard = ({ item }: SearchRecipeCardProps) => {
+const SearchRecipeCard = ({ item }: { item: RecipeItem }) => {
   const navigate = useNavigate();
   const showRecipe = (id: string) => {
     navigate(`/recipe/${id}`);
   };
   return (
-    <Card sx={{ maxWidth: 345, margin: 2, border: "1px solid lightgrey" }}>
-      <CardMedia
-        component="img"
-        height="140"
-        image={item.images[0]}
+    <div className="max-w-xs m-2 border border-light-gray rounded-lg shadow-md overflow-hidden flex flex-col h-[360px]">
+      <img
+        className="w-full h-36 object-cover"
+        src={item.images[0]}
         alt={item.title}
       />
-      <CardContent>
-        <Typography gutterBottom variant="h6" component="div" fontWeight="600">
-          {item.name}
-        </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{marginBottom: "10px"}}>
+      <div className="p-4 flex-1 flex flex-col justify-between">
+        <h2 className="text-lg font-semibold mb-2 line-clamp-1">{item.name}</h2>
+        <p className="text-gray-600 line-clamp-4">
           {item.description}
-        </Typography>
-        <Box>
-          <Button variant='outlined' size="medium" color="primary" onClick={()=>{showRecipe(item._id)}}>
-            상세 보기
-          </Button>
-        </Box>
-      </CardContent>
-    </Card>
+        </p>
+        <button
+          className="w-full border border-blue-500 text-blue-500 rounded-md px-4 py-2 hover:bg-blue-500 hover:text-white transition duration-200 mt-2 self-end"
+          onClick={() => { showRecipe(item._id); }}
+        >
+          상세 보기
+        </button>
+      </div>
+    </div>
   );
 };
 

@@ -1,16 +1,5 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import {
-  Card,
-  CardMedia,
-  Typography,
-  Select,
-  MenuItem,
-  IconButton,
-  Checkbox,
-  Box,
-  SelectChangeEvent
-} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useDeleteCartItem } from "../../hooks/Cart/useDeleteCartItem";
 import { useEditCartItem } from "../../hooks/Cart/useEditCartItem";
@@ -25,14 +14,14 @@ interface CartItemProps {
     unit?: string;
     images: string[];
     _id: string;
-  }  
+  }
   qty: number;
   selectedItems: string[];
 }
 
-const CartItem= ({ item, qty, selectedItems }: CartItemProps) => {
+const CartItem = ({ item, qty, selectedItems }: CartItemProps) => {
   const dispatch = useDispatch<AppDispatch>();
-  
+
   const isSelected = item._id ? selectedItems.includes(item._id) : false;
   const { mutate: deleteItem, isPending: isDeleting } = useDeleteCartItem();
   const { mutate: editCartItem } = useEditCartItem();
@@ -42,14 +31,14 @@ const CartItem= ({ item, qty, selectedItems }: CartItemProps) => {
       dispatch(toggleSelectItem(item._id));
     }
   };
-  
-  const handleQtyChange = (event: SelectChangeEvent<number>) => {
-    const value = Number(event.target.value); 
-    if (!isNaN(value) && item._id) { 
+
+  const handleQtyChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = Number(event.target.value);
+    if (!isNaN(value) && item._id) {
       editCartItem({ ingredientId: item._id, qty: value });
     }
   };
-  
+
   const handleDelete = () => {
     if (item._id) {
       deleteItem({ ingredientId: item._id });
@@ -62,57 +51,48 @@ const CartItem= ({ item, qty, selectedItems }: CartItemProps) => {
   const quantityOptions: number[] = Array.from(Array(10).keys()).map(n => n + 1);
 
   return (
-    <Card sx={{ display: 'flex', mb: 2, p: 2, alignItems: 'center', border: "1px solid lightgrey", boxShadow: "none" }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', flex: '1 0 auto', gap: 2 }}>
-        <Checkbox
+    <div className="flex mb-2 px-[12px] py-[15px] border border-light-gray shadow-none rounded">
+      <div className="flex items-center flex-1 gap-4">
+        <input
+          type="checkbox"
           checked={isSelected}
           onChange={handleSelectChange}
-          color="success"
+          className="w-5 h-5 accent-green-600 text-[15px] cursor-pointer"
         />
-        <CardMedia
-          component="img"
-          sx={{ width: 100, height: 100, objectFit: 'cover', borderRadius: 1 }}
-          image={item.images.length > 0 ? optimizedImageUrl(item.images[0]) : "path/to/default/image.jpg"}
+        <img
+          src={item.images.length > 0 ? optimizedImageUrl(item.images[0]) : "path/to/default/image.jpg"}
           alt={item.name}
+          className="w-24 h-24 object-cover rounded"
         />
-        <Box sx={{ flex: '1 0 auto' }}>
-          <Typography variant="h6" component="div">
-            {item.name}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {item.unit}
-          </Typography>
-          <Typography variant="h6" component="div" sx={{ mt: 1 }}>
-            ₩ {currencyFormat((item.price || 0) * qty)}
-          </Typography>
-        </Box>
-      </Box>
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1, ml: 2 }}>
-        <Typography variant="body2" color="text.secondary">
-          갯수
-        </Typography>
-        <Select
+        <div className="flex-1">
+          <h6 className="font-semibold text-[19px]">{item.name}</h6>
+          <p className="text-gray-500 text-[20px]">{item.unit}</p>
+          <h6 className="mt-1">₩ {currencyFormat((item.price || 0) * qty)}</h6>
+        </div>
+      </div>
+      <div className="flex flex-col items-center gap-1 ml-2">
+        <p className="text-gray-500">갯수</p>
+        <select
           value={qty}
           onChange={handleQtyChange}
-          sx={{ minWidth: 60 }}
+          className="text-center min-w-[65px] h-[60px] border border-gray-300 rounded"
         >
           {quantityOptions.map(n => (
-            <MenuItem key={n} value={n}>
+            <option key={n} value={n}>
               {n}
-            </MenuItem>
+            </option>
           ))}
-        </Select>
-      </Box>
-      <IconButton
+        </select>
+      </div>
+      <button
         aria-label="delete"
-        color="error"
+        className="mx-3 w-6 disabled:opacity-50"
         onClick={handleDelete}
-        sx={{ ml: 2, width: "20px" }}
         disabled={isDeleting}
       >
-        <DeleteIcon />
-      </IconButton>
-    </Card>
+        <span className="text-[20px]">🗑️</span>
+      </button>
+    </div>
   );
 };
 

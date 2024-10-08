@@ -1,8 +1,8 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { TextField, IconButton, InputAdornment } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
 import { SearchQuery } from '../../types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 interface SearchBoxIngredient {
   _id: string;
@@ -67,25 +67,21 @@ const SearchBox = ({
   };
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-      <TextField
-        variant="outlined"
+    <div className="relative w-full">
+      <input
+        type="text"
         placeholder={placeholder}
         value={keyword}
         onChange={handleInputChange}
         onKeyDown={onCheckEnter}
-        fullWidth
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton onClick={handleSearch} edge="end">
-                <SearchIcon />
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-        sx={{ borderRadius: 1 }}
+        className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10"
       />
+      <button
+        onClick={handleSearch}
+        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+      >
+        <FontAwesomeIcon icon={faSearch} />
+      </button>
     </div>
   );
 };

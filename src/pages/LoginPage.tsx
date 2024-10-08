@@ -3,16 +3,6 @@ import { useNavigate } from "react-router";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { Link } from "react-router-dom";
 import KakaoLogin from "../component/KakaoLogin/KakaoLogin";
-import {
-  Container,
-  Typography,
-  TextField,
-  Button,
-  Box,
-  Link as MuiLink,
-  Alert,
-  CircularProgress,
-} from "@mui/material";
 import { useLoginUser } from "../hooks/User/useLoginUser";
 import { useLoginWithGoogle } from "../hooks/User/useLoginWithGoogle";
 import { useLoginWithToken } from "../hooks/User/useLoginWithToken";
@@ -98,116 +88,60 @@ const LoginPage = () => {
     }));
   };
 
-  const error = isLoginWithGoogleError
-  const errorMessage = loginWithGoogleError?.message
-
-  if (isLoading) {
-     return (
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          minHeight: '50vh',
-        }}
-      >
-        <CircularProgress size={100} />
-      </Box>
-    );
-  }
+  const error = isLoginWithGoogleError;
+  const errorMessage = loginWithGoogleError?.message;
 
   return (
-    <Container
-      maxWidth="xs"
-      sx={{ mt: 4, p: 3, borderRadius: 1, backgroundColor: "#fff" }}
-    >
-      <Box
-        sx={{
-          textAlign: "center",
-          mb: 3,
-          borderBottom: 3,
-          borderColor: "black",
-        }}
-      >
-        <Typography variant="h4" component="h2" sx={{ p: 1 }}>
-          로그인
-        </Typography>
-      </Box>
+    <div className="max-w-[430px] mx-auto mt-4 p-6">
+      <div className="text-center mb-6 border-b-4 border-black">
+        <h2 className="text-3xl font-bold py-2">로그인</h2>
+      </div>
       <form onSubmit={handleLogin}>
-        <Box sx={{ mb: 2 }}>
-          <TextField
-            fullWidth
-            label="아이디"
+        <div className="mb-4">
+          <input
+            type="text"
             name="id"
             placeholder="아이디를 입력해 주세요"
             onChange={handleChange}
             required
-            variant="outlined"
-            size="small"
+            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
           />
-        </Box>
-        <Box sx={{ mb: 2 }}>
-          <TextField
-            fullWidth
+        </div>
+        <div className="mb-4">
+          <input
             type="password"
-            label="비밀번호"
             name="password"
             placeholder="비밀번호를 입력해 주세요"
             onChange={handleChange}
             required
-            variant="outlined"
-            size="small"
+            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
           />
-        </Box>
+        </div>
         {error && (
-          <Alert severity="error" sx={{ mb: 2 }}>
+          <div className="mb-4 text-red-600 text-sm">
             {errorMessage}
-          </Alert>
+          </div>
         )}
-        <Button
+        <button
           type="submit"
-          fullWidth
-          variant="contained"
-          color="success"
-          sx={{ mb: 2 }}
+          className="w-full py-2 mb-4 bg-green-700 text-white rounded-md hover:bg-green-600 transition duration-300"
         >
           로그인
-        </Button>
+        </button>
       </form>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "flex-end",
-          mb: 2,
-        }}
-      >
-        <MuiLink
-          component={Link}
-          to="/find-password"
-          sx={{ pl: 2, textDecoration: "none", color: "black" }}
-        >
+      <div className="flex justify-end mb-4">
+        <Link to="/find-password" className="text-black underline">
           비밀번호 찾기
-        </MuiLink>
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: 2,
-        }}
-      >
-        <Box>
-          <GoogleLogin
-            onSuccess={handleGoogleSuccess}
-            onError={handleGoogleFailure}
-          />
-        </Box>
-        <Box>
-          <KakaoLogin />
-        </Box>
-      </Box>
-    </Container>
+        </Link>
+      </div>
+      <div className="flex justify-center items-center gap-4">
+        <GoogleLogin
+          onSuccess={handleGoogleSuccess}
+          onError={handleGoogleFailure}
+        />
+        <KakaoLogin />
+      </div>
+    </div>
   );
 };
 

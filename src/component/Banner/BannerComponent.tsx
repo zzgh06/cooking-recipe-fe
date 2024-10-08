@@ -1,19 +1,14 @@
 import React from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import { Box, IconButton } from "@mui/material";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import { responsive } from "../../constants/responsive";
 
-const optimizeImageUrl = (url : string): string => {
+const optimizeImageUrl = (url: string): string => {
   return url?.replace(/\/upload\//, "/upload/f_webp/");
 };
 
-interface BannerComponentProps {
-  images: string[];
-}
-
-const BannerComponent = ({ images }: BannerComponentProps) => {
+const BannerComponent = ({ images }: { images: string[] }) => {
   const optimizedImageUrl = images.map((img) => optimizeImageUrl(img));
 
   interface ArrowProps {
@@ -21,49 +16,25 @@ const BannerComponent = ({ images }: BannerComponentProps) => {
   }
 
   const CustomLeftArrow = ({ onClick }: ArrowProps) => (
-    <IconButton
+    <button
       onClick={onClick}
-      sx={{
-        position: 'absolute',
-        top: '50%',
-        left: '10px',
-        transform: 'translateY(-50%)',
-        backgroundColor: 'rgba(0, 0, 0, 0.4)',
-        color: 'white',
-        fontSize: '20px',
-        zIndex: 2,
-        '&:hover': {
-          backgroundColor: 'rgba(0, 0, 0, 0.6)',
-        },
-      }}
+      className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-black bg-opacity-40 text-white text-lg z-20 hover:bg-opacity-60 p-2 rounded"
     >
       <ArrowBack />
-    </IconButton>
+    </button>
   );
 
-  const CustomRightArrow = ({ onClick }:ArrowProps) => (
-    <IconButton
+  const CustomRightArrow = ({ onClick }: ArrowProps) => (
+    <button
       onClick={onClick}
-      sx={{
-        position: 'absolute',
-        top: '50%',
-        right: '10px',
-        transform: 'translateY(-50%)',
-        backgroundColor: 'rgba(0, 0, 0, 0.4)',
-        color: 'white',
-        fontSize: '20px',
-        zIndex: 2,
-        '&:hover': {
-          backgroundColor: 'rgba(0, 0, 0, 0.6)',
-        },
-      }}
+      className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-black bg-opacity-40 text-white text-lg z-20 hover:bg-opacity-60 p-2 rounded"
     >
       <ArrowForward />
-    </IconButton>
+    </button>
   );
 
   return (
-    <Box sx={{ position: 'relative', width: '100%', height: 'auto' }}>
+    <div className="relative w-full h-auto">
       <Carousel
         responsive={responsive}
         infinite
@@ -73,20 +44,17 @@ const BannerComponent = ({ images }: BannerComponentProps) => {
         customRightArrow={<CustomRightArrow />}
       >
         {optimizedImageUrl.map((item, index) => (
-          <Box
-            key={index}
-            sx={{ width: '100%', height: 'auto' }}
-          >
+          <div key={index} className="w-full h-auto">
             <img
               src={item}
               alt={`banner-${index}`}
-              style={{ width: '100%', height: 'auto' }}
+              className="w-full h-auto"
               fetchPriority="high"
             />
-          </Box>
+          </div>
         ))}
       </Carousel>
-    </Box>
+    </div>
   );
 };
 

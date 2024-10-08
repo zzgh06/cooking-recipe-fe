@@ -1,5 +1,4 @@
 import React from "react";
-import { Box, Typography, Button } from "@mui/material";
 import ReviewStars from "./ReviewStars";
 import { Review } from "../../types";
 
@@ -11,87 +10,52 @@ interface ReviewListProps {
   onDelete: (reviewId: string, type: string) => void;
 }
 
-const ReviewList = ({ type, reviews, userId, onEdit, onDelete } :ReviewListProps) => {
+const ReviewList = ({ type, reviews, userId, onEdit, onDelete }: ReviewListProps) => {
   return (
-    <Box>
+    <div>
       {reviews.length === 0 ? (
-        <Box
-          sx={{
-            width: "100%",
-            height: "100px",
-            border: "1px solid #ccc",
-            p: 2,
-            mb: 2,
-            borderRadius: 1,
-            backgroundColor: "#f9f9f9",
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              p: 2,
-            }}
-          >
-            <Typography variant="h6" component="p">작성된 리뷰가 없습니다.</Typography>
-          </Box>
-        </Box>
+        <div className="w-full h-24 border border-gray-300 p-4 mb-4 rounded-lg bg-gray-100">
+          <div className="flex justify-center items-center p-4">
+            <p className="text-lg">작성된 리뷰가 없습니다.</p>
+          </div>
+        </div>
       ) : (
         reviews && reviews.map((review) => (
-          <Box
+          <div
             key={review._id}
-            sx={{
-              border: "1px solid #ccc",
-              p: 2,
-              mb: 2,
-              borderRadius: 1,
-              backgroundColor: "#f9f9f9",
-            }}
+            className="border border-gray-300 p-4 mb-4 rounded-lg bg-gray-100"
           >
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: 1,
-              }}
-            >
-              <Typography variant="body1">평점:</Typography>
+            <div className="flex items-center gap-2">
+              <p className="text-base">평점:</p>
               <ReviewStars startNum={review.rating} />
-              <Typography variant="body2" component="span">
+              <span className="text-sm">
                 ({new Date(review.createdAt).toLocaleString()})
-              </Typography>
-              <Typography variant="body2" sx={{ ml: "auto" }}>
-                작성자: {review.userId.id}
-              </Typography>
-            </Box>
-            <Box sx={{ mt: 1, display: "flex", alignItems: "center" }}>
-              <Typography variant="body1">{review.comment}</Typography>
-              {userId &&
-                userId &&
-                userId === review.userId._id && (
-                  <Box sx={{ ml: "auto", display: "flex", gap: 1 }}>
-                    <Button
-                      variant="outlined"
-                      color="error"
-                      onClick={() => onDelete(review._id, type)}
-                    >
-                      삭제
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      onClick={() => onEdit(review)}
-                    >
-                      수정
-                    </Button>
-                  </Box>
-                )}
-            </Box>
-          </Box>
+              </span>
+              <span className="text-sm ml-auto">작성자: {review.userId.id}</span>
+            </div>
+            <div className="mt-2 flex items-center">
+              <p className="text-base">{review.comment}</p>
+              {userId && userId === review.userId._id && (
+                <div className="ml-auto flex gap-2">
+                  <button
+                    className="border border-red-500 text-red-500 rounded px-3 py-1 hover:bg-red-500 hover:text-white"
+                    onClick={() => onDelete(review._id, type)}
+                  >
+                    삭제
+                  </button>
+                  <button
+                    className="border border-blue-500 text-blue-500 rounded px-3 py-1 hover:bg-blue-500 hover:text-white"
+                    onClick={() => onEdit(review)}
+                  >
+                    수정
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
         ))
       )}
-    </Box>
+    </div>
   );
 };
 

@@ -1,104 +1,58 @@
 import React from "react";
-import { Box, Grid, Skeleton, styled } from "@mui/material";
-
-const FridgeContainer = styled(Box)(({ theme }) => ({
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-  padding: "10px",
-  marginBottom: "10px",
-  borderRadius: "10px",
-  boxShadow: "0 3px 5px rgba(0,0,0,0.2)",
-  border: "2px solid lightgrey",
-  [theme.breakpoints.up("md")]: {
-    minWidth: "500px",
-    minHeight: "400px",
-    padding: "20px",
-    marginBottom: "20px",
-  },
-}));
-
-const GridContainer = styled(Box)(({ theme }) => ({
-  display: "grid",
-  gridTemplateColumns: "1fr",
-  gap: "10px",
-  [theme.breakpoints.up("md")]: {
-    gridTemplateColumns: "1fr 1fr",
-    gap: "20px",
-  },
-}));
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const SearchResultCardSkeleton = () => (
-  <Box sx={{
-    display: 'flex',
-    alignItems: 'center',
-    width: 350,
-    p: 2,
-    m: 2,
-    boxShadow: 3,
-    borderRadius: 1
-  }}>
-    <Skeleton variant="rectangular" width={100} height={100} 
-      sx={{ mr: 2, borderRadius: 1 }} />
-    <Box sx={{ flexGrow: 1 }}>
-      <Skeleton variant="text" width="80%" height={32} sx={{ mb: 1 }} />
-      <Skeleton variant="rectangular" height={36} sx={{ mt: 1 }} />
-    </Box>
-  </Box>
+  <div className="flex items-center w-[350px] p-4 m-4 shadow-lg rounded">
+    <div className="mr-4">
+      <Skeleton width={100} height={100} borderRadius={4} />
+    </div>
+    <div className="flex-grow">
+      <Skeleton width="80%" height={32} className="mb-2" />
+      <Skeleton height={36} className="mt-2" />
+    </div>
+  </div>
 );
 
 const MyFridgeSkeleton = () => {
   return (
-    <Box sx={{ padding: { xs: "20px", sm: "30px", md: "50px 150px" } }}>
-      <Box sx={{ textAlign: "center", marginBottom: "20px" }}>
-        <Skeleton variant="text" width="200px" height={40} sx={{ margin: "0 auto" }} />
-        <Skeleton variant="text" width="300px" height={24} sx={{ margin: "0 auto" }} />
-      </Box>
+    <div className="p-5 sm:p-8 md:px-40 md:py-12">
+      <div className="text-center mb-5">
+        <div className="mx-auto w-[200px]">
+          <Skeleton height={40} />
+        </div>
+        <div className="mx-auto w-[300px]">
+          <Skeleton height={24} />
+        </div>
+      </div>
 
-      <GridContainer>
-        <FridgeContainer>
-          <Grid container spacing={2} sx={{
-            alignContent: "flex-start",
-            justifyContent: "center",
-            marginBottom: "10px",
-          }}>
-          </Grid>
-          <Box sx={{ width: "100%", display: "flex", justifyContent: "center", mt: 2 }}>
-            <Skeleton variant="rectangular" width="300px" height={40} 
-              sx={{ borderRadius: 1 }} />
-          </Box>
-        </FridgeContainer>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+        <div className="flex flex-col justify-center items-center p-3 md:p-5 mb-3 md:mb-5 rounded-lg shadow-md border-2 border-gray-200 md:min-w-[500px] md:min-h-[400px]">
+          <div className="grid gap-2 w-full items-start justify-center mb-3">
+          </div>
+          <div className="w-full flex justify-center mt-4">
+            <Skeleton width={300} height={40} borderRadius={4} />
+          </div>
+        </div>
 
-        <Box>
-          <Box sx={{
-            display: "flex",
-            justifyContent: "center",
-            flexDirection: "column",
-            alignItems: "center",
-            padding: { xs: "0 10px", sm: "0 20px", md: "0 50px" },
-            marginBottom: "20px",
-          }}>
-            <Skeleton variant="text" width="350px" height={32} 
-              sx={{ mb: 2 }} />
-            <Skeleton variant="rectangular" width="100%" height={56} 
-              sx={{ borderRadius: 1 }} />
-          </Box>
+        <div>
+          <div className="flex flex-col items-center justify-center px-3 sm:px-5 md:px-12 mb-5">
+            <div className="w-[350px] mb-4">
+              <Skeleton height={32} />
+            </div>
+            <div className="w-full">
+              <Skeleton height={56} borderRadius={4} />
+            </div>
+          </div>
 
-          <Box sx={{
-            textAlign: "center",
-            padding: "10px 0",
-            borderTop: "1px solid lightgrey",
-            borderBottom: "1px solid lightgrey",
-            marginBottom: "20px",
-          }}>
+          <div className="text-center py-3 border-t border-b border-gray-200 mb-5">
             {[...Array(2)].map((_, index) => (
               <SearchResultCardSkeleton key={index} />
             ))}
-          </Box>
-        </Box>
-      </GridContainer>
-    </Box>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

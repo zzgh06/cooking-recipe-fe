@@ -1,14 +1,4 @@
 import React, { useState, useEffect } from "react";
-import {
-  TextField,
-  Button,
-  Modal,
-  Box,
-  Typography,
-  Grid,
-  IconButton,
-  styled,
-} from "@mui/material";
 import CategorySelect from "../CategorySelect/CategorySelect";
 import CloudinaryUploadWidget from "../../utils/CloudinaryUploadWidget";
 import {
@@ -21,37 +11,14 @@ import {
   difficulty,
   time,
 } from "../../constants/recipe.constants";
-import DeleteIcon from "@mui/icons-material/Delete";
-import AddIcon from "@mui/icons-material/Add";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faImage } from "@fortawesome/free-solid-svg-icons";
+import { faImage, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Ingredient, Recipe } from "../../types";
-
-const HeadContainer = styled("div")({
-  display: "flex",
-  justifyContent: "flex-start",
-  alignItems: "baseline",
-  borderBottom: "4px solid black",
-  padding: "10px",
-});
-
-const PlaceholderImage = styled(Box)({
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  width: "100%",
-  backgroundColor: "#f9f9f9",
-  padding: "80px 0",
-  margin: "0 auto",
-  border: "1px solid lightgrey",
-  borderRadius: "15px",
-});
 
 interface Step {
   description: string;
   image: string | null;
 }
-
 
 interface RecipeFormProps {
   onSubmit: (data: Recipe) => void;
@@ -216,333 +183,203 @@ const RecipeForm = ({ onSubmit, initialData }: RecipeFormProps) => {
   };
 
   return (
-    <Box
-      component="form"
-      onSubmit={handleSubmit}
-      sx={{ p: 2, borderRadius: 2 }}
-    >
-      <HeadContainer>
-        <Typography variant="h5">레시피 제목</Typography>
-      </HeadContainer>
-      <TextField
-        fullWidth
-        label="레시피 제목"
-        variant="outlined"
-        margin="normal"
+    <form onSubmit={handleSubmit} className="p-4 rounded-lg">
+      <div className="flex justify-start items-baseline border-b-4 border-black p-2.5">
+        <h2 className="text-2xl font-bold">레시피 제목</h2>
+      </div>
+      <input
+        className="w-full p-3 mt-4 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        placeholder="레시피 제목"
         value={formData.name}
         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
       />
-      <HeadContainer>
-        <Typography variant="h5">요리 소개</Typography>
-      </HeadContainer>
-      <TextField
-        fullWidth
-        label="요리 소개"
-        variant="outlined"
-        multiline
+      <div className="flex justify-start items-baseline border-b-4 border-black p-2.5 mt-6">
+        <h2 className="text-2xl font-bold">요리 소개</h2>
+      </div>
+      <textarea
+        className="w-full p-3 mt-4 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         rows={6}
-        margin="normal"
+        placeholder="요리 소개"
         value={formData.description}
-        onChange={(e) =>
-          setFormData({ ...formData, description: e.target.value })
-        }
+        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
       />
-      <Box sx={{ mb: 2 }}>
-        <Box
-          sx={{
-            mb: 2,
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <HeadContainer sx={{ width: "100%" }}>
-            <Typography variant="h5">레시피 이미지</Typography>
-          </HeadContainer>
+      <div className="mb-8">
+        <div className="mb-4 flex justify-between items-center">
+          <div className="flex justify-start items-baseline border-b-4 border-black p-2.5 w-full">
+            <h2 className="text-2xl font-bold">레시피 이미지</h2>
+          </div>
           <CloudinaryUploadWidget
             uploadImage={uploadMainImage}
             type="main"
             index={null}
           />
-        </Box>
+        </div>
         {formData.images.length > 0 ? (
           formData.images.map((img, idx) => (
             <img
               key={idx}
-              id={`uploadedimage_main_${idx}`}
               src={img}
-              className="upload-image mt-2"
-              alt="uploadedimage"
-              style={{
-                maxWidth: "100%",
-                height: "auto",
-                marginTop: 10,
-                borderRadius: 5,
-              }}
+              className="max-w-full h-auto mt-2.5 rounded-lg"
+              alt="업로드된 이미지"
             />
           ))
         ) : (
-          <PlaceholderImage>
-            <FontAwesomeIcon icon={faImage} fontSize="50px" />
-            <Typography variant="h5" sx={{ marginTop: "10px" }}>
+          <div className="flex flex-col items-center w-full bg-gray-50 p-20 mx-auto border border-gray-300 rounded-2xl">
+            <FontAwesomeIcon icon={faImage} className="text-5xl" />
+            <h3 className="text-xl font-bold mt-2.5">
               요리 대표 사진을 등록해주세요.
-            </Typography>
-            <Typography variant="body1" component="p">
+            </h3>
+            <p className="text-gray-600">
               음식사진 외 사람/동물 등의 사진은 삼가해주세요.
-            </Typography>
-          </PlaceholderImage>
+            </p>
+          </div>
         )}
-      </Box>
-      <HeadContainer sx={{ marginBottom: "15px" }}>
-        <Typography variant="h5">요리 정보</Typography>
-      </HeadContainer>
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={6} md={4}>
+      </div>
+      <div className="flex justify-start items-baseline border-b-4 border-black p-2.5 mb-4">
+          <h2 className="text-2xl font-bold">요리 정보</h2>
+        </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        {[
+          { label: "음식 종류", options: foodCategory, value: formData.foodCategory, field: "foodCategory" },
+          { label: "상황", options: moodCategory, value: formData.moodCategory, field: "moodCategory" },
+          { label: "방법", options: methodCategory, value: formData.methodCategory, field: "methodCategory" },
+          { label: "재료", options: ingredientCategory, value: formData.ingredientCategory, field: "ingredientCategory" },
+          { label: "기타", options: etcCategory, value: formData.etcCategory, field: "etcCategory" },
+          { label: "인원", options: servings, value: formData.servings, field: "servings" },
+          { label: "시간", options: time, value: formData.time, field: "time" },
+          { label: "난이도", options: difficulty, value: formData.difficulty, field: "difficulty" },
+        ].map(({ label, options, value, field }) => (
           <CategorySelect
-            label="음식 종류"
-            options={foodCategory}
-            value={formData.foodCategory}
-            onChange={(e) =>
-              setFormData({ ...formData, foodCategory: e.target.value })
-            }
+            key={label}
+            label={label}
+            options={options}
+            value={value}
+            onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
           />
-        </Grid>
-        <Grid item xs={12} sm={6} md={4}>
-          <CategorySelect
-            label="상황"
-            options={moodCategory}
-            value={formData.moodCategory}
-            onChange={(e) =>
-              setFormData({ ...formData, moodCategory: e.target.value })
-            }
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={4}>
-          <CategorySelect
-            label="방법"
-            options={methodCategory}
-            value={formData.methodCategory}
-            onChange={(e) =>
-              setFormData({ ...formData, methodCategory: e.target.value })
-            }
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={4}>
-          <CategorySelect
-            label="재료"
-            options={ingredientCategory}
-            value={formData.ingredientCategory}
-            onChange={(e) =>
-              setFormData({ ...formData, ingredientCategory: e.target.value })
-            }
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={4}>
-          <CategorySelect
-            label="기타"
-            options={etcCategory}
-            value={formData.etcCategory}
-            onChange={(e) =>
-              setFormData({ ...formData, etcCategory: e.target.value })
-            }
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={4}>
-          <CategorySelect
-            label="인원"
-            options={servings}
-            value={formData.servings}
-            onChange={(e) =>
-              setFormData({ ...formData, servings: e.target.value })
-            }
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={4}>
-          <CategorySelect
-            label="시간"
-            options={time}
-            value={formData.time}
-            onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={4}>
-          <CategorySelect
-            label="난이도"
-            options={difficulty}
-            value={formData.difficulty}
-            onChange={(e) =>
-              setFormData({ ...formData, difficulty: e.target.value })
-            }
-          />
-        </Grid>
-      </Grid>
-      <HeadContainer sx={{ marginTop: "15px" }}>
-        <Typography variant="h5">재료 정보</Typography>
-      </HeadContainer>
-      {formData.ingredients.map((ingredient, index) => (
-        <Grid container spacing={2} alignItems="center" key={index}>
-          <Grid item xs={12} sm={4}>
-            <TextField
-              fullWidth
-              label="재료명"
-              variant="outlined"
-              margin="normal"
-              value={ingredient.name || ""}
-              onChange={(e) =>
-                handleChange(index, "name", e.target.value, "ingredients")
-              }
-            />
-          </Grid>
-          <Grid item xs={12} sm={3}>
-            <TextField
-              fullWidth
-              label="양"
-              variant="outlined"
-              margin="normal"
-              value={ingredient.qty}
-              onChange={(e) =>
-                handleChange(index, "qty", e.target.value, "ingredients")
-              }
-            />
-          </Grid>
-          <Grid item xs={12} sm={3}>
-            <TextField
-              fullWidth
-              label="단위"
-              variant="outlined"
-              margin="normal"
-              value={ingredient.unit || ""}
-              onChange={(e) =>
-                handleChange(index, "unit", e.target.value, "ingredients")
-              }
-            />
-          </Grid>
-          <Grid item xs={12} sm={2}>
-            <IconButton
-              sx={{ width: "70px", padding: "15px 0" }}
-              color="error"
-              onClick={() => handleDeleteIngredient(index)}
-            >
-              <DeleteIcon />
-            </IconButton>
-          </Grid>
-        </Grid>
-      ))}
-      <Button
-        variant="contained"
-        color="success"
-        startIcon={<AddIcon />}
-        onClick={handleAddIngredient}
-        sx={{ mt: 2 }}
-      >
-        재료 추가
-      </Button>
-      <HeadContainer sx={{ my: "15px" }}>
-        <Typography variant="h5">요리 순서</Typography>
-      </HeadContainer>
-      {formData.steps.map((step, index) => (
-        <Grid container spacing={2} alignItems="center" key={index}>
-          <Grid item xs={12} sm={8}>
-            <TextField
-              fullWidth
-              label="요리 설명"
-              variant="outlined"
-              multiline
-              rows={6}
-              margin="normal"
-              value={step.description || ""}
-              onChange={(e) =>
-                handleChange(index, "description", e.target.value, "steps")
-              }
-            />
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <Box>
-            <CloudinaryUploadWidget
-              uploadImage={(url: string) => uploadStepImage(url, "steps", index)}
-              type="steps"
-              index={index}
-            />
-            <IconButton
-              sx={{ width: "70px", padding: "15px 0" }}
-              color="error"
-              onClick={() => handleDeleteStep(index)}
-            >
-              <DeleteIcon />
-            </IconButton>
-            </Box>
-            {step.image && (
-              <img
-                id={`uploadedimage_steps_${index}`}
-                src={step.image}
-                className="upload-image mt-2"
-                alt="uploadedimage"
-                style={{
-                  maxWidth: "100%",
-                  height: "120px",
-                  marginTop: 10,
-                  borderRadius: 5,
-                }}
+        ))}
+      </div>
+      <div className="mt-6">
+        <div className="flex justify-start items-baseline border-b-4 border-black p-2.5">
+          <h2 className="text-2xl font-bold">재료 정보</h2>
+        </div>
+        {formData.ingredients.map((ingredient, index) => (
+          <div key={index} className="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center">
+            <div className="sm:col-span-4">
+              <input
+                className="w-full p-3 mt-4 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                placeholder="재료명"
+                value={ingredient.name}
+                onChange={(e) => handleChange(index, "name", e.target.value, "ingredients")}
               />
-            )}
-          </Grid>
-      
-        </Grid>
-      ))}
-      <Button
-        variant="contained"
-        color="success"
-        startIcon={<AddIcon />}
-        onClick={handleAddStep}
-        sx={{ mt: 2 }}
-      >
-        요리 순서 추가
-      </Button>
-
-      <Grid container spacing={2} justifyContent="center" sx={{ mt: 3 }}>
-        <Grid item>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            sx={{width : "250px"}}
-          >
-            레시피 제출
-          </Button>
-        </Grid>
-      </Grid>
-
-      <Modal
-        open={showSubmitModal}
-        onClose={handleCloseModal}
-        aria-labelledby="modal-title"
-        aria-describedby="modal-description"
-      >
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: 400,
-            bgcolor: "background.paper",
-            border: "2px solid #000",
-            boxShadow: 24,
-            p: 4,
-          }}
+            </div>
+            <div className="sm:col-span-3">
+              <input
+                className="w-full p-3 mt-4 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                placeholder="양"
+                value={ingredient.qty}
+                onChange={(e) => handleChange(index, "qty", e.target.value, "ingredients")}
+              />
+            </div>
+            <div className="sm:col-span-3">
+              <input
+                className="w-full p-3 mt-4 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                placeholder="단위"
+                value={ingredient.unit}
+                onChange={(e) => handleChange(index, "unit", e.target.value, "ingredients")}
+              />
+            </div>
+            <div className="sm:col-span-2">
+              <button
+                type="button"
+                className="w-full h-12 mt-4 text-red-500 hover:text-red-700"
+                onClick={() => handleDeleteIngredient(index)}
+              >
+                <FontAwesomeIcon icon={faTrash} />
+              </button>
+            </div>
+          </div>
+        ))}
+        <button
+          type="button"
+          className="mt-4 px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 flex items-center gap-2"
+          onClick={handleAddIngredient}
         >
-          <Typography id="modal-title" variant="h6" component="h2">
-            레시피 제출 완료
-          </Typography>
-          <Typography id="modal-description" sx={{ mt: 2 }}>
-            레시피 제출이 완료되었습니다.
-          </Typography>
-          <Button variant="contained" onClick={handleCloseModal} sx={{ mt: 2 }}>
-            닫기
-          </Button>
-        </Box>
-      </Modal>
-    </Box>
+          <FontAwesomeIcon icon={faPlus} />
+          재료 추가
+        </button>
+      </div>
+      <div className="mt-6">
+        <div className="flex justify-start items-baseline border-b-4 border-black p-2.5">
+          <h2 className="text-2xl font-bold">요리 순서</h2>
+        </div>
+        {formData.steps.map((step, index) => (
+          <div key={index} className="grid grid-cols-1 sm:grid-cols-12 gap-4 items-start mt-4">
+            <div className="sm:col-span-8">
+              <textarea
+                className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                rows={6}
+                placeholder="요리 설명"
+                value={step.description}
+                onChange={(e) => handleChange(index, "description", e.target.value, "steps")}
+              />
+            </div>
+            <div className="sm:col-span-4">
+              <div className="flex gap-2">
+                <CloudinaryUploadWidget
+                  uploadImage={(url: string) => uploadStepImage(url, "steps", index)}
+                  type="steps"
+                  index={index}
+                />
+                <button
+                  type="button"
+                  className="p-2 text-red-500 hover:text-red-700"
+                  onClick={() => handleDeleteStep(index)}
+                >
+                  <FontAwesomeIcon icon={faTrash} />
+                </button>
+              </div>
+              {step.image && (
+                <img
+                  src={step.image}
+                  className="max-w-full h-[100px] mt-2.5 rounded-lg"
+                  alt="단계 이미지"
+                />
+              )}
+            </div>
+          </div>
+        ))}
+        <button
+          type="button"
+          className="mt-4 px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 flex items-center gap-2"
+          onClick={handleAddStep}
+        >
+          <FontAwesomeIcon icon={faPlus} />
+          요리 순서 추가
+        </button>
+      </div>
+      <div className="flex justify-center mt-8">
+        <button
+          type="submit"
+          className="px-8 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 w-64"
+        >
+          레시피 제출
+        </button>
+      </div>
+      {showSubmitModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-8 rounded-lg max-w-md w-full">
+            <h2 className="text-xl font-bold mb-4">레시피 제출 완료</h2>
+            <p className="mb-6">레시피 제출이 완료되었습니다.</p>
+            <button
+              onClick={handleCloseModal}
+              className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            >
+              닫기
+            </button>
+          </div>
+        </div>
+      )}
+    </form>
   );
 };
 

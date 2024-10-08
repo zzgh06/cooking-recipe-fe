@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Box, Button, Typography, Paper } from "@mui/material";
 import { ArrowDropDown } from "@mui/icons-material";
 import DaumPostcodeEmbed, { Address } from "react-daum-postcode";
 
@@ -19,67 +18,32 @@ const AddressInput = ({ setAddress }: AddressInputProps) => {
     const extraAddress =
       data.addressType === "R"
         ? (data.bname !== "" ? ` (${data.bname})` : "") +
-          (data.buildingName !== "" ? `, ${data.buildingName}` : "")
+        (data.buildingName !== "" ? `, ${data.buildingName}` : "")
         : "";
     setAddress(fullAddress + extraAddress);
     setIsPostcodeOpen(false);
   };
 
   return (
-    <Box sx={{ position: 'relative' }}>
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 1,
-          mb: 1
-        }}
-      >
-        <Button
+    <div className="relative">
+      <div className="flex items-center gap-2 mb-2">
+        <button
           onClick={togglePostcode}
-          variant="outlined"
-          color="primary"
-          endIcon={<ArrowDropDown />}
-          sx={{
-            width: '100px',
-            textTransform: 'none',
-            fontSize: 'small',
-            padding: '4px',
-            borderColor: 'black',
-            color: 'black',
-            '&:hover': {
-              borderColor: 'black',
-              backgroundColor: 'lightgreen',
-            },
-          }}
+          className="flex items-center justify-between w-[100px] text-sm p-1 border border-black rounded-[5px] text-black hover:bg-lightgreen"
         >
           지역 선택
-        </Button>
-        <Typography variant="body2" color="textSecondary">
+          <ArrowDropDown />
+        </button>
+        <p className="text-sm text-gray-500">
           서울과 경기도는 새벽배송 가능 지역입니다.
-        </Typography>
-      </Box>
+        </p>
+      </div>
       {isPostcodeOpen && (
-        <Paper
-          sx={{
-            position: 'absolute',
-            zIndex: 100,
-            width: "100%",
-            height: '400px',
-            boxShadow: 3,
-            top: '100%',
-            left: 0,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            overflow: 'hidden',
-            backgroundColor: 'white'
-          }}
-        >
+        <div className="absolute z-10 w-full h-[400px] shadow-lg top-full left-0 flex items-center justify-center bg-white overflow-hidden">
           <DaumPostcodeEmbed onComplete={handleAddressSelect} />
-        </Paper>
+        </div>
       )}
-    </Box>
+    </div>
   );
 };
 

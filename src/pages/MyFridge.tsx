@@ -1,61 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { RootState } from "../redux/store";
 import { setSelectedIngredients } from "../redux/ingredientSlice";
+import { useFetchIngredients } from "../hooks/Ingredient/useFetchIngredients";
+import { useFetchFridgeItems } from "../hooks/Fridge/useFetchFridgeItems";
+import { useFetchRecommendedRecipes } from "../hooks/Recipe/useFetchRecommendedRecipes";
+import { FridgeItem, Ingredient, RecentlyViewedItem, SearchQuery } from "../types";
+import RecentlyViewed from "../component/RecentlyViewed/RecentlyViewed";
 import MyFridgeSearchResults from "../component/MyFridgeSearchResults/MyFridgeSearchResults";
 import SearchResultCard from "../component/SearchResultCard/SearchResultCard";
 import FridgeItemCard from "../component/FridgeItemCard/FridgeItemCard";
 import SearchBox from "../component/SearchBox/SearchBox";
-import RecentlyViewed from "../component/RecentlyViewed/RecentlyViewed";
-import {
-  CircularProgress,
-  Box,
-  Button,
-  Typography,
-  Grid,
-  styled,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-} from "@mui/material";
-import { useFetchIngredients } from "../hooks/Ingredient/useFetchIngredients";
-import { useFetchFridgeItems } from "../hooks/Fridge/useFetchFridgeItems";
-import { useFetchRecommendedRecipes } from "../hooks/Recipe/useFetchRecommendedRecipes";
-import { RootState } from "../redux/store";
-import { FridgeItem, Ingredient, RecentlyViewedItem, SearchQuery } from "../types";
 import MyFridgeSkeleton from "../component/Skeleton/MyFridgeSkeleton";
 
-const FridgeContainer = styled(Box)(({ theme }) => ({
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-  padding: "10px",
-  marginBottom: "10px",
-  borderRadius: "10px",
-  boxShadow: "0 3px 5px rgba(0,0,0,0.2)",
-  border: "2px solid lightgrey",
-  [theme.breakpoints.up("md")]: {
-    minWidth: "500px",
-    minHeight: "400px",
-    padding: "20px",
-    marginBottom: "20px",
-  },
-}));
-
-const GridContainer = styled(Box)(({ theme }) => ({
-  display: "grid",
-  gridTemplateColumns: "1fr",
-  gap: "10px",
-  [theme.breakpoints.up("md")]: {
-    gridTemplateColumns: "1fr 1fr",
-    gap: "20px",
-  },
-}));
-
 interface RecentlyViewedIngredient {
-  id : string;
+  id: string;
   images: string;
   name: string;
 }
@@ -71,7 +31,7 @@ const MyFridge = () => {
     page: Number(query.get("page")) || 1,
     name: query.get("name") || "",
   });
-  const { data: ingredientData, isLoading : ingredientLoading } = useFetchIngredients(searchQuery);
+  const { data: ingredientData, isLoading: ingredientLoading } = useFetchIngredients(searchQuery);
   const { data: fridgeData, isLoading, refetch } = useFetchFridgeItems(query);
   const [hasSearched, setHasSearched] = useState<boolean>(false);
   const [checkedItems, setCheckedItems] = useState<Set<string>>(new Set());
@@ -154,43 +114,31 @@ const MyFridge = () => {
     setRecommendClicked(false);
   };
 
-  if(isLoading) {
+  if (isLoading) {
     return (
       <MyFridgeSkeleton />
     )
   }
 
   return (
-    <Box sx={{ padding: { xs: "20px", sm: "30px", md: "50px 150px" } }}>
-      <Box sx={{ textAlign: "center", marginBottom: "20px" }}>
-        <Typography variant="h4" gutterBottom>
-          My 냉장고
-        </Typography>
-        <Typography variant="subtitle1">
-          나만의 냉장고에 재료를 추가하고 최적의 레시피를 추천해드려요
-        </Typography>
-      </Box>
+    <div className="py-[50px] sm:px-[10px] md:px-[30px] lg:px-[150px] xl:px-[200px]">
+      <div className="text-center mb-5">
+        <h1 className="text-4xl font-bold mb-2">My 냉장고</h1>
+        <p className="text-lg">나만의 냉장고에 재료를 추가하고 최적의 레시피를 추천해드려요</p>
+      </div>
 
-      <GridContainer>
-        <FridgeContainer>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="flex flex-col justify-center items-center p-5 mb-5 border border-light-gray rounded-lg shadow-md">
           {fridgeData?.length === 0 ? (
-            <Typography variant="h6">
+            <p className="text-lg">
               냉장고가 텅 비워져 있습니다 😅 <br />
               My 냉장고를 가득 채워주세요.
-            </Typography>
+            </p>
           ) : (
             <>
-              <Grid
-                container
-                spacing={2}
-                sx={{
-                  alignContent: "flex-start",
-                  justifyContent: "center",
-                  marginBottom: "10px",
-                }}
-              >
+              <div className="grid sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 mb-5">
                 {fridgeData?.map((item: FridgeItem) => (
-                  <Grid item key={item.ingredientId._id}>
+                  <div key={item.ingredientId._id} className="flex">
                     <FridgeItemCard
                       item={item.ingredientId}
                       id={item._id}
@@ -199,49 +147,26 @@ const MyFridge = () => {
                         handleCheckboxChange(item.ingredientId.name)
                       }
                     />
-                  </Grid>
+                  </div>
                 ))}
-              </Grid>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  marginBottom: "20px",
-                }}
-              >
-                <Button
-                  variant="contained"
+              </div>
+              <div className="flex justify-center mb-5">
+                <button
+                  className="w-[300px] bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600 transition duration-200"
                   onClick={handleRecommendRecipes}
-                  sx={{ width: { xs: "100%", sm: "300px" } }}
                 >
                   레시피 추천
-                </Button>
-              </Box>
+                </button>
+              </div>
             </>
           )}
-        </FridgeContainer>
+        </div>
 
-        <Box>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              flexDirection: "column",
-              alignItems: "center",
-              padding: { xs: "0 10px", sm: "0 20px", md: "0 50px" },
-              marginBottom: "20px",
-            }}
-          >
-            <Typography
-              variant="h5"
-              sx={{
-                fontWeight: "600",
-                marginBottom: "10px",
-                minWidth: "350px",
-              }}
-            >
+        <div>
+          <div className="flex flex-col items-center p-5 mb-5">
+            <h2 className="text-2xl font-semibold mb-2 min-w-[350px]">
               원하시는 식재료를 검색해주세요
-            </Typography>
+            </h2>
             <SearchBox
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
@@ -251,61 +176,57 @@ const MyFridge = () => {
               field="name"
               page="fridge"
             />
-          </Box>
+          </div>
 
           {hasSearched && (
-            <Box
-              sx={{
-                textAlign: "center",
-                padding: "10px 0",
-                borderTop: "1px solid lightgrey",
-                borderBottom: "1px solid lightgrey",
-                marginBottom: "20px",
-              }}
-            >
+            <div className="text-center p-2 border-t border-b border-light-gray mb-5">
               {ingredientLoading ? (
-                <CircularProgress size="60px" sx={{ color: "green" }} />
+                <div className="flex justify-center items-center">
+                  <div className="animate-spin h-16 w-16 border-b-4 border-green-500 rounded-full" />
+                </div>
               ) : ingredientData?.ingredients?.length === 0 ? (
-                <Box sx={{padding: "50px 90px", boxShadow: 1, borderRadius: 2}}>
-                  <Typography variant="h5" fontSize="20px">일치하는 재료가 없습니다. 😅</Typography>
-                </Box>
+                <div className="p-10 shadow-md rounded-lg">
+                  <h5 className="text-xl">일치하는 재료가 없습니다. 😅</h5>
+                </div>
               ) : (
                 ingredientData?.ingredients?.map((item: Ingredient) => (
                   <SearchResultCard key={item._id} item={item} />
                 ))
               )}
-            </Box>
+            </div>
           )}
 
-          <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
-            <DialogTitle variant="h4" sx={{ textAlign: "center" }}>
-              추천 레시피
-            </DialogTitle>
-            <DialogContent>
-              {recipeLoading ? (
-                <CircularProgress size="60px" sx={{ color: "green" }} />
-              ) : (
-                <MyFridgeSearchResults recipeList={recipeList || []} />
-              )}
-            </DialogContent>
-            <DialogActions sx={{ display: "flex", justifyContent: "center" }}>
-              <Button
-                variant="contained"
-                onClick={handleClose}
-                color="primary"
-                sx={{ width: { xs: "100%", sm: "300px" } }}
-              >
-                닫기
-              </Button>
-            </DialogActions>
-          </Dialog>
-        </Box>
-      </GridContainer>
+          {open && (
+            <div className="fixed inset-0 top-[60px] flex items-center justify-center z-50 bg-black bg-opacity-50"> {/* 어두운 배경 추가 */}
+              <div className="bg-white rounded-lg shadow-lg max-w-[800px] w-full p-6 max-h-[80vh] overflow-y-auto">
+                <div className="border-b pb-4 mb-4">
+                  <h4 className="text-center text-3xl font-bold">추천 레시피</h4>
+                </div>
+                <div className="flex justify-center items-center mb-4">
+                  {recipeLoading ? (
+                    <div className="animate-spin h-24 w-24 border-b-4 border-green-500 rounded-full" />
+                  ) : (
+                    <MyFridgeSearchResults recipeList={recipeList || []} />
+                  )}
+                </div>
+                <div className="flex justify-center mt-6">
+                  <button
+                    className="w-[300px] bg-blue-600 text-white rounded-md px-6 py-3 hover:bg-blue-700 transition duration-200"
+                    onClick={handleClose}
+                  >
+                    닫기
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
 
       {recentlyViewedItems.length >= 1 && (
         <RecentlyViewed recentlyViewedItems={recentlyViewedItems} />
       )}
-    </Box>
+    </div>
   );
 };
 
