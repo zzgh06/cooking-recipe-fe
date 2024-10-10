@@ -8,7 +8,6 @@ import { OrderItem } from "../../types";
 import { format, isValid, startOfDay, endOfDay } from "date-fns";
 import MyPageOrderDialog from "../MyPageOrderDialog/MyPageOrderDialog";
 import DateFilterCondition from "../DateFilterCondition/DateFilterCondition";
-import Pagination from "react-js-pagination";
 import PaginationComponent from "../Pagination/PaginationComponent";
 
 const MyOrderComponent = () => {

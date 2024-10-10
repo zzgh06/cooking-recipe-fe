@@ -8,27 +8,9 @@ import MyProfileEditComponent from "../component/MyProfileEditComponent/MyProfil
 import MyRecipeComponent from "../component/MyRecipeComponent/MyRecipeComponent";
 import VerifyCurrentPassword from "./VerifyCurrentPassword";
 import ChangePasswordPage from "./ChangePasswordPage";
-import { styled } from "@mui/system";
 import MyGroceryNote from "../component/MyGroceryNote/MyGroceryNote";
 import { useLoginWithToken } from "../hooks/User/useLoginWithToken";
 import { RootState } from "../redux/store";
-
-const CustomContainer = styled(Container)({
-  width: "100%",
-  maxWidth: "1200px",
-  margin: "50px auto",
-});
-
-const UserInfoCol = styled(Grid)({
-  "&.MuiGrid-item": {
-    "@media (min-width: 0px)": {
-      maxWidth: "100%",
-    },
-    "@media (min-width: 1280px)": {
-      maxWidth: "33.333333%",
-    },
-  },
-});
 
 const MyProfile = () => {
 
@@ -93,20 +75,20 @@ const MyProfile = () => {
   };
 
   return (
-    <CustomContainer>
-      <Grid container spacing={3}>
-      <UserInfoCol item xs={12} lg={3}>
+    <div className="container mx-auto max-w-7xl px-4 my-12">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div className="col-span-12 lg:col-span-3">
           {user ? (
             <UserInfo onButtonClick={handleButtonClick} user={user} />
           ) : (
-            <Typography>사용자 정보를 불러올 수 없습니다.</Typography>
+            <p className="text-gray-600 italic">사용자 정보를 불러올 수 없습니다.</p>
           )}
-        </UserInfoCol>
-        <Grid item xs={12} lg={9}>
+        </div>
+        <div className="col-span-12 lg:col-span-9">
           {renderComponent()}
-        </Grid>
-      </Grid>
-    </CustomContainer>
+        </div>
+      </div>
+    </div>
   );
 };
 

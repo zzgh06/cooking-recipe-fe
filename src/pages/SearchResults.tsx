@@ -2,7 +2,6 @@ import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import RecipeCard from '../component/RecipeCard/RecipeCard';
 import IngredientCard from '../component/IngredientCard/IngredientCard';
-import { Grid, Box, CircularProgress, Typography, Divider } from '@mui/material';
 import { useFetchRecipes } from '../hooks/Recipe/useFetchRecipes';
 import { useFetchIngredients } from '../hooks/Ingredient/useFetchIngredients';
 
@@ -14,65 +13,53 @@ const SearchResults = () => {
   const {
     data: recipesData,
     isLoading: recipesLoading,
-  } = useFetchRecipes({ name: keyword }) 
+  } = useFetchRecipes({ name: keyword })
 
   const {
     data: ingredientsData,
     isLoading: ingredientsLoading,
-  } = useFetchIngredients({ name: keyword, page: 1 }) 
+  } = useFetchIngredients({ name: keyword, page: 1 })
 
   const isLoading = recipesLoading || ingredientsLoading;
 
   return (
-    <Box sx={{ padding: { xs: "20px", md: "50px 150px" }, minHeight: "500px" }}>
-      <Typography variant="h4" sx={{ marginBottom: "30px", textAlign: "center" }}>
+    <div className="p-5 md:p-12 min-h-[500px]">
+      <h2 className="text-2xl font-bold mb-8 text-center">
         검색결과 "{keyword}"
-      </Typography>
+      </h2>
 
       {isLoading ? (
-        <Box sx={{ display: 'flex', justifyContent: 'center', my: 5 }}>
-          <CircularProgress size="80px" sx={{ color: 'green' }} />
-        </Box>
+        <div className="flex justify-center my-5">
+          <div className="animate-spin rounded-full h-20 w-20 border-t-4 border-green-500 border-solid"></div>
+        </div>
       ) : (
         <>
-          <Typography variant="h5" fontWeight="600" gutterBottom sx={{ mb: 3 }}>
-            레시피 검색 결과
-          </Typography>
+          <h3 className="text-xl font-semibold mb-3">레시피 검색 결과</h3>
           {recipesData && recipesData.recipes.length === 0 ? (
-            <Typography variant="body1" fontSize="20px">
-              레시피 검색 결과가 없습니다. 😅
-            </Typography>
+            <p className="text-lg">레시피 검색 결과가 없습니다. 😅</p>
           ) : (
-            <Grid container spacing={3}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {recipesData && recipesData.recipes.map((recipe) => (
-                <Grid item xs={12} sm={6} md={4} lg={3} key={recipe._id}>
-                  <RecipeCard item={recipe} />
-                </Grid>
+                <RecipeCard item={recipe} key={recipe._id} />
               ))}
-            </Grid>
+            </div>
           )}
 
-          <Divider sx={{ my: 5 }} />
+          <div className="my-5 border-t border-gray-300"></div>
 
-          <Typography variant="h5" fontWeight="600" gutterBottom sx={{ mb: 3 }}>
-            재료 검색 결과
-          </Typography>
-          {ingredientsData && ingredientsData?.ingredients?.length === 0 ? (
-            <Typography variant="body1" fontSize="20px">
-              재료 검색 결과가 없습니다. 😅
-            </Typography>
+          <h3 className="text-xl font-semibold mb-3">재료 검색 결과</h3>
+          {ingredientsData && ingredientsData.ingredients.length === 0 ? (
+            <p className="text-lg">재료 검색 결과가 없습니다. 😅</p>
           ) : (
-            <Grid container spacing={3}>
-              {ingredientsData && ingredientsData?.ingredients?.map((ing) => (
-                <Grid item xs={12} sm={6} md={4} lg={3} key={ing._id}>
-                  <IngredientCard item={ing} />
-                </Grid>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {ingredientsData && ingredientsData.ingredients.map((ing) => (
+                <IngredientCard item={ing} key={ing._id} />
               ))}
-            </Grid>
+            </div>
           )}
         </>
       )}
-    </Box>
+    </div>
   );
 };
 
