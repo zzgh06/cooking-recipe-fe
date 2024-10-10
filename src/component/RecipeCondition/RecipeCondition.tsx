@@ -2,16 +2,7 @@ import React from "react";
 import { useFetchRecipesByCategory } from "../../hooks/Recipe/useFetchRecipesByCategory";
 import RecipeCard from "../RecipeCard/RecipeCard";
 import RecipeCardSkeleton from "../Skeleton/RecipeCardSkeleton";
-import { Container, Grid, Box, Typography, styled } from "@mui/material";
 import { Recipe } from "../../types";
-
-const RecipeContainer = styled(Container)(({ theme }) => ({
-  marginTop: theme.spacing(6),
-}));
-
-const RecipeCardContainer = styled(Grid)({
-  width: '100%',
-});
 
 interface RecipeConditionProps {
   category: string;
@@ -33,29 +24,27 @@ const RecipeCondition = ({ category, path }: RecipeConditionProps) => {
       : [];
 
   return (
-    <RecipeContainer>
-      <RecipeCardContainer container spacing={3}>
+    <div className="mt-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {isLoading
           ? Array.from(new Array(8)).map((_, index) => (
-            <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+            <div key={index}>
               <RecipeCardSkeleton />
-            </Grid>
+            </div>
           ))
           : filteredRecipes && filteredRecipes.length > 0 ? (
             filteredRecipes.map((recipe: Recipe) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={recipe._id}>
+              <div key={recipe._id}>
                 <RecipeCard item={recipe} />
-              </Grid>
+              </div>
             ))
           ) : (
-            <Box sx={{ width: '100%', textAlign: 'center', mt: 4 }}>
-              <Typography variant="body1" color="text.secondary">
-                현재 선택된 카테고리에 대한 레시피가 없습니다.
-              </Typography>
-            </Box>
+            <div className="w-full text-center mt-8">
+              <p className="text-gray-500">현재 선택된 카테고리에 대한 레시피가 없습니다.</p>
+            </div>
           )}
-      </RecipeCardContainer>
-    </RecipeContainer>
+      </div>
+    </div>
   );
 };
 

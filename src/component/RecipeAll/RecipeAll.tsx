@@ -2,29 +2,52 @@ import React, { useEffect, useState } from "react";
 import { useFetchRecipesByCategory } from "../../hooks/Recipe/useFetchRecipesByCategory";
 import RecipeCard from "../RecipeCard/RecipeCard";
 import RecipeCardSkeleton from "../Skeleton/RecipeCardSkeleton";
-import { Container, Grid, Typography, Pagination, Box, styled } from "@mui/material";
 import { Recipe } from "../../types";
-
-const RecipeAllContainer = styled(Container)({
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  margin: "30px auto",
-});
-
-const RecipeCardContainer = styled(Grid)({
-  width: '100%',
-});
-
-const NoRecipesMessage = styled(Typography)({
-  marginTop: '20px',
-  color: '#888',
-  fontStyle: 'italic',
-});
+import Pagination from "react-js-pagination";
 
 interface RecipeAllProps {
-  category : string;
+  category: string;
 }
+
+const paginationStyle = `
+  .pagination {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+  }
+  
+  .pagination li {
+    display: inline-block;
+  }
+  
+  .pagination li a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.5rem;
+    height: 2.5rem;
+    padding: 0 0.5rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #4b5563;
+    transition: all 0.2s;
+  }
+  
+  .pagination li.active a {
+    background-color: #2563eb;
+    color: white;
+  }
+  
+  .pagination li a:hover:not(.active) {
+    background-color: #f3f4f6;
+  }
+  
+  .pagination li.disabled a {
+    color: #9ca3af;
+    cursor: not-allowed;
+  }
+`;
 
 const RecipeAll = ({ category }: RecipeAllProps) => {
   const [page, setPage] = useState<number>(1);
@@ -38,44 +61,52 @@ const RecipeAll = ({ category }: RecipeAllProps) => {
     refetch();
   }, [category, page, refetch]);
 
-  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    setPage(value);
+  const handlePageChange = (pageNumber: number) => {
+    setPage(pageNumber);
+    window.scrollTo(0, 0); 
   };
 
   const recipes: Recipe[] = data?.recipeList || [];
-  const totalPages: number = data?.totalPages || 1;
+  const totalPages: number = data?.totalPages || 0; 
+  const itemsPerPage: number = 1; 
 
   return (
-    <RecipeAllContainer>
-      <RecipeCardContainer container spacing={1}>
-        {isLoading
-          ? Array.from(new Array(8)).map((_, index) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
-                <RecipeCardSkeleton />
-              </Grid>
-            ))
-          : recipes.length > 0 ? (
-              recipes.map((recipe) => (
-                <Grid item xs={12} sm={6} md={4} lg={3} key={recipe._id}>
-                  <RecipeCard item={recipe} />
-                </Grid>
+    <>
+      <style>{paginationStyle}</style>
+      <div className="container mx-auto px-10 flex flex-col items-center my-8">
+        <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {isLoading
+            ? Array.from(new Array(8)).map((_, index) => (
+                <div key={index}>
+                  <RecipeCardSkeleton />
+                </div>
               ))
-            ) : (
-              <NoRecipesMessage>작성한 레시피가 없습니다.</NoRecipesMessage>
-            )}
-      </RecipeCardContainer>
-      {totalPages > 1 && (
-        <Box sx={{ mt: 4 }}>
-          <Pagination
-            count={totalPages}
-            size="large"
-            page={page}
-            onChange={handlePageChange}
-            sx={{ display: 'flex', justifyContent: 'center' }}
-          />
-        </Box>
-      )}
-    </RecipeAllContainer>
+            : recipes.length > 0 ? (
+                recipes.map((recipe) => (
+                  <div key={recipe._id}>
+                    <RecipeCard item={recipe} />
+                  </div>
+                ))
+              ) : (
+                <p className="text-gray-500 italic mt-5">작성한 레시피가 없습니다.</p>
+              )}
+        </div>
+        
+        {totalPages > 1 && (
+          <div className="mt-8">
+            <Pagination
+              activePage={page}
+              itemsCountPerPage={itemsPerPage}
+              totalItemsCount={totalPages * itemsPerPage}
+              pageRangeDisplayed={5}
+              prevPageText="이전"
+              nextPageText="다음"
+              onChange={handlePageChange}
+            />
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

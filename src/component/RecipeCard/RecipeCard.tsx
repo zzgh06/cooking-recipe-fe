@@ -31,7 +31,7 @@ const RecipeCard = React.memo(({ item }: RecipeCardProps) => {
         onClick={() => showRecipe(item._id || "")}
       />
       <div className="p-2">
-        <h6 className="text-xl font-semibold text-center truncate max-w-xs sm:max-w-sm md:max-w-md">
+        <h6 className="text-xl font-semibold text-center line-clamp-1 max-w-xs sm:max-w-sm md:max-w-md">
           {item.name}
         </h6>
         <div className="flex justify-center text-gray-500 mt-2">

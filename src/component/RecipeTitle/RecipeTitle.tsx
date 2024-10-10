@@ -19,7 +19,7 @@ const RecipeTitle = ({ title, subtitle }: RecipeTitleProps) => {
 
   return (
     <RecipeTitleBox>
-      <Typography variant="h4" fontWeight="600">
+      <Typography variant="h4" fontWeight="600" sx={{mt: "160px"}}>
         {title} 레시피
       </Typography>
       <Typography variant="subtitle1" color="textSecondary">
