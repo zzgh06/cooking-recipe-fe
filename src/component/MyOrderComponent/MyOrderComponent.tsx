@@ -8,6 +8,8 @@ import { OrderItem } from "../../types";
 import { format, isValid, startOfDay, endOfDay } from "date-fns";
 import MyPageOrderDialog from "../MyPageOrderDialog/MyPageOrderDialog";
 import DateFilterCondition from "../DateFilterCondition/DateFilterCondition";
+import Pagination from "react-js-pagination";
+import PaginationComponent from "../Pagination/PaginationComponent";
 
 const MyOrderComponent = () => {
   const dispatch = useDispatch();
@@ -21,10 +23,11 @@ const MyOrderComponent = () => {
   const [selectedOption, setSelectedOption] = useState("orderNum");
   const [page, setPage] = useState(1);
   const { data, isLoading } = useFetchOrder({ ...searchQuery, page });
-
   const orderList: OrderItem[] = data?.orderList || [];
-  const totalPageNum = data?.totalPages || 1;
   const [sortedOrderList, setSortedOrderList] = useState<OrderItem[]>([]);
+
+  const totalPages: number = data?.totalPages || 0;
+  const itemsPerPage: number = 1;
 
   useEffect(() => {
     if (searchQuery.orderNum === "") delete searchQuery.orderNum;
@@ -79,8 +82,9 @@ const MyOrderComponent = () => {
     setDialogOpen(false);
   };
 
-  const handlePageChange = (event: React.ChangeEvent<unknown> | null, value: number) => {
-    setPage(value);
+  const handlePageChange = (pageNumber: number) => {
+    setPage(pageNumber);
+    window.scrollTo(0, 0);
   };
 
   const handleReset = () => {
@@ -141,7 +145,7 @@ const MyOrderComponent = () => {
             <div className="flex gap-2">
               <button
                 type="submit"
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
               >
                 검색
               </button>
@@ -255,33 +259,12 @@ const MyOrderComponent = () => {
                 </tbody>
               </table>
 
-              <div className="mt-4 flex items-center justify-between px-4">
-                <span className="text-sm text-gray-700">
-                  페이지 {page} / {totalPageNum}
-                </span>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => handlePageChange(null, page - 1)}
-                    disabled={page === 1}
-                    className={`p-2 rounded-md ${page === 1
-                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                      : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-300"
-                      }`}
-                  >
-                    이전
-                  </button>
-                  <button
-                    onClick={() => handlePageChange(null, page + 1)}
-                    disabled={page === totalPageNum}
-                    className={`p-2 rounded-md ${page === totalPageNum
-                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                      : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-300"
-                      }`}
-                  >
-                    다음
-                  </button>
-                </div>
-              </div>
+              <PaginationComponent
+                activePage={page}
+                itemsCountPerPage={itemsPerPage}
+                totalItemsCount={totalPages * itemsPerPage}
+                onPageChange={handlePageChange}
+              />
             </div>
           )}
         </div>
