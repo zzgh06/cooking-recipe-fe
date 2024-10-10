@@ -44,7 +44,7 @@ const CartPage = () => {
 
   return (
     <div className="mb-8">
-      <h2 className="text-3xl text-center mt-20 mb-5 font-semibold">장바구니</h2>
+      <h2 className="text-3xl text-center font-semibold">장바구니</h2>
       <div className="flex justify-center flex-wrap xs:px-[20px] md:px-[40px] lg:px-[180px]">
         {!cartItem || cartItem.length === 0 ? (
           <div className="text-center w-3/5 p-8 flex flex-col items-center justify-center min-h-[300px] border border-gray-300 rounded-lg">

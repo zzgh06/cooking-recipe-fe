@@ -1,14 +1,4 @@
 import React, { useEffect, useState } from "react";
-import {
-  Container,
-  Grid,
-  TextField,
-  Button,
-  Typography,
-  Box,
-} from "@mui/material";
-import PaymentForm from "../component/PaymentForm/PaymentForm";
-import OrderReceipt from "../component/OrderReceipt/OrderReceipt";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { cc_expires_format } from "../utils/number";
@@ -16,6 +6,8 @@ import { useDeleteSelectedCartItems } from "../hooks/Cart/useDeleteSelectedCartI
 import { useCreateOrder } from "../hooks/Order/useCreateOrder";
 import { RootState } from "../redux/store";
 import { Ingredient } from "../types";
+import PaymentForm from "../component/PaymentForm/PaymentForm";
+import OrderReceipt from "../component/OrderReceipt/OrderReceipt";
 
 interface CardValue {
   cvc: string;
@@ -141,112 +133,104 @@ const PaymentPage = () => {
   }, [isSuccess, navigate]);
 
   return (
-    <Container sx={{ my: 3 }}>
-      <Grid container spacing={2}>
-        <Grid item lg={7}>
-          <Box>
-            <Typography variant="h4" component="h2" sx={{ mb: 2 }}>
-              배송 주소
-            </Typography>
-            <Box component="form" onSubmit={handleSubmit}>
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    label="성"
-                    variant="outlined"
-                    fullWidth
+    <div className="container mx-auto px-[30px] md:px-[100px] my-8">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-2">
+        <div className="lg:col-span-7">
+          <div>
+            <h2 className="text-2xl font-bold mb-6">배송 주소</h2>
+            <form onSubmit={handleSubmit}>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <input
+                    type="text"
+                    placeholder="성 *"
+                    className="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     onChange={handleFormChange}
                     required
                     name="lastName"
                   />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    label="이름"
-                    variant="outlined"
-                    fullWidth
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    placeholder="이름 *"
+                    className="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     onChange={handleFormChange}
                     required
                     name="firstName"
                   />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    label="연락처"
-                    variant="outlined"
-                    fullWidth
+                </div>
+                <div className="sm:col-span-2">
+                  <input
+                    type="text"
+                    placeholder="연락처 *"
+                    className="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     onChange={handleFormChange}
                     required
                     name="contact"
                   />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    label="주소"
-                    variant="outlined"
-                    fullWidth
+                </div>
+                <div className="sm:col-span-2">
+                  <input
+                    type="text"
+                    placeholder="주소 *"
+                    className="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     onChange={handleFormChange}
                     required
                     name="address"
                   />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    label="City"
-                    variant="outlined"
-                    fullWidth
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    placeholder="City *"
+                    className="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     onChange={handleFormChange}
                     required
                     name="city"
                   />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    label="Zip"
-                    variant="outlined"
-                    fullWidth
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    placeholder="Zip *"
+                    className="w-full px-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     onChange={handleFormChange}
                     required
                     name="zip"
                   />
-                </Grid>
-              </Grid>
-              <Box sx={{ display: { xs: 'none' }, mt: 2 }}>
-                <OrderReceipt
-                  selectedCartItems={selectedCartItems}
-                  totalPrice={totalPrice}
-                />
-              </Box>
-              <Box sx={{ mt: 2 }}>
-                <Typography variant="h4" component="h2" sx={{ mb: 2 }}>
-                  결제 정보
-                </Typography>
+                </div>
+              </div>
+
+              <div className="mt-8">
+                <h2 className="text-2xl font-bold mb-6">결제 정보</h2>
                 <PaymentForm
                   cardValue={cardValue}
                   handleInputFocus={handleInputFocus}
                   handlePaymentInfoChange={handlePaymentInfoChange}
                 />
-              </Box>
-              <Button
-                variant="contained"
-                color="primary"
+              </div>
+
+              <button
                 type="submit"
                 disabled={isDeleting || isOrdering}
-                sx={{ width: "100%", mt: 3 }}
+                className="w-full mt-6 px-6 py-3 bg-green-600 text-white rounded-lg font-medium 
+                  hover:bg-green-700 transition-colors duration-200 disabled:bg-gray-400 
+                  disabled:cursor-not-allowed"
               >
                 결제하기
-              </Button>
-            </Box>
-          </Box>
-        </Grid>
-        <Grid item lg={5} md={12} sx={{ display: { xs: 'block' } }}>
+              </button>
+            </form>
+          </div>
+        </div>
+        <div className="lg:col-span-5 block lg:block">
           <OrderReceipt
             selectedCartItems={selectedCartItems}
             totalPrice={totalPrice}
           />
-        </Grid>
-      </Grid>
-    </Container>
+        </div>
+      </div>
+    </div>
   );
 };
 

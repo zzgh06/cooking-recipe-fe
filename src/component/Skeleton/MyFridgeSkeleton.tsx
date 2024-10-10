@@ -3,7 +3,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 const SearchResultCardSkeleton = () => (
-  <div className="flex items-center w-[350px] p-4 m-4 shadow-lg rounded">
+  <div className="flex items-center w-full sm:w-[350px] p-4 m-4 shadow-lg rounded">
     <div className="mr-4">
       <Skeleton width={100} height={100} borderRadius={4} />
     </div>
@@ -26,10 +26,9 @@ const MyFridgeSkeleton = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 md:gap-5">
         <div className="flex flex-col justify-center items-center p-3 md:p-5 mb-3 md:mb-5 rounded-lg shadow-md border-2 border-gray-200 md:min-w-[500px] md:min-h-[400px]">
-          <div className="grid gap-2 w-full items-start justify-center mb-3">
-          </div>
+          <div className="grid gap-2 w-full items-start justify-center mb-3"></div>
           <div className="w-full flex justify-center mt-4">
             <Skeleton width={300} height={40} borderRadius={4} />
           </div>
@@ -37,7 +36,7 @@ const MyFridgeSkeleton = () => {
 
         <div>
           <div className="flex flex-col items-center justify-center px-3 sm:px-5 md:px-12 mb-5">
-            <div className="w-[350px] mb-4">
+            <div className="max-w-[350px] mb-4">
               <Skeleton height={32} />
             </div>
             <div className="w-full">
