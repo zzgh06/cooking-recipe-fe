@@ -8,9 +8,10 @@ const RecipeSkeleton = () => {
       <div className="text-center py-5">
         <Skeleton
           className="w-52 h-10 mx-auto mb-2"
+          width="20%"
           borderRadius="0.375rem" 
         />
-        <Skeleton className="w-36 mx-auto" borderRadius="0.375rem" />
+        <Skeleton className="w-36 mx-auto" width="20%" borderRadius="0.375rem" />
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
         <div className="col-span-1">
