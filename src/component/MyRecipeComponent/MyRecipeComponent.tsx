@@ -1,48 +1,14 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import {
-  Container,
-  Typography,
-  Grid,
-  Card,
-  CardContent,
-  CardMedia,
-  Button,
-  Box,
-  Modal,
-  styled,
-} from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { AddCircleOutline } from "@mui/icons-material";
-import RecipeForm from "../RecipeForm/RecipeForm";
 import { useEditRecipe } from "../../hooks/Recipe/useEditRecipe";
 import { RootState } from "../../redux/store";
 import { Recipe, SearchQuery } from "../../types";
 import { useFetchRecipes } from "../../hooks/Recipe/useFetchRecipes";
+import RecipeForm from "../RecipeForm/RecipeForm";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
 
-const HeadContainer = styled("div")({
-  display: "flex",
-  justifyContent: "flex-start",
-  alignItems: "baseline",
-  borderBottom: "4px solid black",
-  paddingLeft: "10px",
-});
-
-const NoRecipesContainer = styled(Box)({
-  textAlign: "center",
-  marginTop: "40px",
-  padding: "20px",
-  borderRadius: "8px",
-  backgroundColor: "#f2f2f2",
-  border: "2px dashed #ccc",
-});
-
-const NoRecipesMessage = styled(Typography)({
-  color: "#555",
-  fontSize: "1.2rem",
-  fontWeight: "bold",
-  fontStyle: "italic",
-});
 
 const MyRecipeComponent = () => {
   const navigate = useNavigate();
@@ -51,7 +17,7 @@ const MyRecipeComponent = () => {
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
   const { user } = useSelector((state: RootState) => state.auth);
   const { mutate: editRecipe } = useEditRecipe();
-  const { data : recipesData, refetch } = useFetchRecipes({} as SearchQuery);
+  const { data: recipesData, refetch } = useFetchRecipes({} as SearchQuery);
 
   const userRecipes = recipesData?.recipes?.filter(
     (recipe: Recipe) => recipe.userId === user?._id
@@ -77,108 +43,83 @@ const MyRecipeComponent = () => {
 
   return (
     <>
-      <Container>
-        <Box mb={3}>
-          <HeadContainer>
-            <Typography variant="h5">나의 정보</Typography>
-            <Typography variant="subtitle1">내 레시피</Typography>
-          </HeadContainer>
-        </Box>
+      <div className="container mx-auto px-4">
+        <div className="mb-6">
+          <div className="flex justify-start items-baseline border-b-4 border-black pl-2">
+            <h5 className="text-2xl font-semibold">나의 정보</h5>
+            <p className="ml-4 text-lg">내 레시피</p>
+          </div>
+        </div>
         {userRecipes && userRecipes.length > 0 ? (
-          <Grid container spacing={3}>
-            {userRecipes?.map((recipe) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={recipe._id}>
-                <Card sx={{ maxWidth: 345, boxShadow: 3 }}>
-                  <CardMedia
-                    component="img"
-                    height="140"
-                    image={recipe.images[0] || "/default-image.jpg"}
-                    alt={recipe.name}
-                  />
-                  <CardContent>
-                    <Typography variant="h6" component="div" noWrap>
-                      {recipe.name}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" noWrap>
-                      {recipe.description || "No description available"}
-                    </Typography>
-                  </CardContent>
-                  <Box
-                    sx={{ p: 2, display: "flex", justifyContent: "flex-end" }}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {userRecipes.map((recipe) => (
+              <div key={recipe._id} className="max-w-sm bg-white shadow-lg rounded-lg overflow-hidden">
+                <img
+                  className="w-full h-40 object-cover"
+                  src={recipe.images[0] || "/default-image.jpg"}
+                  alt={recipe.name}
+                />
+                <div className="p-4">
+                  <h6 className="text-xl font-semibold truncate">{recipe.name}</h6>
+                  <p className="text-gray-600 text-sm truncate">
+                    {recipe.description || "No description available"}
+                  </p>
+                </div>
+                <div className="flex justify-center p-4">
+                  <button
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded mr-2"
+                    onClick={() => openEditForm(recipe)}
                   >
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => openEditForm(recipe)}
-                      sx={{ marginRight: "10px" }}
-                    >
-                      수정
-                    </Button>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => handleRecipe(recipe._id || "")}
-                    >
-                      보기
-                    </Button>
-                  </Box>
-                </Card>
-              </Grid>
+                    수정
+                  </button>
+                  <button
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
+                    onClick={() => handleRecipe(recipe._id || "")}
+                  >
+                    보기
+                  </button>
+                </div>
+              </div>
             ))}
-          </Grid>
+          </div>
         ) : (
-          <NoRecipesContainer>
-            <NoRecipesMessage>작성한 레시피가 없습니다.</NoRecipesMessage>
-            <Button
-              size="large"
-              endIcon={<AddCircleOutline />}
+          <div className="text-center mt-10 p-5 bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg">
+            <p className="text-gray-600 text-lg font-semibold italic">
+              작성한 레시피가 없습니다.
+            </p>
+            <button
+              className="mx-auto flex items-center justify-center max-w-[500px] bg-black text-white px-6 py-2 mt-4 rounded-lg"
               onClick={() => navigate("/account/recipe")}
-              sx={{
-                justifyContent: "flex-end",
-                width: "170px",
-                color: "black",
-              }}
             >
               레시피 등록하기
-            </Button>
-            <Typography variant="body2" sx={{ marginTop: "8px" }}>
+              <FontAwesomeIcon icon={faCirclePlus} />
+            </button>
+            <p className="text-sm mt-2">
               새로운 레시피를 추가하려면 위의 버튼을 클릭하세요.
-            </Typography>
-          </NoRecipesContainer>
+            </p>
+          </div>
         )}
 
-        <Modal
-          open={showForm}
-          onClose={() => setShowForm(false)}
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            overflow: "scroll",
-          }}
-        >
-          <Box
-            sx={{
-              p: 3,
-              width: "80%",
-              maxWidth: 800,
-              maxHeight: "80vh",
-              overflowY: "auto",
-              bgcolor: "background.paper",
-              borderRadius: 2,
-              boxShadow: 24,
-            }}
+        {showForm && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4"
+            onClick={() => setShowForm(false)}
           >
-            <Typography variant="h6" gutterBottom>
-              {mode === "new" ? "Add New Recipe" : "Edit Recipe"}
-            </Typography>
-            <RecipeForm
-              onSubmit={handleFormSubmit}
-              initialData={selectedRecipe || undefined}
-            />
-          </Box>
-        </Modal>
-      </Container>
+            <div
+              className="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h6 className="text-3xl text-center font-bold mb-4">
+                {mode === "new" ? "레시피 작성" : "레시피 수정"}
+              </h6>
+              <RecipeForm
+                onSubmit={handleFormSubmit}
+                initialData={selectedRecipe || undefined}
+              />
+            </div>
+          </div>
+        )}
+      </div>
     </>
   );
 };

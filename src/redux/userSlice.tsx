@@ -70,6 +70,11 @@ const userSlice = createSlice({
       state.error = null;
       sessionStorage.removeItem("token");
     },
+    resetAuthState(state) {
+      state.loading = false;
+      state.error = null;
+      state.isAuthenticated = false; 
+    },
   },
 });
 
@@ -81,10 +86,11 @@ export const {
   setUpdateUser,
   setRegistrationData,
   setIsAuthenticated,
-  logout,
   setVerifyPasswordLoading,
   setVerifyPasswordError,
   setChangePasswordLoading,
   setChangePasswordError,
+  logout,
+  resetAuthState
 } = userSlice.actions;
 export default userSlice.reducer;

@@ -1,59 +1,13 @@
 import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import {
-  Box,
-  Typography,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Grid,
-  Select,
-  MenuItem,
-  TextField,
-  Button,
-  FormGroup,
-  FormControlLabel,
-  Checkbox,
-  TableContainer,
-  Paper,
-  styled,
-  Pagination,
-  Container,
-  CircularProgress,
-} from "@mui/material";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { format, isValid, startOfDay, endOfDay } from "date-fns";
-import DateFilterCondition from "../DateFilterCondition/DateFilterCondition";
 import { currencyFormat } from "../../utils/number";
-import MyPageOrderDialog from "../MyPageOrderDialog/MyPageOrderDialog";
 import { setSelectedOrder } from "../../redux/orderSlice";
 import { useFetchOrder } from "../../hooks/Order/useFetchOrder";
 import { OrderItem } from "../../types";
-
-const cellStyle1 = {
-  whiteSpace: "nowrap",
-  overflow: "hidden",
-  textOverflow: "ellipsis",
-  maxWidth: "150px",
-  color: "white",
-};
-
-const cellStyle2 = {
-  whiteSpace: "nowrap",
-  overflow: "hidden",
-  textOverflow: "ellipsis",
-  maxWidth: "150px",
-};
-
-const HeadContainer = styled("div")({
-  display: "flex",
-  justifyContent: "flex-start",
-  alignItems: "baseline",
-  borderBottom: "4px solid black",
-  paddingLeft: "10px",
-});
+import { format, isValid, startOfDay, endOfDay } from "date-fns";
+import MyPageOrderDialog from "../MyPageOrderDialog/MyPageOrderDialog";
+import DateFilterCondition from "../DateFilterCondition/DateFilterCondition";
 
 const MyOrderComponent = () => {
   const dispatch = useDispatch();
@@ -80,7 +34,7 @@ const MyOrderComponent = () => {
 
   useEffect(() => {
     if (orderList.length === 0) return;
-    
+
     let sortedList = [...orderList];
     if (recentChecked) {
       sortedList.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
@@ -125,7 +79,7 @@ const MyOrderComponent = () => {
     setDialogOpen(false);
   };
 
-  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+  const handlePageChange = (event: React.ChangeEvent<unknown> | null, value: number) => {
     setPage(value);
   };
 
@@ -141,197 +95,200 @@ const MyOrderComponent = () => {
 
   if (isLoading) {
     return (
-      <Container
-        maxWidth="lg"
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          minHeight: "100vh",
-        }}
-      >
-        <CircularProgress size="100px" sx={{ color: "green" }} />
-      </Container>
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin border-4 border-green-500 border-t-transparent rounded-full w-24 h-24"></div>
+      </div>
     );
   }
 
   return (
-    <Grid container>
-      <Grid item xs={12} md={12}>
-        <HeadContainer>
-          <Typography variant="h5">쇼핑</Typography>
-          <Typography variant="subtitle1">내주문</Typography>
-        </HeadContainer>
-      </Grid>
-      <Grid item xs={12} md={12}>
-        <Box mt={2}>
-          <Typography variant="subtitle1" ml={1} mb={1}>
-            최대 지난 3년간의 주문내역까지 확인할 수 있어요
-          </Typography>
-          <Grid
-            container
-            border={3}
-            borderRadius={4}
-            sx={{ borderColor: "success.main", opacity: "70%" }}
-            p={3}
-          >
-            <Grid container>
-              <DateFilterCondition
-                startDate={startDate}
-                setStartDate={setStartDate}
-                endDate={endDate}
-                setEndDate={setEndDate}
-              />
-            </Grid>
-            <Grid container spacing={2} mt={1}>
-              <Grid item xs={12} md={2}>
-                <Select
-                  value={selectedOption || ""}
-                  onChange={(event) => {
-                    setSelectedOption(event.target.value);
-                  }}
-                  fullWidth
-                  sx={{ width: "120px", height: "40px" }}
-                >
-                  <MenuItem value="orderNum">주문번호</MenuItem>
-                </Select>
-              </Grid>
-              <Grid item xs={12} md={2}>
-                <TextField
-                  label={selectedOption === "orderNum" ? "주문번호" : ""}
-                  variant="outlined"
-                  fullWidth
-                  value={searchQuery[selectedOption] || ""}
-                  placeholder="내용을 입력해주세요."
-                  InputLabelProps={{ shrink: true, style: { top: 0 } }}
-                  InputProps={{ style: { height: "40px", padding: "0 14px" } }}
-                  sx={{ width: "280px", height: "40px" }}
-                  onChange={(event) =>
-                    setSearchQuery({
-                      ...searchQuery,
-                      [selectedOption]: event.target.value,
-                    })
-                  }
-                />
-              </Grid>
-              <Grid item xs={12} md={8} sx={{ textAlign: 'right' }}>
-                <Button
-                  variant="contained"
-                  color="success"
-                  size="small"
-                  fullWidth
-                  sx={{ marginRight: "10px", width: "13ch", height: "40px" }}
-                  onClick={handleSearch}
-                >
-                  조회
-                </Button>
-                <Button
-                  variant="contained"
-                  color="success"
-                  size="small"
-                  sx={{ marginRight: "10px", width: "13ch", height: "40px" }}
-                  onClick={handleReset}
-                >
-                  초기화
-                </Button>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Box sx={{ mt: "10px" }}>
-            <FormGroup
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "flex-end",
-              }}
+    <div className="max-w-7xl mx-auto px-4">
+      <div className="flex items-baseline border-b-4 border-black pb-2">
+        <h2 className="text-2xl font-semibold">쇼핑</h2>
+        <span className="ml-4 text-lg">내주문</span>
+      </div>
+      <h3 className="text-md ml-1 mb-1 py-3">최대 지난 3년간의 주문내역까지 확인할 수 있어요</h3>
+      <div className="bg-white rounded-lg shadow-sm border-2 border-gray-200 p-6 mb-8">
+        <DateFilterCondition
+          startDate={startDate}
+          setStartDate={setStartDate}
+          endDate={endDate}
+          setEndDate={setEndDate}
+        />
+        <form onSubmit={handleSearch} className="space-y-6">
+          <div className="flex flex-col md:flex-row gap-4 pt-5">
+            <select
+              value={selectedOption}
+              onChange={(e) => setSelectedOption(e.target.value)}
+              className="w-full md:w-48 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={recentChecked}
-                    onChange={handleRecentChange}
-                  />
-                }
-                label={<Typography variant="body2">최근순</Typography>}
+              <option value="orderNum">주문번호</option>
+            </select>
+
+            <input
+              type="text"
+              placeholder={selectedOption === "orderNum" ? "주문번호를 입력하세요" : ""}
+              value={searchQuery[selectedOption] || ""}
+              onChange={(e) =>
+                setSearchQuery({
+                  ...searchQuery,
+                  [selectedOption]: e.target.value,
+                })
+              }
+              className="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+
+            <div className="flex gap-2">
+              <button
+                type="submit"
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              >
+                검색
+              </button>
+              <button
+                type="button"
+                onClick={handleReset}
+                className="px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              >
+                초기화
+              </button>
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-6">
+            <label className="flex items-center">
+              <input
+                type="checkbox"
+                checked={recentChecked}
+                onChange={handleRecentChange}
+                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
               />
-              <FormControlLabel
-                control={
-                  <Checkbox checked={oldChecked} onChange={handleOldChange} />
-                }
-                label={<Typography variant="body2">오래된순</Typography>}
+              <span className="ml-2 text-sm text-gray-700">최근순</span>
+            </label>
+            <label className="flex items-center">
+              <input
+                type="checkbox"
+                checked={oldChecked}
+                onChange={handleOldChange}
+                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
               />
-            </FormGroup>
-          </Box>
-          <Typography variant="h6" sx={{ marginBottom: "10px" }}>
-            주문 내역/배송 상태
-          </Typography>
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow sx={{ backgroundColor: "green" }}>
-                  <TableCell style={cellStyle1}>주문번호</TableCell>
-                  <TableCell style={cellStyle1}>주문일자</TableCell>
-                  <TableCell style={cellStyle1}>주문내역</TableCell>
-                  <TableCell style={cellStyle1}>총주문액</TableCell>
-                  <TableCell style={cellStyle1}>주문상태</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {sortedOrderList.length > 0 ? (
-                  sortedOrderList.map((item) => (
-                    <TableRow
-                      key={item._id}
-                      onClick={() => handleOpenDialog(item)}
-                    >
-                      <TableCell style={{ ...cellStyle2, cursor: "pointer" }}>
-                        {item.orderNum}
-                      </TableCell>
-                      <TableCell style={cellStyle2}>
-                        {item.createdAt.slice(0, 10)}
-                      </TableCell>
-                      <TableCell style={cellStyle2}>
-                        {item?.items
-                          ?.map((item) => item.ingredientId?.name)
-                          .join(", ")
-                          .slice(0, 25)}
-                        {item?.items
-                          ?.map((item) => item.ingredientId?.name)
-                          .join(", ").length > 25
-                          ? "..."
-                          : ""}
-                      </TableCell>
-                      <TableCell style={cellStyle2}>
-                        {currencyFormat(item.totalPrice)}
-                      </TableCell>
-                      <TableCell style={cellStyle2}>{item.status}</TableCell>
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={5} align="center">
-                      <Typography>No Data to show</Typography>
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Box>
-        <Box
-          sx={{ display: "flex", justifyContent: "center", marginTop: "20px" }}
-        >
-          <Pagination
-            count={totalPageNum}
-            size="large"
-            sx={{ marginBottom: "20px" }}
-            page={page}
-            onChange={handlePageChange}
-            color="primary"
-          />
-        </Box>
-        <MyPageOrderDialog open={dialogOpen} handleClose={handleCloseDialog} />
-      </Grid>
-    </Grid>
+              <span className="ml-2 text-sm text-gray-700">오래된순</span>
+            </label>
+          </div>
+        </form>
+      </div>
+
+      <div className="bg-white rounded-lg shadow-sm border-2 border-gray-200" >
+        <div className="p-6">
+          <h2 className="text-[20px] font-semibold mb-4">주문 내역/배송상태</h2>
+          {isLoading ? (
+            <div className="flex justify-center items-center h-48">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead>
+                  <tr className="bg-green-100">
+                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                      주문번호
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                      주문일자
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                      주문내역
+                    </th>
+                    <th className="px-6 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                      총주문액
+                    </th>
+                    <th className="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                      주문상태
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {sortedOrderList.length > 0 ? (
+                    sortedOrderList.map((item) => (
+                      <tr
+                        key={item._id}
+                        onClick={() => handleOpenDialog(item)}
+                        className="hover:bg-gray-50 cursor-pointer transition-colors"
+                      >
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                          {item.orderNum}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {item.createdAt.slice(0, 10)}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-500">
+                          {item?.items
+                            ?.map((item) => item.ingredientId?.name || "")
+                            .join(", ")
+                            .slice(0, 25)}
+                          {item?.items
+                            ?.map((item) => item.ingredientId?.name || "")
+                            .join(", ").length > 25
+                            ? "..."
+                            : ""}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900">
+                          {currencyFormat(item.totalPrice)}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-center">
+                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full
+                            ${item.status === "delivered" ? "bg-green-100 text-green-800" :
+                              item.status === "shipping" ? "bg-blue-100 text-blue-800" :
+                                "bg-gray-100 text-gray-800"}`}>
+                            {item.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={5} className="px-6 py-12 text-center text-sm text-gray-500">
+                        주문 내역이 없습니다
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+
+              <div className="mt-4 flex items-center justify-between px-4">
+                <span className="text-sm text-gray-700">
+                  페이지 {page} / {totalPageNum}
+                </span>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => handlePageChange(null, page - 1)}
+                    disabled={page === 1}
+                    className={`p-2 rounded-md ${page === 1
+                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                      : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-300"
+                      }`}
+                  >
+                    이전
+                  </button>
+                  <button
+                    onClick={() => handlePageChange(null, page + 1)}
+                    disabled={page === totalPageNum}
+                    className={`p-2 rounded-md ${page === totalPageNum
+                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                      : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-300"
+                      }`}
+                  >
+                    다음
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div >
+
+      <MyPageOrderDialog open={dialogOpen} onClose={handleCloseDialog} />
+    </div >
   );
 };
 
