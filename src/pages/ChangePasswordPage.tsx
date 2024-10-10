@@ -1,12 +1,4 @@
 import React, { useState } from "react";
-import {
-  Button,
-  TextField,
-  Typography,
-  IconButton,
-  InputAdornment,
-  Box,
-} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -19,19 +11,6 @@ import {
 } from "../redux/userSlice";
 import { RootState } from "../redux/store";
 
-const HeadContainer = (props: any) => (
-  <Box
-    sx={{
-      display: "flex",
-      alignItems: "baseline",
-      borderBottom: "4px solid black",
-      paddingLeft: (theme) => theme.spacing(1),
-      mb: 3,
-      textAlign: 'center'
-    }}
-    {...props}
-  />
-);
 
 const ChangePasswordPage = () => {
   const dispatch = useDispatch();
@@ -46,7 +25,7 @@ const ChangePasswordPage = () => {
 
   const { mutate: changePassword } = useChangePassword();
 
-  const handleSubmit = (e: React.FormEvent<HTMLDivElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (newPassword.includes(" ")) {
@@ -85,114 +64,90 @@ const ChangePasswordPage = () => {
 
   return (
     <>
-      <HeadContainer>
-        <Typography variant="h5">나의 정보</Typography>
-        <Typography variant="subtitle1">비밀번호 변경</Typography>
-      </HeadContainer>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          flexDirection: 'column',
-        }}
-      >
-        <Box
-          component="form"
+      <div className="flex justify-start items-baseline border-b-4 border-black pl-2">
+        <h5 className="text-2xl font-semibold">나의 정보</h5>
+        <p className="ml-4 text-lg">비밀번호 변경</p>
+      </div>
+      <div className="flex justify-center items-center flex-col">
+        <div className="mb-3 text-center">
+          <h5 className="text-2xl font-semibold mt-4 mb-1">비밀번호 변경</h5>
+          <p>회원님만의 안전하고 새로운 비밀번호를 입력해주세요.</p>
+        </div>
+        <form
           onSubmit={handleSubmit}
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            width: '100%',
-            maxWidth: '450px',
-            p: 3,
-          }}
+          className="flex flex-col items-center w-full max-w-lg px-6 pt-3"
         >
           {gapMessage && (
-            <Typography
-              color="error"
-              sx={{ mb: 2, display: "flex", alignItems: "center" }}
-            >
-              <FontAwesomeIcon
-                icon={faEyeSlash}
-                style={{ marginRight: "8px" }}
-              />
+            <p className="text-red-600 mb-4 flex items-center">
+              <FontAwesomeIcon icon={faEyeSlash} className="mr-2" />
               {gapMessage}
-            </Typography>
+            </p>
           )}
           {error && (
-            <Typography
-              color="error"
-              sx={{ mb: 2, display: "flex", alignItems: "center" }}
-            >
-              <FontAwesomeIcon
-                icon={faEyeSlash}
-                style={{ marginRight: "8px" }}
-              />
+            <p className="text-red-600 mb-4 flex items-center">
+              <FontAwesomeIcon icon={faEyeSlash} className="mr-2" />
               {error}
-            </Typography>
+            </p>
           )}
-          <TextField
-            fullWidth
-            variant="outlined"
-            label="새 비밀번호"
-            type={showPassword ? "text" : "password"}
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            onFocus={() => {
-              setErrorMessage("");
-              setGapMessage("");
-            }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={togglePasswordVisibility}>
-                    <FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            fullWidth
-            variant="outlined"
-            label="새 비밀번호 재확인"
-            type={showConfirmPassword ? "text" : "password"}
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            onFocus={() => {
-              setErrorMessage("");
-              setGapMessage("");
-            }}
-            error={!!errorMessage}
-            helperText={errorMessage}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={toggleConfirmPasswordVisibility}>
-                    <FontAwesomeIcon
-                      icon={showConfirmPassword ? faEye : faEyeSlash}
-                    />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            sx={{ mb: 2 }}
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            fullWidth
+          <div className="mb-4 w-full">
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                onFocus={() => {
+                  setErrorMessage("");
+                  setGapMessage("");
+                }}
+                className="w-full border border-gray-300 rounded px-2 py-4"
+                placeholder="새 비밀번호"
+              />
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute right-3 top-5 text-gray-600"
+              >
+                <FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} />
+              </button>
+            </div>
+          </div>
+          <div className="mb-4 w-full">
+            <div className="relative">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                onFocus={() => {
+                  setErrorMessage("");
+                  setGapMessage("");
+                }}
+                className={`w-full border px-2 py-4 rounded ${errorMessage ? "border-red-600" : "border-gray-300"
+                  }`}
+                placeholder="새 비밀번호 재확인"
+              />
+              <button
+                type="button"
+                onClick={toggleConfirmPasswordVisibility}
+                className="absolute right-3 top-5 text-gray-600"
+              >
+                <FontAwesomeIcon
+                  icon={showConfirmPassword ? faEye : faEyeSlash}
+                />
+              </button>
+            </div>
+            {errorMessage && (
+              <p className="text-red-600 text-sm mt-2">{errorMessage}</p>
+            )}
+          </div>
+          <button
             type="submit"
             disabled={loading}
-            sx={{ mt: 2 }}
+            className="w-full bg-blue-600 text-white font-semibold py-2 rounded-md transition duration-200 hover:bg-blue-500 disabled:bg-blue-300"
           >
             {loading ? "변경 중..." : "비밀번호 재설정"}
-          </Button>
-        </Box>
-      </Box>
+          </button>
+        </form>
+      </div>
     </>
   );
 };

@@ -1,40 +1,7 @@
 import React from 'react';
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Button,
-  TableContainer,
-  Paper
-} from '@mui/material';
 import { useSelector } from 'react-redux';
-import { styled } from '@mui/material/styles';
-import { tableCellClasses } from '@mui/material/TableCell';
 import { currencyFormat } from '../../utils/number';
 import { RootState } from '../../redux/store';
-
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.primary.light,
-    color: theme.palette.common.white,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}));
-
-const cellStyle = {
-  whiteSpace: 'nowrap',
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-  maxWidth: '150px',
-};
 
 interface ContactInfo {
   shipTo: {
@@ -65,84 +32,86 @@ interface SelectedOrder {
 
 interface MyPageOrderDialogProps {
   open: boolean;
-  handleClose: () => void;
+  onClose: () => void;
 }
 
-const MyPageOrderDialog = ({ open, handleClose }: MyPageOrderDialogProps) => {
+const MyPageOrderDialog = ({ open, onClose }: MyPageOrderDialogProps) => {
   const selectedOrder = useSelector((state: RootState) => state.order.selectedOrder) as SelectedOrder | null;
 
+  if (!open) return null; 
+  
   return (
-    <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>주문 상세 정보</DialogTitle>
-      <DialogContent dividers>
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell style={cellStyle}>주문번호</TableCell>
-                <TableCell style={cellStyle}>주문일자</TableCell>
-                <TableCell style={cellStyle}>주소</TableCell>
-                <TableCell style={cellStyle}>연락처</TableCell>
-              </TableRow>
-            </TableHead>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="bg-white rounded-lg shadow-lg w-11/12 md:w-10/12 lg:w-1/2">
+        <div className="border-b p-4">
+          <h2 className="text-lg font-semibold">주문 상세 정보</h2>
+        </div>
+        <div className="p-4">
+          <div className="mb-4">
+            <table className="min-w-full">
+              <thead>
+                <tr>
+                  <th className="px-4 py-2 text-left text-gray-700 bg-gray-100">주문번호</th>
+                  <th className="px-4 py-2 text-left text-gray-700 bg-gray-100">주문일자</th>
+                  <th className="px-4 py-2 text-left text-gray-700 bg-gray-100">주소</th>
+                  <th className="px-4 py-2 text-left text-gray-700 bg-gray-100">연락처</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className="border px-4 py-2">{selectedOrder?.orderNum}</td>
+                  <td className="border px-4 py-2">{selectedOrder?.createdAt?.slice(0, 10)}</td>
+                  <td className="border px-4 py-2">{selectedOrder?.contactInfo?.shipTo?.address}</td>
+                  <td className="border px-4 py-2">{selectedOrder?.contactInfo?.contact?.contact}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
-            <TableBody>
-              <TableRow>
-                <TableCell style={cellStyle}>{selectedOrder?.orderNum}</TableCell>
-                <TableCell style={cellStyle}>{selectedOrder?.createdAt?.slice(0, 10)}</TableCell>
-                <TableCell style={cellStyle}>{selectedOrder?.contactInfo?.shipTo?.address}</TableCell>
-                <TableCell style={cellStyle}>{selectedOrder?.contactInfo?.contact?.contact}</TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
-
-        <TableContainer component={Paper} sx={{ mt: 1 }}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <StyledTableCell style={cellStyle}>상품명</StyledTableCell>
-                <StyledTableCell style={cellStyle}>가격</StyledTableCell>
-                <StyledTableCell style={cellStyle}>수량</StyledTableCell>
-                <StyledTableCell style={cellStyle}>총 가격</StyledTableCell>
-              </TableRow>
-            </TableHead>
-
-            <TableBody>
-              {selectedOrder?.items && selectedOrder.items.length > 0 ? (
-                selectedOrder.items.map((item, index) => (
-                  <TableRow key={index}>
-                    <TableCell style={cellStyle}>{item.ingredientId.name}</TableCell>
-                    <TableCell style={cellStyle}>{currencyFormat(item.ingredientId.price)}</TableCell>
-                    <TableCell style={cellStyle}>{item.qty}</TableCell>
-                    <TableCell style={cellStyle}>{currencyFormat(item.price * item.qty)}</TableCell>
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={4} style={cellStyle} align="center">
-                    주문 내역이 없습니다.
-                  </TableCell>
-                </TableRow>
-              )}
-              <TableRow>
-                <TableCell colSpan={3} style={cellStyle}>
-                  총 주문액
-                </TableCell>
-                <TableCell style={cellStyle}>
-                  {selectedOrder ? currencyFormat(selectedOrder.totalPrice) + '원' : '0원'}
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose} color="primary">
-          닫기
-        </Button>
-      </DialogActions>
-    </Dialog>
+          <div>
+            <table className="min-w-full">
+              <thead>
+                <tr>
+                  <th className="px-4 py-2 text-left text-gray-700 bg-gray-100">상품명</th>
+                  <th className="px-4 py-2 text-left text-gray-700 bg-gray-100">가격</th>
+                  <th className="px-4 py-2 text-left text-gray-700 bg-gray-100">수량</th>
+                  <th className="px-4 py-2 text-left text-gray-700 bg-gray-100">총 가격</th>
+                </tr>
+              </thead>
+              <tbody>
+                {selectedOrder?.items && selectedOrder.items.length > 0 ? (
+                  selectedOrder.items.map((item, index) => (
+                    <tr key={index}>
+                      <td className="border px-4 py-2">{item?.ingredientId?.name || ""}</td>
+                      <td className="border px-4 py-2">{currencyFormat(item?.ingredientId?.price) || 0}</td>
+                      <td className="border px-4 py-2">{item?.qty || 0}</td>
+                      <td className="border px-4 py-2">{currencyFormat(item?.price * item?.qty) || 0}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={4} className="border px-4 py-2 text-center">
+                      주문 내역이 없습니다.
+                    </td>
+                  </tr>
+                )}
+                <tr>
+                  <td colSpan={3} className="border px-4 py-2">총 주문액</td>
+                  <td className="border px-4 py-2">
+                    {selectedOrder ? currencyFormat(selectedOrder.totalPrice) + '원' : '0원'}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div className="flex justify-end p-4 border-t">
+          <button onClick={onClose} className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
+            닫기
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 

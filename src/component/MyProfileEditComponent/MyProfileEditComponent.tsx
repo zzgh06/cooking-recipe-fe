@@ -1,63 +1,9 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
-import { Grid, Typography, TextField, Button, styled } from "@mui/material";
 import CloudinaryUploadWidget from "../../utils/CloudinaryUploadWidget";
 import { useNavigate } from "react-router-dom";
 import defaultProfile from "../../assets/img/profile_user.png";
 import { useUpdateUser } from "../../hooks/User/useUpdateUser";
 import { User } from "../../types";
-
-const HeadContainer = styled('div')({
-  display: 'flex',
-  justifyContent: 'flex-start',
-  alignItems: 'baseline',
-  borderBottom: '4px solid black',
-  paddingLeft: '10px',
-});
-
-const ProfileContainer = styled('div')({
-  width: '100%',
-  height: '100%',
-  display: 'flex',
-  justifyContent: 'center',
-});
-
-const EditUserFormContainer = styled('form')({
-  display: 'flex',
-  flexDirection: 'column',
-  backgroundColor: 'white',
-  boxShadow: 'none',
-  gap: '16px',
-  padding: '16px',
-});
-
-const UploadImgArea = styled('div')({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-});
-
-const UploadImage = styled('img')({
-  width: '200px',
-  height: '200px',
-  objectFit: 'cover',
-  marginBottom: "10px",
-  borderRadius: '50%',
-  border: '2px solid lightgrey'
-});
-
-const EditSubmitBtn = styled(Button)({
-  margin: '0 auto',
-  marginTop: '16px',
-  width: '150px',
-});
-
-const ProfileImage = styled('div')({
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  textAlign: 'center'
-})
 
 interface FormErrors {
   email: string;
@@ -78,9 +24,9 @@ interface MyProfileEditComponentProps {
   user: User;
 }
 
-const MyProfileEditComponent = ({user}: MyProfileEditComponentProps ) => {
+const MyProfileEditComponent = ({ user }: MyProfileEditComponentProps) => {
   const navigate = useNavigate();
-  
+
   const [formData, setFormData] = useState<EditableUserInfo>({
     image: "",
     email: "",
@@ -94,7 +40,7 @@ const MyProfileEditComponent = ({user}: MyProfileEditComponentProps ) => {
     contact: "",
     shipTo: "",
   });
-  
+
   const { mutate: updateUser, isPending } = useUpdateUser();
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -106,7 +52,7 @@ const MyProfileEditComponent = ({user}: MyProfileEditComponentProps ) => {
         email: user.email || '',
         name: user.name || '',
         contact: formatPhoneNumber(user.contact || '') || '',
-        shipTo: user.shipTo || '' ,
+        shipTo: user.shipTo || '',
       });
     }
   }, [user]);
@@ -176,90 +122,89 @@ const MyProfileEditComponent = ({user}: MyProfileEditComponentProps ) => {
   };
 
   return (
-    <Grid container>
-      <Grid item xs={12}>
-        <HeadContainer>
-          <Typography variant="h5">나의 정보</Typography>
-          <Typography variant="subtitle1">회원정보 수정</Typography>
-        </HeadContainer>
-      </Grid>
-      <Grid item xs={12} sx={{ marginTop: '50px' }}>
-        <ProfileContainer>
-          <EditUserFormContainer onSubmit={handleSubmit}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} md={6}>
-                <ProfileImage>
-                  <Typography variant="h6" sx={{ fontWeight: '600' }}>
-                    프로필 이미지
-                  </Typography>
-                  <UploadImgArea>
-                    <UploadImage
-                      id="uploadedimage"
-                      src={formData?.image === '' ? defaultProfile : formData?.image}
-                      alt="uploadedimage"
-                    />
-                    <CloudinaryUploadWidget uploadImage={uploadImage} />
-                  </UploadImgArea>
-                </ProfileImage>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <TextField
+    <div className="container mx-auto px-4">
+        <div className="mb-6">
+        <div className="flex justify-start items-baseline border-b-4 border-black">
+          <h5 className="text-2xl font-semibold">나의 정보</h5>
+          <p className="ml-4 text-lg">회원정보 수정</p>
+        </div>
+
+        <form className="bg-white shadow-none p-4 flex flex-col gap-4" onSubmit={handleSubmit}>
+          <div className="flex flex-col md:flex-row gap-[60px] justify-center"> 
+            <div className="flex flex-col items-center">
+              <h6 className="font-semibold text-[22px] my-3">프로필 이미지</h6>
+              <div className="flex flex-col items-start">
+                <img
+                  id="uploadedimage"
+                  src={formData?.image === "" ? defaultProfile : formData?.image}
+                  alt="uploadedimage"
+                  className="w-[200px] h-[200px] object-cover mb-2 rounded-full border-2 border-gray-300"
+                />
+                <CloudinaryUploadWidget uploadImage={uploadImage} />
+              </div>
+            </div>
+
+            <div className="w-full max-w-md">
+              <div className="mb-4">
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700">이메일</label>
+                <input
                   id="email"
-                  label="이메일"
-                  variant="outlined"
-                  fullWidth
+                  type="email"
                   value={formData.email}
                   onChange={handleChange}
-                  error={!!formErrors.email}
-                  helperText={formErrors.email}
-                  sx={{ marginBottom: '16px' }}
+                  className={`block w-full mt-1 p-3 border ${formErrors.email ? 'border-red-500' : 'border-gray-300'} rounded`}
                 />
-                <TextField
+                {formErrors.email && <p className="text-red-500 text-sm">{formErrors.email}</p>}
+              </div>
+
+              <div className="mb-4">
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700">이름</label>
+                <input
                   id="name"
-                  label="이름"
-                  variant="outlined"
-                  fullWidth
+                  type="text"
                   value={formData.name}
                   onChange={handleChange}
-                  error={!!formErrors.name}
-                  helperText={formErrors.name}
-                  sx={{ marginBottom: '16px' }}
+                  className={`block w-full mt-1 p-3 border ${formErrors.name ? 'border-red-500' : 'border-gray-300'} rounded`}
                 />
-                <TextField
+                {formErrors.name && <p className="text-red-500 text-sm">{formErrors.name}</p>}
+              </div>
+
+              <div className="mb-4">
+                <label htmlFor="contact" className="block text-sm font-medium text-gray-700">연락처</label>
+                <input
                   id="contact"
-                  label="연락처"
-                  variant="outlined"
-                  fullWidth
+                  type="text"
                   value={formData.contact}
                   onChange={handleChange}
-                  error={!!formErrors.contact}
-                  helperText={formErrors.contact}
-                  sx={{ marginBottom: '16px' }}
+                  className={`block w-full mt-1 p-3 border ${formErrors.contact ? 'border-red-500' : 'border-gray-300'} rounded`}
                 />
-                <TextField
+                {formErrors.contact && <p className="text-red-500 text-sm">{formErrors.contact}</p>}
+              </div>
+
+              <div className="mb-4">
+                <label htmlFor="shipTo" className="block text-sm font-medium text-gray-700">주소</label>
+                <input
                   id="shipTo"
-                  label="주소"
-                  variant="outlined"
-                  fullWidth
+                  type="text"
                   value={formData.shipTo}
                   onChange={handleChange}
-                  error={!!formErrors.shipTo}
-                  helperText={formErrors.shipTo}
+                  className={`block w-full mt-1 p-3 border ${formErrors.shipTo ? 'border-red-500' : 'border-gray-300'} rounded`}
                 />
-                <EditSubmitBtn
-                  variant="contained"
-                  color="primary"
-                  type="submit"
-                  disabled={isPending}
-                >
-                  저장하기
-                </EditSubmitBtn>
-              </Grid>
-            </Grid>
-          </EditUserFormContainer>
-        </ProfileContainer>
-      </Grid>
-    </Grid>
+                {formErrors.shipTo && <p className="text-red-500 text-sm">{formErrors.shipTo}</p>}
+              </div>
+
+              <button
+                type="submit"
+                className="block w-36 mx-auto mt-4 p-2 bg-blue-500 text-white font-medium rounded"
+                disabled={isPending}
+              >
+                저장하기
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
   );
 };
 

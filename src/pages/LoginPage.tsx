@@ -92,54 +92,56 @@ const LoginPage = () => {
   const errorMessage = loginWithGoogleError?.message;
 
   return (
-    <div className="max-w-[430px] mx-auto mt-12 p-6">
-      <div className="text-center mb-6 border-b-4 border-black">
-        <h2 className="text-3xl font-bold py-2">로그인</h2>
-      </div>
-      <form onSubmit={handleLogin}>
-        <div className="mb-4">
-          <input
-            type="text"
-            name="id"
-            placeholder="아이디를 입력해 주세요"
-            onChange={handleChange}
-            required
-            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-          />
+    <div className="flex flex-col justify-center bg-gray-50 py-12 sm:px-6 lg:px-8">
+      <div className="max-w-[430px] mx-auto mt-4 p-6 bg-gray-50">
+        <div className="text-center mb-6 border-b-4 border-black">
+          <h2 className="text-3xl font-bold py-2">로그인</h2>
         </div>
-        <div className="mb-4">
-          <input
-            type="password"
-            name="password"
-            placeholder="비밀번호를 입력해 주세요"
-            onChange={handleChange}
-            required
-            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-          />
-        </div>
-        {error && (
-          <div className="mb-4 text-red-600 text-sm">
-            {errorMessage}
+        <form onSubmit={handleLogin}>
+          <div className="mb-4">
+            <input
+              type="text"
+              name="id"
+              placeholder="아이디를 입력해 주세요"
+              onChange={handleChange}
+              required
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            />
           </div>
-        )}
-        <button
-          type="submit"
-          className="w-full py-2 mb-4 bg-green-700 text-white rounded-md hover:bg-green-600 transition duration-300"
-        >
-          로그인
-        </button>
-      </form>
-      <div className="flex justify-end mb-4">
-        <Link to="/find-password" className="text-black underline">
-          비밀번호 찾기
-        </Link>
-      </div>
-      <div className="flex justify-center items-center gap-4">
-        <GoogleLogin
-          onSuccess={handleGoogleSuccess}
-          onError={handleGoogleFailure}
-        />
-        <KakaoLogin />
+          <div className="mb-4">
+            <input
+              type="password"
+              name="password"
+              placeholder="비밀번호를 입력해 주세요"
+              onChange={handleChange}
+              required
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            />
+          </div>
+          {error && (
+            <div className="mb-4 text-red-600 text-sm">
+              {errorMessage}
+            </div>
+          )}
+          <button
+            type="submit"
+            className="w-full py-2 mb-4 bg-green-700 text-white rounded-md hover:bg-green-600 transition duration-300"
+          >
+            로그인
+          </button>
+        </form>
+        <div className="flex justify-end mb-4">
+          <Link to="/find-password" className="text-black underline">
+            비밀번호 찾기
+          </Link>
+        </div>
+        <div className="flex justify-center items-center gap-4">
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={handleGoogleFailure}
+          />
+          <KakaoLogin />
+        </div>
       </div>
     </div>
   );

@@ -1,13 +1,10 @@
 import React from 'react';
-import { Button, Grid } from '@mui/material';
-import { subDays, subYears } from 'date-fns'; 
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3'
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { subDays, subYears } from 'date-fns';
 
 const DateFilterCondition = ({ startDate, setStartDate, endDate, setEndDate }) => {
   const today = new Date();
   const tenYearsAgo = subYears(today, 3);
+
   const handleDateRange = (range) => {
     let start, end;
     switch (range) {
@@ -40,63 +37,63 @@ const DateFilterCondition = ({ startDate, setStartDate, endDate, setEndDate }) =
     setStartDate(start);
     setEndDate(end);
   };
-  return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
-      {/* 날짜 지정 검색 */}
-      <Grid container>
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={6}>
-            <Grid container mt={1} sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-              <Grid item xs={3} md={3}>
-                <Button variant="outlined" fullWidth onClick={() => handleDateRange('today')}>
-                  오늘
-                </Button>
-              </Grid>
-              <Grid item xs={3} md={3}>
-                <Button variant="outlined" fullWidth onClick={() => handleDateRange('week')}>
-                  일주일
-                </Button>
-              </Grid>
-              <Grid item xs={3} md={3}>
-                <Button variant="outlined" fullWidth onClick={() => handleDateRange('month')}>
-                  일개월
-                </Button>
-              </Grid>
-              <Grid item xs={3} md={3}>
-                <Button variant="outlined" fullWidth onClick={() => handleDateRange('3months')}>
-                  삼개월
-                </Button>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6} md={6}>
-                <DesktopDatePicker
-                  label="Start Date"
-                  value={startDate}
-                  onChange={(newValue) => setStartDate(newValue)}
-                  maxDate={today}
-                  minDate={tenYearsAgo}
-                  slotProps={{ textField: { fullWidth: true } }}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6} md={6}>
-                <DesktopDatePicker
-                  label="End Date"
-                  value={endDate}
-                  onChange={(newValue) => setEndDate(newValue)}
-                  maxDate={today}
-                  minDate={tenYearsAgo}
-                  slotProps={{ textField: { fullWidth: true } }}
-                />
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
-    </LocalizationProvider>
-  )
-}
 
-export default DateFilterCondition
+  return (
+    <div className="space-y-4">
+      <div className="flex justify-between items-center space-x-5">
+        <div className="flex space-x-3">
+          <button
+            className="px-4 py-2 bg-white border border-gray-300 rounded-md w-full sm:w-auto"
+            onClick={() => handleDateRange('today')}
+          >
+            오늘
+          </button>
+          <button
+            className="px-4 py-2 bg-white border border-gray-300 rounded-md w-full sm:w-auto"
+            onClick={() => handleDateRange('week')}
+          >
+            일주일
+          </button>
+          <button
+            className="px-4 py-2 bg-white border border-gray-300 rounded-md w-full sm:w-auto"
+            onClick={() => handleDateRange('month')}
+          >
+            일개월
+          </button>
+          <button
+            className="px-4 py-2 bg-white border border-gray-300 rounded-md w-full sm:w-auto"
+            onClick={() => handleDateRange('3months')}
+          >
+            삼개월
+          </button>
+        </div>
+        <div className="flex gap-4 items-center">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Start Date</label>
+            <input
+              type="date"
+              className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+              value={startDate ? startDate.toISOString().split('T')[0] : ''}
+              onChange={(e) => setStartDate(new Date(e.target.value))}
+              max={today.toISOString().split('T')[0]}
+              min={tenYearsAgo.toISOString().split('T')[0]}
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">End Date</label>
+            <input
+              type="date"
+              className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+              value={endDate ? endDate.toISOString().split('T')[0] : ''}
+              onChange={(e) => setEndDate(new Date(e.target.value))}
+              max={today.toISOString().split('T')[0]}
+              min={tenYearsAgo.toISOString().split('T')[0]}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default DateFilterCondition;

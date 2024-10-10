@@ -1,83 +1,12 @@
 import React, { useEffect } from "react";
-import {
-  Box,
-  Grid,
-  styled,
-  Typography,
-  List,
-  ListItem,
-  Checkbox,
-  IconButton,
-  CircularProgress,
-} from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { useFetchShoppingList } from "../../hooks/ShoppingList/useFetchShoppingList";
 import { useRemoveFromShoppingList } from "../../hooks/ShoppingList/useRemoveFromShoppingList";
 import { useMoveToCompletedList } from "../../hooks/ShoppingList/useMoveToCompletedList";
 import { useDispatch, useSelector } from "react-redux";
 import { setShoppingList } from "../../redux/shoppingListSlice";
 import { RootState } from "../../redux/store";
-
-const HeadContainer = styled(Box)({
-  display: "flex",
-  justifyContent: "flex-start",
-  alignItems: "baseline",
-  borderBottom: "4px solid #333",
-  paddingLeft: "10px",
-});
-
-const ListSection = styled(Box)({
-  marginBottom: "24px",
-  padding: "16px",
-  backgroundColor: "#fff",
-  borderRadius: "4px",
-  boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
-  position: "relative",
-});
-
-const ListItems = styled(ListItem)({
-  height: "50px",
-  borderBottom: "1px solid #eee",
-  padding: "12px 16px",
-  borderRadius: "4px",
-  backgroundColor: "#fafafa",
-  "&:last-child": {
-    borderBottom: "none",
-  },
-});
-
-const StyledCheckbox = styled(Checkbox)({
-  marginRight: "16px",
-});
-
-const DeleteButton = styled(IconButton)({
-  color: "#d32f2f",
-  "&:hover": {
-    color: "#b71c1c",
-  },
-  width: "36px",
-  height: "36px",
-});
-
-const NoItemsMessage = styled(Typography)({
-  color: "#aaa",
-  textAlign: "center",
-  marginTop: "16px",
-  fontStyle: "italic",
-});
-
-const LoadingOverlay = styled(Box)({
-  position: "absolute",
-  top: 0,
-  left: 0,
-  width: "100%",
-  height: "100%",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  backgroundColor: "rgba(255, 255, 255, 0.7)",
-  zIndex: 1,
-});
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 interface ShoppingListItem {
   _id: string;
@@ -116,106 +45,94 @@ const MyGroceryNote = () => {
   };
 
   return (
-    <Grid container>
-      <Grid item xs={12}>
-        <HeadContainer sx={{ marginBottom: "30px" }}>
-          <Typography variant="h5">나의 정보</Typography>
-          <Typography variant="subtitle1">장보기 메모</Typography>
-        </HeadContainer>
+    <div className="container mx-auto px-4">
+      <div className="mb-8">
+        <div className="flex items-baseline border-b-4 border-gray-800 pb-2">
+          <h2 className="text-2xl font-bold">쇼핑</h2>
+          <span className="ml-4 text-lg">장보기 메모</span>
+        </div>
         {isError && (
-          <Typography
-            variant="body1"
-            sx={{ color: "red", textAlign: "center", marginTop: "16px" }}
-          >
+          <p className="text-red-500 text-center mt-4">
             {error.message || "데이터를 가져오는 데 실패했습니다."}
-          </Typography>
+          </p>
         )}
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={6}>
-            <ListSection>
-              <Typography variant="h6" sx={{ marginBottom: "8px" }}>
-                장보기 목록
-              </Typography>
+        <div className="flex flex-wrap -mx-2 pt-4">
+          <div className="w-full md:w-1/2 px-2 mb-4">
+            <div className="mb-4 p-4 bg-white border border-gray-200 rounded shadow">
+              <h3 className="text-xl mb-2">장보기 목록</h3>
               {isLoading && (
-                <LoadingOverlay>
-                  <CircularProgress sx={{ color: "green" }} />
-                </LoadingOverlay>
+                <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-70 z-10">
+                  <div className="animate-spin border-4 border-green-500 border-t-transparent rounded-full w-24 h-24"></div>
+                </div>
               )}
-              <List>
+              <ul>
                 {selectedShoppingList?.length > 0 ? (
                   selectedShoppingList.map((item, index) => (
-                    <ListItems
+                    <li
                       key={`selected-${item._id}-${index}`}
-                      sx={{ display: "flex", alignItems: "center" }}
+                      className="flex items-center bg-gray-50 border-b border-gray-200 p-3"
                     >
-                      <StyledCheckbox
+                      <input
+                        type="checkbox"
+                        className="mr-4"
                         checked={completedShoppingList.some(
                           (i) => i._id === item._id
                         )}
                         onChange={() => handleAddFromSelectedList(item)}
                       />
-                      <Typography variant="body1" sx={{ flexGrow: 1 }}>
-                        {item.name}
-                      </Typography>
-                      <DeleteButton
+                      <span className="flex-grow">{item.name}</span>
+                      <button
+                        className="text-red-600 hover:text-red-800 w-9 h-9"
                         onClick={() => handleRemoveFromShoppingList(item._id)}
                       >
-                        <DeleteIcon />
-                      </DeleteButton>
-                    </ListItems>
+                        <FontAwesomeIcon icon={faTrash} />
+                      </button>
+                    </li>
                   ))
                 ) : (
-                  <NoItemsMessage>장보기 목록이 비어 있습니다.</NoItemsMessage>
+                  <p className="text-gray-500 text-center italic">
+                    장보기 목록이 비어 있습니다.
+                  </p>
                 )}
-              </List>
-            </ListSection>
-          </Grid>
+              </ul>
+            </div>
+          </div>
 
-          <Grid item xs={12} md={6}>
-            <ListSection>
-              <Typography variant="h6" sx={{ marginBottom: "8px" }}>
-                구매 완료 목록
-              </Typography>
+          <div className="w-full md:w-1/2 px-2 mb-4">
+            <div className="mb-4 p-4 bg-white border border-gray-200 rounded shadow">
+              <h3 className="text-xl mb-2">구매 완료 목록</h3>
               {isLoading && (
-                <LoadingOverlay>
-                  <CircularProgress sx={{ color: "green" }} />
-                </LoadingOverlay>
+                <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-70 z-10">
+                  <div className="animate-spin border-4 border-green-500 border-t-transparent rounded-full w-24 h-24"></div>                </div>
               )}
-              <List>
+              <ul>
                 {completedShoppingList?.length > 0 ? (
                   completedShoppingList.map((item, index) => (
-                    <ListItems
+                    <li
                       key={`completed-${item._id}-${index}`}
-                      sx={{ display: "flex", alignItems: "center" }}
+                      className="flex items-center bg-gray-50 border-b border-gray-200 p-3"
                     >
-                      <Typography
-                        variant="body1"
-                        sx={{
-                          flexGrow: 1,
-                          textDecoration: "line-through",
-                          color: "gray",
-                        }}
-                      >
+                      <span className="flex-grow line-through text-gray-500">
                         {item.name}
-                      </Typography>
-                      <DeleteButton
+                      </span>
+                      <button
+                        className="text-red-600 hover:text-red-800 w-9 h-9"
                         onClick={() => handleRemoveFromShoppingList(item._id)}
                       >
-                        <DeleteIcon />
-                      </DeleteButton>
-                    </ListItems>
+                        <FontAwesomeIcon icon={faTrash} />                      </button>
+                    </li>
                   ))
                 ) : (
-                  <NoItemsMessage>
+                  <p className="text-gray-500 text-center italic">
                     구매 완료 목록이 비어 있습니다.
-                  </NoItemsMessage>
+                  </p>
                 )}
-              </List>
-            </ListSection>
-          </Grid>
-        </Grid>
-      </Grid>
-    </Grid>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

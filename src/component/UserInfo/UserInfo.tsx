@@ -1,46 +1,5 @@
 import React from "react";
-import { Typography, Box } from "@mui/material";
-import { styled } from "@mui/system";
 import { User } from "../../types";
-
-const UserInfoContainer = styled("div")({
-  display: "flex",
-  backgroundColor: "#fff",
-  padding: "15px",
-  margin: "10px auto",
-  borderRadius: "15px",
-  width: "100%",
-  height: "50px",
-  border: "1px solid lightgray",
-});
-
-const UserInfoMenu = styled("div")({
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-  backgroundColor: "#fff",
-  margin: "0 auto",
-  padding: "15px",
-  borderRadius: "15px",
-  border: "1px solid lightgray",
-  width: "100%",
-});
-
-const ShoppingMenu = styled("div")({
-  width: "90%",
-  padding: "5px 0 15px",
-  borderBottom: "1px solid lightgray",
-});
-
-const StyledLink = styled(Typography)({
-  cursor: 'pointer',
-  padding: '2px 10px',
-  borderRadius: '8px',
-  '&:hover': {
-    textDecoration: 'underline',
-  },
-});
 
 interface UserInfoProps {
   onButtonClick: (value: string) => void;
@@ -54,51 +13,60 @@ const UserInfo = ({ onButtonClick, user }: UserInfoProps) => {
 
   return (
     <>
-      <UserInfoContainer>
-        <Typography variant="body1">
+      <div className="flex justify-center bg-white p-4 my-2 mx-auto rounded-xl w-full h-12 border border-gray-300">
+        <p className="text-base">
           반가워요! <strong>{user?.name}</strong>님
-        </Typography>
-        <Box display="inline" ml={1}>
-          <Typography
-            variant="subtitle2"
-            border={1}
-            borderRadius={2}
-            borderColor="primary.light"
-            bgcolor={user?.level === "customer" ? "primary.light" : "success.light"}
-            color="white"
-            px="10px"
+        </p>
+        <div className="inline ml-2">
+          <span
+            className={`text-sm border rounded-lg px-2 py-1 text-white ${
+              user?.level === "customer"
+                ? "bg-blue-400 border-blue-400"
+                : "bg-green-500 border-green-500"
+            }`}
           >
             {user?.level}
-          </Typography>
-        </Box>
-      </UserInfoContainer>
-      <UserInfoMenu>
-        <ShoppingMenu>
-          <Typography variant="subtitle1" sx={{ fontWeight: "600" }}>
-            쇼핑
-          </Typography>
-          <StyledLink onClick={() => handleButtonClick("내 주문")}>
+          </span>
+        </div>
+      </div>
+      <div className="flex flex-col justify-center items-center bg-white mx-auto p-4 rounded-xl border border-gray-300 w-full">
+        <div className="w-11/12 pb-4 border-b border-gray-300">
+          <p className="text-lg font-semibold">쇼핑</p>
+          <p
+            className="cursor-pointer py-1 px-2 hover:underline rounded-lg"
+            onClick={() => handleButtonClick("내 주문")}
+          >
             내 주문
-          </StyledLink>
-          <StyledLink onClick={() => handleButtonClick("장보기 메모")}>
+          </p>
+          <p
+            className="cursor-pointer py-1 px-2 hover:underline rounded-lg"
+            onClick={() => handleButtonClick("장보기 메모")}
+          >
             장보기 메모
-          </StyledLink>
-        </ShoppingMenu>
-        <ShoppingMenu>
-          <Typography variant="subtitle1" sx={{ fontWeight: "600" }}>
-            나의정보
-          </Typography>
-          <StyledLink onClick={() => handleButtonClick("내 레시피")}>
+          </p>
+        </div>
+        <div className="w-11/12 pt-4">
+          <p className="text-lg font-semibold">나의정보</p>
+          <p
+            className="cursor-pointer py-1 px-2 hover:underline rounded-lg"
+            onClick={() => handleButtonClick("내 레시피")}
+          >
             내 레시피
-          </StyledLink>
-          <StyledLink onClick={() => handleButtonClick("회원정보 수정")}>
+          </p>
+          <p
+            className="cursor-pointer py-1 px-2 hover:underline rounded-lg"
+            onClick={() => handleButtonClick("회원정보 수정")}
+          >
             회원정보 수정
-          </StyledLink>
-          <StyledLink onClick={() => handleButtonClick("비밀번호 수정")}>
+          </p>
+          <p
+            className="cursor-pointer py-1 px-2 hover:underline rounded-lg"
+            onClick={() => handleButtonClick("비밀번호 수정")}
+          >
             비밀번호 수정
-          </StyledLink>
-        </ShoppingMenu>
-      </UserInfoMenu>
+          </p>
+        </div>
+      </div>
     </>
   );
 };

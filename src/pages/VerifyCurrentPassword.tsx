@@ -1,17 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, TextField, Typography, Grid, Box, CircularProgress, styled } from "@mui/material";
-import { setVerifyPasswordLoading, setVerifyPasswordError, setIsAuthenticated } from "../redux/userSlice";
-import { useVerifyCurrentPassword } from "../hooks/User/useVerifyCurrentPassword"; 
+import { setVerifyPasswordLoading, setVerifyPasswordError, setIsAuthenticated, resetAuthState } from "../redux/userSlice";
+import { useVerifyCurrentPassword } from "../hooks/User/useVerifyCurrentPassword";
 import { RootState } from "../redux/store";
-
-const HeadContainer = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  justifyContent: 'flex-start',
-  alignItems: 'baseline',
-  borderBottom: '4px solid black',
-  paddingLeft: theme.spacing(1),
-}));
 
 interface VerifyCurrentPasswordProps {
   onVerifySuccess: () => void;
@@ -27,6 +18,7 @@ const VerifyCurrentPassword = ({ onVerifySuccess }: VerifyCurrentPasswordProps) 
   useEffect(() => {
     if (isAuthenticated) {
       onVerifySuccess();
+      dispatch(resetAuthState());
     }
   }, [isAuthenticated, onVerifySuccess]);
 
@@ -52,94 +44,47 @@ const VerifyCurrentPassword = ({ onVerifySuccess }: VerifyCurrentPasswordProps) 
   };
 
   return (
-    <>
-      <Grid item xs={12}>
-        <HeadContainer>
-          <Typography variant="h5">나의 정보</Typography>
-          <Typography variant="subtitle1">비밀번호 수정</Typography>
-        </HeadContainer>
-      </Grid>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          mt: 4,
-          px: 2,
-          height: '100%',
-        }}
-      >
-        <Box
-          sx={{
-            mb: 3,
-            textAlign: 'center',
-          }}
-        >
-          <Typography variant="h5" sx={{ fontSize: '25px' }}>
-            비밀번호 재확인
-          </Typography>
-          <Typography>
-            회원님의 정보를 안전하게 보호하기 위해 비밀번호를 다시 한번 확인해주세요.
-          </Typography>
-        </Box>
-        <Box
-          component="form"
-          onSubmit={handleSubmit}
-          sx={{
-            width: '100%',
-            maxWidth: '560px',
-            backgroundColor: '#fff',
-            boxShadow: 'none',
-            borderRadius: 0,
-            borderTop: '3px solid black',
-            borderBottom: '2px solid black',
-            p: 3,
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
-          {error && (
-            <Box
-              sx={{
-                mb: 2,
-                display: 'flex',
-                alignItems: 'center',
-                color: 'rgb(231, 94, 94)',
-              }}
-            >
-              <Typography variant="body2" sx={{ ml: 1 }}>
-                {error}
-              </Typography>
-            </Box>
-          )}
-          <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12}>
-              <TextField
-                id="currentPassword"
-                label="현재 비밀번호"
-                type="password"
-                fullWidth
-                variant="outlined"
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-                required
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Button
-                variant="contained"
-                color="primary"
+    <div className="container mx-auto px-4">
+      <div className="mb-6">
+        <div className="flex justify-start items-baseline border-b-4 border-black">
+          <h5 className="text-2xl font-semibold">나의 정보</h5>
+          <p className="ml-4 text-lg">회원정보 수정</p>
+        </div>
+        <div className="flex flex-col items-center mt-4 px-2 w-full h-full">
+          <div className="mb-3 text-center">
+            <h5 className="text-2xl font-semibold mb-2">비밀번호 재확인</h5>
+            <p>회원님의 정보를 안전하게 보호하기 위해 비밀번호를 다시 한번 확인해주세요.</p>
+          </div>
+          <form onSubmit={handleSubmit} className="w-full max-w-md bg-white shadow-none border-t-3 border-y-2 border-black p-8 flex flex-col">
+            {error && (
+              <div className="mb-2 flex items-center text-red-600">
+                <p className="ml-1 text-sm">{error}</p>
+              </div>
+            )}
+            <div className="flex flex-col space-y-4">
+              <div>
+                <input
+                  id="currentPassword"
+                  type="password"
+                  className="border rounded-md w-full px-2 py-3"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  placeholder="현재 비밀번호 *"
+                  required
+                />
+              </div>
+              <button
                 type="submit"
+                className={`bg-blue-500 text-white font-semibold py-2 px-4 rounded ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
                 disabled={loading}
-                endIcon={loading ? <CircularProgress size={20} /> : null}
               >
                 {loading ? "인증 중..." : "비밀번호 확인"}
-              </Button>
-            </Grid>
-          </Grid>
-        </Box>
-      </Box>
-    </>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   );
 };
 
