@@ -49,7 +49,7 @@ const OrderReceiptSkeleton = () => (
 
 const CartPageSkeleton = () => {
   return (
-    <div className="mb-8 xs:px-[20px] md:px-[50px] lg:px-[200px]">
+    <div className="mt-20 mb-8 xs:px-[20px] md:px-[50px] lg:px-[200px]">
       <div className="text-center my-7">
         <Skeleton width={200} height={40} />
       </div>

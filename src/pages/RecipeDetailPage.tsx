@@ -8,31 +8,15 @@ import {
   faBookmark as solidBookmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark as regularBookmark } from "@fortawesome/free-regular-svg-icons";
-import RecipeCategory from "../component/RecipeCategory/RecipeCategory";
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  styled,
-  Typography,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  CircularProgress,
-} from "@mui/material";
-import KakaoShareButton from "../component/KakaoShareButton/KakaoShareButton";
-import CopyClipButton from "../component/CopyClipButton/CopyClipButton";
-import RecipeDetailSkeleton from "../component/Skeleton/RecipeDetailSkeleton";
 import { useFetchRecipeById } from "../hooks/Recipe/useFetchRecipeById";
 import { useRecipeFavorite } from "../hooks/Favorite/useRecipeFavorite";
 import { useAddRecipeFavorite } from "../hooks/Favorite/useAddRecipeFavorite";
 import { useDeleteRecipeFavorite } from "../hooks/Favorite/useDeleteRecipeFavorite";
 import { RootState } from "../redux/store";
+import KakaoShareButton from "../component/KakaoShareButton/KakaoShareButton";
+import CopyClipButton from "../component/CopyClipButton/CopyClipButton";
+import RecipeCategory from "../component/RecipeCategory/RecipeCategory";
+import RecipeDetailSkeleton from "../component/Skeleton/RecipeDetailSkeleton";
 
 const Review = React.lazy(() => import("../component/Review/Review"));
 const IngredientDialog = React.lazy(() =>
@@ -41,73 +25,6 @@ const IngredientDialog = React.lazy(() =>
 const ShoppingListDialog = React.lazy(() =>
   import("../component/ShoppingListDialog/ShoppingListDialog")
 );
-
-const ImageContainer = styled(Box)({
-  position: "relative",
-  width: "100%",
-  aspectRatio: "16 / 9",
-  borderRadius: "8px",
-  marginBottom: "20px",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-});
-
-const RecipeImage = styled("img")({
-  display: "block",
-  width: "100%",
-  height: "auto",
-  aspectRatio: "16/9"
-});
-
-const RecipeInfoContainer = styled(Box)({
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  marginBottom: "20px",
-});
-
-const DifficultyBox = styled(Box)({
-  display: "flex",
-  gap: "20px",
-  marginTop: "10px",
-  paddingBottom: "30px",
-  borderBottom: "3px solid lightgrey",
-});
-
-const HeadContainer = styled("div")({
-  marginTop: "20px",
-});
-
-const RecipeIngredientButton = styled(Box)({
-  display: "flex",
-  padding: "10px 15px",
-});
-
-const StyledButton = styled(Button)({
-  width: "150px",
-  marginRight: "15px",
-  "&:last-child": {
-    marginRight: 0,
-  },
-});
-
-const RecipeStepContainer = styled(Box)({
-  display: "flex",
-  justifyContent: "space-between",
-  marginBottom: "10px",
-  width: "100%",
-});
-
-const Steps = styled(Box)(({ theme }) => ({
-  display: "flex",
-  alignItems: "baseline",
-  height: "187px",
-  [theme.breakpoints.down("sm")]: {
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-  },
-}));
 
 interface Step {
   _id?: string;
@@ -181,127 +98,114 @@ const RecipeDetail = () => {
   }
 
   if (!recipeDetail) {
-    return <Typography>레시피를 찾을 수 없습니다.</Typography>;
+    return <div>레시피를 찾을 수 없습니다.</div>;
   }
 
   const optimizedMainImageUrl = recipeDetail.images[0] ? optimizeMainImageUrl(recipeDetail.images[0]) : "";
 
   return (
     <>
-      <RecipeCategory />
-      <Container maxWidth="md" sx={{ marginTop: "80px" }}>
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <ImageContainer>
-              <RecipeImage src={optimizedMainImageUrl} alt={recipeDetail.name} />
-            </ImageContainer>
-          </Grid>
-          <Grid item xs={12}>
-            <RecipeInfoContainer>
-              <Typography variant="h4" component="h2" fontWeight="600" fontSize="27px">
-                {recipeDetail.name}
-              </Typography>
-              <Box sx={{ display: "flex" }}>
-                <Box onClick={handleFavoriteClick} sx={{ cursor: "pointer", marginRight: "25px" }}>
+      <div className="container mx-auto mt-20 max-w-4xl px-4">
+        <div className="grid grid-cols-1 gap-4">
+          <div>
+            <div className="relative w-full aspect-w-16 aspect-h-9 rounded-lg mb-5 flex justify-center items-center">
+              <img className="w-full max-h-[500px] rounded-lg" src={optimizedMainImageUrl} alt={recipeDetail.name} />
+            </div>
+          </div>
+          <div>
+            <div className="flex justify-between items-center mb-5">
+              <h2 className="text-2xl font-bold">{recipeDetail.name}</h2>
+              <div className="flex space-x-5">
+                <div onClick={handleFavoriteClick} className="cursor-pointer">
                   <FontAwesomeIcon icon={isFavorite && user ? solidBookmark : regularBookmark} size="lg" />
-                </Box>
-                <Box sx={{ cursor: "pointer", marginRight: "20px" }}>
+                </div>
+                <div className="cursor-pointer">
                   <KakaoShareButton recipeDetail={recipeDetail} />
-                </Box>
-                <Box sx={{ cursor: "pointer" }}>
+                </div>
+                <div className="cursor-pointer">
                   <CopyClipButton recipeDetail={recipeDetail} />
-                </Box>
-              </Box>
-            </RecipeInfoContainer>
-            <Typography variant="body1" component="p" sx={{ marginBottom: "20px" }}>
-              {recipeDetail.description}
-            </Typography>
-            <DifficultyBox>
-              <Typography variant="body2" component="p">
-                난이도 : {getDifficultyStars(recipeDetail.difficulty)}
-              </Typography>
-              <Typography variant="body2" component="p">
-                소요시간 ⏰ : {recipeDetail.time}
-              </Typography>
-            </DifficultyBox>
-          </Grid>
-          <Grid item xs={12}>
-            <HeadContainer>
-              <Typography variant="h5" component="p">재료</Typography>
-            </HeadContainer>
-            <RecipeIngredientButton>
-              <StyledButton
-                variant="outlined"
+                </div>
+              </div>
+            </div>
+            <p className="mb-5">{recipeDetail.description}</p>
+            <div className="flex gap-5 mb-10 pb-7 border-b-2 border-gray-300">
+              <p>난이도: {getDifficultyStars(recipeDetail.difficulty)}</p>
+              <p>소요시간 ⏰ : {recipeDetail.time}</p>
+            </div>
+          </div>
+          <div>
+            <h5 className="text-xl font-bold">재료</h5>
+            <div className="flex space-x-4 mt-3">
+              <button
+                className="flex items-center px-4 py-2 border border-blue-600 rounded-md text-blue-600"
                 onClick={handleClickOpenIngredientDialog}
               >
                 <FontAwesomeIcon icon={faSearch} />
-                <Box component="span" sx={{ ml: 1 }}>재료검색</Box>
-              </StyledButton>
-              <StyledButton
-                variant="outlined"
+                <span className="ml-2">재료검색</span>
+              </button>
+              <button
+                className="flex items-center px-6 py-2 border border-blue-600 rounded-md text-blue-600"
                 onClick={handleClickOpenShoppingListDialog}
               >
                 <FontAwesomeIcon icon={faCartShopping} />
-                <Box component="span" sx={{ ml: 1 }}>장보기</Box>
-              </StyledButton>
-            </RecipeIngredientButton>
-            <TableContainer component={Paper} sx={{ boxShadow: "none", height: "auto", maxHeight: "800px" }}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>재료</TableCell>
-                    <TableCell align="right">양</TableCell>
-                    <TableCell align="right">구매</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {(recipeDetail.ingredients as IngredientSummary[]).map((ingredient, index: number) => (
-                    <TableRow key={index}>
-                      <TableCell>{ingredient.name}</TableCell>
-                      <TableCell align="right">{ingredient.qty}{ingredient.unit}</TableCell>
-                      <TableCell align="right">
-                        <Button variant="outlined" onClick={() => handlePurchaseClick(ingredient.name)}>
+                <span className="ml-2">장보기</span>
+              </button>
+            </div>
+            <div className="mt-4 h-auto">
+              <table className="min-w-full table-fixed">
+                <thead>
+                  <tr className="border-b">
+                    <th className="w-1/2 p-2">재료</th>
+                    <th className="w-1/4 p-2 text-right">양</th>
+                    <th className="w-1/4 p-2 text-right">구매</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {recipeDetail.ingredients.map((ingredient, index: number) => (
+                    <tr key={index} className="border-b"> 
+                      <td className="p-2">{ingredient.name}</td>
+                      <td className="p-2 text-right">{ingredient.qty}{ingredient.unit}</td>
+                      <td className="p-2 text-right">
+                        <button
+                          className="px-4 py-2 border rounded-md text-blue-400"
+                          onClick={() => handlePurchaseClick(ingredient.name)}
+                        >
                           구매
-                        </Button>
-                      </TableCell>
-                    </TableRow>
+                        </button>
+                      </td>
+                    </tr>
                   ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Grid>
-          <Grid item xs={12}>
-            <HeadContainer>
-              <Typography variant="h5" component="p" fontWeight="600">조리순서</Typography>
-            </HeadContainer>
-          </Grid>
-          <Grid item xs={12}>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+          <div>
+            <h5 className="text-xl font-bold mt-8">조리순서</h5>
             {recipeDetail.steps.map((step: Step, index: number) => (
-              <RecipeStepContainer key={index}>
-                <Steps>
-                  <Typography variant="h3" component="h3">{index + 1}.</Typography>
-                  <Typography variant="h6" component="span" ml={2} fontWeight="600">
-                    {step.description}
-                  </Typography>
-                </Steps>
+              <div className="flex justify-between items-start mt-5" key={index}>
+                <div className="flex items-baseline">
+                  <h3 className="text-[26px] font-bold">{index + 1}.</h3>
+                  <span className="ml-3 text-[20px] font-semibold">{step.description}</span>
+                </div>
                 {step.image && (
-                  <RecipeImage
+                  <img
+                    className="ml-4 w-48 h-auto max-h-48 rounded-lg"
                     src={optimizeSubImageUrl(step.image)}
                     alt={step._id}
-                    sx={{ ml: 2, width: "200px", height: "auto", maxHeight: "200px" }}
                   />
                 )}
-              </RecipeStepContainer>
+              </div>
             ))}
-          </Grid>
-          <Grid item xs={12}>
-            <Suspense fallback={<CircularProgress />}>
+          </div>
+          <div className="mt-8">
+            <Suspense fallback={<div>Loading...</div>}>
               <Review type="recipe" itemId={recipeDetail._id || ""} />
             </Suspense>
-          </Grid>
-        </Grid>
-      </Container>
-      <Suspense fallback={<CircularProgress />}>
+          </div>
+        </div>
+      </div>
+      <Suspense fallback={<div>Loading...</div>}>
         <IngredientDialog
           open={openIngredientDialog}
           handleClose={handleCloseIngredientDialog}

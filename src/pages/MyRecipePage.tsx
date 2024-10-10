@@ -23,7 +23,7 @@ const MyRecipePage = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto mt-12">
+    <div className="max-w-7xl mx-auto mt-[75px]">
       <h1 className="text-3xl text-center font-bold mb-4">레시피 등록</h1>
       <RecipeForm onSubmit={handleSubmit} />
     </div>

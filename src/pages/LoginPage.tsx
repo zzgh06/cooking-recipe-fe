@@ -92,7 +92,7 @@ const LoginPage = () => {
   const errorMessage = loginWithGoogleError?.message;
 
   return (
-    <div className="max-w-[430px] mx-auto mt-4 p-6">
+    <div className="max-w-[430px] mx-auto mt-12 p-6">
       <div className="text-center mb-6 border-b-4 border-black">
         <h2 className="text-3xl font-bold py-2">로그인</h2>
       </div>

@@ -1,16 +1,4 @@
 import React, { useState, useEffect } from "react";
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  Typography,
-  FormControlLabel,
-  Checkbox,
-  Box,
-  styled,
-} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useAddToShoppingList } from "../../hooks/ShoppingList/useAddToShoppingList";
 import { useQueryClient } from "@tanstack/react-query";
@@ -18,28 +6,8 @@ import { Ingredient } from "../../types";
 import { RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { setToastMessage } from "../../redux/commonUISlice";
-
-const HeadContainer = styled(Box)({
-  display: "flex",
-  justifyContent: "flex-start",
-  alignItems: "baseline",
-  borderBottom: "2px solid black",
-  paddingLeft: "10px",
-});
-
-const FixedSizeDialog = styled(Dialog)(({ theme }) => ({
-  "& .MuiDialog-paper": {
-    width: '400px',
-    maxWidth: '500px',
-    height: '350px',
-    maxHeight: '400px', 
-  },
-}));
-
-const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
-  padding: theme.spacing(2),
-  overflowY: 'auto', 
-}));
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClose } from "@fortawesome/free-solid-svg-icons";
 
 interface ShoppingListDialogProps {
   open: boolean;
@@ -119,56 +87,50 @@ const ShoppingListDialog = ({ open, handleClose, ingredients }: ShoppingListDial
   const checkedCount = Object.values(checkedItems).filter(Boolean).length;
 
   return (
-    <FixedSizeDialog open={open} onClose={handleClose}>
-      <HeadContainer>
-        <DialogTitle>재료 선택</DialogTitle>
-      </HeadContainer>
-      <StyledDialogContent>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            mb: 2,
-          }}
+    <div className={`fixed inset-0 z-50 flex items-center justify-center ${open ? 'block' : 'hidden'}`}>
+      <div className="fixed inset-0 bg-black opacity-50"></div>
+      <div className="bg-white rounded-lg shadow-lg w-full max-w-lg p-6 relative z-10">
+        <button
+          onClick={handleClose}
+          className="absolute top-7 right-5 text-gray-500 hover:text-gray-700"
         >
-          <Typography variant="h6" gutterBottom>
-            재료를 선택하세요
-          </Typography>
-          <Typography
-            variant="h6"
+          <FontAwesomeIcon icon={faClose} size="xl" />
+        </button>
+        <h2 className="text-xl font-semibold mb-4">재료 선택</h2>
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-lg">재료를 선택하세요</h3>
+          <span
             onClick={handleToggleAll}
-            fontSize="15px"
-            sx={{ cursor: "pointer" }}
+            className="text-blue-600 cursor-pointer hover:underline"
           >
             {allChecked ? "모두 해제" : "모두 선택"}
-          </Typography>
-        </Box>
-        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+          </span>
+        </div>
+        <div className="flex flex-wrap gap-4 mb-4">
           {ingredients.map((ingredient) =>
             isFullIngredient(ingredient) ? (
-              <Box key={ingredient._id} sx={{ flexBasis: "calc(50% - 8px)" }}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={!!checkedItems[ingredient._id]}
-                      onChange={() => handleCheckboxChange(ingredient)}
-                    />
-                  }
-                  label={ingredient.name}
-                  sx={{ width: "100%" }}
+              <label key={ingredient._id} className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  checked={!!checkedItems[ingredient._id]}
+                  onChange={() => handleCheckboxChange(ingredient)}
+                  className="form-checkbox h-5 w-5 text-blue-600"
                 />
-              </Box>
+                <span>{ingredient.name}</span>
+              </label>
             ) : null
           )}
-        </Box>
-      </StyledDialogContent>
-      <DialogActions>
-        <Button variant="contained" onClick={handleSaveList} color="success">
-          {checkedCount} 개의 재료 장보기 메모에 추가
-        </Button>
-      </DialogActions>
-    </FixedSizeDialog>
+        </div>
+        <div className="flex justify-end">
+          <button
+            onClick={handleSaveList}
+            className="bg-green-700 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-300"
+          >
+            {checkedCount} 개의 재료 장보기 메모에 추가
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 

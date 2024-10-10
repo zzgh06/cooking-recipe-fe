@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShareFromSquare } from "@fortawesome/free-regular-svg-icons";
-import { Box } from "@mui/material";
 
 interface RecipeDetail {
   _id?: string;
@@ -48,9 +47,9 @@ const KakaoShareButton = ({ recipeDetail }: KakaoShareButtonProps) => {
   };
 
   return (
-    <Box onClick={shareToKakao} sx={{ cursor: "pointer" }}>
+    <div onClick={shareToKakao} className="cursor-pointer">
       <FontAwesomeIcon icon={faShareFromSquare} size="lg" />
-    </Box>
+    </div>
   );
 };
 

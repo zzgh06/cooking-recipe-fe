@@ -26,22 +26,24 @@ interface RecipeFormProps {
 }
 
 const RecipeForm = ({ onSubmit, initialData }: RecipeFormProps) => {
-  const initialFormData: Recipe = {
+  const initialFormData = {
     _id: "",
     name: "",
     description: "",
     images: [],
-    foodCategory: "",
-    moodCategory: "",
-    methodCategory: "",
-    ingredientCategory: "",
-    etcCategory: "",
+    categories: {
+      food: "",
+      mood: "",
+      method: "",
+      ingredient: "",
+      etc: "",
+    },
     servings: "",
     time: "",
     difficulty: "",
     ingredients: [{ name: "", qty: 0, unit: "" }],
     steps: [{ description: "", image: null }],
-  };
+  } as Recipe;
 
   const [formData, setFormData] = useState<Recipe>(initialFormData);
   const [showSubmitModal, setShowSubmitModal] = useState<boolean>(false);
@@ -52,11 +54,14 @@ const RecipeForm = ({ onSubmit, initialData }: RecipeFormProps) => {
         ...prevData,
         ...initialData,
         images: initialData.images || [],
-        foodCategory: initialData.foodCategory || "",
-        moodCategory: initialData.moodCategory || "",
-        methodCategory: initialData.methodCategory || "",
-        ingredientCategory: initialData.ingredientCategory || "",
-        etcCategory: initialData.etcCategory || "",
+        categories: {
+          ...initialData.categories,
+          food: initialData.categories?.food || "",
+          mood: initialData.categories?.mood || "",
+          method: initialData.categories?.method || "",
+          ingredient: initialData.categories?.ingredient || "",
+          etc: initialData.categories?.etc || "",
+        },
         ingredients: initialData.ingredients || [{ name: "", qty: 0, unit: "" }],
         steps: initialData.steps || [{ description: "", image: null }],
       }));
@@ -129,53 +134,21 @@ const RecipeForm = ({ onSubmit, initialData }: RecipeFormProps) => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    
-    const {
-      _id,
-      name,
-      description,
-      images,
-      foodCategory,
-      moodCategory,
-      methodCategory,
-      ingredientCategory,
-      etcCategory,
-      servings,
-      time,
-      difficulty,
-      ingredients,
-      steps,
-    } = formData;
-  
+
     const recipeData: Recipe = {
-      _id: _id || "",
-      name,
-      description,
-      images,
-      foodCategory,
-      moodCategory,
-      methodCategory,
-      ingredientCategory,
-      etcCategory,
-      servings,
-      time,
-      difficulty,
-      ingredients, 
-      steps,
+      ...formData,
       categories: {
-        food: foodCategory,
-        mood: moodCategory,
-        method: methodCategory,
-        ingredient: ingredientCategory,
-        etc: etcCategory,
-      },
+        food: formData.categories.food,
+        mood: formData.categories.mood,
+        method: formData.categories.method,
+        ingredient: formData.categories.ingredient,
+        etc: formData.categories.etc,
+      }
     };
-  
+
     onSubmit(recipeData);
     setShowSubmitModal(true);
   };
-  
-  
 
   const handleCloseModal = () => {
     setShowSubmitModal(false);
@@ -236,15 +209,15 @@ const RecipeForm = ({ onSubmit, initialData }: RecipeFormProps) => {
         )}
       </div>
       <div className="flex justify-start items-baseline border-b-4 border-black p-2.5 mb-4">
-          <h2 className="text-2xl font-bold">요리 정보</h2>
-        </div>
+        <h2 className="text-2xl font-bold">요리 정보</h2>
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {[
-          { label: "음식 종류", options: foodCategory, value: formData.foodCategory, field: "foodCategory" },
-          { label: "상황", options: moodCategory, value: formData.moodCategory, field: "moodCategory" },
-          { label: "방법", options: methodCategory, value: formData.methodCategory, field: "methodCategory" },
-          { label: "재료", options: ingredientCategory, value: formData.ingredientCategory, field: "ingredientCategory" },
-          { label: "기타", options: etcCategory, value: formData.etcCategory, field: "etcCategory" },
+          { label: "음식 종류", options: foodCategory, value: formData.categories.food, field: "food" },
+          { label: "상황", options: moodCategory, value: formData.categories.mood, field: "mood" },
+          { label: "방법", options: methodCategory, value: formData.categories.method, field: "method" },
+          { label: "재료", options: ingredientCategory, value: formData.categories.ingredient, field: "ingredient" },
+          { label: "종류", options: etcCategory, value: formData.categories.etc, field: "etc" },
           { label: "인원", options: servings, value: formData.servings, field: "servings" },
           { label: "시간", options: time, value: formData.time, field: "time" },
           { label: "난이도", options: difficulty, value: formData.difficulty, field: "difficulty" },
@@ -253,8 +226,14 @@ const RecipeForm = ({ onSubmit, initialData }: RecipeFormProps) => {
             key={label}
             label={label}
             options={options}
-            value={value}
-            onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
+            value={value} // formData.categories에서 직접 접근
+            onChange={(e) => setFormData({
+              ...formData,
+              categories: {
+                ...formData.categories,
+                [field]: e.target.value
+              }
+            })}
           />
         ))}
       </div>
@@ -291,10 +270,11 @@ const RecipeForm = ({ onSubmit, initialData }: RecipeFormProps) => {
             <div className="sm:col-span-2">
               <button
                 type="button"
-                className="w-full h-12 mt-4 text-red-500 hover:text-red-700"
+                className="w-full h-12 mt-4 bg-red-500 text-white font-semibold rounded-md shadow-md hover:bg-red-600 transition duration-200 ease-in-out flex items-center justify-center"
                 onClick={() => handleDeleteIngredient(index)}
               >
-                <FontAwesomeIcon icon={faTrash} />
+                <FontAwesomeIcon icon={faTrash} className="mr-2" />
+                삭제
               </button>
             </div>
           </div>
@@ -332,10 +312,11 @@ const RecipeForm = ({ onSubmit, initialData }: RecipeFormProps) => {
                 />
                 <button
                   type="button"
-                  className="p-2 text-red-500 hover:text-red-700"
-                  onClick={() => handleDeleteStep(index)}
+                  className="w-[250px] h-auto py-2 bg-red-500 text-white font-semibold rounded-md shadow-md hover:bg-red-600 transition duration-200 ease-in-out flex items-center justify-center"
+                  onClick={() => handleDeleteIngredient(index)}
                 >
-                  <FontAwesomeIcon icon={faTrash} />
+                  <FontAwesomeIcon icon={faTrash} className="mr-2" />
+                  삭제
                 </button>
               </div>
               {step.image && (
