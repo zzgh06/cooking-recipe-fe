@@ -1,25 +1,24 @@
 import React from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar } from '@fortawesome/free-regular-svg-icons';
-import { fas } from '@fortawesome/free-solid-svg-icons';
-import { Box } from "@mui/material";
+import { faStar as solidStar } from '@fortawesome/free-solid-svg-icons';
+import { faStar as regularStar } from '@fortawesome/free-regular-svg-icons';
 
 interface ReviewStarsProps {
     startNum: number;
 }
 
 const ReviewStars = ({ startNum }: ReviewStarsProps) => {
-    const totalStart = 5;
+    const totalStars = 5;
 
     return (
-        <Box sx={{ color : "orange" }}>
+        <div className="text-orange-500">
             {[...Array(Number(startNum))].map((_, index) => (
-                <FontAwesomeIcon key={`filled-star-${index}`} icon={fas.faStar} />
+                <FontAwesomeIcon key={`filled-star-${index}`} icon={solidStar} />
             ))}
-            {[...Array(totalStart - Number(startNum))].map((_, index) => (
-                <FontAwesomeIcon key={`empty-star-${index}`} icon={faStar} />
+            {[...Array(totalStars - Number(startNum))].map((_, index) => (
+                <FontAwesomeIcon key={`empty-star-${index}`} icon={regularStar} />
             ))}
-        </Box>
+        </div>
     );
 };
 
