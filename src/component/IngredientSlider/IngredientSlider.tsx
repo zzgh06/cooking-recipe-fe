@@ -23,7 +23,7 @@ const IngredientSlider = ({ title, ingredients, loading }: IngredientSliderProps
 
   return (
     <div
-      className="relative px-[50px] py-[50px] w-full max-w-full h-auto max-h-[1000px] min-h-[500px] md:px-[150px] md:py-[30px]"
+      className="relative px-[50px] py-[50px] w-full max-w-full h-auto max-h-[1000px] min-h-[500px] md:px-[100px] md:py-[30px]"
       onMouseEnter={(e) => {
         const buttons = e.currentTarget.querySelectorAll(".custom-arrow-recipe");
         buttons.forEach((button) => {
@@ -43,12 +43,12 @@ const IngredientSlider = ({ title, ingredients, loading }: IngredientSliderProps
         containerClass="ingredient-carousel-container"
         responsive={ingredientResponsive}
         customLeftArrow={
-          <div className="absolute left-0 top-[40%] transform -translate-y-1/2 bg-black bg-opacity-40 text-white text-[20px] cursor-pointer z-20 p-3 rounded-full custom-arrow-recipe">
+          <div className="absolute left-0 top-[40%] transform -translate-y-1/2 bg-black bg-opacity-40 text-white text-[20px] cursor-pointer z-20 px-4 py-3 rounded-full custom-arrow-recipe">
             ◀
           </div>
         }
         customRightArrow={
-          <div className="absolute right-0 top-[40%] transform -translate-y-1/2 bg-black bg-opacity-40 text-white text-[20px] cursor-pointer z-20 p-3 rounded-full custom-arrow-recipe">
+          <div className="absolute right-0 top-[40%] transform -translate-y-1/2 bg-black bg-opacity-40 text-white text-[20px] cursor-pointer z-20 px-4 py-3 rounded-full custom-arrow-recipe">
             ▶
           </div>
         }

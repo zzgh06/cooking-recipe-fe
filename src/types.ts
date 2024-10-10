@@ -21,28 +21,22 @@ export interface Recipe {
   name: string;
   description: string;
   images: string[];
-  foodCategory: string;
-  moodCategory: string;
-  methodCategory: string;
-  ingredientCategory: string;
-  etcCategory: string;
-  servings: string;
-  time: string;
-  difficulty: string;
-  ingredients: Ingredient[] | { _id?: string; name: string; qty: number; unit: string; }[];
-  steps: { description: string; image: string | null }[];
-  categories?: {
+  categories: {
     food: string;
     mood: string;
     method: string;
     ingredient: string;
     etc: string;
   };
+  servings: string;
+  time: string;
+  difficulty: string;
+  ingredients: Ingredient[] | { _id?: string; name: string; qty: number; unit: string; }[];
+  steps: { description: string; image: string | null }[];
   viewCnt?: number;
   reviewCnt?: number;
   createdAt?: string;
 }
-
 
 export interface RecipeItem {
   _id: string;

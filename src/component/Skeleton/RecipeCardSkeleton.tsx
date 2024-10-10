@@ -1,24 +1,15 @@
 import React from "react";
-import { styled } from "@mui/system";
-import { Skeleton, Box } from "@mui/material";
-
-const SkeletonCardContainer = styled(Box)({
-  border: "none",
-  borderRadius: "8px",
-  marginBottom: "10px",
-  width: "100%",
-  padding: "10px 15px",
-  overflow: "hidden",
-});
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const RecipeCardSkeleton = () => (
-  <SkeletonCardContainer>
-    <Skeleton variant="rectangular" width="100%" height={200} />
-    <Box padding="10px 8px">
-      <Skeleton width="60%" />
+  <div className="mb-2 w-full h-auto p-2 rounded-lg overflow-hidden">
+    <Skeleton className="w-full h-52 rounded-lg" />
+    <div className="py-2">
+      <Skeleton width="60%" className="mb-1" />
       <Skeleton width="40%" />
-    </Box>
-  </SkeletonCardContainer>
+    </div>
+  </div>
 );
 
 export default RecipeCardSkeleton;

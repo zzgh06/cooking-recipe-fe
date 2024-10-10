@@ -1,79 +1,48 @@
 import React from 'react';
-import { Container, Box, Grid, Skeleton } from '@mui/material';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const RecipeSkeleton = () => {
   return (
-    <Container sx={{ padding: { xs: "30px", sm: "50px", md: "50px 100px" } }}>
-      <Box sx={{ textAlign: "center", padding: "20px" }}>
-        <Skeleton 
-          variant="rectangular" 
-          sx={{ 
-            width: "200px", 
-            height: "40px", 
-            margin: "0 auto",
-            marginBottom: "10px"
-          }} 
+    <div className="px-6 py-8 sm:px-12 md:px-24">
+      <div className="text-center py-5">
+        <Skeleton
+          className="w-52 h-10 mx-auto mb-2"
+          borderRadius="0.375rem" 
         />
-        <Skeleton 
-          variant="text" 
-          sx={{ 
-            width: "150px", 
-            margin: "0 auto" 
-          }} 
-        />
-      </Box>
-      <Grid container spacing={2}>
-        <Grid item lg={6} md={6} xs={12}>
-          <Skeleton 
-            variant="rectangular" 
-            sx={{ 
-              width: "100%", 
-              paddingTop: "100%",
-              borderRadius: 1 
-            }} 
+        <Skeleton className="w-36 mx-auto" borderRadius="0.375rem" />
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
+        <div className="col-span-1">
+          <Skeleton
+            className="w-full pt-[100%] rounded-lg"
+            borderRadius="0.375rem"
           />
-        </Grid>
-        <Grid item lg={6} md={6} xs={12}>
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <Skeleton 
-                variant="rectangular" 
-                sx={{ 
-                  width: "100%", 
-                  paddingTop: "100%",
-                  borderRadius: 1 
-                }} 
+        </div>
+        <div className="col-span-1">
+          <div className="grid grid-cols-2 gap-2">
+            <div className="col-span-1">
+              <Skeleton
+                className="w-full pt-[100%] rounded-lg"
+                borderRadius="0.375rem"
               />
-            </Grid>
-            <Grid item xs={6}>
-              <Skeleton 
-                variant="rectangular" 
-                sx={{ 
-                  width: "100%", 
-                  paddingTop: "100%",
-                  borderRadius: 1 
-                }} 
+            </div>
+            <div className="col-span-1">
+              <Skeleton
+                className="w-full pt-[100%] rounded-lg"
+                borderRadius="0.375rem"
               />
-            </Grid>
-            <Grid item xs={12}>
-              <Skeleton 
-                variant="rectangular" 
-                sx={{ 
-                  width: "100%", 
-                  height: { 
-                    xs: "300px",
-                    sm: "300px",
-                    md: "200px",
-                    lg: "300px"
-                  },
-                  borderRadius: 1 
-                }} 
+            </div>
+            <div className="col-span-1 col-span-2">
+              <Skeleton
+                className="w-full h-72 md:h-48 lg:h-72 rounded-lg"
+                borderRadius="0.375rem"
               />
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
-    </Container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

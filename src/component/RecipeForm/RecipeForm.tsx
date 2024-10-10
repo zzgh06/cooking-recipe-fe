@@ -26,22 +26,24 @@ interface RecipeFormProps {
 }
 
 const RecipeForm = ({ onSubmit, initialData }: RecipeFormProps) => {
-  const initialFormData: Recipe = {
+  const initialFormData = {
     _id: "",
     name: "",
     description: "",
     images: [],
-    foodCategory: "",
-    moodCategory: "",
-    methodCategory: "",
-    ingredientCategory: "",
-    etcCategory: "",
+    categories: {
+      food: "",
+      mood: "",
+      method: "",
+      ingredient: "",
+      etc: "",
+    },
     servings: "",
     time: "",
     difficulty: "",
     ingredients: [{ name: "", qty: 0, unit: "" }],
     steps: [{ description: "", image: null }],
-  };
+  } as Recipe;
 
   const [formData, setFormData] = useState<Recipe>(initialFormData);
   const [showSubmitModal, setShowSubmitModal] = useState<boolean>(false);
@@ -52,11 +54,14 @@ const RecipeForm = ({ onSubmit, initialData }: RecipeFormProps) => {
         ...prevData,
         ...initialData,
         images: initialData.images || [],
-        foodCategory: initialData.foodCategory || "",
-        moodCategory: initialData.moodCategory || "",
-        methodCategory: initialData.methodCategory || "",
-        ingredientCategory: initialData.ingredientCategory || "",
-        etcCategory: initialData.etcCategory || "",
+        categories: {
+          ...initialData.categories,
+          food: initialData.categories?.food || "",
+          mood: initialData.categories?.mood || "",
+          method: initialData.categories?.method || "",
+          ingredient: initialData.categories?.ingredient || "",
+          etc: initialData.categories?.etc || "",
+        },
         ingredients: initialData.ingredients || [{ name: "", qty: 0, unit: "" }],
         steps: initialData.steps || [{ description: "", image: null }],
       }));
@@ -130,52 +135,20 @@ const RecipeForm = ({ onSubmit, initialData }: RecipeFormProps) => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const {
-      _id,
-      name,
-      description,
-      images,
-      foodCategory,
-      moodCategory,
-      methodCategory,
-      ingredientCategory,
-      etcCategory,
-      servings,
-      time,
-      difficulty,
-      ingredients,
-      steps,
-    } = formData;
-
     const recipeData: Recipe = {
-      _id: _id || "",
-      name,
-      description,
-      images,
-      foodCategory,
-      moodCategory,
-      methodCategory,
-      ingredientCategory,
-      etcCategory,
-      servings,
-      time,
-      difficulty,
-      ingredients,
-      steps,
+      ...formData,
       categories: {
-        food: foodCategory,
-        mood: moodCategory,
-        method: methodCategory,
-        ingredient: ingredientCategory,
-        etc: etcCategory,
-      },
+        food: formData.categories.food,
+        mood: formData.categories.mood,
+        method: formData.categories.method,
+        ingredient: formData.categories.ingredient,
+        etc: formData.categories.etc,
+      }
     };
 
     onSubmit(recipeData);
     setShowSubmitModal(true);
   };
-
-
 
   const handleCloseModal = () => {
     setShowSubmitModal(false);
@@ -240,11 +213,11 @@ const RecipeForm = ({ onSubmit, initialData }: RecipeFormProps) => {
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {[
-          { label: "음식 종류", options: foodCategory, value: formData.foodCategory, field: "foodCategory" },
-          { label: "상황", options: moodCategory, value: formData.moodCategory, field: "moodCategory" },
-          { label: "방법", options: methodCategory, value: formData.methodCategory, field: "methodCategory" },
-          { label: "재료", options: ingredientCategory, value: formData.ingredientCategory, field: "ingredientCategory" },
-          { label: "기타", options: etcCategory, value: formData.etcCategory, field: "etcCategory" },
+          { label: "음식 종류", options: foodCategory, value: formData.categories.food, field: "food" },
+          { label: "상황", options: moodCategory, value: formData.categories.mood, field: "mood" },
+          { label: "방법", options: methodCategory, value: formData.categories.method, field: "method" },
+          { label: "재료", options: ingredientCategory, value: formData.categories.ingredient, field: "ingredient" },
+          { label: "종류", options: etcCategory, value: formData.categories.etc, field: "etc" },
           { label: "인원", options: servings, value: formData.servings, field: "servings" },
           { label: "시간", options: time, value: formData.time, field: "time" },
           { label: "난이도", options: difficulty, value: formData.difficulty, field: "difficulty" },
@@ -253,8 +226,14 @@ const RecipeForm = ({ onSubmit, initialData }: RecipeFormProps) => {
             key={label}
             label={label}
             options={options}
-            value={value}
-            onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
+            value={value} // formData.categories에서 직접 접근
+            onChange={(e) => setFormData({
+              ...formData,
+              categories: {
+                ...formData.categories,
+                [field]: e.target.value
+              }
+            })}
           />
         ))}
       </div>

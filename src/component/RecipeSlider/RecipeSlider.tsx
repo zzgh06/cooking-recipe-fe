@@ -1,54 +1,13 @@
 import React from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import { Box, Typography, Button, IconButton, styled, Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { AddCircleOutline } from "@mui/icons-material";
-import RecipeCard from "../RecipeCard/RecipeCard";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import { recipeResponsive } from "../../constants/responsive";
-import RecipeCardSkeleton from "../Skeleton/RecipeCardSkeleton";
 import { Recipe } from "../../types";
-
-const RecipeCarouselWrapper = styled(Box)(({ theme }) => ({
-  position: "relative",
-  padding: "50px 100px 10px 100px",
-  width: "100vw",
-  [theme.breakpoints.down("md")]: {
-    padding: "40px 50px 0 50px",
-  },
-}));
-
-const CustomArrowRecipe = styled(IconButton)(({ theme }) => ({
-  position: "absolute",
-  top: "40%",
-  transform: "translateY(-70%)",
-  background: "rgba(0, 0, 0, 0.4)",
-  color: "white",
-  fontSize: "20px",
-  cursor: "pointer",
-  zIndex: 2,
-  padding: "5px",
-  borderRadius: "50%",
-  width: "50px",
-  height: "50px",
-  display: "none",
-  "&:hover": {
-    background: "rgba(0, 0, 0, 0.6)",
-  },
-  [theme.breakpoints.down("md")]: {
-    width: "40px",
-    height: "40px",
-    fontSize: "15px",
-  },
-}));
-
-const LeftArrow = styled(CustomArrowRecipe)({
-  left: 0,
-});
-
-const RightArrow = styled(CustomArrowRecipe)({
-  right: 0,
-});
+import RecipeCard from "../RecipeCard/RecipeCard";
+import RecipeCardSkeleton from "../Skeleton/RecipeCardSkeleton";
 
 interface RecipeSliderProps {
   title: string;
@@ -68,65 +27,67 @@ const RecipeSlider = ({ title, recipes, loading }: RecipeSliderProps) => {
   };
 
   return (
-    <RecipeCarouselWrapper
+    <div
+      className="relative px-[50px] pt-[30px] w-full max-w-full h-auto md:px-[100px]"
       onMouseEnter={(e) => {
-        const buttons = e.currentTarget.querySelectorAll(
-          ".custom-arrow-recipe"
-        );
+        const buttons = e.currentTarget.querySelectorAll(".custom-arrow-recipe");
         buttons.forEach((button) => {
           (button as HTMLElement).style.display = "block";
         });
       }}
       onMouseLeave={(e) => {
-        const buttons = e.currentTarget.querySelectorAll(
-          ".custom-arrow-recipe"
-        );
+        const buttons = e.currentTarget.querySelectorAll(".custom-arrow-recipe");
         buttons.forEach((button) => {
           (button as HTMLElement).style.display = "none";
         });
       }}
     >
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          padding: "0 15px",
-          marginBottom: "10px",
-          fontWeight: "600",
-        }}
-      >
-        <Typography variant="h5" fontWeight="600">{title}</Typography>
-        <Button
-          size="small"
-          endIcon={<AddCircleOutline />}
+      <div className="flex justify-between mb-4 px-4">
+        <h5 className="text-[25px] font-semibold">{title}</h5>
+        <button
+          className="flex items-center text-sm text-gray-700 hover:text-black"
           onClick={onClickMore}
-          sx={{ justifyContent: "flex-end", width: "80px", color: "black" }}
         >
           더보기
-        </Button>
-      </Box>
+          <FontAwesomeIcon icon={faCirclePlus} className="ml-1" />
+        </button>
+      </div>
       <Carousel
         infinite={true}
         containerClass="recipe-carousel-container"
         responsive={recipeResponsive}
         customLeftArrow={
-          <LeftArrow className="custom-arrow-recipe">◀</LeftArrow>
+          <button
+            className="custom-arrow-recipe absolute left-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-40 text-white px-4 py-3 rounded-full hidden"
+            style={{ zIndex: 2 }}
+          >
+            ◀
+          </button>
         }
         customRightArrow={
-          <RightArrow className="custom-arrow-recipe">▶</RightArrow>
+          <button
+            className="custom-arrow-recipe absolute right-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-40 text-white px-4 py-3 rounded-full hidden"
+            style={{ zIndex: 2 }}
+          >
+            ▶
+          </button>
         }
       >
         {loading ? (
-          Array.from(new Array(8)).map((_, index) => (
-            <Grid item key={index} xs={12} md={6} lg={3}>
+          Array.from(new Array(4)).map((_, index) => (
+            <div key={index} className="w-full gap-1">
               <RecipeCardSkeleton />
-            </Grid>
+            </div>
           ))
-        ) : (recipes.map((recipe) => (
-          <RecipeCard key={recipe._id} item={recipe} />
-        )))}
+        ) : (
+          recipes.map((recipe) => (
+            <div key={recipe._id}>
+              <RecipeCard item={recipe} />
+            </div>
+          ))
+        )}
       </Carousel>
-    </RecipeCarouselWrapper>
+    </div>
   );
 };
 

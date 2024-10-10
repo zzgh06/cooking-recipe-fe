@@ -1,65 +1,8 @@
 import React, { useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { styled } from "@mui/system";
-import { Typography } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock, faSignal } from "@fortawesome/free-solid-svg-icons";
 import { Recipe } from "../../types";
-
-const RecipeCardContainer = styled("div")({
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  position: "relative",
-  border: "none",
-  borderRadius: "8px",
-  marginBottom: "10px",
-  width: "100%",
-  padding: "10px",
-  overflow: "hidden",
-  transition: "all 0.3s ease-in-out",
-});
-
-const RecipeImage = styled("img")({
-  width: "100%",
-  height: "auto",
-  maxWidth: "400px",
-  maxHeight: "220px",
-  aspectRatio: "16 / 9",
-  objectFit: "cover",
-  borderRadius: "8px",
-  transition: "transform 0.3s",
-  "&:hover": {
-    transform: "scale(1.05)",
-  },
-});
-
-const CardDescription = styled("div")({
-  padding: "10px 8px",
-});
-
-const HeadContainer = styled("div")({
-  display: "flex",
-  justifyContent: "center",
-  color: "gray",
-});
-
-const RecipeName = styled(Typography)(({ theme }) => ({
-  fontSize: '20px',
-  fontWeight: '600',
-  minWidth: '100px',
-  maxWidth: '250px',
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-  whiteSpace: 'nowrap',
-  [theme.breakpoints.down('md')]: {
-    maxWidth: '200px',
-  },
-  [theme.breakpoints.down('sm')]: {
-    fontSize: '16px',
-    maxWidth: '150px',
-  },
-}));
 
 const optimizeImageUrl = (url: string) => {
   return url?.replace(/\/upload\//, '/upload/c_fill,h_504,w_504,f_auto,q_auto,f_webp/');
@@ -78,28 +21,29 @@ const RecipeCard = React.memo(({ item }: RecipeCardProps) => {
   }, [navigate]);
 
   return (
-    <RecipeCardContainer>
-      <RecipeImage
+    <div className="flex flex-col items-center relative mb-2 p-2 w-full transition-all duration-300 ease-in-out">
+      <img
         src={optimizedImageUrl}
         alt={item.name}
+        className="w-full h-auto max-w-[400px] max-h-[220px] aspect-video object-cover rounded-lg transition-transform duration-300 hover:scale-105 cursor-pointer"
         loading="eager"
         fetchPriority="high"
         onClick={() => showRecipe(item._id || "")}
       />
-      <CardDescription>
-        <RecipeName variant="h6" align="center">
+      <div className="p-2">
+        <h6 className="text-xl font-semibold text-center truncate max-w-xs sm:max-w-sm md:max-w-md">
           {item.name}
-        </RecipeName>
-        <HeadContainer>
-          <Typography variant="subtitle1" align="center" sx={{ paddingRight: "15px" }}>
-            <FontAwesomeIcon icon={faSignal} /> {item.difficulty}
-          </Typography>
-          <Typography variant="subtitle1" align="center">
-            <FontAwesomeIcon icon={faClock} /> {item.time?.split("이내")[0]}
-          </Typography>
-        </HeadContainer>
-      </CardDescription>
-    </RecipeCardContainer>
+        </h6>
+        <div className="flex justify-center text-gray-500 mt-2">
+          <p className="flex items-center pr-4">
+            <FontAwesomeIcon icon={faSignal} className="mr-1" /> {item.difficulty}
+          </p>
+          <p className="flex items-center">
+            <FontAwesomeIcon icon={faClock} className="mr-1" /> {item.time?.split("이내")[0]}
+          </p>
+        </div>
+      </div>
+    </div>
   );
 });
 
