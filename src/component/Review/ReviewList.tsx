@@ -14,7 +14,7 @@ const ReviewList = ({ type, reviews, userId, onEdit, onDelete }: ReviewListProps
   return (
     <div>
       {reviews.length === 0 ? (
-        <div className="w-full h-24 border border-gray-300 p-4 mb-4 rounded-lg bg-gray-100">
+        <div className="w-full h-24 border border-gray-300 p-4 mb-4 rounded-lg bg-gray-50">
           <div className="flex justify-center items-center p-4">
             <p className="text-lg">작성된 리뷰가 없습니다.</p>
           </div>
@@ -23,7 +23,7 @@ const ReviewList = ({ type, reviews, userId, onEdit, onDelete }: ReviewListProps
         reviews && reviews.map((review) => (
           <div
             key={review._id}
-            className="border border-gray-300 p-4 mb-4 rounded-lg bg-gray-100"
+            className="border border-gray-300 p-4 mb-4 rounded-lg bg-gray-50"
           >
             <div className="flex items-center gap-2">
               <p className="text-base">평점:</p>

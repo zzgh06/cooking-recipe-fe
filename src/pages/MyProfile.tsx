@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Container, Grid, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import UserInfo from "../component/UserInfo/UserInfo";
@@ -61,7 +60,7 @@ const MyProfile = () => {
       case "장보기 메모":
         return <MyGroceryNote />;
       case "회원정보 수정":
-        return user ? <MyProfileEditComponent user={user} /> : <Typography>사용자 정보를 불러올 수 없습니다.</Typography>;
+        return user ? <MyProfileEditComponent user={user} /> : <p>사용자 정보를 불러올 수 없습니다.</p>;
       case "비밀번호 수정":
         return isVerified ? (
           <ChangePasswordPage />

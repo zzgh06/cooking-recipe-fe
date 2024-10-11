@@ -1,4 +1,3 @@
-import CircularProgress from '@mui/material/CircularProgress';
 import React, { Suspense, lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
@@ -44,7 +43,7 @@ const AppRouter = () => {
           height: '100vh',
           backgroundColor: '#f0f0f0'
         }}>
-          <CircularProgress />
+          <div className="animate-spin border-4 border-green-500 border-t-transparent rounded-full w-24 h-24"></div>
         </div>
       }
     >

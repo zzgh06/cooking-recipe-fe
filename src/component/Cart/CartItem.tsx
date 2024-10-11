@@ -1,6 +1,5 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { useDeleteCartItem } from "../../hooks/Cart/useDeleteCartItem";
 import { useEditCartItem } from "../../hooks/Cart/useEditCartItem";
 import { currencyFormat } from "../../utils/number";

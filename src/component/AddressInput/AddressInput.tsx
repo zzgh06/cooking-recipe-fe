@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { ArrowDropDown } from "@mui/icons-material";
 import DaumPostcodeEmbed, { Address } from "react-daum-postcode";
 
 interface AddressInputProps {
@@ -32,7 +31,7 @@ const AddressInput = ({ setAddress }: AddressInputProps) => {
           className="flex items-center justify-between w-[100px] text-sm p-1 border border-black rounded-[5px] text-black hover:bg-lightgreen"
         >
           지역 선택
-          <ArrowDropDown />
+          ▼
         </button>
         <p className="text-sm text-gray-500">
           서울과 경기도는 새벽배송 가능 지역입니다.
