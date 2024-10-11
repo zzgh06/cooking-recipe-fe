@@ -19,6 +19,10 @@ interface SearchQuery {
   [key: string]: string | number | null;
 }
 
+interface InputState {
+  orderNum: string;
+}
+
 interface BadgeBg {
   [key: string]: string;
 }
@@ -40,6 +44,10 @@ const AdminOrderPage = () => {
     startDate: query.get("startDate") || null,
     endDate: query.get("endDate") || null,
   });
+  const [inputState, setInputState] = useState<InputState>({
+    orderNum: searchQuery.orderNum,
+  });
+
   const [open, setOpen] = useState<boolean>(false);
   const [selectedOption, setSelectedOption] = useState<string>("orderNum");
   const [startDate, setStartDate] = useState<Date | null>(null);
@@ -65,7 +73,6 @@ const AdminOrderPage = () => {
     navigate("?" + params.toString());
   }, [searchQuery, navigate]);
 
-
   const openEditForm = (order: Order) => {
     setOpen(true);
     dispatch(setSelectedOrder(order));
@@ -83,19 +90,38 @@ const AdminOrderPage = () => {
     return data?.data?.filter((order: Order) => order.status === status).length || 0;
   };
 
-  const handleSearch = (event: React.FormEvent<HTMLButtonElement>) => {
-    event.preventDefault();
+  const executeSearch = () => {
     if (startDate && endDate && isValid(startDate) && isValid(endDate)) {
       const formattedStartDate = startOfDay(startDate);
       const formattedEndDate = endOfDay(endDate);
 
       setSearchQuery((prev) => ({
         ...prev,
+        orderNum: inputState.orderNum,
         startDate: format(formattedStartDate, "yyyy-MM-dd HH:mm:ss"),
         endDate: format(formattedEndDate, "yyyy-MM-dd HH:mm:ss"),
+        page: 1,
       }));
     } else {
-      setSearchQuery((prev) => ({ ...prev, startDate: null, endDate: null }));
+      setSearchQuery((prev) => ({
+        ...prev,
+        orderNum: inputState.orderNum,
+        startDate: null,
+        endDate: null,
+        page: 1,
+      }));
+    }
+  };
+
+  const handleSearch = (event: React.FormEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    executeSearch();
+  };
+
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      executeSearch();
     }
   };
 
@@ -103,6 +129,7 @@ const AdminOrderPage = () => {
     setStartDate(null);
     setEndDate(null);
     setSelectedOption("orderNum");
+    setInputState({ orderNum: "" });
     setSearchQuery({
       page: 1,
       orderNum: "",
@@ -110,7 +137,6 @@ const AdminOrderPage = () => {
       endDate: null,
     });
   };
-
 
   if (isLoading) {
     return (
@@ -121,7 +147,7 @@ const AdminOrderPage = () => {
   }
 
   return (
-    <div className="container mx-auto mt-4">
+    <div className="container mx-auto p-6">
       <div className="border-2 border-gray-300 shadow-sm rounded-lg opacity-70 p-4">
         <div className="mb-4">
           <DateFilterCondition
@@ -132,7 +158,7 @@ const AdminOrderPage = () => {
           />
         </div>
         <div className="flex flex-col md:flex-row md:items-center md:space-x-2">
-          <div className="w-full md:w-1/4">
+          <div className="w-full md:w-1/4 mb-2">
             <select
               value={selectedOption || ""}
               onChange={(event) => setSelectedOption(event.target.value)}
@@ -141,30 +167,32 @@ const AdminOrderPage = () => {
               <option value="orderNum">주문번호</option>
             </select>
           </div>
-          <div className="w-full md:w-1/4">
+          <div className="w-full md:w-1/4 mb-2">
             <input
               type="text"
               placeholder="내용을 입력해주세요."
-              value={searchQuery[selectedOption] || ""}
+              value={inputState[selectedOption as keyof InputState] || ""}
               onChange={(event) =>
-                setSearchQuery({
-                  ...searchQuery,
+                setInputState({
+                  ...inputState,
                   [selectedOption]: event.target.value,
                 })
               }
+              onKeyPress={handleKeyPress}
               className="block w-full h-10 border border-gray-300 rounded-md px-3"
             />
           </div>
           <div className="w-full md:w-1/2 flex justify-end space-x-2 mt-2 md:mt-0">
             <button
-              onClick={handleSearch}
-              className="bg-green-700 text-white rounded-md px-4 h-10 hover:bg-green-600 transition-colors"
+              type="submit"
+              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
-              조회
+              검색
             </button>
             <button
+              type="button"
               onClick={handleReset}
-              className="bg-green-700 text-white rounded-md px-4 h-10 hover:bg-green-600 transition-colors"
+              className="px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
               초기화
             </button>

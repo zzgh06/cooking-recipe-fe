@@ -67,7 +67,7 @@ const AdminUserPage = () => {
     );
   }
   return (
-    <div className="container mx-auto mt-4">
+    <div className="container mx-auto p-6">
       <div className="mb-4 flex justify-center">
         <SearchBox
           searchQuery={searchQuery}

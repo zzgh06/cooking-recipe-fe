@@ -1,11 +1,10 @@
 import React, { ReactNode, useEffect } from "react";
 import { useLocation } from "react-router";
-import { Box, Grid, Container, CssBaseline } from "@mui/material";
+import { useLoginWithToken } from "../hooks/User/useLoginWithToken";
 import Sidebar from "../component/SideBar/SideBar";
 import Navbar from "../component/Navbar/Navbar";
 import Footer from "../component/Footer/Footer";
 import ToastMessage from "../component/ToastMessage/ToastMessage";
-import { useLoginWithToken } from "../hooks/User/useLoginWithToken";
 
 const AppLayout = ({ children }: { children: ReactNode }) => {
   const location = useLocation();
@@ -26,28 +25,25 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
   const isAdminPage = location.pathname.includes("admin");
 
   return (
-    <Box>
-      <CssBaseline />
+    <div className="min-h-screen">
       <ToastMessage />
       {isAdminPage ? (
-        <Grid container spacing={2} sx={{ minHeight: "100vh" }}>
-          <Grid item xs={12} lg={2}>
+        <div className="flex flex-col lg:flex-row min-h-screen">
+          <div className="lg:w-1/6">
             <Sidebar />
-          </Grid>
-          <Grid item xs={12} lg={10}>
-            <Container>{children}</Container>
-          </Grid>
-        </Grid>
+          </div>
+          <div className="flex-1 lg:w-5/6">
+            <div className="container mx-auto">{children}</div>
+          </div>
+        </div>
       ) : (
         <>
           <Navbar />
-          <Box component="main" sx={{ paddingTop: "120px" }}>
-            {children}
-          </Box>
+          <main className="pt-32">{children}</main>
           <Footer />
         </>
       )}
-    </Box>
+    </div>
   );
 };
 

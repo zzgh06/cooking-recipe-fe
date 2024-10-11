@@ -2,7 +2,7 @@ import { useMutation, UseMutationResult } from "@tanstack/react-query";
 import api from "../../utils/api";
 import { setToastMessage } from "../../redux/commonUISlice";
 import { useDispatch } from "react-redux";
-import { removeCartItem } from "../../redux/cartSlice";  // setCartItems 추가
+import { removeCartItem } from "../../redux/cartSlice";
 import { CartItemType } from "../../types";
 import { useFetchCart } from "./useFetchCart";
 

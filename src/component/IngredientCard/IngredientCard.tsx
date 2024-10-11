@@ -102,7 +102,7 @@ const IngredientCard = ({ item }: IngredientCardProps) => {
             <img
               src={optimizeImageUrl(item.images[0])}
               alt={item.name}
-              className="w-full h-40 object-cover rounded-lg mb-4" // 이미지의 크기 조정
+              className="w-full h-40 object-cover rounded-lg mb-4" 
               loading="lazy"
             />
             <div className="grid grid-cols-1 gap-2">

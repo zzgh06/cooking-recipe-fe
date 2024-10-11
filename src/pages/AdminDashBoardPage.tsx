@@ -254,7 +254,7 @@ const AdminDashBoardPage = () => {
   ) ?? [];
 
   return (
-    <div className="min-h-screen py-5">
+    <div className="min-h-screen p-5">
       <div className="mb-6">
         <Card>
           <div className="flex items-center mb-4">

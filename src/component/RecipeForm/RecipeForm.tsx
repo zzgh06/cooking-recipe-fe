@@ -226,7 +226,7 @@ const RecipeForm = ({ onSubmit, initialData }: RecipeFormProps) => {
             key={label}
             label={label}
             options={options}
-            value={value} // formData.categories에서 직접 접근
+            value={value} 
             onChange={(e) => setFormData({
               ...formData,
               categories: {

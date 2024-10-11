@@ -72,7 +72,7 @@ const AdminIngredientsPage = () => {
   }
 
   return (
-    <div className="container mx-auto px-4">
+    <div className="container mx-auto p-6">
       <div className="mt-4">
         <div className="flex justify-between items-center mb-4 max-w-[1100px]">
           <SearchBox

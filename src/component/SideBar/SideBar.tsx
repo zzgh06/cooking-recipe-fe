@@ -1,46 +1,11 @@
+import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Drawer,
-  List,
-  ListItem,
-  ListItemText,
-  Divider,
-  Typography,
-  useTheme,
-  useMediaQuery,
-  Box,
-  IconButton,
-} from "@mui/material";
-import { styled } from "@mui/material/styles";
-import MenuIcon from '@mui/icons-material/Menu';
-
-const DrawerHeader = styled("div")(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "space-between",
-  padding: theme.spacing(2),
-  ...theme.mixins.toolbar,
-}));
-
-const SidebarListItem = styled(ListItem)(({ theme }) => ({
-  "&:hover": {
-    backgroundColor: theme.palette.grey[200],
-  },
-}));
 
 const Sidebar = () => {
   const navigate = useNavigate();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
-  const [open, setOpen] = useState(false); 
-
-  const handleSelectMenu = (url: string) => {
-    navigate(url);
-    if (isMobile) {
-      setOpen(false);
-    }
-  };
+  const [isOpen, setIsOpen] = useState(false);
 
   const menuItems = [
     { text: "DashBoard", url: "/admin/dashboard" },
@@ -50,92 +15,66 @@ const Sidebar = () => {
     { text: "User", url: "/admin/user?page=1" },
   ];
 
-  return (
-    <Box sx={{ display: "flex" }}>
-      {isMobile ? (
-        <>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            onClick={() => setOpen(true)}
-            sx={{ margin: 1 }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Drawer
-            variant="temporary"
-            open={open}
-            onClose={() => setOpen(false)}
-            ModalProps={{
-              keepMounted: true,
-            }}
-            sx={{
-              display: { xs: "block", lg: "none" },
-              "& .MuiDrawer-paper": {
-                width: 240,
-              },
-            }}
-          >
-            <DrawerHeader>
-              <Typography
-                variant="h6"
-                onClick={() => navigate("/")}
-                sx={{ cursor: "pointer" }}
-              >
-                What’s in your fridge
-              </Typography>
-            </DrawerHeader>
-            <Divider />
-            <List>
-              {menuItems.map((item) => (
-                <SidebarListItem
-                  key={item.text}
-                  onClick={() => handleSelectMenu(item.url)}
-                >
-                  <ListItemText primary={item.text} />
-                </SidebarListItem>
-              ))}
-            </List>
-          </Drawer>
-        </>
-      ) : (
-        <Drawer
-          variant="permanent"
-          sx={{
-            width: 240,
-            flexShrink: 0,
-            "& .MuiDrawer-paper": {
-              width: 240,
-              boxSizing: "border-box",
-              backgroundColor: "green",
-              color: "#fff",
-            },
-          }}
+  const handleSelectMenu = (url: string) => {
+    navigate(url);
+    setIsOpen(false);
+  };
+
+  const SidebarContent = () => (
+    <div className="flex flex-col h-full">
+      <div className="p-4 flex items-center justify-between min-h-[64px]">
+        <h6
+          className="text-lg font-semibold cursor-pointer"
+          onClick={() => navigate("/")}
         >
-          <DrawerHeader>
-            <Typography
-              variant="h6"
-              onClick={() => navigate("/")}
-              sx={{ cursor: "pointer" }}
-            >
-              What’s in your fridge
-            </Typography>
-          </DrawerHeader>
-          <Divider />
-          <List>
-            {menuItems.map((item) => (
-              <SidebarListItem
-                key={item.text}
+          What's in your fridge
+        </h6>
+      </div>
+      <div className="h-px bg-gray-200 dark:bg-gray-700" />
+      <nav className="flex-1">
+        <ul className="py-2">
+          {menuItems.map((item) => (
+            <li key={item.text}>
+              <button
                 onClick={() => handleSelectMenu(item.url)}
+                className="w-full px-4 py-2 text-left hover:bg-gray-100 hover:text-black dark:hover:bg-gray-700 transition-colors duration-200"
               >
-                <ListItemText primary={item.text} />
-              </SidebarListItem>
-            ))}
-          </List>
-        </Drawer>
+                {item.text}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+  );
+
+  return (
+    <div className="flex flex-col lg:flex-row">
+      <button
+        className="flex justify-start ml-3 lg:hidden p-4 focus:outline-none"
+        onClick={() => setIsOpen(true)}
+      >
+        <FontAwesomeIcon icon={faBars} size="lg" />
+      </button>
+
+      {isOpen && (
+        <div className="xl:hidden fixed inset-0 z-50">
+          <div
+            className="fixed inset-0 bg-black opacity-50"
+            onClick={() => setIsOpen(false)}
+          />
+          <div className="fixed inset-y-0 left-0 w-60 bg-white dark:bg-gray-800 shadow-lg transform transition-transform duration-200 ease-in-out">
+            <SidebarContent />
+          </div>
+        </div>
       )}
-    </Box>
+
+      <div className="hidden lg:block w-60 flex-shrink-0">
+        <div className="fixed h-full w-60 bg-green-800 text-white shadow-lg">
+          <SidebarContent />
+        </div>
+      </div>
+    </div>
   );
 };
 

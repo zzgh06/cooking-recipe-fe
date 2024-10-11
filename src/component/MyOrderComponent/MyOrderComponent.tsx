@@ -10,10 +10,17 @@ import MyPageOrderDialog from "../MyPageOrderDialog/MyPageOrderDialog";
 import DateFilterCondition from "../DateFilterCondition/DateFilterCondition";
 import PaginationComponent from "../Pagination/PaginationComponent";
 
+interface InputValues {
+  orderNum: string;
+}
+
 const MyOrderComponent = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState<{ [key: string]: string | null }>({});
+  const [inputValues, setInputValues] = useState<InputValues>({
+    orderNum: "",
+  });
   const [recentChecked, setRecentChecked] = useState(false);
   const [oldChecked, setOldChecked] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -56,20 +63,45 @@ const MyOrderComponent = () => {
     setRecentChecked(!event.target.checked);
   };
 
-  const handleSearch = (event: FormEvent) => {
-    event.preventDefault();
+  const executeSearch = () => {
     if (startDate && endDate && isValid(startDate) && isValid(endDate)) {
       const formattedStartDate = startOfDay(startDate);
       const formattedEndDate = endOfDay(endDate);
 
       setSearchQuery({
         ...searchQuery,
+        [selectedOption]: inputValues[selectedOption as keyof InputValues],
         startDate: format(formattedStartDate, "yyyy-MM-dd HH:mm:ss"),
         endDate: format(formattedEndDate, "yyyy-MM-dd HH:mm:ss"),
       });
     } else {
-      setSearchQuery({ ...searchQuery, startDate: null, endDate: null });
+      setSearchQuery({
+        ...searchQuery,
+        [selectedOption]: inputValues[selectedOption as keyof InputValues],
+        startDate: null,
+        endDate: null,
+      });
     }
+    setPage(1); 
+  };
+
+  const handleSearch = (event: FormEvent) => {
+    event.preventDefault();
+    executeSearch();
+  };
+
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      executeSearch();
+    }
+  };
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setInputValues({
+      ...inputValues,
+      [selectedOption]: e.target.value,
+    });
   };
 
   const handleOpenDialog = (order: OrderItem) => {
@@ -131,13 +163,9 @@ const MyOrderComponent = () => {
             <input
               type="text"
               placeholder={selectedOption === "orderNum" ? "주문번호를 입력하세요" : ""}
-              value={searchQuery[selectedOption] || ""}
-              onChange={(e) =>
-                setSearchQuery({
-                  ...searchQuery,
-                  [selectedOption]: e.target.value,
-                })
-              }
+              value={inputValues[selectedOption as keyof InputValues]}
+              onChange={handleInputChange}
+              onKeyPress={handleKeyPress}
               className="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
 
