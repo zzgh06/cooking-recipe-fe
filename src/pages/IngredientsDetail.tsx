@@ -135,13 +135,13 @@ const IngredientsDetail = () => {
   return (
     <>
       {data?._id ? (
-        <div className="container mx-auto py-12">
+        <div className="container py-12 px-[50px] md:px-[100px] lg:px-[150px]">
           <div className="grid lg:grid-cols-2 gap-8">
             <div className="text-center">
               <img
                 src={optimizedImageUrl(data.images[0])}
                 alt={data.name}
-                className="mx-auto max-h-[650px]"
+                className="mx-auto"
                 fetchPriority="high"
               />
             </div>
@@ -159,15 +159,15 @@ const IngredientsDetail = () => {
                   </>
                 )}
               </div>
-              <p className="mt-4 text-lg">{data.description}</p>
-              <div className="mt-8 border-t pt-4">
+              <p className="my-4 text-lg">{data.description}</p>
+              <div className="flex-col py-4 border-t space-y-3">
                 <p className="text-gray-600">배송안내</p>
                 <p className="text-xl font-semibold">{address}</p>
                 <AddressInput setAddress={setAddress} />
                 <DeliveryEstimate address={address} />
               </div>
               <button
-                className="mt-4 w-full bg-green-700 text-white py-2 px-4 rounded hover:bg-green-600 transition disabled:opacity-50"
+                className="w-full bg-green-700 text-white py-2 px-4 rounded hover:bg-green-600 transition disabled:opacity-50"
                 onClick={addCart}
                 disabled={isAdding}
               >
@@ -212,8 +212,8 @@ const IngredientsDetail = () => {
                     )}
                   </>
                 ) : (
-                  <div className="flex justify-center p-8">
-                    <h3 className="text-2xl">상세 이미지가 없습니다. 😅</h3>
+                  <div className="flex justify-center items-center py-[150px]">
+                    <h3 className="text-3xl font-semibold">상세 이미지가 없습니다. 😅</h3>
                   </div>
                 )}
               </div>
