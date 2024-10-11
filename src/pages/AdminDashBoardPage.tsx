@@ -1,5 +1,6 @@
+import React, { ReactNode, useEffect, useState } from 'react';
 import {
-  Chart,
+  Chart as ChartJS,
   CategoryScale,
   LinearScale,
   BarElement,
@@ -9,15 +10,12 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import React, { useEffect, useState } from 'react';
+import { Bar, Line } from 'react-chartjs-2';
 import { useGetUsersInfo } from '../hooks/User/useGetUsersInfo';
 import { useFetchOrderList } from '../hooks/Order/useFetchOrderList';
 import { Order } from '../types';
-import { Box, Grid, Paper, Tab, Tabs, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination } from '@mui/material';
-import AdminDashboardCard from '../component/AdminDashboard/AdminDashboardCard';
-import { Bar, Line } from 'react-chartjs-2';
 
-Chart.register(
+ChartJS.register(
   CategoryScale,
   LinearScale,
   BarElement,
@@ -28,23 +26,118 @@ Chart.register(
   Legend
 );
 
-interface StatusTableProps {
-  orderTableHead: string[];
-  orderData: Order[];
-}
+const Card = ({ title, children } : {
+  title? : string,
+  children : ReactNode
+}) => (
+  <div className="bg-white rounded-lg shadow-md p-4">
+    <h3 className="text-lg font-semibold mb-4">{title}</h3>
+    {children}
+  </div>
+);
+
+const StatusTable = ({ orderTableHead, orderData } :{
+  orderTableHead: string[],
+  orderData: Order[]
+}) => {
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const paginatedData = orderData.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
+
+  return (
+    <div className="w-full">
+      <div className="overflow-x-auto">
+        <table className="min-w-full">
+          <thead className="bg-gray-50">
+            <tr>
+              {orderTableHead.map((head) => (
+                <th key={head} className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  {head}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {paginatedData.map((order) => (
+              <tr key={order._id}>
+                <td className="px-6 py-4 whitespace-nowrap text-sm">{order._id}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm">{order.createdAt}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm">{order.userId?.email}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  {order.items?.map((item) => item.ingredientId?.name).join(', ')}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm">{order.totalPrice}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="flex items-center justify-between py-4">
+        <div className="flex items-center space-x-2">
+          <select
+            className="border rounded px-2 py-1 text-sm"
+            value={rowsPerPage}
+            onChange={(e) => {
+              setRowsPerPage(Number(e.target.value));
+              setPage(0);
+            }}
+          >
+            {[5, 10, 25].map((value) => (
+              <option key={value} value={value}>
+                {value} rows
+              </option>
+            ))}
+          </select>
+          <span className="text-sm text-gray-500">
+            Page {page + 1} of {Math.ceil(orderData.length / rowsPerPage)}
+          </span>
+        </div>
+        <div className="flex space-x-2">
+          <button
+            className="px-3 py-1 border rounded text-sm disabled:opacity-50"
+            onClick={() => setPage(page - 1)}
+            disabled={page === 0}
+          >
+            Previous
+          </button>
+          <button
+            className="px-3 py-1 border rounded text-sm disabled:opacity-50"
+            onClick={() => setPage(page + 1)}
+            disabled={page >= Math.ceil(orderData.length / rowsPerPage) - 1}
+          >
+            Next
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const AdminDashBoardPage = () => {
-  const [selectedTab, setSelectedTab] = useState<number>(0);
-  const orderTableHead: string[] = ['주문번호', '주문일자', '구매자', '상품명', '총 주문액'];
+  const [selectedTab, setSelectedTab] = useState('preparing');
+  const orderTableHead = ['주문번호', '주문일자', '구매자', '상품명', '총 주문액'];
   const { data: usersInfo } = useGetUsersInfo();
   const { data: orderData } = useFetchOrderList();
 
   const [monthlySales, setMonthlySales] = useState<number[]>([]);
-  const [orderStatusCounts, setOrderStatusCounts] = useState<number[]>([0, 0, 0, 0]);
+  const [orderStatusCounts, setOrderStatusCounts] = useState([0, 0, 0, 0]);
 
-  const calculateMonthlySales = (orderData: Order[]) => {
+  useEffect(() => {
+    if (orderData && orderData.data.length > 0) {
+      const sales = calculateMonthlySales(orderData.data);
+      setMonthlySales(sales);
+      const statusCounts = calculateOrderStatusCounts(orderData.data);
+      setOrderStatusCounts(statusCounts);
+    }
+  }, [orderData]);
+
+  const calculateMonthlySales = (orders: Order[]) => {
     const sales = Array(12).fill(0);
-    orderData.forEach((order) => {
+    orders.forEach((order) => {
       const date = new Date(order.createdAt || '');
       const month = date.getMonth();
       sales[month] += order.totalPrice;
@@ -66,24 +159,19 @@ const AdminDashBoardPage = () => {
       }
     });
 
-    return [statusCounts.preparing, statusCounts.shipping, statusCounts.delivered, statusCounts.refund];
+    return [
+      statusCounts.preparing,
+      statusCounts.shipping,
+      statusCounts.delivered,
+      statusCounts.refund
+    ];
   };
-
-  useEffect(() => {
-    if (orderData && orderData.data.length > 0) {
-      const sales = calculateMonthlySales(orderData.data);
-      setMonthlySales(sales);
-
-      const statusCounts = calculateOrderStatusCounts(orderData.data);
-      setOrderStatusCounts(statusCounts);
-    }
-  }, [orderData]);
 
   const getMonthlySignups = (year: number, month: number) => {
     return usersInfo?.usersData.filter((user) => {
       const date = new Date(user.createdAt || '');
       return date.getFullYear() === year && date.getMonth() === month;
-    }).length;
+    }).length ?? 0;
   };
 
   const today = new Date();
@@ -104,19 +192,7 @@ const AdminDashBoardPage = () => {
   const twoMonthsAgoSignups = getMonthlySignups(twoMonthsAgoYear, twoMonthsAgo);
   const threeMonthsAgoSignups = getMonthlySignups(threeMonthsAgoYear, threeMonthsAgo);
 
-  const monthNames: string[] = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
-
-  const signupData = {
-    labels: [monthNames[threeMonthsAgo], monthNames[twoMonthsAgo], monthNames[lastMonth], monthNames[currentMonth]],
-    datasets: [
-      {
-        label: `${currentYear}년 가입자 수`,
-        data: [threeMonthsAgoSignups, twoMonthsAgoSignups, lastMonthSignups, currentMonthSignups],
-        backgroundColor: ['#9BD5FF'],
-        barThickness: 15,
-      },
-    ],
-  };
+  const monthNames = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
 
   const salesData = {
     labels: monthNames,
@@ -124,145 +200,131 @@ const AdminDashBoardPage = () => {
       {
         label: '총 매출',
         data: monthlySales,
-        borderColor: '#9BD5FF',
+        borderColor: '#60A5FA',
+        backgroundColor: 'rgba(96, 165, 250, 0.1)',
         fill: true,
       },
     ],
   };
 
-  const refundOrders = orderData?.data.filter((order) => order.status === 'refund').length;
-  const newOrders = orderData?.data.filter((order) => order.status === 'preparing').length;
-  const shippingCounts = orderData?.data.filter((order) => order.status === 'shipping').length;
-  const deliveredCounts = orderData?.data.filter((order) => order.status === 'delivered').length;
-
   const newSignups = usersInfo?.usersData.filter((user) => {
     const date = new Date(user.createdAt || '');
-    return date.getFullYear() === currentYear && date.getMonth() === currentMonth;
-  }).length;
+    const today = new Date();
+    return date.getMonth() === today.getMonth() && 
+           date.getFullYear() === today.getFullYear();
+  }).length ?? 0;
 
-  const totalTasks = (newOrders ?? 0) + (refundOrders ?? 0) + (newSignups ?? 0);
+  const signupData = {
+    labels: [
+      monthNames[threeMonthsAgo],
+      monthNames[twoMonthsAgo],
+      monthNames[lastMonth],
+      monthNames[currentMonth]
+    ],
+    datasets: [
+      {
+        label: '신규 가입자 수',
+        data: [
+          threeMonthsAgoSignups,
+          twoMonthsAgoSignups,
+          lastMonthSignups,
+          currentMonthSignups
+        ],
+        backgroundColor: '#60A5FA',
+        barThickness: 40,
+      },
+    ],
+  };
+
+  const tabItems = [
+    { id: 'preparing', label: '준비 중', count: orderStatusCounts[0] },
+    { id: 'shipping', label: '배송 중', count: orderStatusCounts[1] },
+    { id: 'delivered', label: '배송완료', count: orderStatusCounts[2] },
+    { id: 'refund', label: '환불', count: orderStatusCounts[3] }
+  ];
 
   const taskItems = [
-    { title: '신규 주문', count: newOrders },
-    { title: '환불 주문', count: refundOrders },
+    { title: '신규 주문', count: orderStatusCounts[0] },
+    { title: '환불 주문', count: orderStatusCounts[3] },
     { title: '신규 가입', count: newSignups },
   ];
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
-    setSelectedTab(newValue);
-  };
-
-  const filteredOrderData = orderData?.data.filter((order) => {
-    switch (selectedTab) {
-      case 0:
-        return order.status === 'preparing';
-      case 1:
-        return order.status === 'shipping';
-      case 2:
-        return order.status === 'delivered';
-      case 3:
-        return order.status === 'refund';
-      default:
-        return true;
-    }
-  });
+  const filteredOrderData = orderData?.data?.filter(
+    (order) => order.status === selectedTab
+  ) ?? [];
 
   return (
-    <div>
-      <Box mb={4}>
-        <Paper elevation={3} sx={{ padding: 2, marginTop: 2 }}>
-          <Box display="flex" alignItems="center" mb={2}>
-            <Typography variant="h6" sx={{ fontWeight: 'bold', marginRight: '10px' }}>
-              오늘의 할일
-            </Typography>
-            <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'red' }}>
-              {totalTasks}
-            </Typography>
-          </Box>
-          <Grid container spacing={2}>
+    <div className="min-h-screen py-5">
+      <div className="mb-6">
+        <Card>
+          <div className="flex items-center mb-4">
+            <h2 className="text-xl font-bold mr-2">오늘의 할일</h2>
+            <span className="text-xl font-bold text-red-500">
+              {taskItems.reduce((sum, item) => sum + item.count, 0)}
+            </span>
+          </div>
+          <div className="flex space-x-3">
             {taskItems.map((item, index) => (
-              <Grid item key={index}>
-                <Typography variant="body1">
-                  {item.title} {item.count}
-                </Typography>
-              </Grid>
+              <div key={index} className="text-md font-medium">
+                {item.title} {item.count}
+              </div>
             ))}
-          </Grid>
-        </Paper>
-      </Box>
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={6}>
-          <AdminDashboardCard title="총 매출" content={<Line data={salesData} />} />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <AdminDashboardCard title="신규 가입 고객" content={<Bar data={signupData} />} />
-        </Grid>
-        <Grid item xs={12}>
-          <AdminDashboardCard
-            title="주문 상태"
-            content={
-              <>
-                <Tabs value={selectedTab} onChange={handleTabChange} aria-label="order status tabs">
-                  <Tab label={`준비 중 (${newOrders})`} />
-                  <Tab label={`배송 중 (${shippingCounts})`} />
-                  <Tab label={`배송완료 (${deliveredCounts})`} />
-                  <Tab label={`환불 (${refundOrders})`} />
-                </Tabs>
-                <StatusTable orderTableHead={orderTableHead} orderData={filteredOrderData ?? []} />
-              </>
-            }
-          />
-        </Grid>
-      </Grid>
+          </div>
+        </Card>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Card title="총 매출">
+          <div className="h-64">
+            <Line 
+              data={salesData}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+              }}
+            />
+          </div>
+        </Card>
+
+        <Card title="신규 가입 고객">
+          <div className="h-64">
+            <Bar
+              data={signupData}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+              }}
+            />
+          </div>
+        </Card>
+
+        <div className="col-span-1 md:col-span-2">
+          <Card title="주문 상태">
+            <div className="mb-4">
+              <div className="flex border-b">
+                {tabItems.map((tab) => (
+                  <button
+                    key={tab.id}
+                    className={`px-4 py-2 text-sm font-medium ${
+                      selectedTab === tab.id
+                        ? 'border-b-2 border-blue-500 text-blue-600'
+                        : 'text-gray-500 hover:text-gray-700'
+                    }`}
+                    onClick={() => setSelectedTab(tab.id)}
+                  >
+                    {tab.label} ({tab.count})
+                  </button>
+                ))}
+              </div>
+            </div>
+            <StatusTable
+              orderTableHead={orderTableHead}
+              orderData={filteredOrderData}
+            />
+          </Card>
+        </div>
+      </div>
     </div>
-  );
-};
-
-const StatusTable = ({ orderTableHead, orderData }: StatusTableProps) => {
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-
-  const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0); 
-  };
-
-  return (
-    <TableContainer component={Paper}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            {orderTableHead.map((head) => (
-              <TableCell key={head}>{head}</TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {orderData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order) => (
-            <TableRow key={order._id}>
-              <TableCell>{order._id}</TableCell>
-              <TableCell>{order.createdAt}</TableCell>
-              <TableCell>{order.userId?.email}</TableCell>
-              <TableCell> {order.items?.map((item) => item.ingredientId?.name).join(', ')}</TableCell>
-              <TableCell>{order.totalPrice}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={orderData.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
-    </TableContainer>
   );
 };
 
