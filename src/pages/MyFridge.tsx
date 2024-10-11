@@ -182,7 +182,7 @@ const MyFridge = () => {
             <div className="text-center p-2 border-t border-b border-light-gray mb-5">
               {ingredientLoading ? (
                 <div className="flex justify-center items-center">
-                  <div className="animate-spin h-16 w-16 border-b-4 border-green-500 rounded-full" />
+                  <div className="animate-spin border-4 border-green-500 border-t-transparent rounded-full w-24 h-24"></div>
                 </div>
               ) : ingredientData?.ingredients?.length === 0 ? (
                 <div className="p-10 shadow-md rounded-lg">

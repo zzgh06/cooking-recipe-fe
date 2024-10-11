@@ -27,6 +27,17 @@ const Navbar = () => {
     fetchUser();
   }, [fetchUser]);
 
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMenuOpen]);
+
   const handleLogout = async () => {
     await dispatch(logout());
     navigate("/");
@@ -52,121 +63,125 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="fixed top-0 w-full bg-white/90 backdrop-blur-lg shadow-sm z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-end items-center py-2 border-b border-emerald-100">
-          {user?.level === "admin" && (
-            <Link
-              to="/admin/dashboard"
-              className="mr-4 px-4 py-1.5 bg-emerald-500 text-white rounded-full text-sm font-medium hover:bg-emerald-600 transition-colors"
-            >
-              Admin page
-            </Link>
-          )}
+    <>
+      <nav className="fixed top-0 w-full bg-white/90 backdrop-blur-lg shadow-sm z-40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-end items-center py-2 border-b border-emerald-100">
+            {user?.level === "admin" && (
+              <Link
+                to="/admin/dashboard"
+                className="mr-4 px-4 py-1.5 bg-emerald-500 text-white rounded-full text-sm font-medium hover:bg-emerald-600 transition-colors"
+              >
+                Admin page
+              </Link>
+            )}
 
-          <div className="flex items-center space-x-1">
-            <div className="relative">
+            <div className="flex items-center space-x-1">
+              <div className="relative">
+                <button
+                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                >
+                  <FontAwesomeIcon icon={faUser} className="w-5 h-5 text-gray-700" />
+                </button>
+                {isUserMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 border border-gray-100 z-50">
+                    {user?.name ? (
+                      <>
+                        <button
+                          onClick={() => navigate("/account/profile")}
+                          className="w-full text-left px-4 py-2 hover:bg-gray-50 text-gray-700"
+                        >
+                          {user.name}님
+                        </button>
+                        <button
+                          onClick={handleLogout}
+                          className="w-full text-left px-4 py-2 hover:bg-gray-50 text-gray-700"
+                        >
+                          로그아웃
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button
+                          onClick={() => navigate("/register")}
+                          className="w-full text-left px-4 py-2 hover:bg-gray-50 text-gray-700"
+                        >
+                          회원가입
+                        </button>
+                        <button
+                          onClick={() => navigate("/login")}
+                          className="w-full text-left px-4 py-2 hover:bg-gray-50 text-gray-700"
+                        >
+                          로그인
+                        </button>
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
               <button
-                onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                onClick={() => navigate("/account/recipe")}
                 className="p-2 hover:bg-gray-100 rounded-full transition-colors"
               >
-                <FontAwesomeIcon icon={faUser} className="w-5 h-5 text-gray-700" />
+                <FontAwesomeIcon icon={faUtensils} className="w-5 h-5 text-gray-700" />
               </button>
-              {isUserMenuOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 border border-gray-100">
-                  {user?.name ? (
-                    <>
-                      <button
-                        onClick={() => navigate("/account/profile")}
-                        className="w-full text-left px-4 py-2 hover:bg-gray-50 text-gray-700"
-                      >
-                        {user.name}님
-                      </button>
-                      <button
-                        onClick={handleLogout}
-                        className="w-full text-left px-4 py-2 hover:bg-gray-50 text-gray-700"
-                      >
-                        로그아웃
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <button
-                        onClick={() => navigate("/register")}
-                        className="w-full text-left px-4 py-2 hover:bg-gray-50 text-gray-700"
-                      >
-                        회원가입
-                      </button>
-                      <button
-                        onClick={() => navigate("/login")}
-                        className="w-full text-left px-4 py-2 hover:bg-gray-50 text-gray-700"
-                      >
-                        로그인
-                      </button>
-                    </>
-                  )}
-                </div>
-              )}
-            </div>
-            <button
-              onClick={() => navigate("/account/recipe")}
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-            >
-              <FontAwesomeIcon icon={faUtensils} className="w-5 h-5 text-gray-700" />
-            </button>
-            <button
-              onClick={() => navigate("/cart")}
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-            >
-              <FontAwesomeIcon icon={faCartShopping} className="w-5 h-5 text-gray-700" />
-            </button>
-          </div>
-        </div>
-        <div className="flex items-center justify-between py-4">
-          <button
-            onClick={() => navigate("/")}
-            className="text-xl font-bold text-gray-900 hover:text-emerald-600 transition-colors"
-          >
-            냉장고에 뭐 있지?
-          </button>
-          <div className="hidden md:flex flex-1 max-w-2xl mx-8">
-            <div className="relative w-full">
-              <input
-                type="text"
-                placeholder="검색어를 입력하세요"
-                value={keyword}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => setKeyword(e.target.value)}
-                onKeyPress={handleSearch}
-                className="w-full py-2 px-4 pl-11 bg-gray-50 border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-              />
-              <FontAwesomeIcon
-                icon={faMagnifyingGlass}
-                className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2"
-              />
-            </div>
-          </div>
-          <div className="hidden md:flex items-center space-x-8">
-            {menuItems.map((item) => (
-              <Link
-                key={item.name}
-                to={`/${item.path}`}
-                className="text-gray-700 font-semibold hover:text-emerald-600 transition-colors"
+              <button
+                onClick={() => navigate("/cart")}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
               >
-                {item.name}
-              </Link>
-            ))}
+                <FontAwesomeIcon icon={faCartShopping} className="w-5 h-5 text-gray-700" />
+              </button>
+            </div>
           </div>
-          <button
-            onClick={() => setIsMenuOpen(true)}
-            className="md:hidden p-2 hover:bg-gray-100 rounded-lg"
-          >
-            <FontAwesomeIcon icon={faBars} className="w-6 h-6 text-gray-700" />
-          </button>
+          <div className="flex items-center justify-between py-4">
+            <button
+              onClick={() => navigate("/")}
+              className="text-xl font-bold text-gray-900 hover:text-emerald-600 transition-colors"
+            >
+              냉장고에 뭐 있지?
+            </button>
+            <div className="hidden md:flex flex-1 max-w-2xl mx-8">
+              <div className="relative w-full">
+                <input
+                  type="text"
+                  placeholder="검색어를 입력하세요"
+                  value={keyword}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => setKeyword(e.target.value)}
+                  onKeyPress={handleSearch}
+                  className="w-full py-2 px-4 pl-11 bg-gray-50 border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                />
+                <FontAwesomeIcon
+                  icon={faMagnifyingGlass}
+                  className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2"
+                />
+              </div>
+            </div>
+            <div className="hidden md:flex items-center space-x-8">
+              {menuItems.map((item) => (
+                <Link
+                  key={item.name}
+                  to={`/${item.path}`}
+                  className="text-gray-700 font-semibold hover:text-emerald-600 transition-colors"
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </div>
+            <button
+              onClick={() => setIsMenuOpen(true)}
+              className="md:hidden p-2 hover:bg-gray-100 rounded-lg"
+            >
+              <FontAwesomeIcon icon={faBars} className="w-6 h-6 text-gray-700" />
+            </button>
+          </div>
         </div>
-      </div>
+      </nav>
+
       {isMenuOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50">
-          <div className="fixed inset-y-0 right-0 w-full max-w-sm bg-white shadow-lg z-60">
+        <div className="fixed inset-0 z-50">
+          <div className="fixed inset-0 bg-black bg-opacity-50" onClick={() => setIsMenuOpen(false)} />
+          <div className="fixed inset-y-0 right-0 w-full max-w-sm bg-white shadow-lg">
             <div className="flex justify-between items-center p-4 border-b">
               <span className="text-lg font-semibold">메뉴</span>
               <button
@@ -207,7 +222,7 @@ const Navbar = () => {
           </div>
         </div>
       )}
-    </nav>
+    </>
   );
 };
 

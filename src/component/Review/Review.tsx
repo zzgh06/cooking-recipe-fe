@@ -9,7 +9,7 @@ import { useDeleteReview } from "../../hooks/Review/useDeleteReview";
 import { useFetchReviews } from "../../hooks/Review/useFetchReviews";
 import { setReviews } from "../../redux/reviewSlice";
 import { RootState } from "../../redux/store";
-import Pagination from "@mui/material/Pagination";
+import PaginationComponent from "../Pagination/PaginationComponent";
 
 interface ReviewProps {
   type: string;
@@ -102,8 +102,8 @@ const Review = ({ type, itemId }: ReviewProps) => {
     deleteReview({ id: reviewId, type });
   };
 
-  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    setPage(value);
+  const handlePageChange = (pageNumber: number) => {
+    setPage(pageNumber);
   };
 
   const pageCount = Math.ceil((totalReviews) / Number(reviewsPerPage));
@@ -147,11 +147,11 @@ const Review = ({ type, itemId }: ReviewProps) => {
       />
       {pageCount > 0 && (
         <div className="flex justify-center mt-4 mb-5">
-          <Pagination
-            count={pageCount}
-            size="large"
-            page={page}
-            onChange={handlePageChange}
+          <PaginationComponent
+            activePage={page}
+            itemsCountPerPage={reviewsPerPage}
+            totalItemsCount={totalReviews}
+            onPageChange={handlePageChange}
           />
         </div>
       )}

@@ -1,5 +1,4 @@
 import React from "react";
-import { Box } from "@mui/material";
 import RecipeAll from "../component/RecipeAll/RecipeAll";
 import { useLocation, useParams } from "react-router-dom";
 import RecipeTitle from "../component/RecipeTitle/RecipeTitle";
@@ -14,7 +13,7 @@ const RecipePage = () => {
   const path = pathArray[pathArray.length - 1];
 
   return (
-    <Box>
+    <div>
       <RecipeCategory />
       <RecipeTitle
         title={
@@ -41,7 +40,7 @@ const RecipePage = () => {
       ) : (
         <RecipeAll category={category}  />
       )}
-    </Box>
+    </div>
   );
 };
 

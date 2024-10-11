@@ -29,8 +29,8 @@ const SearchResults = () => {
       </h2>
 
       {isLoading ? (
-        <div className="flex justify-center my-5">
-          <div className="animate-spin rounded-full h-20 w-20 border-t-4 border-green-500 border-solid"></div>
+        <div className="flex justify-center items-center min-h-screen">
+          <div className="h-24 w-24 border-8 border-green-600 border-t-transparent rounded-full animate-spin"></div>
         </div>
       ) : (
         <>

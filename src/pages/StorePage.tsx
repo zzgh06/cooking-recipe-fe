@@ -1,7 +1,6 @@
 import React, { useEffect, useState, Suspense, lazy, startTransition } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useFetchIngredients } from "../hooks/Ingredient/useFetchIngredients";
-import { CircleRounded } from "@mui/icons-material";
 import BannerComponent from "../component/Banner/BannerComponent";
 import IngredientSlider from "../component/IngredientSlider/IngredientSlider";
 import RecentlyViewed from "../component/RecentlyViewed/RecentlyViewed";
@@ -69,7 +68,11 @@ const StorePage = () => {
         ingredients={newIngredients?.slice(0, 8) || []}
         loading={isLoading}
       />
-      <Suspense fallback={<CircleRounded />}>
+      <Suspense fallback={
+        <div className="flex justify-center items-center h-48">
+          <div className="animate-spin border-4 border-green-500 border-t-transparent rounded-full w-24 h-24"></div>
+        </div>
+      }>
         <IngredientThemeCard
           ingredients={topDiscountedIngredients || []}
           loading={isLoading}

@@ -1,7 +1,6 @@
 import React from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import { responsive } from "../../constants/responsive";
 
 const optimizeImageUrl = (url: string): string => {
@@ -20,7 +19,7 @@ const BannerComponent = ({ images }: { images: string[] }) => {
       onClick={onClick}
       className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-black bg-opacity-40 text-white text-lg z-20 hover:bg-opacity-60 p-2 rounded"
     >
-      <ArrowBack />
+      ◀
     </button>
   );
 
@@ -29,7 +28,7 @@ const BannerComponent = ({ images }: { images: string[] }) => {
       onClick={onClick}
       className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-black bg-opacity-40 text-white text-lg z-20 hover:bg-opacity-60 p-2 rounded"
     >
-      <ArrowForward />
+      ▶
     </button>
   );
 
