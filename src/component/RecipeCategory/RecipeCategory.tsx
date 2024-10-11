@@ -12,7 +12,7 @@ const RecipeCategory = () => {
   };
 
   return (
-    <div className="fixed top-[131px] w-full z-30">
+    <div className="fixed top-[130px] w-full z-30">
       <div className="absolute inset-0 bg-gradient-to-b from-emerald-50/80 to-white/90 backdrop-blur-lg border-t border-b border-emerald-100" />
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex flex-col gap-4">

@@ -122,13 +122,13 @@ const MyFridge = () => {
 
   return (
     <div className="py-[80px] sm:px-[20px] md:px-[30px] lg:px-[150px] xl:px-[200px]">
-      <div className="text-center mb-5">
-        <h1 className="text-4xl font-bold mb-2">My 냉장고</h1>
+      <div className="text-center mb-7">
+        <h1 className="text-3xl font-bold mb-3">My 냉장고</h1>
         <p className="text-lg">나만의 냉장고에 재료를 추가하고 최적의 레시피를 추천해드려요</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        <div className="flex flex-col justify-center items-center p-5 mb-5 border border-light-gray rounded-lg shadow-md">
+        <div className="flex flex-col justify-center items-center p-5 mb-5 border border-light-gray rounded-lg shadow max-h-[700px]">
           {fridgeData?.length === 0 ? (
             <p className="text-lg">
               냉장고가 텅 비워져 있습니다 😅 <br />
@@ -164,7 +164,7 @@ const MyFridge = () => {
 
         <div>
           <div className="flex flex-col items-center p-5 mb-5">
-            <h2 className="text-2xl font-semibold mb-2 min-w-[350px]">
+            <h2 className="text-xl font-semibold mb-2 min-w-[350px]">
               원하시는 식재료를 검색해주세요
             </h2>
             <SearchBox
@@ -179,7 +179,7 @@ const MyFridge = () => {
           </div>
 
           {hasSearched && (
-            <div className="text-center p-2 border-t border-b border-light-gray mb-5">
+            <div className="text-center p-2 border border-light-gray rounded-lg shadow mb-5 max-h-[500px] overflow-y-auto">
               {ingredientLoading ? (
                 <div className="flex justify-center items-center">
                   <div className="animate-spin border-4 border-green-500 border-t-transparent rounded-full w-24 h-24"></div>
