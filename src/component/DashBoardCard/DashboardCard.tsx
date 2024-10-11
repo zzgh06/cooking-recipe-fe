@@ -1,47 +1,20 @@
 import React from "react";
-import { Card, CardContent, Typography, Box } from "@mui/material";
-import { styled } from "@mui/material/styles";
-
-const StyledCard = styled(Card)(({ theme }) => ({
-  border: `2px solid green`,
-  borderRadius: theme.shape.borderRadius,
-  boxShadow: theme.shadows[3],
-  transition: 'transform 0.3s ease',
-  '&:hover': {
-    transform: 'scale(1.03)',
-    boxShadow: theme.shadows[6],
-  },
-}));
-
-const StyledCardContent = styled(CardContent)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  textAlign: 'center',
-}));
 
 interface DashBoardCardProps {
   status: string;
   count: number;
-  borderColor?: string;
 }
 
 const DashBoardCard = ({ status, count }: DashBoardCardProps) => {
-
-
   return (
-    <Box sx={{ p: 1 }}>
-      <StyledCard>
-        <StyledCardContent>
-          <Typography variant="h6" component="div" color="textPrimary">
-            {status}
-          </Typography>
-          <Typography variant="h4" component="div" color="textSecondary" sx={{ mt: 1 }}>
-            {count}
-          </Typography>
-        </StyledCardContent>
-      </StyledCard>
-    </Box>
+    <div className="p-2">
+      <div className="border-2 border-gray-300 rounded-lg shadow-md transition-transform transform hover:scale-105 hover:shadow-lg">
+        <div className="flex flex-col items-center text-center p-4">
+          <h2 className="text-lg font-semibold text-gray-800">{status}</h2>
+          <h3 className="text-3xl font-bold text-gray-600 mt-2">{count}</h3>
+        </div>
+      </div>
+    </div>
   );
 };
 

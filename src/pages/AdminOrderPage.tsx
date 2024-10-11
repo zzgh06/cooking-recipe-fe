@@ -1,26 +1,15 @@
 import React, { useEffect, useState } from "react";
-import {
-  Container,
-  Grid,
-  Box,
-  Select,
-  MenuItem,
-  TextField,
-  Button,
-  Stack,
-  Pagination,
-  CircularProgress,
-} from "@mui/material";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { setSelectedOrder } from "../redux/orderSlice";
+import { endOfDay, format, isValid, startOfDay } from "date-fns";
+import { useFetchOrderList } from "../hooks/Order/useFetchOrderList";
+import { Order } from "../types";
 import OrderTable from "../component/OrderTable/OrderTable";
 import DashBoardCard from "../component/DashBoardCard/DashboardCard";
 import OrderDetailDialog from "../component/OrderDetailDialog/OrderDetailDialog";
-import { setSelectedOrder } from "../redux/orderSlice";
-import { endOfDay, format, isValid, startOfDay } from "date-fns";
 import DateFilterCondition from "../component/DateFilterCondition/DateFilterCondition";
-import { useFetchOrderList } from "../hooks/Order/useFetchOrderList";
-import { Order } from "../types";
+import PaginationComponent from "../component/Pagination/PaginationComponent";
 
 interface SearchQuery {
   page: number;
@@ -29,10 +18,9 @@ interface SearchQuery {
   endDate: string | null;
   [key: string]: string | number | null;
 }
-type ChipColor = 'default' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning';
 
 interface BadgeBg {
-  [key: string]: ChipColor;
+  [key: string]: string;
 }
 
 const badgeBg: BadgeBg = {
@@ -58,6 +46,9 @@ const AdminOrderPage = () => {
   const [endDate, setEndDate] = useState<Date | null>(null);
   const { data, isLoading } = useFetchOrderList(searchQuery);
 
+  const totalPages: number = data?.totalPageNum || 0;
+  const itemsPerPage: number = 1;
+
   const tableHeader: string[] = [
     "#",
     "Order#",
@@ -80,8 +71,8 @@ const AdminOrderPage = () => {
     dispatch(setSelectedOrder(order));
   };
 
-  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    setSearchQuery({ ...searchQuery, page: value });
+  const handlePageChange = (pageNumber: number) => {
+    setSearchQuery({ ...searchQuery, page: pageNumber });
   };
 
   const handleClose = () => {
@@ -119,121 +110,93 @@ const AdminOrderPage = () => {
       endDate: null,
     });
   };
-  
+
 
   if (isLoading) {
     return (
-      <Container maxWidth="lg" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
-        <CircularProgress size="100px" sx={{color: "green"}} />
-      </Container>
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="h-24 w-24 border-8 border-green-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
     );
   }
 
   return (
-    <Container sx={{ mt: 2 }}>
-      <Grid
-        container
-        border={3}
-        borderRadius={4}
-        sx={{ borderColor: "success.main", opacity: "70%" }}
-        p={3}
-      >
-        <Grid container>
+    <div className="container mx-auto mt-4">
+      <div className="border-2 border-gray-300 shadow-sm rounded-lg opacity-70 p-4">
+        <div className="mb-4">
           <DateFilterCondition
             startDate={startDate}
             setStartDate={setStartDate}
             endDate={endDate}
             setEndDate={setEndDate}
           />
-        </Grid>
-        <Grid container spacing={2} mt={1}>
-          <Grid item xs={12} md={2}>
-            <Select
+        </div>
+        <div className="flex flex-col md:flex-row md:items-center md:space-x-2">
+          <div className="w-full md:w-1/4">
+            <select
               value={selectedOption || ""}
-              onChange={(event) => {
-                setSelectedOption(event.target.value);
-              }}
-              fullWidth
-              sx={{ width: "120px", height: "40px" }}
+              onChange={(event) => setSelectedOption(event.target.value)}
+              className="block w-full h-10 border border-gray-300 rounded-md"
             >
-              <MenuItem value="orderNum">주문번호</MenuItem>
-            </Select>
-          </Grid>
-          <Grid item xs={12} md={2}>
-            <TextField
-              label={selectedOption === "orderNum" ? "주문번호" : ""}
-              variant="outlined"
-              fullWidth
-              value={searchQuery[selectedOption] || ""}
+              <option value="orderNum">주문번호</option>
+            </select>
+          </div>
+          <div className="w-full md:w-1/4">
+            <input
+              type="text"
               placeholder="내용을 입력해주세요."
-              InputLabelProps={{ shrink: true, style: { top: 0 } }}
-              InputProps={{ style: { height: "40px", padding: "0 14px" } }}
-              sx={{ width: "280px", height: "40px" }}
+              value={searchQuery[selectedOption] || ""}
               onChange={(event) =>
                 setSearchQuery({
                   ...searchQuery,
                   [selectedOption]: event.target.value,
                 })
               }
+              className="block w-full h-10 border border-gray-300 rounded-md px-3"
             />
-          </Grid>
-          <Grid item xs={12} md={8} sx={{ textAlign: "right" }}>
-            <Button
-              variant="contained"
-              color="success"
-              size="small"
-              fullWidth
-              sx={{ marginRight: "10px", width: "13ch", height: "40px" }}
+          </div>
+          <div className="w-full md:w-1/2 flex justify-end space-x-2 mt-2 md:mt-0">
+            <button
               onClick={handleSearch}
+              className="bg-green-700 text-white rounded-md px-4 h-10 hover:bg-green-600 transition-colors"
             >
               조회
-            </Button>
-            <Button
-              variant="contained"
-              color="success"
-              size="small"
-              sx={{ marginRight: "10px", width: "13ch", height: "40px" }}
+            </button>
+            <button
               onClick={handleReset}
+              className="bg-green-700 text-white rounded-md px-4 h-10 hover:bg-green-600 transition-colors"
             >
               초기화
-            </Button>
-          </Grid>
-        </Grid>
-      </Grid>
+            </button>
+          </div>
+        </div>
+      </div>
 
-      <Grid container spacing={1} sx={{ margin: "10px 0" }}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 my-4">
         {Object.keys(badgeBg).map((status) => (
-          <Grid item xs={12} sm={6} md={3} key={status}>
-            <DashBoardCard
-              status={status}
-              count={getOrderCountByStatus(status)}
-              borderColor={badgeBg[status]}
-            />
-          </Grid>
+          <DashBoardCard
+            key={status}
+            status={status}
+            count={getOrderCountByStatus(status)}
+          />
         ))}
-      </Grid>
+      </div>
 
       <OrderTable
         header={tableHeader}
         data={data?.data || []}
         openEditForm={openEditForm}
-        badgeBg={badgeBg}
       />
 
-      <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-        <Stack spacing={2}>
-          <Pagination
-            count={data?.totalPageNum}
-            page={searchQuery.page}
-            onChange={handlePageChange}
-            color="primary"
-            shape="rounded"
-          />
-        </Stack>
-      </Box>
+      <PaginationComponent
+        activePage={Number(searchQuery.page)}
+        itemsCountPerPage={itemsPerPage}
+        totalItemsCount={totalPages}
+        onPageChange={handlePageChange}
+      />
 
       {open && <OrderDetailDialog open={open} handleClose={handleClose} />}
-    </Container>
+    </div>
   );
 };
 

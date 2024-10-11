@@ -13,7 +13,6 @@ import { useLoginWithToken } from "../hooks/User/useLoginWithToken";
 import { RootState } from "../redux/store";
 
 const MyProfile = () => {
-
   const user = useSelector((state: RootState) => state.auth.user);
   const navigate = useNavigate();
   const [currentView, setCurrentView] = useState<string>("내 주문");
