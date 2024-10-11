@@ -1,5 +1,5 @@
 # 🍴 레시피와 쇼핑이 더해진 What’s in your fridge
-![whats-in-yours-fridge netlify app_ (3)](https://github.com/user-attachments/assets/fda42495-0e67-470b-83ee-4fe5f680482f)
+![스크린샷 2024-10-12 030526](https://github.com/user-attachments/assets/74536df6-79a0-4c46-af97-070fddad9a8e)
 
 **What’s in your fridge 는 사용자가 다양한 레시피를 확인하고, 필요한 식재료를 간편하게 구매할 수 있는 웹사이트입니다.**
 >
@@ -99,19 +99,19 @@
 
 |레시피 페이지|레시피 상세 페이지|
 |:------:|:------:|
-|![whats-in-yours-fridge netlify app_](https://github.com/user-attachments/assets/41ee5bf0-37c7-4e19-a049-1437d895aa26)|![whats-in-yours-fridge netlify app_account_profile (1)](https://github.com/user-attachments/assets/82c8bce1-d31b-4dc7-b5c1-1a9e558c9b05)|
+|![whats-in-yours-fridge netlify app_ (8)](https://github.com/user-attachments/assets/37007615-07fc-410e-836c-7611e59a4db0)|![whats-in-yours-fridge netlify app_ (14)](https://github.com/user-attachments/assets/d4d163ab-0ee3-41fc-9af4-360fbc8b2538)|
 
 |스토어 페이지|스토어 상세 페이지|
 |:---:|:------:|
-|![whats-in-yours-fridge netlify app_ (9)](https://github.com/user-attachments/assets/68fc72ca-90d7-467f-bdb2-397f4d45111c)|![whats-in-yours-fridge netlify app_ (2)](https://github.com/user-attachments/assets/38c51f77-9075-4e3a-8460-406690d813a6)|
+|![whats-in-yours-fridge netlify app_store](https://github.com/user-attachments/assets/66ba4893-6fee-40fc-b13c-84ba7e06ef75)|![whats-in-yours-fridge netlify app_store (1)](https://github.com/user-attachments/assets/24204e3e-d760-461c-8417-5132645e37e9)|
 
 |My 냉장고 페이지|카트 페이지|
 |:------:|:------:|
-|![whats-in-yours-fridge netlify app_ (10)](https://github.com/user-attachments/assets/02c58d8e-5720-43dc-9a13-311044bd10ae))|![whats-in-yours-fridge netlify app_ (11)](https://github.com/user-attachments/assets/7c892f26-3ceb-454e-8589-9cebd2cd16ed)|
+|![whats-in-yours-fridge netlify app_store (3)](https://github.com/user-attachments/assets/60bcce82-7113-4a4e-8e29-4d84c6388986)|![whats-in-yours-fridge netlify app_store (2)](https://github.com/user-attachments/assets/0f9eff2d-f9f8-498e-a568-d38a6810505e)|
 
 |프로필 페이지|어드민 페이지|
 |:------:|:------:|
-|![whats-in-yours-fridge netlify app_account_profile](https://github.com/user-attachments/assets/00e7466c-30f2-4f48-b472-b3ce8bb13189)|![whats-in-yours-fridge netlify app_ (12)](https://github.com/user-attachments/assets/517c9e7f-1454-4ab3-bb90-b588068e1f63)|
+|![whats-in-yours-fridge netlify app_ (13)](https://github.com/user-attachments/assets/b5ba696a-9aee-4d05-a7c4-d1106eac6932)|![스크린샷 2024-10-12 030341](https://github.com/user-attachments/assets/977b662d-b9c7-46a8-a441-4bd3f4aa65d1)|
 <br>
 
 ## ⭐ 주요 기능 
