@@ -1,23 +1,14 @@
 import React, { useState } from "react";
-import {
-  Button,
-  Container,
-  Modal,
-  Typography,
-  Box,
-  Stack,
-  Pagination,
-  CircularProgress,
-} from "@mui/material";
-import SearchBox from "../component/SearchBox/SearchBox";
-import RecipeTable from "../component/RecipeTable/RecipeTable";
-import RecipeForm from "../component/RecipeForm/RecipeForm";
 import { useSearchParams } from "react-router-dom";
 import { useFetchRecipes } from "../hooks/Recipe/useFetchRecipes";
 import { useCreateRecipe } from "../hooks/Recipe/useCreateRecipe";
 import { useEditRecipe } from "../hooks/Recipe/useEditRecipe";
 import { useDeleteRecipe } from "../hooks/Recipe/useDeleteRecipe";
 import { Recipe, SearchQuery } from "../types";
+import SearchBox from "../component/SearchBox/SearchBox";
+import RecipeTable from "../component/RecipeTable/RecipeTable";
+import RecipeForm from "../component/RecipeForm/RecipeForm";
+import PaginationComponent from "../component/Pagination/PaginationComponent";
 
 const AdminRecipePage = () => {
   const [query, setQuery] = useSearchParams();
@@ -28,10 +19,14 @@ const AdminRecipePage = () => {
   const [showForm, setShowForm] = useState(false);
   const [mode, setMode] = useState("new");
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+
   const { data: recipesData, isLoading } = useFetchRecipes(searchQuery);
   const { mutate: createRecipe } = useCreateRecipe();
   const { mutate: editRecipe } = useEditRecipe();
   const { mutate: deleteRecipe } = useDeleteRecipe();
+
+  const totalPages: number = recipesData?.totalPages || 0;
+  const itemsPerPage: number = 1;
 
   const tableHeader = [
     "#",
@@ -61,8 +56,8 @@ const AdminRecipePage = () => {
     setShowForm(true);
   };
 
-  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    setSearchQuery({ ...searchQuery, page: value });
+  const handlePageChange = (pageNumber: number) => {
+    setSearchQuery({ ...searchQuery, page: pageNumber });
   };
 
   const deleteItem = (id: string) => {
@@ -71,89 +66,67 @@ const AdminRecipePage = () => {
 
   const handleFormSubmit = (recipeData: Recipe) => {
     if (mode === "new") {
-      createRecipe(recipeData); 
+      createRecipe(recipeData);
     } else {
-      editRecipe({ id: selectedRecipe?._id || "", updatedData: recipeData });  
+      editRecipe({ id: selectedRecipe?._id || "", updatedData: recipeData });
     }
     setShowForm(false);
   };
 
   if (isLoading) {
     return (
-      <Container maxWidth="lg" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
-        <CircularProgress size="100px" sx={{color: "green"}} />
-      </Container>
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="h-24 w-24 border-8 border-green-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
     );
   }
 
   return (
-    <Container maxWidth="lg">
-      <Box sx={{ mt: 2 }}>
-        <Box
-          sx={{
-            mb: 2,
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
+    <div className="container mx-auto px-4">
+      <div className="mt-4">
+        <div className="flex justify-between items-center mb-4 max-w-[1100px]">
           <SearchBox
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
-            placeholder="Search by recipe name"
+            placeholder="원하는 레시피를 입력해주세요."
             field="name"
           />
-          <Button
-            variant="contained"
-            color="primary"
+          <button
+            className="w-full max-w-[200px] bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 ml-4"
             onClick={handleShowAll}
-            sx={{ width: "300px", marginLeft: "10px" }}
           >
             Show All
-          </Button>
-        </Box>
-        <Box sx={{ mb: 2 }}>
-          <Button
-            variant="contained"
-            color="success"
+          </button>
+        </div>
+
+        <div className="mb-4">
+          <button
+            className="bg-green-700 text-white py-2 px-4 rounded hover:bg-green-600"
             onClick={handleClickNewItem}
-            sx={{ width: "300px" }}
           >
             Add New Recipe +
-          </Button>
-        </Box>
+          </button>
+        </div>
 
-        <Modal
-          open={showForm}
-          onClose={() => setShowForm(false)}
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            overflow: "scroll",
-          }}
-        >
-          <Box
-            sx={{
-              p: 3,
-              width: "80%",
-              maxWidth: 800,
-              maxHeight: "80vh",
-              overflowY: "auto",
-              bgcolor: "background.paper",
-              borderRadius: 2,
-              boxShadow: 24,
-            }}
+        {showForm && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4"
+            onClick={() => setShowForm(false)}
           >
-            <Typography variant="h6" gutterBottom>
-              {mode === "new" ? "Add New Recipe" : "Edit Recipe"}
-            </Typography>
-            <RecipeForm
-              onSubmit={handleFormSubmit}
-              initialData={selectedRecipe || undefined}
-            />
-          </Box>
-        </Modal>
+            <div
+              className="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h6 className="text-3xl text-center font-bold mb-4">
+                {mode === "new" ? "레시피 작성" : "레시피 수정"}
+              </h6>
+              <RecipeForm
+                onSubmit={handleFormSubmit}
+                initialData={selectedRecipe || undefined}
+              />
+            </div>
+          </div>
+        )}
 
         <RecipeTable
           header={tableHeader}
@@ -162,19 +135,14 @@ const AdminRecipePage = () => {
           openEditForm={openEditForm}
         />
 
-        <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-          <Stack spacing={2}>
-            <Pagination
-              count={recipesData?.totalPages ?? 0}
-              page={Number(searchQuery.page)}
-              onChange={handlePageChange}
-              color="primary"
-              shape="rounded"
-            />
-          </Stack>
-        </Box>
-      </Box>
-    </Container>
+        <PaginationComponent
+          activePage={Number(searchQuery.page)}
+          itemsCountPerPage={itemsPerPage}
+          totalItemsCount={totalPages}
+          onPageChange={handlePageChange}
+        />
+      </div>
+    </div>
   );
 };
 

@@ -93,7 +93,7 @@ const LoginPage = () => {
 
   return (
     <div className="flex flex-col justify-center bg-gray-50 py-12 sm:px-6 lg:px-8">
-      <div className="max-w-[430px] mx-auto mt-4 p-6 bg-gray-50">
+      <div className="max-w-[430px] mx-auto mt-4 p-6">
         <div className="text-center mb-6 border-b-4 border-black">
           <h2 className="text-3xl font-bold py-2">로그인</h2>
         </div>
