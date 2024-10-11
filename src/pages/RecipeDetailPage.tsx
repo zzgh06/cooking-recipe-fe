@@ -116,7 +116,7 @@ const RecipeDetail = () => {
             <div className="flex justify-between items-center mb-5">
               <h2 className="text-2xl font-bold">{recipeDetail.name}</h2>
               <div className="flex space-x-5">
-                <div onClick={handleFavoriteClick} className="cursor-pointer">
+                <div onClick={handleFavoriteClick} className="cursor-pointer text-green-700">
                   <FontAwesomeIcon icon={isFavorite && user ? solidBookmark : regularBookmark} size="lg" />
                 </div>
                 <div className="cursor-pointer">

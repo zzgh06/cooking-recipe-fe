@@ -1,13 +1,4 @@
-import styled from '@emotion/styled';
-import { Card, CardContent, Typography } from '@mui/material';
 import React, { ReactNode } from 'react'
-
-const HoverCard = styled(Card)({
-  transition: 'transform 0.2s, background-color 0.2s',
-  '&:hover': {
-    transform: 'scale(1.02)',
-  },
-});
 
 interface AdminDashboardCardProps {
   title: string;
@@ -17,17 +8,16 @@ interface AdminDashboardCardProps {
 
 const AdminDashboardCard = ({ title, content, onClick }: AdminDashboardCardProps) => {
   return (
-    <HoverCard onClick={onClick}>
-      <CardContent>
-        <Typography variant="h5" component="h2">
-          {title}
-        </Typography>
-        <Typography variant="body2" component="p">
-          {content}
-        </Typography>
-      </CardContent>
-    </HoverCard>
-  )
-}
+    <div
+      className="bg-white shadow-md rounded-lg transition-transform duration-200 hover:scale-105 cursor-pointer"
+      onClick={onClick}
+    >
+      <div className="p-4">
+        <h2 className="text-xl font-bold mb-2">{title}</h2>
+        <p className="text-gray-700">{content}</p>
+      </div>
+    </div>
+  );
+};
 
 export default AdminDashboardCard

@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Box, CircularProgress } from '@mui/material';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import UserTable from '../component/UserTable/UserTable';
-import UserDetailDialog from '../component/UserDetailDialog/UserDetailDialog';
-import SearchBox from '../component/SearchBox/SearchBox';
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
 import { useGetUsersInfo } from '../hooks/User/useGetUsersInfo';
 import { useDeleteUser } from '../hooks/User/useDeleteUser';
 import { SearchQuery, User } from '../types';
+import UserTable from '../component/UserTable/UserTable';
+import UserDetailDialog from '../component/UserDetailDialog/UserDetailDialog';
+import SearchBox from '../component/SearchBox/SearchBox';
+import PaginationComponent from '../component/Pagination/PaginationComponent';
 
 const AdminUserPage = () => {
   const navigate = useNavigate();
@@ -23,7 +21,9 @@ const AdminUserPage = () => {
   const { mutateAsync: deleteUser } = useDeleteUser();
 
   const usersData: User[] = data?.usersData || [];
-  const totalPageNum: number = data?.totalPageNum || 0;
+  const totalPages: number = data?.totalPageNum || 0;
+  const itemsPerPage: number = 1;
+
 
   const tableHeader: string[] = [
     "#",
@@ -45,8 +45,8 @@ const AdminUserPage = () => {
     handleClose();
   };
 
-  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    setSearchQuery(prev => ({ ...prev, page: value }));
+  const handlePageChange = (pageNumber: number) => {
+    setSearchQuery({ ...searchQuery, page: pageNumber });
   };
 
   const handleRowClick = (user: User) => {
@@ -61,22 +61,21 @@ const AdminUserPage = () => {
 
   if (isLoading) {
     return (
-      <Container maxWidth="lg" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
-        <CircularProgress size="100px" sx={{color: "green"}} />
-      </Container>
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="h-24 w-24 border-8 border-green-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
     );
   }
-
   return (
-    <Container sx={{ mt: 2 }}>
-      <Box sx={{ mb: 2, display: 'flex', justifyContent: 'center' }}>
+    <div className="container mx-auto p-6">
+      <div className="mb-4 flex justify-center">
         <SearchBox
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
           placeholder="유저명 입력"
           field="name"
         />
-      </Box>
+      </div>
 
       <UserTable
         header={tableHeader}
@@ -84,17 +83,12 @@ const AdminUserPage = () => {
         onRowClick={handleRowClick}
       />
 
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-        <Stack spacing={2}>
-          <Pagination
-            count={totalPageNum}
-            page={Number(searchQuery.page)}
-            onChange={handlePageChange}
-            color="primary"
-            shape="rounded"
-          />
-        </Stack>
-      </Box>
+      <PaginationComponent
+        activePage={Number(searchQuery.page)}
+        itemsCountPerPage={itemsPerPage}
+        totalItemsCount={totalPages}
+        onPageChange={handlePageChange}
+      />
 
       {showDialog && selectedUser && (
         <UserDetailDialog
@@ -104,7 +98,7 @@ const AdminUserPage = () => {
           deleteUser={handleUserDelete}
         />
       )}
-    </Container>
+    </div>
   );
 };
 
